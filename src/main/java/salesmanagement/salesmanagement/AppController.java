@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
@@ -29,15 +30,14 @@ public class AppController {
     }
 
     public synchronized void run() {
-        FXMLLoader fxmlLoader = new FXMLLoader(SalesManagement.class.getResource("login-view.fxml"));
-
+        FXMLLoader fxmlLoader = new FXMLLoader(SalesManagement.class.getResource("login_scene.fxml"));
         try {
-            loginScene = new Scene(fxmlLoader.load(), 1200, 600);
+            loginScene = new Scene(fxmlLoader.load());
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(0);
         }
-
+        stage.initStyle(StageStyle.TRANSPARENT);
         stage.setTitle("Sales Management");
         stage.setScene(loginScene);
         stage.getIcons().add(new Image("/app_icon.jpg"));

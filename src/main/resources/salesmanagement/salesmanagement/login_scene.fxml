@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="450.0" prefWidth="705.0" stylesheets="@login.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.LoginSceneController">
+    <children>
+        <AnchorPane fx:id="pane1" layoutX="-30.0" layoutY="-32.0" prefHeight="217.0" prefWidth="811.0" styleClass="topPane">
+         <children>
+            <JFXButton fx:id="closeIcon" buttonType="RAISED" contentDisplay="CENTER" focusTraversable="false" layoutX="772.0" layoutY="35.0" onMouseClicked="#closeStage" prefHeight="28.0" prefWidth="17.0" textFill="TRANSPARENT">
+               <graphic>
+                  <ImageView fitHeight="22.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@close_icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </JFXButton>
+         </children></AnchorPane>
+        <AnchorPane id="cardPane" layoutX="229.0" layoutY="62.0" prefHeight="326.0" prefWidth="323.0" styleClass="cardPane">
+            <children>
+                <ImageView fitHeight="90.0" fitWidth="90.0" layoutX="117.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@login.png" />
+                    </image>
+                </ImageView>
+                <JFXTextField focusTraversable="false" layoutX="77.0" layoutY="154.0" promptText="Username">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </JFXTextField>
+                <JFXPasswordField focusTraversable="false" layoutX="77.0" layoutY="214.0" promptText="Password">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </JFXPasswordField>
+                <JFXButton buttonType="RAISED" layoutX="131.0" layoutY="274.0" styleClass="topPane" text="LOGIN" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </JFXButton>
+            </children>
+        </AnchorPane>
+    </children>
+<!--    <AnchorPane prefHeight="400" prefWidth="600">-->
+<!--        <JFXButton layoutX="550" layoutY="10" style="-fx-background-color: red;" onAction="#closeStage">-->
+<!--            <Label text="X" style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;" />-->
+<!--        </JFXButton>-->
+<!--    </AnchorPane>-->
+
+</AnchorPane>
