@@ -1,0 +1,32 @@
+
+.avatar-image {
+    -fx-background-radius: 50%;
+    -fx-background-color: #e3e3e3;
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+}
+.split-pane:horizontal > .split-pane-divider {
+    
+    -fx-padding: 0 0.75 0 0.75;  
+ }
+ .split-pane:vertical > .split-pane-divider {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 0;  
+ }
+
+ .button {
+    -fx-border-radius: 10px;
+    -fx-background-radious: 10px;
+ }
+ .request_button{
+    -fx-border-color: rgba(30, 124, 202, 0.553);
+    -fx-border-radius: 0;
+    -fx-border-width: 1 0 1 0;
+    -fx-alignment: center;
+}
+
+.content-notification-text-area {
+    -fx-text-alignment: justify;
+    -fx-padding: 0 20px 10px 20px;
+    -fx-font-size: 16;
+}

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXToolbar?>
+<?import java.lang.String?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="600.0" maxWidth="1200.0" minHeight="600.0" minWidth="1200.0" prefHeight="600.0" prefWidth="1200.0" stylesheets="@style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.scenecontrollers.MainSceneController">
+   <children>
+      <TabPane fx:id="tabPane" layoutX="193.0" layoutY="20.0" prefHeight="580.0" prefWidth="1007.0" styleClass="tab-pane-noheader" stylesheets="@tabpane_style.css" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab fx:id="homeTab" closable="false" text="HOME">
+               <content>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
+                     <children>
+                        <Text fx:id="notificationTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to our revolutionary sales management application!" textAlignment="CENTER" wrappingWidth="1006.2982177734375">
+                           <font>
+                              <Font size="32.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="author" strokeType="OUTSIDE" strokeWidth="0.0" text="Posted by Thành An " wrappingWidth="966.795743227005" />
+                        <Text fx:id="postTime" strokeType="OUTSIDE" strokeWidth="0.0" text="Published 2:34 AM, Sat March 4, 2023" wrappingWidth="968.0000915527344" />
+                        <JFXTextArea fx:id="contents" editable="false" prefHeight="416.0" prefWidth="943.0" styleClass="content-notification-text-area" text="Our cutting-edge sales management application is designed to streamline your sales process and help you achieve your business goals more efficiently. Whether you're a manager or an employee, our app has a range of features tailored to meet your specific needs. Our sleek and intuitive user interface makes it easy for you to navigate and access all the essential features, from creating invoices and updating product information to generating reports and receiving notifications from your manager.&#10;&#10;As a sales representative, you'll love the ease with which you can create invoices, manage product inventory, and access up-to-date sales data. With our app, you can easily generate sales reports and track your progress towards your sales targets, all while on the go. &#10;&#10;As a manager, you'll appreciate the comprehensive tools at your disposal. You can easily monitor employee performance, assign tasks, and receive updates on inventory levels. Additionally, you have access to an extensive set of reporting tools, allowing you to gain insights into your sales performance and make data-driven decisions.&#10;&#10;Our app is designed to be flexible and scalable to meet the needs of businesses of all sizes. We offer a range of customization options, from adding your company's logo and branding to tailoring the app's functionality to suit your specific needs.&#10;&#10;We take security seriously, and our app is designed with advanced security features to keep your data safe and secure. You can rest assured that your data is protected with industry-standard encryption protocols.&#10;&#10;We are constantly updating our app with new features and improvements, and we encourage you to check this tab regularly to stay up-to-date with the latest developments.&#10;&#10;Don't hesitate to try our app today and experience the future of sales management!" wrapText="true">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </JFXTextArea>
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
+          <Tab fx:id="createOrderTab" closable="false" text="Create Order">
+               <content>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="2" wrappingWidth="28.153666019439697">
+                     <font>
+                        <Font size="96.0" />
+                     </font>
+                  </Text>
+               </content>
+            </Tab>
+            <Tab fx:id="productsOperationTab" closable="false" text="Products Operation">
+               <content>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="3" />
+               </content>
+            </Tab>
+            <Tab fx:id="employeesOperationTab" closable="false" text="Employees Operation" />
+            <Tab fx:id="settingTab" text="Setting" />
+        </tabs>
+      </TabPane>
+      <SplitPane dividerPositions="0.5" layoutX="-3.0" layoutY="50.0" maxWidth="196.0" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="550.0" prefWidth="196.0" style="-fx-background-color: #3196de;">
+         <items>
+            <VBox alignment="CENTER" maxHeight="158.0" maxWidth="194.0" minHeight="140.0" minWidth="180.0" prefHeight="158.0" prefWidth="193.0" spacing="5.0">
+               <children>
+                  <JFXButton alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="50.0" ripplerFill="WHITE" styleClass="avatar-image" text="Button" textAlignment="CENTER" textOverrun="CLIP">
+                     <graphic>
+                        <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@img/default_acc_icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+                  <Text fx:id="usernameText" fill="WHITE" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Ngũ Thành An" textAlignment="CENTER" wrappingWidth="153.57815885543823">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+               </children>
+            </VBox>
+            <VBox maxHeight="516.0" maxWidth="209.0" minHeight="362.0" minWidth="180.0" prefHeight="409.0" prefWidth="191.0">
+               <children>
+                  <JFXButton alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#goToHomeTab" prefHeight="67.0" prefWidth="466.0" styleClass="request_button" text="Home" textAlignment="CENTER" />
+                  <JFXButton focusTraversable="false" onMouseClicked="#goToCreateOrderTab" prefHeight="66.0" prefWidth="271.0" styleClass="request_button" text="Create Order" />
+                  <JFXButton focusTraversable="false" onMouseClicked="#goToProductsOperationTab" prefHeight="65.0" prefWidth="259.0" styleClass="request_button" text="Products Operation" />
+                  <JFXButton focusTraversable="false" onMouseClicked="#goToEmployeesOperationTab" prefHeight="57.0" prefWidth="434.0" styleClass="request_button" text="Employees Operation" />
+                  <JFXButton onMouseClicked="#goToSettingTab" prefHeight="63.0" prefWidth="195.0" styleClass="request_button" text="Setting" />
+               </children>
+            </VBox>
+         </items>
+         <styleClass>
+            <String fx:value="split-pane-divider" />
+            <String fx:value="split-pane-divider" />
+         </styleClass>
+      </SplitPane>
+      <JFXToolbar prefHeight="50.0" prefWidth="1201.0" style="-fx-background-color: #3196de;">
+         <left>
+            <StackPane prefHeight="17.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fitHeight="38.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/home_icon.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </StackPane>
+         </left>
+         <right>
+            <JFXButton fx:id="closeIcon" buttonType="RAISED" contentDisplay="CENTER" focusTraversable="false" onMouseClicked="#closeStage" prefHeight="28.0" prefWidth="17.0" style="-fx-background-radius: 10; -fx-border-radius: 10;" textFill="TRANSPARENT" BorderPane.alignment="CENTER">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/close_icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </JFXButton>
+         </right>
+         <center>
+            <Text fx:id="timeDateText" fill="WHITE" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="datetime" textAlignment="CENTER" wrappingWidth="276.34372210502625" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Text>
+         </center>
+      </JFXToolbar>
+   </children>
+</AnchorPane>

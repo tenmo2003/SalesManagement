@@ -11,6 +11,10 @@ import java.sql.*;
 public class SQLConnection {
     private Connection connection;
 
+    public Connection getConnection() {
+        return connection;
+    }
+
     /**
      * You need url to database server, username and password to log in database server.
      *
