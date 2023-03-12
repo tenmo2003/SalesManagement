@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXToolbar?>
 <?import java.lang.String?>
 <?import javafx.scene.control.SplitPane?>
@@ -42,11 +43,45 @@
             </Tab>
           <Tab fx:id="createOrderTab" closable="false" text="Create Order">
                <content>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="2" wrappingWidth="28.153666019439697">
-                     <font>
-                        <Font size="96.0" />
-                     </font>
-                  </Text>
+                  <AnchorPane prefHeight="470.0" prefWidth="917.0">
+                     <children>
+                        <AnchorPane layoutX="263.0" layoutY="34.7060546875" visible="false">
+                           <children>
+                              <Text layoutX="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Check customer data" textAlignment="CENTER" wrappingWidth="442.6667073567709">
+                                 <font>
+                                    <Font size="29.0" />
+                                 </font>
+                              </Text>
+                              <JFXTextField layoutX="164.0" layoutY="102.2939453125" prefHeight="33.0" prefWidth="274.0" promptText="Nguyễn Văn A">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </JFXTextField>
+                              <JFXTextField layoutX="165.0" layoutY="149.2939453125" prefHeight="35.0" prefWidth="275.0" promptText="0123456789">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </JFXTextField>
+                              <Text layoutX="28.0" layoutY="104.7119140625" strokeType="OUTSIDE" strokeWidth="0.0" text="Fullname">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Text>
+                              <Text layoutY="152.7119140625" strokeType="OUTSIDE" strokeWidth="0.0" text="Phone Number">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Text>
+                              <JFXButton layoutX="202.0" layoutY="217.2939453125" prefHeight="42.0" prefWidth="94.0" style="-fx-background-color: #3196de; -fx-border-radius: 10; -fx-background-radius: 10;" text="CHECK" textFill="WHITE">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </JFXButton>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane prefHeight="523.0" prefWidth="1007.0" />
+                     </children>
+                  </AnchorPane>
                </content>
             </Tab>
             <Tab fx:id="productsOperationTab" closable="false" text="Products Operation">
@@ -93,13 +128,13 @@
             <String fx:value="split-pane-divider" />
          </styleClass>
       </SplitPane>
-      <JFXToolbar prefHeight="50.0" prefWidth="1201.0" style="-fx-background-color: #3196de;">
+      <JFXToolbar prefHeight="50.0" prefWidth="1201.0" style="-fx-background-color: linear-gradient(to right, #3196de, #65c0de);">
          <left>
             <StackPane prefHeight="17.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fitHeight="38.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="statusIcon" fitHeight="38.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@img/home_icon.png" />
+                        <Image url="@../../home_icon.png" />
                      </image>
                   </ImageView>
                </children>

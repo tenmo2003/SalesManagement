@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="450.0" prefWidth="705.0" styleClass="generalPane" stylesheets="@login.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.scenecontrollers.LoginSceneController">
+<AnchorPane onKeyPressed="#checkAccount" prefHeight="450.0" prefWidth="705.0" styleClass="generalPane" stylesheets="@login.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.scenecontrollers.LoginSceneController">
     <children>
         <AnchorPane fx:id="pane1" prefHeight="185.0" prefWidth="631.0" styleClass="topPane">
          <children>
@@ -23,7 +23,7 @@
                </graphic>
             </JFXButton>
          </children></AnchorPane>
-        <AnchorPane id="cardPane" layoutX="250.0" layoutY="62.0" prefHeight="326.0" prefWidth="323.0" styleClass="cardPane">
+        <AnchorPane id="cardPane" fx:id="loginPane" layoutX="250.0" layoutY="62.0" prefHeight="326.0" prefWidth="323.0" styleClass="cardPane">
             <children>
                 <ImageView fitHeight="90.0" fitWidth="90.0" layoutX="117.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
                     <image>
@@ -32,12 +32,12 @@
                 </ImageView>
                 <JFXTextField fx:id="username" focusTraversable="false" layoutX="77.0" layoutY="154.0" promptText="Username">
                     <font>
-                        <Font name="System Bold" size="14.0" />
+                        <Font size="14.0" />
                     </font>
                 </JFXTextField>
                 <JFXPasswordField fx:id="password" focusTraversable="false" layoutX="77.0" layoutY="214.0" promptText="Password">
                     <font>
-                        <Font name="System Bold" size="14.0" />
+                        <Font size="14.0" />
                     </font>
                 </JFXPasswordField>
                 <JFXButton buttonType="RAISED" layoutX="131.0" layoutY="274.0" onMouseClicked="#checkAccount" styleClass="topPane" text="LOGIN" textFill="WHITE">
@@ -45,8 +45,8 @@
                         <Font name="System Bold" size="14.0" />
                     </font>
                 </JFXButton>
-            <ProgressIndicator fx:id="progressIndicator" layoutX="136.0" layoutY="157.0" />
             </children>
         </AnchorPane>
+      <ProgressIndicator fx:id="progressIndicator" layoutX="385.0" layoutY="200.0" />
     </children>
 </AnchorPane>

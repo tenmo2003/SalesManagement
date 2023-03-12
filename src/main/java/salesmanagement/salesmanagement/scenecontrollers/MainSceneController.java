@@ -4,6 +4,8 @@ import com.jfoenix.controls.JFXTextArea;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 
@@ -42,6 +44,7 @@ public class MainSceneController extends SceneController {
     @FXML
     void goToCreateOrderTab() {
         tabPane.getSelectionModel().select(createOrderTab);
+        statusIcon.setImage(new Image("/create_order_icon.png"));
     }
 
     @FXML
@@ -52,6 +55,7 @@ public class MainSceneController extends SceneController {
     @FXML
     void goToHomeTab() {
         tabPane.getSelectionModel().select(homeTab);
+        statusIcon.setImage(new Image("/home_icon.png"));
     }
 
     @FXML
@@ -90,4 +94,8 @@ public class MainSceneController extends SceneController {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    ImageView statusIcon;
+
 }

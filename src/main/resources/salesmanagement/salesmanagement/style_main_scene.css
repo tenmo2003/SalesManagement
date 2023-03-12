@@ -1,7 +1,7 @@
 
 .avatar-image {
     -fx-background-radius: 50%;
-    -fx-background-color: #e3e3e3;
+    -fx-background-color: #65c0de;
     -fx-background-size: cover;
     -fx-background-position: center center;
 }

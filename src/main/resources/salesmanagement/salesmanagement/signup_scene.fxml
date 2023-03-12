@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import java.net.URL?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="450.0" prefWidth="705.0" styleClass="generalPane" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.scenecontrollers.LoginSceneController">
+   <children>
+      <AnchorPane fx:id="pane1" prefHeight="185.0" prefWidth="631.0" styleClass="topPane">
+         <children>
+            <JFXButton fx:id="closeIcon" buttonType="RAISED" contentDisplay="CENTER" focusTraversable="false" layoutX="771.0" layoutY="3.0" onMouseClicked="#closeStage" prefHeight="28.0" prefWidth="17.0" style="-fx-background-radius: 10; -fx-border-radius: 10;" textFill="TRANSPARENT">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/close_icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </JFXButton>
+         </children>
+      </AnchorPane>
+      <AnchorPane id="cardPane" fx:id="loginPane" layoutX="76.0" layoutY="62.0" prefHeight="326.0" prefWidth="640.0" styleClass="cardPane">
+         <children>
+            <JFXButton buttonType="RAISED" layoutX="227.0" layoutY="273.0" onMouseClicked="#checkAccount" styleClass="topPane" text="SIGN UP FOR MANAGER" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </JFXButton>
+            <VBox alignment="CENTER" layoutX="341.0" layoutY="77.0" prefHeight="0.0" prefWidth="200.0" spacing="20.0" stylesheets="@signup_style.css">
+               <children>
+                  <JFXTextField fx:id="username2" focusTraversable="false" prefHeight="29.0" prefWidth="211.0" promptText="First Name">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </JFXTextField>
+                  <JFXTextField fx:id="username21" focusTraversable="false" prefHeight="29.0" prefWidth="211.0" promptText="Username">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </JFXTextField>
+                  <JFXTextField fx:id="username22" focusTraversable="false" prefHeight="29.0" prefWidth="211.0" promptText="Last Name">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </JFXTextField>
+                  <JFXPasswordField fx:id="password" focusTraversable="false" prefHeight="29.0" prefWidth="211.0" promptText="Password" styleClass="text_field" stylesheets="@signup_style.css">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </JFXPasswordField>
+               </children>
+            </VBox>
+            <VBox layoutX="99.0" layoutY="77.0" prefHeight="0.0" prefWidth="200.0" spacing="20.0" stylesheets="@signup_style.css">
+               <children>
+                  <JFXComboBox prefHeight="29.0" prefWidth="205.0" promptText="Country" styleClass="text_field" />
+                  <JFXTextField fx:id="username" focusTraversable="false" prefHeight="29.0" prefWidth="211.0" promptText="Business Code" styleClass="text_field">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </JFXTextField>
+                  <JFXTextField fx:id="username1" focusTraversable="false" prefHeight="29.0" prefWidth="211.0" promptText="Enterprise Name" styleClass="text_field">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </JFXTextField>
+                  <JFXTextField fx:id="username11" focusTraversable="false" prefHeight="29.0" prefWidth="211.0" promptText="Email" styleClass="text_field">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </JFXTextField>
+               </children>
+            </VBox>
+            <ProgressIndicator fx:id="progressIndicator" layoutX="294.0" layoutY="137.0" />
+            <ImageView fitHeight="61.0" fitWidth="72.0" layoutX="290.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@img/sign_up.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+   </children>
+   <stylesheets>
+      <URL value="@login.css" />
+      <URL value="@signup_style.css" />
+   </stylesheets>
+</AnchorPane>
