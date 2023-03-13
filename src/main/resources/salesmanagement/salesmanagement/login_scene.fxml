@@ -25,26 +25,26 @@
          </children></AnchorPane>
         <AnchorPane id="cardPane" fx:id="loginPane" layoutX="250.0" layoutY="62.0" prefHeight="326.0" prefWidth="323.0" styleClass="cardPane">
             <children>
-                <ImageView fitHeight="90.0" fitWidth="90.0" layoutX="117.0" layoutY="38.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fitHeight="90.0" fitWidth="90.0" layoutX="117.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@img/login.png" />
                     </image>
                 </ImageView>
-                <JFXTextField fx:id="username" focusTraversable="false" layoutX="77.0" layoutY="154.0" promptText="Username">
+                <JFXTextField fx:id="username" focusTraversable="false" layoutX="76.0" layoutY="146.0" prefHeight="30.0" prefWidth="170.0" promptText="Username">
                     <font>
                         <Font size="14.0" />
                     </font>
                 </JFXTextField>
-                <JFXPasswordField fx:id="password" focusTraversable="false" layoutX="77.0" layoutY="214.0" promptText="Password">
-                    <font>
-                        <Font size="14.0" />
-                    </font>
-                </JFXPasswordField>
-                <JFXButton buttonType="RAISED" layoutX="131.0" layoutY="274.0" onMouseClicked="#checkAccount" styleClass="topPane" text="LOGIN" textFill="WHITE">
+                <JFXButton buttonType="RAISED" layoutX="134.0" layoutY="251.0" onMouseClicked="#checkAccount" styleClass="topPane" text="LOGIN" textFill="WHITE">
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font>
                 </JFXButton>
+                <JFXPasswordField fx:id="password" focusTraversable="false" layoutX="77.0" layoutY="194.0" promptText="Password">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </JFXPasswordField>
             </children>
         </AnchorPane>
       <ProgressIndicator fx:id="progressIndicator" layoutX="385.0" layoutY="200.0" />

@@ -11,7 +11,6 @@ import javafx.stage.StageStyle;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.scenecontrollers.LoginSceneController;
 import salesmanagement.salesmanagement.scenecontrollers.MainSceneController;
-import salesmanagement.salesmanagement.scenecontrollers.SignupSceneController;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -61,16 +60,6 @@ public class AppController {
         }
         LoginSceneController loginSceneController = loginFXMLLoader.getController();
 
-        //Load login scene.
-        FXMLLoader signupFXMLLoader = new FXMLLoader(SalesManagement.class.getResource("signup_scene.fxml"));
-        try {
-            signupScene = new Scene(signupFXMLLoader.load());
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(0);
-        }
-       // SignupSceneController signupSceneController = signupFXMLLoader.getController();
-
         //Load main scene.
         FXMLLoader mainFXMLLoader = new FXMLLoader(SalesManagement.class.getResource("main_scene.fxml"));
         try {
@@ -118,8 +107,8 @@ public class AppController {
                 mainSceneController.setTimeDateText(formattedDateTime);
             }
         };
-        // Start the AnimationTimer
         timer.start();
+
     }
     private void loginEventController(LoginSceneController loginSceneController, MainSceneController mainSceneController) {
         //Create thread for run progressIndicator while load db connection.
@@ -127,13 +116,13 @@ public class AppController {
             @Override
             protected Void call() {
                 start();
-                loginSceneController.setSqlConnection(sqlConnection);
-                mainSceneController.setSqlConnection(sqlConnection);
+                loginSceneController.setSqlConnection(sqlConnection, stage);
+                mainSceneController.setSqlConnection(sqlConnection, stage);
                 return null;
             }
         };
         new Thread(databaseConnectionTask).start();
         loginSceneController.setProgressIndicatorStatus(databaseConnectionTask);
-
     }
+
 }

@@ -8,6 +8,8 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -45,7 +47,7 @@
                <content>
                   <AnchorPane prefHeight="470.0" prefWidth="917.0">
                      <children>
-                        <AnchorPane layoutX="263.0" layoutY="34.7060546875" visible="false">
+                        <AnchorPane layoutX="263.0" layoutY="34.7060546875">
                            <children>
                               <Text layoutX="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Check customer data" textAlignment="CENTER" wrappingWidth="442.6667073567709">
                                  <font>
@@ -62,24 +64,24 @@
                                     <Font size="20.0" />
                                  </font>
                               </JFXTextField>
-                              <Text layoutX="28.0" layoutY="104.7119140625" strokeType="OUTSIDE" strokeWidth="0.0" text="Fullname">
+                              <Text layoutX="28.0" layoutY="133.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fullname">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
                               </Text>
-                              <Text layoutY="152.7119140625" strokeType="OUTSIDE" strokeWidth="0.0" text="Phone Number">
+                              <Text layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Phone Number">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
                               </Text>
                               <JFXButton layoutX="202.0" layoutY="217.2939453125" prefHeight="42.0" prefWidth="94.0" style="-fx-background-color: #3196de; -fx-border-radius: 10; -fx-background-radius: 10;" text="CHECK" textFill="WHITE">
                                  <font>
-                                    <Font size="20.0" />
+                                    <Font size="26.0" />
                                  </font>
                               </JFXButton>
                            </children>
                         </AnchorPane>
-                        <AnchorPane prefHeight="523.0" prefWidth="1007.0" />
+                        <AnchorPane prefHeight="523.0" prefWidth="1007.0" visible="false" />
                      </children>
                   </AnchorPane>
                </content>
@@ -89,7 +91,25 @@
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="3" />
                </content>
             </Tab>
-            <Tab fx:id="employeesOperationTab" closable="false" text="Employees Operation" />
+            <Tab fx:id="employeesOperationTab" closable="false" onSelectionChanged="#selectEmployeesOperationTab" text="Employees Operation">
+               <content>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="employeeTable" layoutX="22.0" layoutY="18.0" prefHeight="487.0" prefWidth="950.0">
+                          <columns>
+                            <TableColumn fx:id="employeeNumber" prefWidth="72.79998779296875" text="ID" />
+                            <TableColumn fx:id="lastName" prefWidth="120.0" text="Last name" />
+                              <TableColumn fx:id="firstName" prefWidth="143.20004272460938" text="First Name" />
+                              <TableColumn fx:id="email" prefWidth="204.0" text="Email" />
+                              <TableColumn fx:id="officeCode" minWidth="0.0" prefWidth="104.0" text="Office Code" />
+                              <TableColumn fx:id="reportsTo" prefWidth="117.60003662109375" text="Reports To" />
+                              <TableColumn fx:id="jobTitle" prefWidth="107.99993896484375" text="Job Title" />
+                              <TableColumn fx:id="operation" prefWidth="92.0" text="Operation" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+               </content></Tab>
             <Tab fx:id="settingTab" text="Setting" />
         </tabs>
       </TabPane>
