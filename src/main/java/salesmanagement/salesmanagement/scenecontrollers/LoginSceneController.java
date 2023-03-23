@@ -5,38 +5,31 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.util.Duration;
-import org.controlsfx.control.Notifications;
-import salesmanagement.salesmanagement.ErrorCode;
-import salesmanagement.salesmanagement.InvalidInput;
-import salesmanagement.salesmanagement.SalesManagement;
+import salesmanagement.salesmanagement.NotificationCode;
+import salesmanagement.salesmanagement.NotificationSystem;
+import salesmanagement.salesmanagement.SalesComponent.Employee;
 
-import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class LoginSceneController extends SceneController implements Initializable {
+public class LoginSceneController extends SceneController  {
     @FXML
     JFXTextField username;
     @FXML
     JFXPasswordField password;
 
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    private Employee user;
 
+    public Employee getUser() {
+        return user;
     }
-
-
 
     int loggerID = -1;
 
@@ -45,7 +38,11 @@ public class LoginSceneController extends SceneController implements Initializab
     }
 
     @FXML
-    AnchorPane loginPane;
+     private AnchorPane loginPane;
+
+    public AnchorPane getLoginPane() {
+        return loginPane;
+    }
 
     @FXML
     public void checkAccount(Event event) {
@@ -60,7 +57,8 @@ public class LoginSceneController extends SceneController implements Initializab
                 String query = "select accountID, username, password from accounts where username = '" + username + "' and password = '" + password + "'";
                 ResultSet resultSet = sqlConnection.getDataQuery(query);
                 if (resultSet.next()) {
-                    loggerID = resultSet.getInt("accountID");
+                    MainSceneController.loggerID = resultSet.getInt("accountID");
+                    MainSceneController.haveJustOpened = true;
                     return true;
                 }
                 return false;
@@ -69,7 +67,7 @@ public class LoginSceneController extends SceneController implements Initializab
 
         checkAccountTask.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
-                InvalidInput.throwNotification(ErrorCode.INVALID_LOGIN, stage);
+                NotificationSystem.throwNotification(NotificationCode.INVALID_LOGIN, stage);
             }
         });
 
@@ -79,5 +77,23 @@ public class LoginSceneController extends SceneController implements Initializab
 
     public void setProgressIndicatorStatus(Task<?> databaseConnectionTask) {
         super.setProgressIndicatorStatus(databaseConnectionTask, loginPane);
+    }
+
+
+    public void setProgressIndicatorStatus(boolean loading) {
+        if(loading) {
+            showProgressIndicator();
+        }
+        else {
+
+        }
+    }
+
+    public void showProgressIndicator() {
+        super.showProgressIndicator(loginPane);
+    }
+
+    public void hideProgressIndicator() {
+        super.hideProgressIndicator(loginPane);
     }
 }

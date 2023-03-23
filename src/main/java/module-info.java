@@ -4,7 +4,7 @@ module salesmanagement.salesmanagement {
     requires java.sql;
     requires com.jfoenix;
     requires org.controlsfx.controls;
-   requires java.mail;
+    requires java.mail;
 
     opens salesmanagement.salesmanagement to javafx.fxml;
     exports salesmanagement.salesmanagement;

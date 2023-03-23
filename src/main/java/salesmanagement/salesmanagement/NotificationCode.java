@@ -1,6 +1,6 @@
 package salesmanagement.salesmanagement;
 
-public enum ErrorCode {
+public enum NotificationCode {
     INVALID_USERNAME,
     INVALID_PASSWORD,
     INVALID_EMAIL,
@@ -8,9 +8,10 @@ public enum ErrorCode {
     INVALID_PHONE_NUMBER,
     INVALID_BUSINESS_CODE,
     INVALID_ENTERPRISE,
-    INVALID_LOGIN;
+    INVALID_LOGIN,
+    NETWORK_ERROR;
 
-    public static ErrorCode getErrorCode(int code) {
+    public static NotificationCode getErrorCode(int code) {
         return switch (code) {
             case 0 -> INVALID_USERNAME;
             case 1 -> INVALID_PASSWORD;
@@ -20,6 +21,7 @@ public enum ErrorCode {
             case 5 -> INVALID_BUSINESS_CODE;
             case 6 -> INVALID_ENTERPRISE;
             case 7 -> INVALID_LOGIN;
+            case 8 -> NETWORK_ERROR;
             default -> throw new IllegalArgumentException("Invalid error code: " + code);
         };
     }

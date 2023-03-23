@@ -30,3 +30,10 @@
     -fx-padding: 0 20px 10px 20px;
     -fx-font-size: 16;
 }
+.tab-pane {
+    -fx-tab-max-height: 0 ;
+} 
+.tab-pane .tab-header-area {
+    visibility: hidden ;
+    -fx-padding: -20 0 0 0;
+}
