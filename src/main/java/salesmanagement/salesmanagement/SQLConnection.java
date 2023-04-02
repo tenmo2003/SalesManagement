@@ -46,6 +46,17 @@ public class SQLConnection {
         return resultSet;
     }
 
+    public void updateQuery(String query) {
+        Statement statement = null;
+        try {
+            statement = connection.createStatement();
+
+            statement.executeUpdate(query);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     /**
      * Close connection to SQL Server.
      *
