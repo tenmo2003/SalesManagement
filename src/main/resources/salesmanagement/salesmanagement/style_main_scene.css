@@ -1,7 +1,6 @@
-
 .avatar-image {
     -fx-background-radius: 50%;
-    -fx-background-color: #65c0de;
+    -fx-background-color: #d8e9ef;
     -fx-background-size: cover;
     -fx-background-position: center center;
 }
@@ -18,12 +17,7 @@
     -fx-border-radius: 10px;
     -fx-background-radious: 10px;
  }
- .request_button{
-    -fx-border-color: rgba(30, 124, 202, 0.553);
-    -fx-border-radius: 0;
-    -fx-border-width: 1 0 1 0;
-    -fx-alignment: center;
-}
+ 
 
 .content-notification-text-area {
     -fx-text-alignment: justify;
@@ -36,4 +30,15 @@
 .tab-pane .tab-header-area {
     visibility: hidden ;
     -fx-padding: -20 0 0 0;
+}
+.main-button {
+    -fx-border-radius: 0;
+    -fx-border-width: 0 0 0 4;
+    -fx-border-color: transparent;
+    -fx-background-color :#ffffff;
+}
+@font-face {
+    font-family: 'myfont';
+    src: url('/salesmanagement/salesmanagement/SVN-Poppins.ttf');
+    font-weight: 10;
 }

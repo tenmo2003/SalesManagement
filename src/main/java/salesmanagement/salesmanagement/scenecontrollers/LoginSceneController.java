@@ -5,37 +5,20 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import salesmanagement.salesmanagement.NotificationCode;
 import salesmanagement.salesmanagement.NotificationSystem;
-import salesmanagement.salesmanagement.SalesComponent.Employee;
 
-import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
 
 public class LoginSceneController extends SceneController  {
     @FXML
     JFXTextField username;
     @FXML
     JFXPasswordField password;
-
-
-    private Employee user;
-
-    public Employee getUser() {
-        return user;
-    }
-
-    int loggerID = -1;
-
-    public int getLoggerID() {
-        return loggerID;
-    }
 
     @FXML
      private AnchorPane loginPane;

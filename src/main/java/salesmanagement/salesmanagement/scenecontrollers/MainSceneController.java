@@ -8,7 +8,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -18,17 +18,31 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
+
 import javafx.util.Callback;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import salesmanagement.salesmanagement.SQLConnection;
+
+import salesmanagement.salesmanagement.EmployeeForm;
+import salesmanagement.salesmanagement.Form;
+import salesmanagement.salesmanagement.ImageController;
+
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesComponent.Order;
 
+
 import java.net.URL;
+=======
+import java.io.InputStream;
+import java.sql.PreparedStatement;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -39,11 +53,6 @@ import java.util.ResourceBundle;
 public class MainSceneController extends SceneController implements Initializable {
     @FXML
     Text usernameText;
-
-    public void setUsernameText(String usernameText) {
-        this.usernameText.setText(usernameText);
-    }
-
     @FXML
     TabPane tabPane;
     @FXML
@@ -58,21 +67,29 @@ public class MainSceneController extends SceneController implements Initializabl
     private Tab productsOperationTab;
 
     @FXML
+    JFXButton ordersTabButton;
+    @FXML
+    JFXButton newsTabButton;
+    @FXML
+    JFXButton settingsTabButton;
+    @FXML
+    JFXButton productsTabButton;
+    @FXML
+    JFXButton employeesTabButton;
+    JFXButton currentTabButton;
+
+    @FXML
     void goToCreateOrderTab() {
         tabPane.getSelectionModel().select(createOrderTab);
-        statusIcon.setImage(new Image("/create_order_icon.png"));
+        statusIcon.setImage(ImageController.getImage("create_order_icon.png"));
     }
 
     @FXML
-    void goToEmployeesOperationTab() {
+    void goToEmployeesTab() {
         tabPane.getSelectionModel().select(employeesOperationTab);
+        haveChangeInEmployeesTab = true;
     }
 
-    @FXML
-    void goToHomeTab() {
-        tabPane.getSelectionModel().select(homeTab);
-        statusIcon.setImage(new Image("/home_icon.png"));
-    }
 
     @FXML
     void goToProductsOperationTab() {
@@ -103,7 +120,8 @@ public class MainSceneController extends SceneController implements Initializabl
             ResultSet resultSet = sqlConnection.getDataQuery(query);
             try {
                 if (resultSet.next()) {
-                    content.wrappingWidthProperty().bind(contentBox.widthProperty().multiply(0.9));
+                    //content.wrappingWidthProperty().bind(contentBox.widthProperty().multiply(0.9));
+                    content.setWrappingWidth(contentBox.getWidth() * 0.9);
                     content.setText(resultSet.getString("content"));
                     notificationTitle.setText(resultSet.getString("title"));
                     int authorID = Integer.parseInt(resultSet.getString("employeeNumber"));
@@ -114,7 +132,7 @@ public class MainSceneController extends SceneController implements Initializabl
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }, progressIndicator, homeTab.getTabPane());
+        }, null, progressIndicator, homeTab.getTabPane());
 
     }
 
@@ -147,40 +165,25 @@ public class MainSceneController extends SceneController implements Initializabl
     ArrayList<Employee> employees;
 
     @FXML
-    void selectEmployeesOperationTab() {
+    void selectEmployeesTab() {
         employeeTable.setSelectionModel(null);
-        Task<Void> getEmployeeRecordsTask = new Task<>() {
-            @Override
-            protected Void call() {
-                String query = "select * from employees";
-                employees = new ArrayList<>();
+        ArrayList<Employee> employees = new ArrayList<>();
+        runTask(() -> {
+            String query = "SELECT * FROM employees";
+            try {
                 ResultSet resultSet = sqlConnection.getDataQuery(query);
-                try {
-                    while (resultSet.next()) {
-                        employees.add(new Employee(resultSet, MainSceneController.this));
-                    }
-
-                } catch (SQLException e) {
-                    e.printStackTrace();
+                while (resultSet.next()) {
+                    employees.add(new Employee(resultSet, MainSceneController.this));
                 }
-                employeeNumber.setCellValueFactory(new PropertyValueFactory<>("employeeNumber"));
-                lastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-                firstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-                email.setCellValueFactory(new PropertyValueFactory<>("email"));
-                officeCode.setCellValueFactory(new PropertyValueFactory<>("officeCode"));
-                reportsTo.setCellValueFactory(new PropertyValueFactory<>("reportsTo"));
-                jobTitle.setCellValueFactory(new PropertyValueFactory<>("jobTitle"));
-                operation.setCellValueFactory(new PropertyValueFactory<>("operation"));
-
-                ObservableList<Employee> employeeList = FXCollections.observableArrayList(employees);
-                employeeTable.setItems(employeeList);
-                return null;
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        };
-        new Thread(getEmployeeRecordsTask).start();
-        setProgressIndicatorStatus(getEmployeeRecordsTask, employeeOperationPane);
+        }, () -> {
+            ObservableList<Employee> employeeList = FXCollections.observableArrayList(employees);
+            employeeTable.setItems(employeeList);
+            this.employees = employees;
+        }, progressIndicator, employeeOperationPane);
     }
-
 
     @FXML
     SplitPane firstSplitPane;
@@ -193,10 +196,27 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     HBox statusIconBox;
 
+    @FXML
+    ImageView smallAvatar;
+
+    @FXML
+    private void goToNewsTab() {
+        tabPane.getSelectionModel().select(homeTab);
+        newsTabButton.fire();
+    }
+
+    enum tab {
+        newsTab,
+        employeesTab,
+        settingsTab,
+        ordersTab,
+        productsTab
+    }
+
+
     public void initialSetup() {
-
+        // Load current UI.
         user = new Employee(sqlConnection, loggerID);
-
         usernameText.setText(user.getFullName());
 
         firstSplitPane.setMaxHeight(Screen.getPrimary().getVisualBounds().getHeight());
@@ -212,7 +232,6 @@ public class MainSceneController extends SceneController implements Initializabl
         statusIconBox.setPrefWidth(0.1667 * Screen.getPrimary().getVisualBounds().getWidth());
 
         double tableWidth = employeeTabBox.getWidth() * 0.95;
-        System.out.println(employeeTabBox.getWidth());
         employeeTable.setMaxWidth(tableWidth);
         employeeNumber.setMinWidth(0.1 * tableWidth);
         firstName.setMinWidth(0.125 * tableWidth);
@@ -222,7 +241,46 @@ public class MainSceneController extends SceneController implements Initializabl
         reportsTo.setMinWidth(0.125 * tableWidth);
         jobTitle.setMinWidth(0.125 * tableWidth);
         operation.setMinWidth(0.125 * tableWidth);
+
+        Circle clip = new Circle();
+        clip.setRadius(35);
+        clip.setCenterX(35);
+        clip.setCenterY(35);
+        smallAvatar.setClip(clip);
+
+        employeeForm = new EmployeeForm(employeeInfoBoxContainer);
+        employeeForm.closeForm(() -> employeeInfoBoxContainer.setMouseTransparent(true));
+
+        currentTabButton = newsTabButton;
+        goToNewsTab();
+
+        // Load UI for others.
+        runTask(() -> {
+            //Load small avatar.
+            try {
+                PreparedStatement ps = sqlConnection.getConnection().prepareStatement("SELECT avatar FROM employees WHERE employeeNumber = ?");
+                ps.setInt(1, loggerID);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    InputStream is = rs.getBinaryStream("avatar");
+                    Image image = new Image(is);
+                    smallAvatar.setImage(image);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            employeeNumber.setCellValueFactory(new PropertyValueFactory<>("employeeNumber"));
+            lastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+            firstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+            email.setCellValueFactory(new PropertyValueFactory<>("email"));
+            officeCode.setCellValueFactory(new PropertyValueFactory<>("officeCode"));
+            reportsTo.setCellValueFactory(new PropertyValueFactory<>("reportsTo"));
+            jobTitle.setCellValueFactory(new PropertyValueFactory<>("jobTitle"));
+            operation.setCellValueFactory(new PropertyValueFactory<>("operation"));
+        }, null, null, null);
     }
+
 
     private Employee user;
 
@@ -246,10 +304,11 @@ public class MainSceneController extends SceneController implements Initializabl
             }
         }
     };
-    private AnimationTimer reloadFlagListener = new AnimationTimer() {
+    private final AnimationTimer reloadFlagListener = new AnimationTimer() {
         @Override
         public void handle(long l) {
             if (haveJustOpened) {
+                haveJustOpened = false;
                 stage.setScene(MainSceneController.this.scene);
                 stage.hide();
                 initialSetup();
@@ -257,17 +316,22 @@ public class MainSceneController extends SceneController implements Initializabl
                 stage.setY(0);
                 stage.show();
                 uploadNotificationText();
-                haveJustOpened = false;
             }
+
             if (haveChangeInEmployeesTab) {
-                selectEmployeesOperationTab();
                 haveChangeInEmployeesTab = false;
+                selectEmployeesTab();
             }
+
             if (haveChangeInHomeTab) {
 
             }
         }
     };
+    @FXML
+    StackPane employeeInfoBoxContainer;
+    Form employeeForm;
+
 
     @FXML
     JFXComboBox statusInput;
@@ -438,5 +502,39 @@ public class MainSceneController extends SceneController implements Initializabl
         orderdetails.deleteCharAt(orderdetails.length() - 1);
         orderdetails.append(';');
         sqlConnection.updateQuery(orderdetails.toString());
+
+    public void editEmployees(Employee employee) {
+        employeeInfoBoxContainer.setMouseTransparent(false);
+        employeeForm.fillInForm(employee);
+        employeeForm.show();
+    }
+
+    @FXML
+    void tabSelectingEffect(Event event) {
+        HBox hbox = (HBox) currentTabButton.getGraphic();
+        Label label = (Label) hbox.getChildren().get(1);
+        label.setTextFill(Color.valueOf("#7c8db5"));
+        ImageView buttonIcon = (ImageView) hbox.getChildren().get(0);
+        if (currentTabButton.equals(newsTabButton)) buttonIcon.setImage(ImageController.newsIcon);
+        else if (currentTabButton.equals(ordersTabButton)) buttonIcon.setImage(ImageController.orderIcon);
+        else if (currentTabButton.equals(productsTabButton)) buttonIcon.setImage(ImageController.productIcon);
+        else if (currentTabButton.equals(employeesTabButton)) buttonIcon.setImage(ImageController.employeeIcon);
+        else if (currentTabButton.equals(settingsTabButton)) buttonIcon.setImage(ImageController.settingsIcon);
+        currentTabButton.setStyle("-fx-border-color: transparent;-fx-background-color :#ffffff; -fx-border-width: 0 0 0 4; -fx-border-radius: 0;");
+
+        currentTabButton = (JFXButton) event.getSource();
+        hbox = (HBox) currentTabButton.getGraphic();
+        label = (Label) hbox.getChildren().get(1);
+        label.setTextFill(Color.valueOf("#329cfe"));
+        buttonIcon = (ImageView) hbox.getChildren().get(0);
+        if (currentTabButton.equals(newsTabButton)) buttonIcon.setImage(ImageController.blueNewsIcon);
+        else if (currentTabButton.equals(ordersTabButton)) buttonIcon.setImage(ImageController.blueOrderIcon);
+        else if (currentTabButton.equals(productsTabButton)) buttonIcon.setImage(ImageController.blueProductIcon);
+        else if (currentTabButton.equals(employeesTabButton)) buttonIcon.setImage(ImageController.blueEmployeeIcon);
+        else if (currentTabButton.equals(settingsTabButton)) buttonIcon.setImage(ImageController.blueSettingsIcon);
+
+        currentTabButton.setStyle("-fx-border-color: #60b1fd; -fx-background-color : #fafafa;-fx-border-width: 0 0 0 4; -fx-border-radius: 0;");
+
     }
 }
+

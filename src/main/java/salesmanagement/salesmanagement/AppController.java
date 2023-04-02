@@ -12,6 +12,7 @@ import salesmanagement.salesmanagement.scenecontrollers.MainSceneController;
 import salesmanagement.salesmanagement.scenecontrollers.SceneController;
 
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * @since 1.0
@@ -70,7 +71,7 @@ public class AppController {
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.setTitle("Sales Management");
         stage.setScene(loginScene);
-        stage.getIcons().add(new Image("/app_icon.png"));
+        stage.getIcons().add(ImageController.getImage("app_icon.png"));
         stage.show();
 
         // Set up SQL Connection for scene controllers.
@@ -79,7 +80,7 @@ public class AppController {
             sqlConnection.logInSQLServer(url, user, password);
             loginSceneController.setSqlConnection(sqlConnection, stage);
             mainSceneController.setSqlConnection(sqlConnection, stage);
-        }, loginSceneController.getProgressIndicator(), loginSceneController.getLoginPane());
+        },null, loginSceneController.getProgressIndicator(), loginSceneController.getLoginPane());
 
         // Login event.
         mainSceneController.loginDataListener.start();
