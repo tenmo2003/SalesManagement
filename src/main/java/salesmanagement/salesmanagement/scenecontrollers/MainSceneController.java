@@ -1,13 +1,19 @@
 package salesmanagement.salesmanagement.scenecontrollers;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextField;
 import javafx.animation.AnimationTimer;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -15,13 +21,22 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
+import javafx.util.Callback;
+import javafx.util.converter.DoubleStringConverter;
+import javafx.util.converter.IntegerStringConverter;
+import salesmanagement.salesmanagement.SQLConnection;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
+import salesmanagement.salesmanagement.SalesComponent.Order;
 
+import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
-public class MainSceneController extends SceneController {
+public class MainSceneController extends SceneController implements Initializable {
     @FXML
     Text usernameText;
 
@@ -254,4 +269,174 @@ public class MainSceneController extends SceneController {
         }
     };
 
+    @FXML
+    JFXComboBox statusInput;
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        statusInput.getItems().add("Cancelled");
+        statusInput.getItems().add("Disputed");
+        statusInput.getItems().add("In Process");
+        statusInput.getItems().add("On Hold");
+        statusInput.getItems().add("Resolved");
+        statusInput.getItems().add("Shipped");
+
+//        tableView.setItems(getItems());
+        productCode.setCellValueFactory(new PropertyValueFactory<Order, String>("productCode"));
+        quantity.setCellValueFactory(new PropertyValueFactory<Order, Integer>("quantityOrdered"));
+        priceEach.setCellValueFactory(new PropertyValueFactory<Order, Double>("priceEach"));
+        total.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Order, Double>, ObservableValue<Double>>() {
+            @Override
+            public ObservableValue<Double> call(TableColumn.CellDataFeatures<Order, Double> param) {
+                Order order = param.getValue();
+                int quantity = order.getQuantityOrdered();
+                double price = order.getPriceEach();
+                double total = quantity * price;
+                return new SimpleDoubleProperty(total).asObject();
+            }
+        });
+
+        tableView.setItems(getList());
+
+        tableView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        tableView.setEditable(true);
+        productCode.setCellFactory(TextFieldTableCell.forTableColumn());
+        quantity.setCellFactory(TextFieldTableCell.forTableColumn((new IntegerStringConverter())));
+        priceEach.setCellFactory(TextFieldTableCell.forTableColumn((new DoubleStringConverter())));
+    }
+
+    public ObservableList<Order> getList() {
+        ObservableList<Order> items = FXCollections.observableArrayList();
+        return items;
+    }
+
+    public void addItem() {
+        String productCode = productCodeInput.getText();
+        int quantity = Integer.parseInt(quantityInput.getText());
+        double priceEach = Double.parseDouble(priceEachInput.getText());
+
+        // Check if an order with the same productCode already exists
+        for (Order order : tableView.getItems()) {
+            if (order.getProductCode().equals(productCode)) {
+                // Update the existing order
+                order.setQuantityOrdered(quantity);
+                order.setPriceEach(priceEach);
+                tableView.refresh();
+                return;
+            }
+        }
+
+        // If no existing order was found, create a new one and add it to the tableView
+        Order order = new Order(productCode, quantity, priceEach);
+        tableView.getItems().add(order);
+    }
+
+    public void removeItems() {
+        ObservableList<Order> selectedRows, allItems;
+        allItems = tableView.getItems();
+
+        selectedRows = tableView.getSelectionModel().getSelectedItems();
+
+        allItems.removeAll(selectedRows);
+    }
+
+    public void changeProductCode(TableColumn.CellEditEvent edittedCell) {
+        Order selected = tableView.getSelectionModel().getSelectedItem();
+        selected.setProductCode(edittedCell.getNewValue().toString());
+        tableView.refresh();
+    }
+    public void changeQuantity(TableColumn.CellEditEvent edittedCell) {
+        Order selected = tableView.getSelectionModel().getSelectedItem();
+        selected.setQuantityOrdered((int) edittedCell.getNewValue());
+        tableView.refresh();
+    }
+    public void changePriceEach(TableColumn.CellEditEvent edittedCell) {
+        Order selected = tableView.getSelectionModel().getSelectedItem();
+        selected.setPriceEach((double) edittedCell.getNewValue());
+        tableView.refresh();
+    }
+
+    @FXML
+    TableView<Order> tableView;
+    @FXML
+    TableColumn<Order, String> productCode;
+    @FXML
+    TableColumn<Order, Integer> quantity;
+    @FXML
+    TableColumn<Order, Double> priceEach;
+    @FXML
+    TableColumn<Order, Double> total;
+    @FXML
+    JFXTextField customerNumberInput;
+    @FXML
+    JFXTextField productCodeInput;
+    @FXML
+    JFXTextField quantityInput;
+    @FXML
+    JFXTextField priceEachInput;
+    @FXML
+    JFXButton addButton;
+    @FXML
+    JFXButton removeButton;
+    @FXML
+    DatePicker orderDateInput;
+    @FXML
+    DatePicker requiredDateInput;
+    @FXML
+    DatePicker shippedDateInput;
+    @FXML
+    JFXTextField commentsInput;
+    @FXML
+    JFXButton createOrderButton;
+    public void createOrder() throws SQLException {
+        String orderDate;
+        if (orderDateInput.getValue() == null) {
+            orderDate = LocalDate.now().format(DateTimeFormatter.ISO_DATE);
+        } else {
+            orderDate = orderDateInput.getValue().format(DateTimeFormatter.ISO_DATE);
+        }
+        String shippedDate;
+        if (shippedDateInput.getValue() != null) {
+            shippedDate = shippedDateInput.getValue().format(DateTimeFormatter.ISO_DATE);
+            shippedDate = "'" + shippedDate;
+            shippedDate += "'";
+        } else {
+            shippedDate = "null";
+        }
+        String comment;
+        if (commentsInput.getText().equals("")) {
+            comment = "null";
+        }
+        String order = "insert into orders(orderDate, requiredDate, shippedDate, status, comments, customerNumber) values ('"
+                + orderDate + "','"
+                + requiredDateInput.getValue().format(DateTimeFormatter.ISO_DATE) + "',"
+                + shippedDate + ",'"
+                + statusInput.getValue() + "','"
+                + commentsInput.getText() + "',"
+                + Integer.parseInt(customerNumberInput.getText()) + ");";
+        sqlConnection.updateQuery(order);
+        ResultSet result = sqlConnection.getDataQuery("SELECT LAST_INSERT_ID() FROM orders;");
+
+        int orderNumber = 0;
+        if (result.next()) {
+            orderNumber = result.getInt(1);
+        }
+
+        StringBuilder orderdetails = new StringBuilder("insert into orderdetails values");
+        ObservableList<Order> items = tableView.getItems();
+
+        for (Order item : items) {
+            orderdetails.append("(").append(orderNumber)
+                    .append(", '")
+                    .append(item.getProductCode())
+                    .append("',")
+                    .append(item.getQuantityOrdered())
+                    .append(",")
+                    .append(item.getPriceEach())
+                    .append("),");
+        }
+        orderdetails.deleteCharAt(orderdetails.length() - 1);
+        orderdetails.append(';');
+        sqlConnection.updateQuery(orderdetails.toString());
+    }
 }

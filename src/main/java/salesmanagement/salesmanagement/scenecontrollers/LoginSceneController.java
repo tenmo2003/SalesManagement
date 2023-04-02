@@ -54,10 +54,10 @@ public class LoginSceneController extends SceneController  {
         Task<Boolean> checkAccountTask = new Task<>() {
             @Override
             protected Boolean call() throws SQLException {
-                String query = "select accountID, username, password from accounts where username = '" + username + "' and password = '" + password + "'";
+                String query = "select employeeNumber, username, password from employees where username = '" + username + "' and password = '" + password + "'";
                 ResultSet resultSet = sqlConnection.getDataQuery(query);
                 if (resultSet.next()) {
-                    MainSceneController.loggerID = resultSet.getInt("accountID");
+                    MainSceneController.loggerID = resultSet.getInt("employeeNumber");
                     MainSceneController.haveJustOpened = true;
                     return true;
                 }
