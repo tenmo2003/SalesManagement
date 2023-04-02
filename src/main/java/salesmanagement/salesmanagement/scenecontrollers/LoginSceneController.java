@@ -5,37 +5,20 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import salesmanagement.salesmanagement.NotificationCode;
 import salesmanagement.salesmanagement.NotificationSystem;
-import salesmanagement.salesmanagement.SalesComponent.Employee;
 
-import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
 
 public class LoginSceneController extends SceneController  {
     @FXML
     JFXTextField username;
     @FXML
     JFXPasswordField password;
-
-
-    private Employee user;
-
-    public Employee getUser() {
-        return user;
-    }
-
-    int loggerID = -1;
-
-    public int getLoggerID() {
-        return loggerID;
-    }
 
     @FXML
      private AnchorPane loginPane;
@@ -54,10 +37,10 @@ public class LoginSceneController extends SceneController  {
         Task<Boolean> checkAccountTask = new Task<>() {
             @Override
             protected Boolean call() throws SQLException {
-                String query = "select accountID, username, password from accounts where username = '" + username + "' and password = '" + password + "'";
+                String query = "select employeeNumber, username, password from employees where username = '" + username + "' and password = '" + password + "'";
                 ResultSet resultSet = sqlConnection.getDataQuery(query);
                 if (resultSet.next()) {
-                    MainSceneController.loggerID = resultSet.getInt("accountID");
+                    MainSceneController.loggerID = resultSet.getInt("employeeNumber");
                     MainSceneController.haveJustOpened = true;
                     return true;
                 }

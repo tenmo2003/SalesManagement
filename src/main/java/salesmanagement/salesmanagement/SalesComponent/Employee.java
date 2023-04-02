@@ -1,15 +1,22 @@
 package salesmanagement.salesmanagement.SalesComponent;
 
 import com.jfoenix.controls.JFXButton;
+import javafx.animation.ScaleTransition;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
-import javafx.scene.image.ImageView;
+import javafx.scene.image.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.util.Duration;
+import salesmanagement.salesmanagement.ImageController;
 import salesmanagement.salesmanagement.SQLConnection;
 import salesmanagement.salesmanagement.scenecontrollers.MainSceneController;
+import salesmanagement.salesmanagement.scenecontrollers.SceneController;
 
+import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,6 +26,29 @@ import java.util.Objects;
  * @since 1.3
  */
 public class Employee {
+    private void convertGrayToGreen(ImageView imageView) {
+        PixelReader pixelReader = imageView.getImage().getPixelReader();
+
+        WritableImage writableImage = new WritableImage(pixelReader, (int) imageView.getFitWidth(), (int) imageView.getFitHeight());
+
+        PixelWriter pixelWriter = writableImage.getPixelWriter();
+
+        for (int x = 0; x < (int) imageView.getFitWidth(); x++) {
+            for (int y = 0; y < (int) imageView.getFitHeight(); y++) {
+                Color color = pixelReader.getColor(x, y);
+
+                if (color.getRed() == color.getGreen() && color.getGreen() == color.getBlue()) {
+                    Color newColor = Color.GREEN;
+                    pixelWriter.setColor(x, y, newColor);
+                } else {
+                    pixelWriter.setColor(x, y, color);
+                }
+            }
+        }
+
+        imageView.setImage(writableImage);
+    }
+
     private int employeeNumber;
     private String lastName;
     private String firstName;
@@ -26,6 +56,7 @@ public class Employee {
     private String officeCode;
     private int reportsTo;
     private String jobTitle;
+    private ImageView avatar = new ImageView();
     private static SQLConnection sqlConnection;
     private MainSceneController mainSceneController;
     private HBox operation = new HBox();
@@ -44,19 +75,32 @@ public class Employee {
             officeCode = employeeRecord.getString("officeCode");
             reportsTo = employeeRecord.getInt("reportsTo");
             jobTitle = employeeRecord.getString("jobTitle");
+
+            try {
+                PreparedStatement ps = sqlConnection.getConnection().prepareStatement("SELECT avatar FROM employees WHERE employeeNumber = ?");
+                ps.setInt(1, employeeNumber);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    InputStream is = rs.getBinaryStream("avatar");
+                    Image image = new Image(is);
+                    avatar.setImage(image);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         this.mainSceneController = mainSceneController;
         // Operation is a hbox include
         JFXButton removeButton = new JFXButton();
-        ImageView removeImg = new ImageView("remove.png");
+        ImageView removeImg = new ImageView(ImageController.getImage("remove.png"));
         removeImg.setFitWidth(20);
         removeImg.setFitHeight(20);
         removeButton.setGraphic(removeImg);
 
         JFXButton editButton = new JFXButton();
-        ImageView editImg = new ImageView("edit.png");
+        ImageView editImg = new ImageView(ImageController.getImage("edit.png"));
         editImg.setFitWidth(20);
         editImg.setFitHeight(20);
         editButton.setGraphic(editImg);
@@ -67,6 +111,15 @@ public class Employee {
         removeButton.setOnMouseClicked(event -> {
             removeEmployee();
         });
+
+
+        editButton.setOnMouseClicked(event -> {
+            mainSceneController.editEmployees(this);
+        });
+    }
+
+    public void editEmployeeInfo() {
+
     }
 
     private void removeEmployee() {
@@ -88,17 +141,16 @@ public class Employee {
             if (type == okButton) {
                 mainSceneController.getEmployees().remove(this);
                 MainSceneController.haveChangeInEmployeesTab = true;
+                try {
+                    String sql = "DELETE FROM employees WHERE employeeNumber = ?";
+                    PreparedStatement pstmt = sqlConnection.getConnection().prepareStatement(sql);
+                    pstmt.setInt(1, employeeNumber);
+                    pstmt.executeUpdate();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         });
-
-        try {
-            String sql = "DELETE FROM employees WHERE employeeNumber = ?";
-            PreparedStatement pstmt = sqlConnection.getConnection().prepareStatement(sql);
-            pstmt.setInt(1, employeeNumber);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -110,15 +162,10 @@ public class Employee {
      * use this connection and do not create new connections.
      */
     public Employee(SQLConnection sqlConnection, int employeeNumber) {
-        Employee.sqlConnection = sqlConnection;
-        new Employee(employeeNumber);
-    }
-
-    public Employee(int employeeNumber) {
+        if (sqlConnection != null) Employee.sqlConnection = sqlConnection;
         this.employeeNumber = employeeNumber;
         String query = "select * from employees where employeeNumber = " + employeeNumber;
-        ResultSet resultSet = sqlConnection.getDataQuery(query);
-
+        ResultSet resultSet = Employee.sqlConnection.getDataQuery(query);
         try {
             if (resultSet.next()) {
                 lastName = resultSet.getString("lastName");
@@ -131,6 +178,10 @@ public class Employee {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public Employee(int employeeNumber) {
+        this(null, employeeNumber);
     }
 
     public String getFullName() {
@@ -205,5 +256,13 @@ public class Employee {
 
     public void setOperation(HBox operation) {
         this.operation = operation;
+    }
+
+    public ImageView getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(ImageView avatar) {
+        this.avatar = avatar;
     }
 }

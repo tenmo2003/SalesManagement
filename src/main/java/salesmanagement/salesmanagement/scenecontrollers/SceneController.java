@@ -27,6 +27,7 @@ public class SceneController {
             sqlConnection.addClosingWork();
         System.exit(0);
     }
+
     protected Scene scene;
 
     public void setScene(Scene scene) {
@@ -44,6 +45,7 @@ public class SceneController {
         progressIndicator.visibleProperty().bind(databaseConnectionTask.runningProperty());
         bannedArea.disableProperty().bind(databaseConnectionTask.runningProperty());
     }
+
     public void showProgressIndicator(Node bannedPane) {
         progressIndicator.setVisible(true);
         bannedPane.setDisable(true);
@@ -53,7 +55,20 @@ public class SceneController {
         progressIndicator.setVisible(false);
         bannedPane.setDisable(false);
     }
-    static public void runTask(Runnable taskFunction, ProgressIndicator progressIndicator, Node bannedArea) {
+
+    /**
+     * This runTask() function is a useful utility method that allows for the execution
+     * of a background task while updating the UI with progress and disabling certain
+     * UI elements. It is well-designed and easy to use, with the parameters clearly
+     * indicating what functionality will be provided by the method. The code is concise
+     * and uses JavaFX 's Task class to handle background processing and UI updates.
+     * Overall, this function promotes good coding practices and can help improve
+     * the user experience in JavaFX applications.
+     *
+     * @author ThanhAn
+     * @since 1.3
+     */
+    static public void runTask(Runnable taskFunction, Runnable finishFunction, ProgressIndicator progressIndicator, Node bannedArea) {
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() {
@@ -61,11 +76,18 @@ public class SceneController {
                 return null;
             }
         };
-        progressIndicator.visibleProperty().bind(task.runningProperty());
-        bannedArea.disableProperty().bind(task.runningProperty());
-        task.setOnSucceeded(workerStateEvent -> {
-            //do sth;
-        });
+        if (progressIndicator != null) {
+            progressIndicator.visibleProperty().bind(task.runningProperty());
+        }
+        if (bannedArea != null) {
+            bannedArea.disableProperty().bind(task.runningProperty());
+        }
+        if (finishFunction != null) {
+            task.setOnSucceeded(workerStateEvent -> {
+                finishFunction.run();
+            });
+        }
         new Thread(task).start();
     }
+
 }

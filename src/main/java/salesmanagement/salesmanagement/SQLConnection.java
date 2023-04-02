@@ -35,7 +35,7 @@ public class SQLConnection {
      * @since 1.0
      */
     public ResultSet getDataQuery(String query) {
-        Statement statement = null;
+        Statement statement;
         ResultSet resultSet = null;
         try {
             statement = connection.createStatement();
@@ -52,14 +52,12 @@ public class SQLConnection {
      * @since 1.0
      */
     public void addClosingWork() {
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            public void run() {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        });
+        }));
     }
 }
