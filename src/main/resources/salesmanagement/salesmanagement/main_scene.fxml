@@ -4,12 +4,9 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import java.lang.String?>
-
-<?import javafx.scene.control.DatePicker?>
-
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
@@ -106,7 +103,7 @@
                                                 <Font size="15.0" />
                                              </font>
                                           </Label>
-                                          <JFXButton fx:id="ordersTabButton" buttonType="RAISED" focusTraversable="false" onAction="#tabSelectingEffect" onMouseClicked="#goToCreateOrderTab" prefHeight="50.0" prefWidth="240.0" styleClass="main-button" textFill="WHITE">
+                                          <JFXButton fx:id="ordersTabButton" buttonType="RAISED" focusTraversable="false" onAction="#tabSelectingEffect" onMouseClicked="#goToOrdersTab" prefHeight="50.0" prefWidth="240.0" styleClass="main-button" textFill="WHITE">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
@@ -326,7 +323,7 @@
                                                     <JFXTextField fx:id="customerNumberInput" prefHeight="26.0" prefWidth="240.0" />
                                                  </children>
                                               </VBox>
-                                              <JFXButton fx:id="createOrderButton" layoutX="394.0" layoutY="486.0" onAction="#createOrder" prefHeight="65.0" prefWidth="215.0" text="Create Order" />
+                                              <JFXButton fx:id="submitOrderButton" layoutX="394.0" layoutY="486.0" onAction="#createOrder" prefHeight="65.0" prefWidth="215.0" text="Create Order" />
                                               <JFXComboBox fx:id="statusInput" layoutX="176.0" layoutY="347.0" prefHeight="35.0" prefWidth="143.0" promptText="Status" />
                                               <JFXTextField fx:id="commentsInput" layoutX="176.0" layoutY="413.0" prefHeight="44.0" prefWidth="574.0" />
                                               <DatePicker fx:id="requiredDateInput" layoutX="384.0" layoutY="315.0" prefHeight="26.0" prefWidth="154.0" promptText="Required Date" />
@@ -336,12 +333,12 @@
                                                  </font>
                                               </Text>
                                               <DatePicker fx:id="shippedDateInput" layoutX="595.0" layoutY="314.0" prefHeight="26.0" prefWidth="154.0" promptText="Shipped Date" />
-                                              <TableView fx:id="tableView" layoutX="176.0" layoutY="128.0" prefHeight="176.0" prefWidth="574.0">
+                                              <TableView fx:id="orderDetailsList" layoutX="176.0" layoutY="128.0" prefHeight="176.0" prefWidth="574.0">
                                                  <columns>
-                                                    <TableColumn fx:id="productCode" onEditCommit="#changeProductCode" prefWidth="246.98178100585938" text="Item" />
-                                                    <TableColumn fx:id="quantity" onEditCommit="#changeQuantity" prefWidth="105.5999755859375" text="Quantity" />
-                                                    <TableColumn fx:id="priceEach" minWidth="0.0" onEditCommit="#changePriceEach" prefWidth="102.109130859375" text="Price" />
-                                                    <TableColumn fx:id="total" prefWidth="118.69091796875" text="Total" />
+                                                    <TableColumn fx:id="productCodeOD" onEditCommit="#changeProductCode" prefWidth="246.98178100585938" text="Item" />
+                                                    <TableColumn fx:id="quantityOD" onEditCommit="#changeQuantity" prefWidth="105.5999755859375" text="Quantity" />
+                                                    <TableColumn fx:id="priceEachOD" minWidth="0.0" onEditCommit="#changePriceEach" prefWidth="102.109130859375" text="Price" />
+                                                    <TableColumn fx:id="totalOD" prefWidth="118.69091796875" text="Total" />
                                                  </columns>
                                               </TableView>
                                               <JFXTextField fx:id="productCodeInput" layoutX="176.0" layoutY="87.0" promptText="Product Code" />
@@ -387,7 +384,27 @@
                                           </AnchorPane>
                                        </content>
                                     </Tab>
-                                    <Tab fx:id="settingTab" text="Setting" />
+                                    <Tab fx:id="ordersTab" text="Orders">
+                                      <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <TableView fx:id="ordersList" layoutX="164.0" layoutY="103.0" prefHeight="591.0" prefWidth="804.0">
+                                                  <columns>
+                                                    <TableColumn fx:id="orderNumberCol" prefWidth="93.38180541992188" text="Order No." />
+                                                    <TableColumn fx:id="orderDateCol" minWidth="6.103515625E-5" prefWidth="100.0" text="Order Date" />
+                                                      <TableColumn fx:id="requiredDateCol" prefWidth="100.0" text="Required Date" />
+                                                      <TableColumn fx:id="shippedDateCol" prefWidth="100.0" text="Shipped Date" />
+                                                      <TableColumn fx:id="statusCol" prefWidth="96.00009155273438" text="Status" />
+                                                      <TableColumn fx:id="commentsCol" prefWidth="190.25457763671875" text="Comments" />
+                                                      <TableColumn fx:id="customerNumberCol" prefWidth="122.18182373046875" text="Customer No." />
+                                                  </columns>
+                                                </TableView>
+                                                <JFXButton fx:id="removeOrderButton" layoutX="889.0" layoutY="63.0" onAction="#handleRemoveOrder" prefHeight="26.0" prefWidth="79.0" text="Remove" />
+                                                <JFXButton fx:id="createOrderButton" layoutX="775.0" layoutY="63.0" onAction="#goToCreateOrderTab" text="Create New Order" />
+                                             </children>
+                                          </AnchorPane>
+                                      </content>
+                                    </Tab>
                                 </tabs>
                               </TabPane>
                            </children>
