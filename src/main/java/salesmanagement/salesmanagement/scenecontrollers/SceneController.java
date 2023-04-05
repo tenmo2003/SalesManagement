@@ -87,6 +87,7 @@ public class SceneController {
                 finishFunction.run();
             });
         }
+        task.setOnFailed(e -> task.getException().printStackTrace());
         new Thread(task).start();
     }
 

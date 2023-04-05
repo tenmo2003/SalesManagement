@@ -39,7 +39,6 @@ import salesmanagement.salesmanagement.SalesComponent.Order;
 
 
 import java.net.URL;
-=======
 import java.io.InputStream;
 import java.sql.PreparedStatement;
 
@@ -502,7 +501,7 @@ public class MainSceneController extends SceneController implements Initializabl
         orderdetails.deleteCharAt(orderdetails.length() - 1);
         orderdetails.append(';');
         sqlConnection.updateQuery(orderdetails.toString());
-
+    }
     public void editEmployees(Employee employee) {
         employeeInfoBoxContainer.setMouseTransparent(false);
         employeeForm.fillInForm(employee);
