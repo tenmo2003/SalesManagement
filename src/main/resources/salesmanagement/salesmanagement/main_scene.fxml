@@ -4,12 +4,9 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import java.lang.String?>
-
-<?import javafx.scene.control.DatePicker?>
-
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
@@ -30,7 +27,7 @@
 <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="800.0" stylesheets="@style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.scenecontrollers.MainSceneController">
    <children>
       <SplitPane fx:id="firstSplitPane" dividerPositions="0.05" focusTraversable="false" orientation="VERTICAL" prefHeight="600.8" prefWidth="1200.8" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <items>
+         <items>
             <AnchorPane fx:id="menuPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
                <children>
                   <BorderPane prefHeight="200.0" prefWidth="1199.2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -70,11 +67,11 @@
                   </BorderPane>
                </children>
             </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                <children>
                   <SplitPane fx:id="secondSplitPane" dividerPositions="0.16666" focusTraversable="false" prefHeight="569.6" prefWidth="1199.2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <items>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                     <items>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                            <children>
                               <SplitPane fx:id="forthSplitPane" dividerPositions="0.5" maxWidth="196.0" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="568.8" prefWidth="239.2" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <items>
@@ -106,7 +103,7 @@
                                                 <Font size="15.0" />
                                              </font>
                                           </Label>
-                                          <JFXButton fx:id="ordersTabButton" buttonType="RAISED" focusTraversable="false" onAction="#tabSelectingEffect" onMouseClicked="#goToCreateOrderTab" prefHeight="50.0" prefWidth="240.0" styleClass="main-button" textFill="WHITE">
+                                          <JFXButton fx:id="ordersTabButton" buttonType="RAISED" focusTraversable="false" onAction="#tabSelectingEffect" onMouseClicked="#goToOrdersTab" prefHeight="50.0" prefWidth="240.0" styleClass="main-button" textFill="WHITE">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
@@ -255,16 +252,16 @@
                               </SplitPane>
                            </children>
                         </AnchorPane>
-                      <AnchorPane fx:id="rightHometPane" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                        <AnchorPane fx:id="rightHometPane" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                            <children>
                               <TabPane fx:id="tabPane" layoutY="-20.0" prefHeight="568.8" prefWidth="997.6" styleClass="tab-pane-noheader" stylesheets="@tabpane_style.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                <tabs>
+                                 <tabs>
                                     <Tab fx:id="homeTab" closable="false" text="HOME">
                                        <content>
                                           <ScrollPane fx:id="homeTabPane" fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0">
                                              <content>
                                                 <SplitPane fx:id="thirdSplitPane" dividerPositions="0.75" focusTraversable="false" maxWidth="-Infinity" prefHeight="557.0" prefWidth="999.0">
-                                                  <items>
+                                                   <items>
                                                       <VBox fx:id="article" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" SplitPane.resizableWithParent="false">
                                                          <children>
                                                             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
@@ -306,53 +303,53 @@
                                                          </children>
                                                       </VBox>
                                                       <VBox fx:id="newsBox" prefHeight="200.0" prefWidth="100.0" SplitPane.resizableWithParent="false" />
-                                                  </items>
+                                                   </items>
                                                 </SplitPane>
                                              </content>
                                           </ScrollPane>
                                        </content>
                                     </Tab>
-                                  <Tab fx:id="createOrderTab" closable="false" text="Create Order">
-                                     <content>
-                                        <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-border-width: 0;">
-                                           <children>
-                                              <VBox layoutX="176.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="58.0" prefWidth="240.0">
-                                                 <children>
-                                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Customer Number:">
-                                                       <font>
-                                                          <Font size="14.0" />
-                                                       </font>
-                                                    </Text>
-                                                    <JFXTextField fx:id="customerNumberInput" prefHeight="26.0" prefWidth="240.0" />
-                                                 </children>
-                                              </VBox>
-                                              <JFXButton fx:id="createOrderButton" layoutX="394.0" layoutY="486.0" onAction="#createOrder" prefHeight="65.0" prefWidth="215.0" text="Create Order" />
-                                              <JFXComboBox fx:id="statusInput" layoutX="176.0" layoutY="347.0" prefHeight="35.0" prefWidth="143.0" promptText="Status" />
-                                              <JFXTextField fx:id="commentsInput" layoutX="176.0" layoutY="413.0" prefHeight="44.0" prefWidth="574.0" />
-                                              <DatePicker fx:id="requiredDateInput" layoutX="384.0" layoutY="315.0" prefHeight="26.0" prefWidth="154.0" promptText="Required Date" />
-                                              <Text layoutX="176.0" layoutY="407.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Comments" wrappingWidth="102.90938186645508">
-                                                 <font>
-                                                    <Font size="16.0" />
-                                                 </font>
-                                              </Text>
-                                              <DatePicker fx:id="shippedDateInput" layoutX="595.0" layoutY="314.0" prefHeight="26.0" prefWidth="154.0" promptText="Shipped Date" />
-                                              <TableView fx:id="tableView" layoutX="176.0" layoutY="128.0" prefHeight="176.0" prefWidth="574.0">
-                                                 <columns>
-                                                    <TableColumn fx:id="productCode" onEditCommit="#changeProductCode" prefWidth="246.98178100585938" text="Item" />
-                                                    <TableColumn fx:id="quantity" onEditCommit="#changeQuantity" prefWidth="105.5999755859375" text="Quantity" />
-                                                    <TableColumn fx:id="priceEach" minWidth="0.0" onEditCommit="#changePriceEach" prefWidth="102.109130859375" text="Price" />
-                                                    <TableColumn fx:id="total" prefWidth="118.69091796875" text="Total" />
-                                                 </columns>
-                                              </TableView>
-                                              <JFXTextField fx:id="productCodeInput" layoutX="176.0" layoutY="87.0" promptText="Product Code" />
-                                              <JFXTextField fx:id="quantityInput" layoutX="326.0" layoutY="88.0" prefHeight="26.0" prefWidth="85.0" promptText="Quantity" />
-                                              <JFXButton fx:id="addButton" layoutX="598.0" layoutY="88.0" onAction="#addItem" text="Add/Update" />
-                                              <JFXButton fx:id="removeButton" layoutX="690.0" layoutY="88.0" onAction="#removeItems" text="Remove" />
+                                    <Tab fx:id="createOrderTab" closable="false" text="Create Order">
+                                       <content>
+                                          <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-border-width: 0;">
+                                             <children>
+                                                <VBox layoutX="176.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="58.0" prefWidth="240.0">
+                                                   <children>
+                                                      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Customer Number:">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                      </Text>
+                                                      <JFXTextField fx:id="customerNumberInput" prefHeight="26.0" prefWidth="240.0" />
+                                                   </children>
+                                                </VBox>
+                                                <JFXButton fx:id="submitOrderButton" layoutX="394.0" layoutY="486.0" onAction="#createOrder" prefHeight="65.0" prefWidth="215.0" text="Create Order" />
+                                                <JFXComboBox fx:id="statusInput" layoutX="176.0" layoutY="347.0" prefHeight="35.0" prefWidth="143.0" promptText="Status" />
+                                                <JFXTextField fx:id="commentsInput" layoutX="176.0" layoutY="413.0" prefHeight="44.0" prefWidth="574.0" />
+                                                <DatePicker fx:id="requiredDateInput" layoutX="384.0" layoutY="315.0" prefHeight="26.0" prefWidth="154.0" promptText="Required Date" />
+                                                <Text layoutX="176.0" layoutY="407.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Comments" wrappingWidth="102.90938186645508">
+                                                   <font>
+                                                      <Font size="16.0" />
+                                                   </font>
+                                                </Text>
+                                                <DatePicker fx:id="shippedDateInput" layoutX="595.0" layoutY="314.0" prefHeight="26.0" prefWidth="154.0" promptText="Shipped Date" />
+                                                <TableView fx:id="orderDetailsList" layoutX="176.0" layoutY="128.0" prefHeight="176.0" prefWidth="574.0">
+                                                   <columns>
+                                                      <TableColumn fx:id="productCodeOD" onEditCommit="#changeProductCode" prefWidth="246.98178100585938" text="Item" />
+                                                      <TableColumn fx:id="quantityOD" onEditCommit="#changeQuantity" prefWidth="105.5999755859375" text="Quantity" />
+                                                      <TableColumn fx:id="priceEachOD" minWidth="0.0" onEditCommit="#changePriceEach" prefWidth="102.109130859375" text="Price" />
+                                                      <TableColumn fx:id="totalOD" prefWidth="118.69091796875" text="Total" />
+                                                   </columns>
+                                                </TableView>
+                                                <JFXTextField fx:id="productCodeInput" layoutX="176.0" layoutY="87.0" promptText="Product Code" />
+                                                <JFXTextField fx:id="quantityInput" layoutX="326.0" layoutY="88.0" prefHeight="26.0" prefWidth="85.0" promptText="Quantity" />
+                                                <JFXButton fx:id="addButton" layoutX="598.0" layoutY="88.0" onAction="#addItem" text="Add/Update" />
+                                                <JFXButton fx:id="removeButton" layoutX="690.0" layoutY="88.0" onAction="#removeItems" text="Remove" />
                                                 <JFXTextField fx:id="priceEachInput" layoutX="432.0" layoutY="88.0" prefHeight="26.0" prefWidth="100.0" promptText="Price Each" />
                                                 <DatePicker fx:id="orderDateInput" layoutX="176.0" layoutY="315.0" prefHeight="26.0" prefWidth="154.0" promptText="Order Date" />
-                                           </children>
-                                        </AnchorPane>
-                                     </content>
+                                             </children>
+                                          </AnchorPane>
+                                       </content>
                                     </Tab>
                                     <Tab fx:id="productsOperationTab" closable="false" text="Products Operation">
                                        <content>
@@ -366,16 +363,16 @@
                                                 <VBox fx:id="employeeTabBox" alignment="CENTER" layoutX="316.0" layoutY="-64.0" prefHeight="560.0" prefWidth="997.6" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                    <children>
                                                       <TableView fx:id="employeeTable" maxWidth="1019.0" minWidth="552.0" pickOnBounds="false" prefHeight="560.0" prefWidth="841.0" stylesheets="@table.css">
-                                                        <columns>
-                                                          <TableColumn fx:id="employeeNumber" prefWidth="98.4000244140625" text="ID" />
-                                                          <TableColumn fx:id="lastName" prefWidth="136.8000030517578" text="Last name" />
+                                                         <columns>
+                                                            <TableColumn fx:id="employeeNumber" prefWidth="98.4000244140625" text="ID" />
+                                                            <TableColumn fx:id="lastName" prefWidth="136.8000030517578" text="Last name" />
                                                             <TableColumn fx:id="firstName" prefWidth="152.80001831054688" text="First Name" />
                                                             <TableColumn fx:id="email" prefWidth="185.5999755859375" sortable="false" text="Email" />
                                                             <TableColumn fx:id="officeCode" minWidth="0.0" prefWidth="90.39996337890625" sortable="false" text="Office Code" />
                                                             <TableColumn fx:id="reportsTo" minWidth="0.0" prefWidth="100.800048828125" sortable="false" text="Reports To" />
                                                             <TableColumn fx:id="jobTitle" minWidth="0.0" prefWidth="114.4000244140625" sortable="false" text="Job Title" />
                                                             <TableColumn fx:id="operation" maxWidth="173.5999755859375" prefWidth="130.39999999999998" resizable="false" sortable="false" text="Operation" />
-                                                        </columns>
+                                                         </columns>
                                                          <columnResizePolicy>
                                                             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                                          </columnResizePolicy>
@@ -387,16 +384,36 @@
                                           </AnchorPane>
                                        </content>
                                     </Tab>
-                                    <Tab fx:id="settingTab" text="Setting" />
-                                </tabs>
+                                    <Tab fx:id="ordersTab" text="Orders">
+                                       <content>
+                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <TableView fx:id="ordersList" layoutX="164.0" layoutY="103.0" prefHeight="591.0" prefWidth="804.0">
+                                                   <columns>
+                                                      <TableColumn fx:id="orderNumberCol" prefWidth="93.38180541992188" text="Order No." />
+                                                      <TableColumn fx:id="orderDateCol" minWidth="6.103515625E-5" prefWidth="100.0" text="Order Date" />
+                                                      <TableColumn fx:id="requiredDateCol" prefWidth="100.0" text="Required Date" />
+                                                      <TableColumn fx:id="shippedDateCol" prefWidth="100.0" text="Shipped Date" />
+                                                      <TableColumn fx:id="statusCol" prefWidth="96.00009155273438" text="Status" />
+                                                      <TableColumn fx:id="commentsCol" prefWidth="190.25457763671875" text="Comments" />
+                                                      <TableColumn fx:id="customerNumberCol" prefWidth="122.18182373046875" text="Customer No." />
+                                                   </columns>
+                                                </TableView>
+                                                <JFXButton fx:id="removeOrderButton" layoutX="889.0" layoutY="63.0" onAction="#handleRemoveOrder" prefHeight="26.0" prefWidth="79.0" text="Remove" />
+                                                <JFXButton fx:id="createOrderButton" layoutX="775.0" layoutY="63.0" onAction="#goToCreateOrderTab" text="Create New Order" />
+                                             </children>
+                                          </AnchorPane>
+                                       </content>
+                                    </Tab>
+                                 </tabs>
                               </TabPane>
                            </children>
                         </AnchorPane>
-                    </items>
+                     </items>
                   </SplitPane>
                </children>
             </AnchorPane>
-        </items>
+         </items>
       </SplitPane>
       <ProgressIndicator fx:id="progressIndicator" layoutX="650.0" layoutY="270.0" visible="false" />
    </children>
