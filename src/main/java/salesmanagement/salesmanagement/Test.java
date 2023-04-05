@@ -1,11 +1,20 @@
 package salesmanagement.salesmanagement;
 
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
+import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXTextField;
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -14,41 +23,55 @@ import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class Test extends Application {
-    String url = "jdbc:mysql://bjeoeejo9jrw0qoibqmj-mysql.services.clever-cloud.com:3306/bjeoeejo9jrw0qoibqmj";
-    private final String user = "ugxxkw9sh32lhroy";
-    private final String password = "QtXTyK7jzCyWztQv80TM";
     @Override
     public void start(Stage primaryStage) throws IOException, SQLException {
-        SQLConnection sqlConnection = new SQLConnection();
-        sqlConnection.logInSQLServer(url, user, password);
+        Dialog<Pair<String, String>> dialog = new Dialog<>();
+        dialog.setTitle("login Dialog");
+        dialog.setHeaderText("Sign Up");
 
-        String sql = "UPDATE employees SET avatar = ? WHERE employeeNumber = ?";
-        try (PreparedStatement pstmt = sqlConnection.getConnection().prepareStatement(sql)) {
-            // set binary stream for blob data
-            pstmt.setBinaryStream(1, new FileInputStream("D:/DOWNLOAD/2257402d821023dd69a315a170614872.jpg"));
-            // set accountID
-            pstmt.setInt(2, 21000000);
-            // execute the update
-            pstmt.executeUpdate();
-        } catch (SQLException | FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        ButtonType loginButtonType = new ButtonType("login", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
 
-        PreparedStatement ps = sqlConnection.getConnection().prepareStatement("SELECT avatar FROM employees WHERE employeeNumber = ?");
-        ps.setInt(1, 21000000);
-        ResultSet rs = ps.executeQuery();
-        ImageView imageView = null;
-        if (rs.next()) {
-            InputStream is = rs.getBinaryStream("avatar");
-            Image image = new Image(is);
-            imageView = new ImageView();
-            imageView.setImage(image);
-        }
-        primaryStage.setScene(new Scene(new StackPane(imageView)));
-        primaryStage.show();
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        JFXTextField userName = new JFXTextField();
+        userName.setPromptText("Username");
+        JFXPasswordField password = new JFXPasswordField();
+        password.setPromptText("Password");
+
+        grid.add(new Label("Username:"), 0, 0);
+        grid.add(userName, 1, 0);
+        grid.add(new Label("Password:"), 0, 1);
+        grid.add(password, 1, 1);
+
+        Node loginButton = dialog.getDialogPane().lookupButton(loginButtonType);
+        loginButton.setDisable(true);
+
+        userName.textProperty().addListener((observable, oldValue, newValue) -> {
+            loginButton.setDisable(newValue.trim().isEmpty());
+        });
+        dialog.getDialogPane().setContent(grid);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == loginButtonType){
+                return new Pair<>(userName.getText(), password.getText());
+            }
+            return null;
+        } );
+        Optional<Pair<String, String>> result = dialog.showAndWait();
+        result.ifPresent(userNamepassword -> {
+            System.out.println("Username="+userNamepassword.getKey()+", Password="+userNamepassword.getValue());
+        });
+
+        primaryStage.setScene(new Scene(grid));
     }
+
 
     public static void main(String[] args) {
         launch(args);

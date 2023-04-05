@@ -7,7 +7,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -38,7 +37,7 @@ public class EmployeeForm extends Form {
     public void fillInForm(Object e) {
         Employee employee = (Employee) e;
         employeeNumberTextField.setText(Integer.toString(employee.getEmployeeNumber()));
-        employeeNumberTextField.setEditable(false);
+        employeeNumberTextField.setDisable(true);
         lastNameTextField.setText(employee.getLastName());
         firstNameTextField.setText(employee.getFirstName());
         emailTextField.setText(employee.getEmail());
@@ -57,7 +56,7 @@ public class EmployeeForm extends Form {
         heading.setAlignment(Pos.CENTER);
         HBox headerContainer = new HBox(heading);
         headerContainer.setAlignment(Pos.CENTER);
-        content.setHeading(headerContainer);
+       // content.setHeading(headerContainer);
 
         HBox form = new HBox();
         form.setAlignment(Pos.CENTER);
@@ -147,6 +146,6 @@ public class EmployeeForm extends Form {
         avatar.setFitWidth(120);
         avatar.setFitHeight(avatar.getImage().getHeight() / avatar.getImage().getWidth() * avatar.getFitWidth());
         form.getChildren().addAll(Arrays.asList(mainForm, avatar));
-        content.setBody(form);
+        content.setContent(form);
     }
 }

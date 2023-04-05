@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -16,33 +17,23 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
-
 import javafx.util.Callback;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
-import salesmanagement.salesmanagement.SQLConnection;
-
 import salesmanagement.salesmanagement.EmployeeForm;
 import salesmanagement.salesmanagement.Form;
 import salesmanagement.salesmanagement.ImageController;
-
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesComponent.Order;
 
-
-import java.net.URL;
-=======
 import java.io.InputStream;
+import java.net.URL;
 import java.sql.PreparedStatement;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -64,6 +55,8 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     private Tab settingTab;
     @FXML
+    private Tab customersTab;
+    @FXML
     private Tab productsOperationTab;
 
     @FXML
@@ -76,12 +69,13 @@ public class MainSceneController extends SceneController implements Initializabl
     JFXButton productsTabButton;
     @FXML
     JFXButton employeesTabButton;
+    @FXML
+    JFXButton customersTabButton;
     JFXButton currentTabButton;
 
     @FXML
     void goToCreateOrderTab() {
         tabPane.getSelectionModel().select(createOrderTab);
-        statusIcon.setImage(ImageController.getImage("create_order_icon.png"));
     }
 
     @FXML
@@ -99,6 +93,11 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     void goToSettingTab() {
         tabPane.getSelectionModel().select(settingTab);
+    }
+
+    @FXML
+    void goToCustomersTab() {
+        tabPane.getSelectionModel().select(customersTab);
     }
 
     @FXML
@@ -161,9 +160,10 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     private TableColumn<?, ?> reportsTo;
     @FXML
-    AnchorPane employeeOperationPane;
+    AnchorPane employeeListPane;
     ArrayList<Employee> employees;
-
+    @FXML
+    BorderPane employeeInfoPane;
     @FXML
     void selectEmployeesTab() {
         employeeTable.setSelectionModel(null);
@@ -175,14 +175,15 @@ public class MainSceneController extends SceneController implements Initializabl
                 while (resultSet.next()) {
                     employees.add(new Employee(resultSet, MainSceneController.this));
                 }
+                Platform.runLater(() -> {
+                    ObservableList<Employee> employeeList = FXCollections.observableArrayList(employees);
+                    employeeTable.setItems(employeeList);
+                    this.employees = employees;
+                });
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }, () -> {
-            ObservableList<Employee> employeeList = FXCollections.observableArrayList(employees);
-            employeeTable.setItems(employeeList);
-            this.employees = employees;
-        }, progressIndicator, employeeOperationPane);
+        }, null, progressIndicator, employeeListPane);
     }
 
     @FXML
@@ -203,14 +204,6 @@ public class MainSceneController extends SceneController implements Initializabl
     private void goToNewsTab() {
         tabPane.getSelectionModel().select(homeTab);
         newsTabButton.fire();
-    }
-
-    enum tab {
-        newsTab,
-        employeesTab,
-        settingsTab,
-        ordersTab,
-        productsTab
     }
 
 
@@ -253,6 +246,21 @@ public class MainSceneController extends SceneController implements Initializabl
 
         currentTabButton = newsTabButton;
         goToNewsTab();
+
+        Menu employeeMenu = new Menu("Employee");
+
+        MenuItem addEmployeeMenuItem = new MenuItem("Add New Employee");
+        addEmployeeMenuItem.setOnAction(e -> {
+            // Code để thực hiện chức năng "Add New Employee"
+        });
+
+        MenuItem viewEmployeeMenuItem = new MenuItem("View Employee");
+        viewEmployeeMenuItem.setOnAction(e -> {
+            // Code để thực hiện chức năng "View Employee"
+        });
+
+        employeeMenu.getItems().addAll(addEmployeeMenuItem, viewEmployeeMenuItem);
+        employeesTabButton.setContextMenu(new ContextMenu(employeeMenu));
 
         // Load UI for others.
         runTask(() -> {
@@ -335,6 +343,7 @@ public class MainSceneController extends SceneController implements Initializabl
 
     @FXML
     JFXComboBox statusInput;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         statusInput.getItems().add("Cancelled");
@@ -409,11 +418,13 @@ public class MainSceneController extends SceneController implements Initializabl
         selected.setProductCode(edittedCell.getNewValue().toString());
         tableView.refresh();
     }
+
     public void changeQuantity(TableColumn.CellEditEvent edittedCell) {
         Order selected = tableView.getSelectionModel().getSelectedItem();
         selected.setQuantityOrdered((int) edittedCell.getNewValue());
         tableView.refresh();
     }
+
     public void changePriceEach(TableColumn.CellEditEvent edittedCell) {
         Order selected = tableView.getSelectionModel().getSelectedItem();
         selected.setPriceEach((double) edittedCell.getNewValue());
@@ -452,6 +463,7 @@ public class MainSceneController extends SceneController implements Initializabl
     JFXTextField commentsInput;
     @FXML
     JFXButton createOrderButton;
+
     public void createOrder() throws SQLException {
         String orderDate;
         if (orderDateInput.getValue() == null) {
@@ -502,6 +514,8 @@ public class MainSceneController extends SceneController implements Initializabl
         orderdetails.deleteCharAt(orderdetails.length() - 1);
         orderdetails.append(';');
         sqlConnection.updateQuery(orderdetails.toString());
+    }
+    
 
     public void editEmployees(Employee employee) {
         employeeInfoBoxContainer.setMouseTransparent(false);
@@ -520,6 +534,8 @@ public class MainSceneController extends SceneController implements Initializabl
         else if (currentTabButton.equals(productsTabButton)) buttonIcon.setImage(ImageController.productIcon);
         else if (currentTabButton.equals(employeesTabButton)) buttonIcon.setImage(ImageController.employeeIcon);
         else if (currentTabButton.equals(settingsTabButton)) buttonIcon.setImage(ImageController.settingsIcon);
+        else if (currentTabButton.equals(customersTabButton)) buttonIcon.setImage(ImageController.customerIcon);
+
         currentTabButton.setStyle("-fx-border-color: transparent;-fx-background-color :#ffffff; -fx-border-width: 0 0 0 4; -fx-border-radius: 0;");
 
         currentTabButton = (JFXButton) event.getSource();
@@ -532,9 +548,10 @@ public class MainSceneController extends SceneController implements Initializabl
         else if (currentTabButton.equals(productsTabButton)) buttonIcon.setImage(ImageController.blueProductIcon);
         else if (currentTabButton.equals(employeesTabButton)) buttonIcon.setImage(ImageController.blueEmployeeIcon);
         else if (currentTabButton.equals(settingsTabButton)) buttonIcon.setImage(ImageController.blueSettingsIcon);
-
+        else if (currentTabButton.equals(customersTabButton)) buttonIcon.setImage(ImageController.blueCustomerIcon);
         currentTabButton.setStyle("-fx-border-color: #60b1fd; -fx-background-color : #fafafa;-fx-border-width: 0 0 0 4; -fx-border-radius: 0;");
 
     }
 }
+
 

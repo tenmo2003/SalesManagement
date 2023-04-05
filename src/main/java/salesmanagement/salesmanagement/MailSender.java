@@ -23,7 +23,7 @@ public class MailSender {
 
     public static void send(String emailReceiver, int code) {
         final String username = "smdevelopersse2023@gmail.com";
-        final String password = "fshdhjembjzdraur";
+        final String password = "sjyaadbginfbfpeo";
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");

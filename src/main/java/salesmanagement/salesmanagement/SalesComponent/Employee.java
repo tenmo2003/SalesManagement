@@ -1,11 +1,11 @@
 package salesmanagement.salesmanagement.SalesComponent;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
+import com.jfoenix.controls.JFXTextField;
 import javafx.animation.ScaleTransition;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.DialogPane;
+import javafx.scene.control.*;
 import javafx.scene.image.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -82,7 +83,9 @@ public class Employee {
                 ResultSet rs = ps.executeQuery();
                 if (rs.next()) {
                     InputStream is = rs.getBinaryStream("avatar");
-                    Image image = new Image(is);
+                    Image image;
+                    if(is==null) image = ImageController.getImage("sample_avatar.jpg");
+                    else image = new Image(is);
                     avatar.setImage(image);
                 }
             } catch (SQLException e) {
@@ -123,7 +126,16 @@ public class Employee {
     }
 
     private void removeEmployee() {
+
+        Dialog dialog = new Dialog<>();
+      //  dialog.getDialogPane(mainSceneController.getEmployeeOperationPane());
+
+        VBox vBox = new VBox();
+        Label a = new Label("abc");
+        JFXTextField b = new JFXTextField("abc");
+        vBox.getChildren().addAll(Arrays.asList(a,b));
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setGraphic(vBox);
         alert.setTitle("Modifying Confirmation!");
         alert.setContentText(this.toString());
         alert.setHeaderText("You are deleting this employee permanently: ");
@@ -134,7 +146,7 @@ public class Employee {
 
         DialogPane dialogPane = alert.getDialogPane();
         dialogPane.getStylesheets().add(
-                Objects.requireNonNull(getClass().getResource("/myDialogs.css")).toExternalForm());
+                Objects.requireNonNull(getClass().getResource("/salesmanagement/salesmanagement/img/myDialogs.css")).toExternalForm());
         dialogPane.getStyleClass().add("myDialog");
 
         alert.showAndWait().ifPresent(type -> {

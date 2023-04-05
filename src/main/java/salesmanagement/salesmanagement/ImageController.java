@@ -15,6 +15,8 @@ public class ImageController {
     public static Image blueSettingsIcon =getImage("blue_settings_icon.png");
     public static Image productIcon = getImage("product_icon.png");
     public static Image blueProductIcon =getImage("blue_product_icon.png");
+    public static Image customerIcon = getImage("customer_icon.png");
+    public static Image blueCustomerIcon = getImage("blue_customer_icon.png");
 
     public static Image getImage(String imageName) {
         return new Image(Objects.requireNonNull(SalesManagement.class.getResourceAsStream("/salesmanagement/salesmanagement/img/" + imageName)));
