@@ -50,12 +50,17 @@ public class MainSceneController extends SceneController {
     private Tab employeesOperationTab;
     @FXML
     private Tab createOrderTab;
+    boolean createOrderInit = false;
     @FXML
     private Tab homeTab;
     @FXML
     private Tab settingTab;
     @FXML
     private Tab productsOperationTab;
+    boolean productsInit = false;
+    @FXML
+    private Tab ordersTab;
+    boolean ordersInit = false;
 
     @FXML
     JFXButton ordersTabButton;
@@ -68,21 +73,20 @@ public class MainSceneController extends SceneController {
     @FXML
     JFXButton employeesTabButton;
     JFXButton currentTabButton;
-    @FXML
-    private Tab ordersTab;
+
 
     @FXML
     void goToCreateOrderTab() {
         tabPane.getSelectionModel().select(createOrderTab);
-
         initCreateOrder();
-
         statusIcon.setImage(ImageController.getImage("create_order_icon.png"));
     }
 
     @FXML
     void goToOrdersTab() {
-        initOrders();
+        if (!ordersInit) {
+            initOrders();
+        }
         tabPane.getSelectionModel().select(ordersTab);
     }
 
@@ -95,7 +99,9 @@ public class MainSceneController extends SceneController {
 
     @FXML
     void goToProductsOperationTab() {
-        initProducts();
+        if (!productsInit) {
+            initProducts();
+        }
         tabPane.getSelectionModel().select(productsOperationTab);
     }
 
@@ -339,12 +345,12 @@ public class MainSceneController extends SceneController {
     @FXML
     StackPane employeeInfoBoxContainer;
     Form employeeForm;
-
-
     @FXML
     JFXComboBox statusInput;
 
     public void initCreateOrder() {
+        customerNumberInput.clear();
+        commentsInput.clear();
         statusInput.getItems().clear();
         statusInput.getItems().add("Cancelled");
         statusInput.getItems().add("Disputed");
@@ -353,7 +359,6 @@ public class MainSceneController extends SceneController {
         statusInput.getItems().add("Resolved");
         statusInput.getItems().add("Shipped");
 
-//        tableView.setItems(getItems());
         productCodeOD.setCellValueFactory(new PropertyValueFactory<Order, String>("productCode"));
         quantityOD.setCellValueFactory(new PropertyValueFactory<Order, Integer>("quantityOrdered"));
         priceEachOD.setCellValueFactory(new PropertyValueFactory<Order, Double>("priceEach"));
@@ -468,56 +473,64 @@ public class MainSceneController extends SceneController {
     @FXML
     JFXButton submitOrderButton;
 
-    public void createOrder() throws SQLException {
-        String orderDate;
-        if (orderDateInput.getValue() == null) {
-            orderDate = LocalDate.now().format(DateTimeFormatter.ISO_DATE);
-        } else {
-            orderDate = orderDateInput.getValue().format(DateTimeFormatter.ISO_DATE);
-        }
-        String shippedDate;
-        if (shippedDateInput.getValue() != null) {
-            shippedDate = shippedDateInput.getValue().format(DateTimeFormatter.ISO_DATE);
-            shippedDate = "'" + shippedDate;
-            shippedDate += "'";
-        } else {
-            shippedDate = "null";
-        }
-        String comment;
-        if (commentsInput.getText().equals("")) {
-            comment = "null";
-        }
-        String order = "insert into orders(orderDate, requiredDate, shippedDate, status, comments, customerNumber) values ('"
-                + orderDate + "','"
-                + requiredDateInput.getValue().format(DateTimeFormatter.ISO_DATE) + "',"
-                + shippedDate + ",'"
-                + statusInput.getValue() + "','"
-                + commentsInput.getText() + "',"
-                + Integer.parseInt(customerNumberInput.getText()) + ");";
-        sqlConnection.updateQuery(order);
-        ResultSet result = sqlConnection.getDataQuery("SELECT LAST_INSERT_ID() FROM orders;");
+    public void createOrder(){
+        runTask(() -> {
+            String orderDate;
+            if (orderDateInput.getValue() == null) {
+                orderDate = LocalDate.now().format(DateTimeFormatter.ISO_DATE);
+            } else {
+                orderDate = orderDateInput.getValue().format(DateTimeFormatter.ISO_DATE);
+            }
+            String shippedDate;
+            if (shippedDateInput.getValue() != null) {
+                shippedDate = shippedDateInput.getValue().format(DateTimeFormatter.ISO_DATE);
+                shippedDate = "'" + shippedDate;
+                shippedDate += "'";
+            } else {
+                shippedDate = "null";
+            }
+            String comment;
+            if (commentsInput.getText().equals("")) {
+                comment = "null";
+            }
+            String order = "insert into orders(orderDate, requiredDate, shippedDate, status, comments, customerNumber) values ('"
+                    + orderDate + "','"
+                    + requiredDateInput.getValue().format(DateTimeFormatter.ISO_DATE) + "',"
+                    + shippedDate + ",'"
+                    + statusInput.getValue() + "','"
+                    + commentsInput.getText() + "',"
+                    + Integer.parseInt(customerNumberInput.getText()) + ");";
+            sqlConnection.updateQuery(order);
+            ResultSet result = sqlConnection.getDataQuery("SELECT LAST_INSERT_ID() FROM orders;");
 
-        int orderNumber = 0;
-        if (result.next()) {
-            orderNumber = result.getInt(1);
-        }
+            int orderNumber = 0;
+            try {
+                if (result.next()) {
+                    orderNumber = result.getInt(1);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
 
-        StringBuilder orderdetails = new StringBuilder("insert into orderdetails values");
-        ObservableList<Order> items = orderDetailsTable.getItems();
+            StringBuilder orderdetails = new StringBuilder("insert into orderdetails values");
+            ObservableList<Order> items = orderDetailsTable.getItems();
 
-        for (Order item : items) {
-            orderdetails.append("(").append(orderNumber)
-                    .append(", '")
-                    .append(item.getProductCode())
-                    .append("',")
-                    .append(item.getQuantityOrdered())
-                    .append(",")
-                    .append(item.getPriceEach())
-                    .append("),");
-        }
-        orderdetails.deleteCharAt(orderdetails.length() - 1);
-        orderdetails.append(';');
-        sqlConnection.updateQuery(orderdetails.toString());
+            for (Order item : items) {
+                orderdetails.append("(").append(orderNumber)
+                        .append(", '")
+                        .append(item.getProductCode())
+                        .append("',")
+                        .append(item.getQuantityOrdered())
+                        .append(",")
+                        .append(item.getPriceEach())
+                        .append("),");
+            }
+            orderdetails.deleteCharAt(orderdetails.length() - 1);
+            orderdetails.append(';');
+            sqlConnection.updateQuery(orderdetails.toString());
+        }, null, progressIndicator, createOrderTab.getTabPane());
+        goToOrdersTab();
+
     }
 
     public void editEmployees(Employee employee) {
@@ -576,73 +589,77 @@ public class MainSceneController extends SceneController {
     JFXButton removeOrderButton;
 
     void initOrders() {
-        ordersTable.getItems().clear();
-        orderNumberOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, Integer>, ObservableValue<Integer>>() {
-            @Override
-            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<ObservableList<Object>, Integer> param) {
-                return new SimpleObjectProperty<Integer>((Integer) param.getValue().get(0));
-            }
-        });
+        runTask(() -> {
+            ordersInit = true;
+            ordersTable.getItems().clear();
+            orderNumberOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, Integer>, ObservableValue<Integer>>() {
+                @Override
+                public ObservableValue<Integer> call(TableColumn.CellDataFeatures<ObservableList<Object>, Integer> param) {
+                    return new SimpleObjectProperty<Integer>((Integer) param.getValue().get(0));
+                }
+            });
 
-        orderDateOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate>, ObservableValue<LocalDate>>() {
-            @Override
-            public ObservableValue<LocalDate> call(TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate> param) {
-                return new SimpleObjectProperty<LocalDate>((LocalDate) param.getValue().get(1));
-            }
-        });
+            orderDateOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate>, ObservableValue<LocalDate>>() {
+                @Override
+                public ObservableValue<LocalDate> call(TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate> param) {
+                    return new SimpleObjectProperty<LocalDate>((LocalDate) param.getValue().get(1));
+                }
+            });
 
-        requiredDateOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate>, ObservableValue<LocalDate>>() {
-            @Override
-            public ObservableValue<LocalDate> call(TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate> param) {
-                return new SimpleObjectProperty<LocalDate>((LocalDate) param.getValue().get(2));
-            }
-        });
+            requiredDateOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate>, ObservableValue<LocalDate>>() {
+                @Override
+                public ObservableValue<LocalDate> call(TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate> param) {
+                    return new SimpleObjectProperty<LocalDate>((LocalDate) param.getValue().get(2));
+                }
+            });
 
-        shippedDateOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate>, ObservableValue<LocalDate>>() {
-            @Override
-            public ObservableValue<LocalDate> call(TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate> param) {
-                return new SimpleObjectProperty<LocalDate>((LocalDate) param.getValue().get(3));
-            }
-        });
+            shippedDateOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate>, ObservableValue<LocalDate>>() {
+                @Override
+                public ObservableValue<LocalDate> call(TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate> param) {
+                    return new SimpleObjectProperty<LocalDate>((LocalDate) param.getValue().get(3));
+                }
+            });
 
-        statusOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
-                return new SimpleStringProperty((String) param.getValue().get(4));
-            }
-        });
+            statusOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
+                    return new SimpleStringProperty((String) param.getValue().get(4));
+                }
+            });
 
-        commentsOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
-                return new SimpleStringProperty((String) param.getValue().get(5));
-            }
-        });
+            commentsOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
+                    return new SimpleStringProperty((String) param.getValue().get(5));
+                }
+            });
 
-        customerNumberOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, Integer>, ObservableValue<Integer>>() {
-            @Override
-            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<ObservableList<Object>, Integer> param) {
-                return new SimpleObjectProperty<Integer>((Integer) param.getValue().get(6));
+            customerNumberOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, Integer>, ObservableValue<Integer>>() {
+                @Override
+                public ObservableValue<Integer> call(TableColumn.CellDataFeatures<ObservableList<Object>, Integer> param) {
+                    return new SimpleObjectProperty<Integer>((Integer) param.getValue().get(6));
+                }
+            });
+            try {
+                String query = "SELECT orderNumber, orderDate, requiredDate, shippedDate, status, comments, customerNumber FROM orders";
+                ResultSet resultSet = sqlConnection.getDataQuery(query);
+                while (resultSet.next()) {
+                    ObservableList<Object> row = FXCollections.observableArrayList();
+                    row.add(resultSet.getInt("orderNumber"));
+                    row.add(resultSet.getDate("orderDate").toLocalDate());
+                    row.add(resultSet.getDate("requiredDate").toLocalDate());
+                    row.add(resultSet.getDate("shippedDate") != null ? resultSet.getDate("shippedDate").toLocalDate() : null);
+                    row.add(resultSet.getString("status"));
+                    row.add(resultSet.getString("comments"));
+                    row.add(resultSet.getInt("customerNumber"));
+                    ordersTable.getItems().add(row);
+                }
+                ordersTable.refresh();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
-        });
-        try {
-            String query = "SELECT orderNumber, orderDate, requiredDate, shippedDate, status, comments, customerNumber FROM orders";
-            ResultSet resultSet = sqlConnection.getDataQuery(query);
-            while (resultSet.next()) {
-                ObservableList<Object> row = FXCollections.observableArrayList();
-                row.add(resultSet.getInt("orderNumber"));
-                row.add(resultSet.getDate("orderDate").toLocalDate());
-                row.add(resultSet.getDate("requiredDate").toLocalDate());
-                row.add(resultSet.getDate("shippedDate") != null ? resultSet.getDate("shippedDate").toLocalDate() : null);
-                row.add(resultSet.getString("status"));
-                row.add(resultSet.getString("comments"));
-                row.add(resultSet.getInt("customerNumber"));
-                ordersTable.getItems().add(row);
-            }
-            ordersTable.refresh();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+        }, null, progressIndicator, ordersTab.getTabPane());
+
     }
 
     public void handleRemoveOrder() {
@@ -694,102 +711,58 @@ public class MainSceneController extends SceneController {
     @FXML
     JFXButton closeProductDetailsButton;
     void initProducts() {
-        productsTable.getItems().clear();
-        productsTable.setOnMouseClicked((MouseEvent event) -> {
-            if (event.getClickCount() == 2) {
-                ObservableList<Object> selected = productsTable.getSelectionModel().getSelectedItem();
-                initProductDetails(selected);
-                bgPane.setVisible(true);
-                productDetailsPane.setVisible(true);
-            }
-        });
-        closeProductDetailsButton.setOnAction(event -> {
-            bgPane.setVisible(false);
-            productDetailsPane.setVisible(false);
-        });
-        productCodeProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
-                return new SimpleObjectProperty<String>((String) param.getValue().get(0));
-            }
-        });
+        runTask(() -> {
+            productsInit = true;
+            productsTable.getItems().clear();
+            productsTable.setOnMouseClicked((MouseEvent event) -> {
+                if (event.getClickCount() == 2) {
+                    ObservableList<Object> selected = productsTable.getSelectionModel().getSelectedItem();
+                    initProductDetails(selected);
+                    bgPane.setVisible(true);
+                    productDetailsPane.setVisible(true);
+                }
+            });
+            closeProductDetailsButton.setOnAction(event -> {
+                bgPane.setVisible(false);
+                productDetailsPane.setVisible(false);
+            });
+            productCodeProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
+                    return new SimpleObjectProperty<String>((String) param.getValue().get(0));
+                }
+            });
 
-        productNameProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
-                return new SimpleObjectProperty<String>((String) param.getValue().get(1));
-            }
-        });
+            productNameProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
+                    return new SimpleObjectProperty<String>((String) param.getValue().get(1));
+                }
+            });
 
-        productLineProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
-                return new SimpleObjectProperty<String>((String) param.getValue().get(2));
-            }
-        });
+            productLineProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
+                @Override
+                public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
+                    return new SimpleObjectProperty<String>((String) param.getValue().get(2));
+                }
+            });
 
-//        productScaleProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
-//            @Override
-//            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
-//                return new SimpleObjectProperty<String>((String) param.getValue().get(3));
-//            }
-//        });
-//
-//        productVendorProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
-//            @Override
-//            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
-//                return new SimpleObjectProperty<String>((String) param.getValue().get(4));
-//            }
-//        });
-//
-//        productDescriptionProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
-//            @Override
-//            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
-//                return new SimpleObjectProperty<String>((String) param.getValue().get(5));
-//            }
-//        });
-//
-//        inStockProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, Integer>, ObservableValue<Integer>>() {
-//            @Override
-//            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<ObservableList<Object>, Integer> param) {
-//                return new SimpleObjectProperty<Integer>((Integer) param.getValue().get(6));
-//            }
-//        });
-//
-//        buyPriceProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, Float>, ObservableValue<Float>>() {
-//            @Override
-//            public ObservableValue<Float> call(TableColumn.CellDataFeatures<ObservableList<Object>, Float> param) {
-//                return new SimpleObjectProperty<Float>((Float) param.getValue().get(7));
-//            }
-//        });
-//
-//        MSRPProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, Float>, ObservableValue<Float>>() {
-//            @Override
-//            public ObservableValue<Float> call(TableColumn.CellDataFeatures<ObservableList<Object>, Float> param) {
-//                return new SimpleObjectProperty<Float>((Float) param.getValue().get(8));
-//            }
-//        });
-
-        try {
-            String query = "SELECT productCode, productName, productLine FROM products";
-            ResultSet resultSet = sqlConnection.getDataQuery(query);
-            while (resultSet.next()) {
-                ObservableList<Object> row = FXCollections.observableArrayList();
-                row.add(resultSet.getString("productCode"));
-                row.add(resultSet.getString("productName"));
-                row.add(resultSet.getString("productLine"));
-//                row.add(resultSet.getString("productScale"));
-//                row.add(resultSet.getString("productVendor"));
-//                row.add(resultSet.getString("productDescription"));
-//                row.add(resultSet.getInt("quantityInStock"));
-//                row.add(resultSet.getFloat("buyPrice"));
-//                row.add(resultSet.getFloat("MSRP"));
-                productsTable.getItems().add(row);
+            try {
+                String query = "SELECT productCode, productName, productLine FROM products";
+                ResultSet resultSet = sqlConnection.getDataQuery(query);
+                while (resultSet.next()) {
+                    ObservableList<Object> row = FXCollections.observableArrayList();
+                    row.add(resultSet.getString("productCode"));
+                    row.add(resultSet.getString("productName"));
+                    row.add(resultSet.getString("productLine"));
+                    productsTable.getItems().add(row);
+                }
+                productsTable.refresh();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
-            productsTable.refresh();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+        }, null, progressIndicator, productsOperationTab.getTabPane());
+
     }
     @FXML
     JFXTextField productCodePDetails;
@@ -811,31 +784,34 @@ public class MainSceneController extends SceneController {
     JFXTextField productDescriptionPDetails;
 
     void initProductDetails(ObservableList<Object> selected) {
-        try {
-            productLinePDetails.getItems().clear();
-            String query = "SELECT productLine FROM productlines";
-            ResultSet resultSet = sqlConnection.getDataQuery(query);
+        runTask(() -> {
+            try {
+                productLinePDetails.getItems().clear();
+                String query = "SELECT productLine FROM productlines";
+                ResultSet resultSet = sqlConnection.getDataQuery(query);
 
-            while (resultSet.next()) {
-                String productLine = resultSet.getString("productLine");
-                productLinePDetails.getItems().add(productLine);
+                while (resultSet.next()) {
+                    String productLine = resultSet.getString("productLine");
+                    productLinePDetails.getItems().add(productLine);
+                }
+                query = "SELECT productCode, productName, productLine, productScale, productVendor, productDescription, quantityInStock, buyPrice, MSRP FROM products WHERE productCode = '" + selected.get(0).toString() + "'";
+                resultSet = sqlConnection.getDataQuery(query);
+                if (resultSet.next()) {
+                    productCodePDetails.setText(resultSet.getString("productCode"));
+                    productNamePDetails.setText(resultSet.getString("productName"));
+                    productLinePDetails.setValue(resultSet.getString("productLine"));
+                    productScalePDetails.setText(resultSet.getString("productScale"));
+                    productVendorPDetails.setText(resultSet.getString("productVendor"));
+                    productDescriptionPDetails.setText(resultSet.getString("productDescription"));
+                    inStockPDetails.setText(resultSet.getString("quantityInStock"));
+                    buyPricePDetails.setText(resultSet.getString("buyPrice"));
+                    MSRPPDetails.setText(resultSet.getString("MSRP"));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-            query = "SELECT productCode, productName, productLine, productScale, productVendor, productDescription, quantityInStock, buyPrice, MSRP FROM products WHERE productCode = '" + selected.get(0).toString() + "'";
-            resultSet = sqlConnection.getDataQuery(query);
-            if (resultSet.next()) {
-                productCodePDetails.setText(resultSet.getString("productCode"));
-                productNamePDetails.setText(resultSet.getString("productName"));
-                productLinePDetails.setValue(resultSet.getString("productLine"));
-                productScalePDetails.setText(resultSet.getString("productScale"));
-                productVendorPDetails.setText(resultSet.getString("productVendor"));
-                productDescriptionPDetails.setText(resultSet.getString("productDescription"));
-                inStockPDetails.setText(resultSet.getString("quantityInStock"));
-                buyPricePDetails.setText(resultSet.getString("buyPrice"));
-                MSRPPDetails.setText(resultSet.getString("MSRP"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        }, null, progressIndicator, null);
+
     }
 }
 
