@@ -23,7 +23,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
-
 import javafx.util.Callback;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
@@ -31,14 +30,11 @@ import javafx.util.converter.IntegerStringConverter;
 import salesmanagement.salesmanagement.EmployeeForm;
 import salesmanagement.salesmanagement.Form;
 import salesmanagement.salesmanagement.ImageController;
-
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesComponent.Order;
 
-
 import java.io.InputStream;
 import java.sql.PreparedStatement;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -219,8 +215,10 @@ public class MainSceneController extends SceneController {
         ordersTab,
         productsTab
     }
-
-
+@FXML
+    ScrollPane scrollpane;
+    @FXML
+    VBox boxaaa;
     public void initialSetup() {
         // Load current UI.
         user = new Employee(sqlConnection, loggerID);
@@ -260,6 +258,9 @@ public class MainSceneController extends SceneController {
 
         currentTabButton = newsTabButton;
         goToNewsTab();
+
+        //TODO: test area
+
 
         // Load UI for others.
         runTask(() -> {

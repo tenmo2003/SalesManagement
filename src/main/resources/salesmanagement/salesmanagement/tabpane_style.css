@@ -1,5 +1,5 @@
 
-.tab-pane .tab-header-area {
+.main-tab-pane > .tab-header-area {
     visibility: hidden ;
     -fx-padding: -20 0 0 0;
 }

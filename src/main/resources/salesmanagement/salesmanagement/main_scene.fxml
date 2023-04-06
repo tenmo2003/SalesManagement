@@ -108,6 +108,9 @@
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
+                                             <VBox.margin>
+                                                <Insets />
+                                             </VBox.margin>
                                              <graphic>
                                                 <HBox alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="182.0" spacing="10.0">
                                                    <children>
@@ -122,13 +125,11 @@
                                                       <Label style="-fx-font-weight: 800; -fx-font-family: SVN-Poppins;" text="Order" textFill="#7c8db5">
                                                          <font>
                                                             <Font size="15.0" />
-                                                         </font></Label>
+                                                         </font>
+                                                      </Label>
                                                    </children>
                                                 </HBox>
                                              </graphic>
-                                             <VBox.margin>
-                                                <Insets />
-                                             </VBox.margin>
                                           </JFXButton>
                                           <JFXButton fx:id="productsTabButton" buttonType="RAISED" focusTraversable="false" onAction="#tabSelectingEffect" onMouseClicked="#goToProductsOperationTab" prefHeight="50.0" prefWidth="223.0" styleClass="main-button" textFill="WHITE">
                                              <font>
@@ -148,7 +149,8 @@
                                                       <Label fx:id="Products" style="-fx-font-weight: 800; -fx-font-family: SVN-Poppins;" text="Products" textFill="#7c8db5">
                                                          <font>
                                                             <Font size="15.0" />
-                                                         </font></Label>
+                                                         </font>
+                                                      </Label>
                                                    </children>
                                                 </HBox>
                                              </graphic>
@@ -174,7 +176,8 @@
                                                       <Label style="-fx-font-family: SVN-Poppins; -fx-font-weight: 800;" text="Employees" textFill="#7c8db5">
                                                          <font>
                                                             <Font size="15.0" />
-                                                         </font></Label>
+                                                         </font>
+                                                      </Label>
                                                    </children>
                                                 </HBox>
                                              </graphic>
@@ -235,7 +238,8 @@
                                                       <Label style="-fx-font-family: SVN-Poppins; -fx-font-weight: 800;" text="Settings" textFill="#7c8db5">
                                                          <font>
                                                             <Font size="15.0" />
-                                                         </font></Label>
+                                                         </font>
+                                                      </Label>
                                                    </children>
                                                 </HBox>
                                              </graphic>
@@ -255,13 +259,13 @@
                         </AnchorPane>
                         <AnchorPane fx:id="rightHometPane" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                            <children>
-                              <TabPane fx:id="tabPane" layoutY="-20.0" prefHeight="568.8" prefWidth="997.6" styleClass="tab-pane-noheader" stylesheets="@tabpane_style.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <TabPane fx:id="tabPane" prefHeight="758.4" prefWidth="997.6" styleClass="main-tab-pane" stylesheets="@tabpane_style.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <tabs>
                                     <Tab fx:id="homeTab" closable="false" text="HOME">
                                        <content>
-                                          <ScrollPane fx:id="homeTabPane" fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0">
+                                          <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="ALWAYS" vbarPolicy="ALWAYS">
                                              <content>
-                                                <SplitPane fx:id="thirdSplitPane" dividerPositions="0.75" focusTraversable="false" maxWidth="-Infinity" prefHeight="557.0" prefWidth="999.0">
+                                                <SplitPane fx:id="thirdSplitPane" dividerPositions="0.5" prefHeight="200.0" prefWidth="200.0">
                                                    <items>
                                                       <VBox fx:id="article" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" SplitPane.resizableWithParent="false">
                                                          <children>
@@ -353,19 +357,7 @@
                                        </content>
                                     </Tab>
                                     <Tab fx:id="productsOperationTab" closable="false" text="Products Operation">
-                                       <content>
-                                          <TableView fx:id="ordersList1" prefHeight="591.0" prefWidth="804.0">
-                                             <columns>
-                                                <TableColumn fx:id="orderNumberCol1" prefWidth="93.38180541992188" text="Order No." />
-                                                <TableColumn fx:id="orderDateCol1" minWidth="6.103515625E-5" prefWidth="100.0" text="Order Date" />
-                                                <TableColumn fx:id="requiredDateCol1" prefWidth="100.0" text="Required Date" />
-                                                <TableColumn fx:id="shippedDateCol1" prefWidth="100.0" text="Shipped Date" />
-                                                <TableColumn fx:id="statusCol1" prefWidth="96.00009155273438" text="Status" />
-                                                <TableColumn fx:id="commentsCol1" prefWidth="190.25457763671875" text="Comments" />
-                                                <TableColumn fx:id="customerNumberCol1" prefWidth="122.18182373046875" text="Customer No." />
-                                             </columns>
-                                          </TableView>
-                                       </content>
+                                  
                                        <content>
                                           <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                              <children>
@@ -443,13 +435,16 @@
                                                 </AnchorPane>
                                              </children>
                                           </AnchorPane>
+
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Stack OverflowAboutProductsFor TeamsSearch…Join Stack Overflow to find the best answer to your technical question, help others answer theirs.HomePUBLICQuestionsTagsUsersCompaniesCOLLECTIVESExplore CollectivesTEAMSStack Overflow for Teams – Start collaborating and sharing organizational knowledge. How do i make a TabPane fill its parent?Asked 8 years, 8 months agoModified 8 years, 8 months agoViewed 8k times3My TabPane only seems to fill it's width horizontally, but not vertically. My workaround for now is to do this:    stage.getScene().heightProperty().addListener(new ChangeListener&lt;Number&gt;() {      @Override      public void changed(ObservableValue&lt;? extends Number&gt; observable, Number oldValue, Number newValue) {        System.out.println(&quot;height changed&quot;);        tabPane.setPrefHeight(newValue.doubleValue());      }    });But if i use that height it's obviously larger than the area that actually remains for it (theres a MenuBar above the TabPane). (Or does it adjust it's size properly?) It also kinda feels wrong, there got to be simple boolean i can set, since it behaves exactly as expected for horizontal changes.The Scene is setup like this:public static ResourceBundle BUNDLE = ResourceBundle.getBundle(&quot;locales/Bundle&quot;, new Locale(&quot;en&quot;, &quot;GB&quot;));Scene scene = new Scene(new VBox(0), 800, 600);MenuBar menuBar = new MenuBar();Menu menuStart = new Menu(BUNDLE.getString(&quot;menu.start&quot;));Menu menuView = new Menu(BUNDLE.getString(&quot;menu.view&quot;));Menu menuHelp = new Menu(BUNDLE.getString(&quot;menu.help&quot;));menuBar.getMenus().addAll(menuStart, menuView, menuHelp);((VBox) stage.getScene().getRoot()).getChildren().add(menuBar);TabPane tabPane = new TabPane();((VBox) stage.getScene().getRoot()).getChildren().add(tabPane);stage.setScene(scene);stage.show();Ofcourse there is some more code, but it only contains drag'n'drop related listeners, and this problem occurs way before any of them ever did anything (they print to console everytime they do something).The Tab setup:final Tab tab = new Tab();final Label label = new Label(&quot;Tab&quot; +text);tab.setGraphic(label);StackPane pane = new StackPane();int red = rng.nextInt(256);int green = rng.nextInt(256);int blue = rng.nextInt(256);String style = String.format(&quot;-fx-background-color: rgb(%d, %d, %d);&quot;, red, green, blue);pane.setStyle(style);Label label = new Label(&quot;This is tab &quot; + text);label.setStyle(String.format(&quot;-fx-text-fill: rgb(%d, %d, %d);&quot;, 256 - red, 256 - green, 256 - blue));pane.setPrefSize(500, 500);pane.getChildren().add(label);tab.setContent(pane);Which is from How to drag and drop tab nodes between tab panesjavafxShareImprove this questionFollowedited May 23, 2017 at 12:24Community's user avatarCommunityBot111 silver badgeasked Aug 6, 2014 at 15:18wlfbck's user avatarwlfbck56488 silver badges2222 bronze badges1Just a tip: if you first construct the MenuBar and the TabPane, then the VBox and finally the Scene, you can avoid digging into children and type casting: VBox root = new VBox(0, menuBar, tabPane); Scene scene = new Scene(root, 800, 600); – Tomas Mikula Aug 6, 2014 at 15:36 Add a comment1 AnswerSorted by:Highest score (default)9VBox.setVgrow(tabPane, Priority.ALWAYS);ShareImprove this answerFollowanswered Aug 6, 2014 at 15:30Tomas Mikula's user avatarTomas Mikula6,5272424 silver badges3939 bronze badgesWell that was easier than expected^^ Thank you very much! Is there a way to set this behaviour automatically for all gui-elements? – wlfbck Aug 6, 2014 at 15:46Add a commentYour AnswerSign up or log inPost as a guestNameEmailRequired, but never shownBy clicking “Post Your Answer”, you agree to our terms of service, privacy policy and cookie policyNot the answer you're looking for? Browse other questions tagged javafx or ask your own question.The Overflow BlogFrom Smalltalk to smart contracts, reflecting on 50 years of programming (Ep....From cryptography to consensus: Q&amp;A with CTO David Schwartz on building...sponsored postFeatured on MetaImproving the copy in the close modal and post notices - 2023 editionPlagiarism flag and moderator tooling has launched to Stack Overflow!Temporary policy: ChatGPT is bannedDo you observe increased relevance of Related Questions with our Machine...Linked5How to drag and drop tab nodes between tab panesRelated3JavaFX - TabPane/Tab How to make tab title invisible?1How to make TabPane borders green5JavaFX TabPane and resizing parent Stage2How to make an empty view for JavaFX TabPane2Make ScrollPane fit to its parent in javafx0How do I make JavaFX MediaView stretch media to fill parent?2JavaFX: Stretching Tabs to fit parent TabPaneHot Network QuestionsExotic smooth structureWhy does the right seem to rely on &quot;communism&quot; as a snarl word more so than the left?How to have an opamp's input voltage greater than the supply voltage of the opamp itselfIn &gt;&amp;N, why is N treated as file descriptor instead as file name (as the manual seems to say)?Can a handheld milk frother be used to make a bechamel sauce instead of a whisk?Is renormalization different to just ignoring infinite expressions?Dealing with unknowledgeable check-in staffHow to convince the FAA to cancel family member's medical certificate?Could my planet be habitable (Or partially habitable) by humans?Cosine similarity of two vectorsWhy would I want to hit myself with a Face Flask?How many sigops are in the invalid block 783426?Prove HAKMEM Item 23: connection between arithmetic operations and bitwise operations on integersSQL as a means of avoiding &quot;releases&quot;Enumeration of free polyominoesWhy were kitchen work surfaces in Sweden apparently so low before the 1950s or so?What is Netherlands?How to use bearer token to authenticate with Tridion Sites 9.6 WCF CoreserviceHow to properly calculate USD income when paid in foreign currency like EUR?Can an attorney plead the 5th if attorney-client privilege is pierced?Split a CSV file based on second column valueCan I offset short term capital gain using short term and long term capital losses?How can I &quot;number&quot; polygons with the same field values with sequential lettersWould spinning bush planes' tundra tires in flight be useful? Question feedSTACK OVERFLOWQuestionsHelpPRODUCTSTeamsAdvertisingCollectivesTalentCOMPANYAboutPressWork HereLegalPrivacy PolicyTerms of ServiceContact UsCookie SettingsCookie PolicySTACK EXCHANGE NETWORKTechnologyCulture &amp; recreationLife &amp; artsScienceProfessionalBusinessAPIDataBlogFacebookTwitterLinkedInInstagramSite design / logo © 2023 Stack Exchange Inc; user contributions licensed under CC BY-SA. rev 2023.4.5.43379" />
+
                                        </content>
                                     </Tab>
                                     <Tab fx:id="employeesOperationTab" closable="false" text="Employees Operation">
                                        <content>
-                                          <AnchorPane fx:id="employeeOperationPane" prefHeight="200.0" prefWidth="200.0">
+                                        <AnchorPane fx:id="employeeOperationPane" minHeight="0.0" minWidth="0.0" prefHeight="773.0" prefWidth="987.0">
                                              <children>
-                                                <VBox fx:id="employeeTabBox" alignment="CENTER" layoutX="316.0" layoutY="-64.0" prefHeight="560.0" prefWidth="997.6" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                <VBox fx:id="employeeTabBox" alignment="CENTER" prefHeight="720.0" prefWidth="997.6" spacing="20.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                    <children>
                                                       <TableView fx:id="employeeTable" maxWidth="1019.0" minWidth="552.0" pickOnBounds="false" prefHeight="560.0" prefWidth="841.0" stylesheets="@table.css">
                                                          <columns>
@@ -469,6 +464,173 @@
                                                    </children>
                                                 </VBox>
                                                 <StackPane fx:id="employeeInfoBoxContainer" mouseTransparent="true" prefHeight="560.0" prefWidth="997.6" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                <VBox prefHeight="720.0" prefWidth="997.6" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="987.0">
+                                                         <children>
+                                                            <Label text="Ngũ Thành An">
+                                                               <font>
+                                                                  <Font size="20.0" />
+                                                               </font>
+                                                               <HBox.margin>
+                                                                  <Insets left="20.0" />
+                                                               </HBox.margin>
+                                                            </Label>
+                                                         </children>
+                                                      </HBox>
+                                                      <TabPane prefHeight="606.0" prefWidth="966.0" tabClosingPolicy="UNAVAILABLE">
+                                                        <tabs>
+                                                          <Tab closable="false" text="DETAILS">
+                                                               <content>
+                                                                  <HBox alignment="CENTER">
+                                                                     <children>
+                                                                        <VBox fx:id="boxaaa" prefHeight="622.0" prefWidth="734.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                                                                           <children>
+                                                                              <HBox alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="634.0" spacing="20.0">
+                                                                                 <children>
+                                                                                    <Label text="Last Name">
+                                                                                       <font>
+                                                                                          <Font size="19.0" />
+                                                                                       </font>
+                                                                                    </Label>
+                                                                                    <JFXTextField focusColor="GREY" prefHeight="26.0" prefWidth="282.0" style="-fx-text-fill: gray;" text="Ngũ" unFocusColor="GREY">
+                                                                                       <HBox.margin>
+                                                                                          <Insets right="150.0" />
+                                                                                       </HBox.margin>
+                                                                                       <font>
+                                                                                          <Font size="19.0" />
+                                                                                       </font>
+                                                                                    </JFXTextField>
+                                                                                 </children>
+                                                                                 <VBox.margin>
+                                                                                    <Insets top="30.0" />
+                                                                                 </VBox.margin>
+                                                                              </HBox>
+                                                                              <HBox alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="634.0" spacing="20.0">
+                                                                                 <children>
+                                                                                    <Label text="First Name">
+                                                                                       <font>
+                                                                                          <Font size="19.0" />
+                                                                                       </font>
+                                                                                    </Label>
+                                                                                    <JFXTextField focusColor="GREY" prefHeight="26.0" prefWidth="282.0" style="-fx-text-fill: gray;" text="Thành An" unFocusColor="GREY">
+                                                                                       <HBox.margin>
+                                                                                          <Insets right="150.0" />
+                                                                                       </HBox.margin>
+                                                                                       <font>
+                                                                                          <Font size="19.0" />
+                                                                                       </font>
+                                                                                    </JFXTextField>
+                                                                                 </children>
+                                                                              </HBox>
+                                                                              <HBox alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="634.0" spacing="20.0">
+                                                                                 <children>
+                                                                                    <Label text="Gender">
+                                                                                       <font>
+                                                                                          <Font size="19.0" />
+                                                                                       </font>
+                                                                                    </Label>
+                                                                                    <JFXComboBox prefHeight="28.0" prefWidth="282.0">
+                                                                                       <HBox.margin>
+                                                                                          <Insets right="150.0" />
+                                                                                       </HBox.margin>
+                                                                                    </JFXComboBox>
+                                                                                 </children>
+                                                                              </HBox>
+                                                                              <HBox alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="634.0" spacing="20.0">
+                                                                                 <children>
+                                                                                    <Label text="Status">
+                                                                                       <font>
+                                                                                          <Font size="19.0" />
+                                                                                       </font>
+                                                                                    </Label>
+                                                                                    <JFXComboBox prefHeight="28.0" prefWidth="282.0">
+                                                                                       <HBox.margin>
+                                                                                          <Insets right="150.0" />
+                                                                                       </HBox.margin>
+                                                                                    </JFXComboBox>
+                                                                                 </children>
+                                                                              </HBox>
+                                                                              <HBox alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="634.0" spacing="20.0">
+                                                                                 <children>
+                                                                                    <Label text="Last Active Device">
+                                                                                       <font>
+                                                                                          <Font size="19.0" />
+                                                                                       </font>
+                                                                                    </Label>
+                                                                                    <JFXTextField focusColor="GREY" prefHeight="26.0" prefWidth="282.0" style="-fx-text-fill: gray;" text="PC101" unFocusColor="GREY">
+                                                                                       <HBox.margin>
+                                                                                          <Insets right="150.0" />
+                                                                                       </HBox.margin>
+                                                                                       <font>
+                                                                                          <Font size="19.0" />
+                                                                                       </font>
+                                                                                    </JFXTextField>
+                                                                                 </children>
+                                                                              </HBox>
+                                                                              <HBox alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="634.0" spacing="20.0">
+                                                                                 <children>
+                                                                                    <Label text="Payment Account">
+                                                                                       <font>
+                                                                                          <Font size="19.0" />
+                                                                                       </font>
+                                                                                    </Label>
+                                                                                    <JFXTextField focusColor="GREY" prefHeight="26.0" prefWidth="282.0" style="-fx-text-fill: gray;" text="0123456789" unFocusColor="GREY">
+                                                                                       <HBox.margin>
+                                                                                          <Insets right="150.0" />
+                                                                                       </HBox.margin>
+                                                                                       <font>
+                                                                                          <Font size="19.0" />
+                                                                                       </font>
+                                                                                    </JFXTextField>
+                                                                                 </children>
+                                                                              </HBox>
+                                                                           </children>
+                                                                        </VBox>
+                                                                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                                                           <image>
+                                                                              <Image url="@img/sample_avatar.jpg" />
+                                                                           </image>
+                                                                        </ImageView>
+                                                                     </children>
+                                                                  </HBox>
+                                                               </content>
+                                                          </Tab>
+                                                          <Tab text="ORDER">
+                                                            <content>
+                                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                                     <children>
+                                                                        <TableView fx:id="employeeTable1" layoutX="-185.0" layoutY="-6.0" maxWidth="1019.0" minWidth="552.0" pickOnBounds="false" prefHeight="548.0" prefWidth="966.4" stylesheets="@table.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0">
+                                                                           <columns>
+                                                                              <TableColumn fx:id="orderNumberColumn" prefWidth="100.0" text="Order Number" />
+                                                                              <TableColumn fx:id="orderDateColumn" prefWidth="155.9999542236328" text="Order Date" />
+                                                                              <TableColumn fx:id="requiredDateColumn" prefWidth="152.80001831054688" text="Required Date" />
+                                                                              <TableColumn fx:id="shippedDateColumn" prefWidth="98.39999389648438" sortable="false" text="Shipped Date" />
+                                                                              <TableColumn fx:id="statusColumn" minWidth="0.0" prefWidth="161.5999755859375" sortable="false" text="Status" />
+                                                                              <TableColumn fx:id="customerNumberColumn" minWidth="0.0" prefWidth="156.00006103515625" sortable="false" text="Comments" />
+                                                                              <TableColumn fx:id="jobTitle1" minWidth="0.0" prefWidth="163.19976806640625" sortable="false" text="Customer Number" />
+                                                                              <TableColumn fx:id="oderOperationColumn" maxWidth="173.5999755859375" prefWidth="130.39999999999998" resizable="false" sortable="false" text="Operation" />
+                                                                           </columns>
+                                                                           <columnResizePolicy>
+                                                                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                                           </columnResizePolicy>
+                                                                        </TableView>
+                                                                     </children>
+                                                                  </AnchorPane>
+                                                            </content>
+                                                          </Tab>
+                                                            <Tab text="ACTIVITIES">
+                                                               <content>
+                                                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                                               </content>
+                                                            </Tab>
+                                                        </tabs>
+                                                         <VBox.margin>
+                                                            <Insets left="10.0" right="10.0" />
+                                                         </VBox.margin>
+                                                      </TabPane>
+                                                   </children>
+                                                </VBox>
                                              </children>
                                           </AnchorPane>
                                        </content>
