@@ -19,12 +19,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="800.0" stylesheets="@style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.scenecontrollers.MainSceneController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.scenecontrollers.MainSceneController">
    <children>
       <SplitPane fx:id="firstSplitPane" dividerPositions="0.05" focusTraversable="false" orientation="VERTICAL" prefHeight="600.8" prefWidth="1200.8" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
@@ -353,7 +354,95 @@
                                     </Tab>
                                     <Tab fx:id="productsOperationTab" closable="false" text="Products Operation">
                                        <content>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="3" />
+                                          <TableView fx:id="ordersList1" prefHeight="591.0" prefWidth="804.0">
+                                             <columns>
+                                                <TableColumn fx:id="orderNumberCol1" prefWidth="93.38180541992188" text="Order No." />
+                                                <TableColumn fx:id="orderDateCol1" minWidth="6.103515625E-5" prefWidth="100.0" text="Order Date" />
+                                                <TableColumn fx:id="requiredDateCol1" prefWidth="100.0" text="Required Date" />
+                                                <TableColumn fx:id="shippedDateCol1" prefWidth="100.0" text="Shipped Date" />
+                                                <TableColumn fx:id="statusCol1" prefWidth="96.00009155273438" text="Status" />
+                                                <TableColumn fx:id="commentsCol1" prefWidth="190.25457763671875" text="Comments" />
+                                                <TableColumn fx:id="customerNumberCol1" prefWidth="122.18182373046875" text="Customer No." />
+                                             </columns>
+                                          </TableView>
+                                       </content>
+                                       <content>
+                                          <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                             <children>
+                                                <TableView fx:id="productsTable" layoutX="255.0" layoutY="95.0" prefHeight="675.0" prefWidth="950.0">
+                                                  <columns>
+                                                    <TableColumn fx:id="productCodeProd" prefWidth="210.32733154296875" text="Product Code" />
+                                                    <TableColumn fx:id="productNameProd" prefWidth="374.4000244140625" text="Name" />
+                                                      <TableColumn fx:id="productLineProd" prefWidth="364.79993041992304" text="Product Line" />
+                                                  </columns>
+                                                </TableView>
+                                                <Pane fx:id="bgPane" opacity="0.5" prefHeight="900.0" prefWidth="1500.0" style="-fx-background-color: black;" visible="false" />
+                                                <AnchorPane fx:id="productDetailsPane" layoutX="385.0" layoutY="199.0" prefHeight="466.0" prefWidth="677.0" style="-fx-background-color: white;" visible="false">
+                                                   <children>
+                                                      <JFXTextField fx:id="productCodePDetails" layoutX="54.0" layoutY="72.0" prefHeight="26.0" prefWidth="195.0" />
+                                                      <JFXTextField fx:id="productNamePDetails" layoutX="382.0" layoutY="72.0" prefWidth="195.0" />
+                                                      <JFXTextField fx:id="productScalePDetails" layoutX="382.0" layoutY="128.0" prefWidth="195.0" />
+                                                      <Text layoutX="54.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Code">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font></Text>
+                                                      <Text layoutX="54.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PRODUCT DETAILS" wrappingWidth="175.5630645751953">
+                                                         <font>
+                                                            <Font name="System Bold Italic" size="17.0" />
+                                                         </font>
+                                                      </Text>
+                                                      <Text layoutX="384.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Name">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font></Text>
+                                                      <Text layoutX="54.0" layoutY="124.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Line">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font></Text>
+                                                      <Text layoutX="384.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Scale">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font></Text>
+                                                      <JFXButton fx:id="closeProductDetailsButton" buttonType="RAISED" layoutX="596.0" layoutY="18.0" prefHeight="24.0" prefWidth="15.0" text="X">
+                                                         <font>
+                                                            <Font name="System Bold" size="14.0" />
+                                                         </font>
+                                                      </JFXButton>
+                                                      <JFXTextField fx:id="productVendorPDetails" layoutX="54.0" layoutY="189.0" prefWidth="195.0" />
+                                                      <Text layoutX="53.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Vendor">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                      </Text>
+                                                      <JFXTextField fx:id="inStockPDetails" layoutX="382.0" layoutY="189.0" prefWidth="195.0" />
+                                                      <Text layoutX="382.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="In Stock">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                      </Text>
+                                                      <JFXTextField fx:id="buyPricePDetails" layoutX="54.0" layoutY="251.0" prefWidth="195.0" />
+                                                      <Text layoutX="54.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Buy Price">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                      </Text>
+                                                      <JFXTextField fx:id="MSRPPDetails" layoutX="382.0" layoutY="251.0" prefWidth="195.0" />
+                                                      <Text layoutX="382.0" layoutY="246.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MSRP">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                      </Text>
+                                                      <JFXComboBox fx:id="productLinePDetails" layoutX="54.0" layoutY="128.0" prefHeight="26.0" prefWidth="195.0" />
+                                                      <JFXTextField fx:id="productDescriptionPDetails" layoutX="53.0" layoutY="323.0" maxHeight="60.0" prefHeight="34.0" prefWidth="531.0" />
+                                                      <Text layoutX="54.0" layoutY="315.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Description">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                      </Text>
+                                                   </children>
+                                                </AnchorPane>
+                                             </children>
+                                          </AnchorPane>
                                        </content>
                                     </Tab>
                                     <Tab fx:id="employeesOperationTab" closable="false" text="Employees Operation">
@@ -388,15 +477,15 @@
                                        <content>
                                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                              <children>
-                                                <TableView fx:id="ordersList" layoutX="164.0" layoutY="103.0" prefHeight="591.0" prefWidth="804.0">
+                                                <TableView fx:id="ordersTable" layoutX="164.0" layoutY="103.0" prefHeight="591.0" prefWidth="804.0">
                                                    <columns>
-                                                      <TableColumn fx:id="orderNumberCol" prefWidth="93.38180541992188" text="Order No." />
-                                                      <TableColumn fx:id="orderDateCol" minWidth="6.103515625E-5" prefWidth="100.0" text="Order Date" />
-                                                      <TableColumn fx:id="requiredDateCol" prefWidth="100.0" text="Required Date" />
-                                                      <TableColumn fx:id="shippedDateCol" prefWidth="100.0" text="Shipped Date" />
-                                                      <TableColumn fx:id="statusCol" prefWidth="96.00009155273438" text="Status" />
-                                                      <TableColumn fx:id="commentsCol" prefWidth="190.25457763671875" text="Comments" />
-                                                      <TableColumn fx:id="customerNumberCol" prefWidth="122.18182373046875" text="Customer No." />
+                                                      <TableColumn fx:id="orderNumberOrd" prefWidth="93.38180541992188" text="Order No." />
+                                                      <TableColumn fx:id="orderDateOrd" minWidth="6.103515625E-5" prefWidth="100.0" text="Order Date" />
+                                                      <TableColumn fx:id="requiredDateOrd" prefWidth="100.0" text="Required Date" />
+                                                      <TableColumn fx:id="shippedDateOrd" prefWidth="100.0" text="Shipped Date" />
+                                                      <TableColumn fx:id="statusOrd" prefWidth="96.00009155273438" text="Status" />
+                                                      <TableColumn fx:id="commentsOrd" prefWidth="193.74554443359375" text="Comments" />
+                                                      <TableColumn fx:id="customerNumberOrd" prefWidth="117.81815280378453" text="Customer No." />
                                                    </columns>
                                                 </TableView>
                                                 <JFXButton fx:id="removeOrderButton" layoutX="889.0" layoutY="63.0" onAction="#handleRemoveOrder" prefHeight="26.0" prefWidth="79.0" text="Remove" />

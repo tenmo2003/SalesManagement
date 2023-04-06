@@ -12,16 +12,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -30,7 +27,6 @@ import javafx.stage.Screen;
 import javafx.util.Callback;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
-import salesmanagement.salesmanagement.SQLConnection;
 
 import salesmanagement.salesmanagement.EmployeeForm;
 import salesmanagement.salesmanagement.Form;
@@ -40,7 +36,6 @@ import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesComponent.Order;
 
 
-import java.net.URL;
 import java.io.InputStream;
 import java.sql.PreparedStatement;
 
@@ -49,7 +44,6 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.ResourceBundle;
 
 public class MainSceneController extends SceneController {
     @FXML
@@ -92,8 +86,8 @@ public class MainSceneController extends SceneController {
 
     @FXML
     void goToOrdersTab() {
-        tabPane.getSelectionModel().select(ordersTab);
         initOrders();
+        tabPane.getSelectionModel().select(ordersTab);
     }
 
     @FXML
@@ -105,6 +99,7 @@ public class MainSceneController extends SceneController {
 
     @FXML
     void goToProductsOperationTab() {
+        initProducts();
         tabPane.getSelectionModel().select(productsOperationTab);
     }
 
@@ -349,6 +344,7 @@ public class MainSceneController extends SceneController {
     JFXComboBox statusInput;
 
     public void initCreateOrder() {
+        statusInput.getItems().clear();
         statusInput.getItems().add("Cancelled");
         statusInput.getItems().add("Disputed");
         statusInput.getItems().add("In Process");
@@ -371,11 +367,11 @@ public class MainSceneController extends SceneController {
             }
         });
 
-        orderDetailsList.setItems(getList());
+        orderDetailsTable.setItems(getList());
 
-        orderDetailsList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        orderDetailsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        orderDetailsList.setEditable(true);
+        orderDetailsTable.setEditable(true);
         productCodeOD.setCellFactory(TextFieldTableCell.forTableColumn());
         quantityOD.setCellFactory(TextFieldTableCell.forTableColumn((new IntegerStringConverter())));
         priceEachOD.setCellFactory(TextFieldTableCell.forTableColumn((new DoubleStringConverter())));
@@ -392,19 +388,19 @@ public class MainSceneController extends SceneController {
         double priceEach = Double.parseDouble(priceEachInput.getText());
 
         // Check if an order with the same productCode already exists
-        for (Order order : orderDetailsList.getItems()) {
+        for (Order order : orderDetailsTable.getItems()) {
             if (order.getProductCode().equals(productCode)) {
                 // Update the existing order
                 order.setQuantityOrdered(quantity);
                 order.setPriceEach(priceEach);
-                orderDetailsList.refresh();
+                orderDetailsTable.refresh();
                 return;
             }
         }
 
         // If no existing order was found, create a new one and add it to the tableView
         Order order = new Order(productCode, quantity, priceEach);
-        orderDetailsList.getItems().add(order);
+        orderDetailsTable.getItems().add(order);
 
         productCodeInput.clear();
         quantityInput.clear();
@@ -413,33 +409,33 @@ public class MainSceneController extends SceneController {
 
     public void removeItems() {
         ObservableList<Order> selectedRows, allItems;
-        allItems = orderDetailsList.getItems();
+        allItems = orderDetailsTable.getItems();
 
-        selectedRows = orderDetailsList.getSelectionModel().getSelectedItems();
+        selectedRows = orderDetailsTable.getSelectionModel().getSelectedItems();
 
         allItems.removeAll(selectedRows);
     }
 
     public void changeProductCode(TableColumn.CellEditEvent edittedCell) {
-        Order selected = orderDetailsList.getSelectionModel().getSelectedItem();
+        Order selected = orderDetailsTable.getSelectionModel().getSelectedItem();
         selected.setProductCode(edittedCell.getNewValue().toString());
-        orderDetailsList.refresh();
+        orderDetailsTable.refresh();
     }
 
     public void changeQuantity(TableColumn.CellEditEvent edittedCell) {
-        Order selected = orderDetailsList.getSelectionModel().getSelectedItem();
+        Order selected = orderDetailsTable.getSelectionModel().getSelectedItem();
         selected.setQuantityOrdered((int) edittedCell.getNewValue());
-        orderDetailsList.refresh();
+        orderDetailsTable.refresh();
     }
 
     public void changePriceEach(TableColumn.CellEditEvent edittedCell) {
-        Order selected = orderDetailsList.getSelectionModel().getSelectedItem();
+        Order selected = orderDetailsTable.getSelectionModel().getSelectedItem();
         selected.setPriceEach((double) edittedCell.getNewValue());
-        orderDetailsList.refresh();
+        orderDetailsTable.refresh();
     }
 
     @FXML
-    TableView<Order> orderDetailsList;
+    TableView<Order> orderDetailsTable;
     @FXML
     TableColumn<Order, String> productCodeOD;
     @FXML
@@ -506,7 +502,7 @@ public class MainSceneController extends SceneController {
         }
 
         StringBuilder orderdetails = new StringBuilder("insert into orderdetails values");
-        ObservableList<Order> items = orderDetailsList.getItems();
+        ObservableList<Order> items = orderDetailsTable.getItems();
 
         for (Order item : items) {
             orderdetails.append("(").append(orderNumber)
@@ -558,71 +554,71 @@ public class MainSceneController extends SceneController {
     }
 
     @FXML
-    TableView<ObservableList<Object>> ordersList;
+    TableView<ObservableList<Object>> ordersTable;
     @FXML
-    TableColumn<ObservableList<Object>, Integer> orderNumberCol;
+    TableColumn<ObservableList<Object>, Integer> orderNumberOrd;
     @FXML
-    TableColumn<ObservableList<Object>, LocalDate> orderDateCol;
+    TableColumn<ObservableList<Object>, LocalDate> orderDateOrd;
     @FXML
-    TableColumn<ObservableList<Object>, LocalDate> requiredDateCol;
+    TableColumn<ObservableList<Object>, LocalDate> requiredDateOrd;
     @FXML
-    TableColumn<ObservableList<Object>, LocalDate> shippedDateCol;
+    TableColumn<ObservableList<Object>, LocalDate> shippedDateOrd;
     @FXML
-    TableColumn<ObservableList<Object>, String> statusCol;
+    TableColumn<ObservableList<Object>, String> statusOrd;
     @FXML
-    TableColumn<ObservableList<Object>, String> commentsCol;
+    TableColumn<ObservableList<Object>, String> commentsOrd;
     @FXML
-    TableColumn<ObservableList<Object>, Integer> customerNumberCol;
+    TableColumn<ObservableList<Object>, Integer> customerNumberOrd;
     @FXML
     JFXButton createOrderButton;
     @FXML
     JFXButton removeOrderButton;
 
     void initOrders() {
-        ordersList.getItems().clear();
-        orderNumberCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, Integer>, ObservableValue<Integer>>() {
+        ordersTable.getItems().clear();
+        orderNumberOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, Integer>, ObservableValue<Integer>>() {
             @Override
             public ObservableValue<Integer> call(TableColumn.CellDataFeatures<ObservableList<Object>, Integer> param) {
                 return new SimpleObjectProperty<Integer>((Integer) param.getValue().get(0));
             }
         });
 
-        orderDateCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate>, ObservableValue<LocalDate>>() {
+        orderDateOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate>, ObservableValue<LocalDate>>() {
             @Override
             public ObservableValue<LocalDate> call(TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate> param) {
                 return new SimpleObjectProperty<LocalDate>((LocalDate) param.getValue().get(1));
             }
         });
 
-        requiredDateCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate>, ObservableValue<LocalDate>>() {
+        requiredDateOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate>, ObservableValue<LocalDate>>() {
             @Override
             public ObservableValue<LocalDate> call(TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate> param) {
                 return new SimpleObjectProperty<LocalDate>((LocalDate) param.getValue().get(2));
             }
         });
 
-        shippedDateCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate>, ObservableValue<LocalDate>>() {
+        shippedDateOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate>, ObservableValue<LocalDate>>() {
             @Override
             public ObservableValue<LocalDate> call(TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate> param) {
                 return new SimpleObjectProperty<LocalDate>((LocalDate) param.getValue().get(3));
             }
         });
 
-        statusCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
+        statusOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
                 return new SimpleStringProperty((String) param.getValue().get(4));
             }
         });
 
-        commentsCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
+        commentsOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
                 return new SimpleStringProperty((String) param.getValue().get(5));
             }
         });
 
-        customerNumberCol.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, Integer>, ObservableValue<Integer>>() {
+        customerNumberOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, Integer>, ObservableValue<Integer>>() {
             @Override
             public ObservableValue<Integer> call(TableColumn.CellDataFeatures<ObservableList<Object>, Integer> param) {
                 return new SimpleObjectProperty<Integer>((Integer) param.getValue().get(6));
@@ -640,9 +636,9 @@ public class MainSceneController extends SceneController {
                 row.add(resultSet.getString("status"));
                 row.add(resultSet.getString("comments"));
                 row.add(resultSet.getInt("customerNumber"));
-                ordersList.getItems().add(row);
+                ordersTable.getItems().add(row);
             }
-            ordersList.refresh();
+            ordersTable.refresh();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -650,7 +646,7 @@ public class MainSceneController extends SceneController {
 
     public void handleRemoveOrder() {
         // Get the selected row in the TableView
-        ObservableList<Object> selectedRow = ordersList.getSelectionModel().getSelectedItem();
+        ObservableList<Object> selectedRow = ordersTable.getSelectionModel().getSelectedItem();
 
         // If a row is selected, delete the corresponding order from the database and TableView
         if (selectedRow != null) {
@@ -665,8 +661,179 @@ public class MainSceneController extends SceneController {
             sqlConnection.updateQuery(deleteQuery);
 
             // Delete the order from the TableView
-            ordersList.getItems().remove(selectedRow);
+            ordersTable.getItems().remove(selectedRow);
 
+        }
+    }
+
+    @FXML
+    TableView<ObservableList<Object>> productsTable;
+    @FXML
+    TableColumn<ObservableList<Object>, String> productCodeProd;
+    @FXML
+    TableColumn<ObservableList<Object>, String> productNameProd;
+    @FXML
+    TableColumn<ObservableList<Object>, String> productLineProd;
+//    @FXML
+//    TableColumn<ObservableList<Object>, String> productScaleProd;
+//    @FXML
+//    TableColumn<ObservableList<Object>, String> productVendorProd;
+//    @FXML
+//    TableColumn<ObservableList<Object>, String> productDescriptionProd;
+//    @FXML
+//    TableColumn<ObservableList<Object>, Integer> inStockProd;
+//    @FXML
+//    TableColumn<ObservableList<Object>, Float> buyPriceProd;
+//    @FXML
+//    TableColumn<ObservableList<Object>, Float> MSRPProd;
+    @FXML
+    Pane bgPane;
+    @FXML
+    AnchorPane productDetailsPane;
+    @FXML
+    JFXButton closeProductDetailsButton;
+    void initProducts() {
+        productsTable.getItems().clear();
+        productsTable.setOnMouseClicked((MouseEvent event) -> {
+            if (event.getClickCount() == 2) {
+                ObservableList<Object> selected = productsTable.getSelectionModel().getSelectedItem();
+                initProductDetails(selected);
+                bgPane.setVisible(true);
+                productDetailsPane.setVisible(true);
+            }
+        });
+        closeProductDetailsButton.setOnAction(event -> {
+            bgPane.setVisible(false);
+            productDetailsPane.setVisible(false);
+        });
+        productCodeProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
+                return new SimpleObjectProperty<String>((String) param.getValue().get(0));
+            }
+        });
+
+        productNameProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
+                return new SimpleObjectProperty<String>((String) param.getValue().get(1));
+            }
+        });
+
+        productLineProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
+                return new SimpleObjectProperty<String>((String) param.getValue().get(2));
+            }
+        });
+
+//        productScaleProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
+//            @Override
+//            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
+//                return new SimpleObjectProperty<String>((String) param.getValue().get(3));
+//            }
+//        });
+//
+//        productVendorProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
+//            @Override
+//            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
+//                return new SimpleObjectProperty<String>((String) param.getValue().get(4));
+//            }
+//        });
+//
+//        productDescriptionProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
+//            @Override
+//            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
+//                return new SimpleObjectProperty<String>((String) param.getValue().get(5));
+//            }
+//        });
+//
+//        inStockProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, Integer>, ObservableValue<Integer>>() {
+//            @Override
+//            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<ObservableList<Object>, Integer> param) {
+//                return new SimpleObjectProperty<Integer>((Integer) param.getValue().get(6));
+//            }
+//        });
+//
+//        buyPriceProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, Float>, ObservableValue<Float>>() {
+//            @Override
+//            public ObservableValue<Float> call(TableColumn.CellDataFeatures<ObservableList<Object>, Float> param) {
+//                return new SimpleObjectProperty<Float>((Float) param.getValue().get(7));
+//            }
+//        });
+//
+//        MSRPProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, Float>, ObservableValue<Float>>() {
+//            @Override
+//            public ObservableValue<Float> call(TableColumn.CellDataFeatures<ObservableList<Object>, Float> param) {
+//                return new SimpleObjectProperty<Float>((Float) param.getValue().get(8));
+//            }
+//        });
+
+        try {
+            String query = "SELECT productCode, productName, productLine FROM products";
+            ResultSet resultSet = sqlConnection.getDataQuery(query);
+            while (resultSet.next()) {
+                ObservableList<Object> row = FXCollections.observableArrayList();
+                row.add(resultSet.getString("productCode"));
+                row.add(resultSet.getString("productName"));
+                row.add(resultSet.getString("productLine"));
+//                row.add(resultSet.getString("productScale"));
+//                row.add(resultSet.getString("productVendor"));
+//                row.add(resultSet.getString("productDescription"));
+//                row.add(resultSet.getInt("quantityInStock"));
+//                row.add(resultSet.getFloat("buyPrice"));
+//                row.add(resultSet.getFloat("MSRP"));
+                productsTable.getItems().add(row);
+            }
+            productsTable.refresh();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+    @FXML
+    JFXTextField productCodePDetails;
+    @FXML
+    JFXTextField productNamePDetails;
+    @FXML
+    JFXComboBox productLinePDetails;
+    @FXML
+    JFXTextField productScalePDetails;
+    @FXML
+    JFXTextField productVendorPDetails;
+    @FXML
+    JFXTextField inStockPDetails;
+    @FXML
+    JFXTextField buyPricePDetails;
+    @FXML
+    JFXTextField MSRPPDetails;
+    @FXML
+    JFXTextField productDescriptionPDetails;
+
+    void initProductDetails(ObservableList<Object> selected) {
+        try {
+            productLinePDetails.getItems().clear();
+            String query = "SELECT productLine FROM productlines";
+            ResultSet resultSet = sqlConnection.getDataQuery(query);
+
+            while (resultSet.next()) {
+                String productLine = resultSet.getString("productLine");
+                productLinePDetails.getItems().add(productLine);
+            }
+            query = "SELECT productCode, productName, productLine, productScale, productVendor, productDescription, quantityInStock, buyPrice, MSRP FROM products WHERE productCode = '" + selected.get(0).toString() + "'";
+            resultSet = sqlConnection.getDataQuery(query);
+            if (resultSet.next()) {
+                productCodePDetails.setText(resultSet.getString("productCode"));
+                productNamePDetails.setText(resultSet.getString("productName"));
+                productLinePDetails.setValue(resultSet.getString("productLine"));
+                productScalePDetails.setText(resultSet.getString("productScale"));
+                productVendorPDetails.setText(resultSet.getString("productVendor"));
+                productDescriptionPDetails.setText(resultSet.getString("productDescription"));
+                inStockPDetails.setText(resultSet.getString("quantityInStock"));
+                buyPricePDetails.setText(resultSet.getString("buyPrice"));
+                MSRPPDetails.setText(resultSet.getString("MSRP"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }
