@@ -12,7 +12,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -26,30 +25,22 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
-
 import javafx.util.Callback;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
-import salesmanagement.salesmanagement.SQLConnection;
-
 import salesmanagement.salesmanagement.EmployeeForm;
 import salesmanagement.salesmanagement.Form;
 import salesmanagement.salesmanagement.ImageController;
-
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesComponent.Order;
 
-
-import java.net.URL;
 import java.io.InputStream;
 import java.sql.PreparedStatement;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.ResourceBundle;
 
 public class MainSceneController extends SceneController {
     @FXML
@@ -224,8 +215,10 @@ public class MainSceneController extends SceneController {
         ordersTab,
         productsTab
     }
-
-
+@FXML
+    ScrollPane scrollpane;
+    @FXML
+    VBox boxaaa;
     public void initialSetup() {
         // Load current UI.
         user = new Employee(sqlConnection, loggerID);
@@ -265,6 +258,9 @@ public class MainSceneController extends SceneController {
 
         currentTabButton = newsTabButton;
         goToNewsTab();
+
+        //TODO: test area
+
 
         // Load UI for others.
         runTask(() -> {
