@@ -19,12 +19,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="800.0" stylesheets="@style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.scenecontrollers.MainSceneController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.scenecontrollers.MainSceneController">
    <children>
       <SplitPane fx:id="firstSplitPane" dividerPositions="0.05" focusTraversable="false" orientation="VERTICAL" prefHeight="600.8" prefWidth="1200.8" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
@@ -356,8 +357,87 @@
                                        </content>
                                     </Tab>
                                     <Tab fx:id="productsOperationTab" closable="false" text="Products Operation">
+                                  
                                        <content>
+                                          <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                             <children>
+                                                <TableView fx:id="productsTable" layoutX="255.0" layoutY="95.0" prefHeight="675.0" prefWidth="950.0">
+                                                  <columns>
+                                                    <TableColumn fx:id="productCodeProd" prefWidth="210.32733154296875" text="Product Code" />
+                                                    <TableColumn fx:id="productNameProd" prefWidth="374.4000244140625" text="Name" />
+                                                      <TableColumn fx:id="productLineProd" prefWidth="364.79993041992304" text="Product Line" />
+                                                  </columns>
+                                                </TableView>
+                                                <Pane fx:id="bgPane" opacity="0.5" prefHeight="900.0" prefWidth="1500.0" style="-fx-background-color: black;" visible="false" />
+                                                <AnchorPane fx:id="productDetailsPane" layoutX="385.0" layoutY="199.0" prefHeight="466.0" prefWidth="677.0" style="-fx-background-color: white;" visible="false">
+                                                   <children>
+                                                      <JFXTextField fx:id="productCodePDetails" layoutX="54.0" layoutY="72.0" prefHeight="26.0" prefWidth="195.0" />
+                                                      <JFXTextField fx:id="productNamePDetails" layoutX="382.0" layoutY="72.0" prefWidth="195.0" />
+                                                      <JFXTextField fx:id="productScalePDetails" layoutX="382.0" layoutY="128.0" prefWidth="195.0" />
+                                                      <Text layoutX="54.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Code">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font></Text>
+                                                      <Text layoutX="54.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PRODUCT DETAILS" wrappingWidth="175.5630645751953">
+                                                         <font>
+                                                            <Font name="System Bold Italic" size="17.0" />
+                                                         </font>
+                                                      </Text>
+                                                      <Text layoutX="384.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Name">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font></Text>
+                                                      <Text layoutX="54.0" layoutY="124.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Line">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font></Text>
+                                                      <Text layoutX="384.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Scale">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font></Text>
+                                                      <JFXButton fx:id="closeProductDetailsButton" buttonType="RAISED" layoutX="596.0" layoutY="18.0" prefHeight="24.0" prefWidth="15.0" text="X">
+                                                         <font>
+                                                            <Font name="System Bold" size="14.0" />
+                                                         </font>
+                                                      </JFXButton>
+                                                      <JFXTextField fx:id="productVendorPDetails" layoutX="54.0" layoutY="189.0" prefWidth="195.0" />
+                                                      <Text layoutX="53.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Vendor">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                      </Text>
+                                                      <JFXTextField fx:id="inStockPDetails" layoutX="382.0" layoutY="189.0" prefWidth="195.0" />
+                                                      <Text layoutX="382.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="In Stock">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                      </Text>
+                                                      <JFXTextField fx:id="buyPricePDetails" layoutX="54.0" layoutY="251.0" prefWidth="195.0" />
+                                                      <Text layoutX="54.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Buy Price">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                      </Text>
+                                                      <JFXTextField fx:id="MSRPPDetails" layoutX="382.0" layoutY="251.0" prefWidth="195.0" />
+                                                      <Text layoutX="382.0" layoutY="246.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MSRP">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                      </Text>
+                                                      <JFXComboBox fx:id="productLinePDetails" layoutX="54.0" layoutY="128.0" prefHeight="26.0" prefWidth="195.0" />
+                                                      <JFXTextField fx:id="productDescriptionPDetails" layoutX="53.0" layoutY="323.0" maxHeight="60.0" prefHeight="34.0" prefWidth="531.0" />
+                                                      <Text layoutX="54.0" layoutY="315.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Description">
+                                                         <font>
+                                                            <Font size="14.0" />
+                                                         </font>
+                                                      </Text>
+                                                   </children>
+                                                </AnchorPane>
+                                             </children>
+                                          </AnchorPane>
+
                                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Stack OverflowAboutProductsFor TeamsSearch…Join Stack Overflow to find the best answer to your technical question, help others answer theirs.HomePUBLICQuestionsTagsUsersCompaniesCOLLECTIVESExplore CollectivesTEAMSStack Overflow for Teams – Start collaborating and sharing organizational knowledge. How do i make a TabPane fill its parent?Asked 8 years, 8 months agoModified 8 years, 8 months agoViewed 8k times3My TabPane only seems to fill it's width horizontally, but not vertically. My workaround for now is to do this:    stage.getScene().heightProperty().addListener(new ChangeListener&lt;Number&gt;() {      @Override      public void changed(ObservableValue&lt;? extends Number&gt; observable, Number oldValue, Number newValue) {        System.out.println(&quot;height changed&quot;);        tabPane.setPrefHeight(newValue.doubleValue());      }    });But if i use that height it's obviously larger than the area that actually remains for it (theres a MenuBar above the TabPane). (Or does it adjust it's size properly?) It also kinda feels wrong, there got to be simple boolean i can set, since it behaves exactly as expected for horizontal changes.The Scene is setup like this:public static ResourceBundle BUNDLE = ResourceBundle.getBundle(&quot;locales/Bundle&quot;, new Locale(&quot;en&quot;, &quot;GB&quot;));Scene scene = new Scene(new VBox(0), 800, 600);MenuBar menuBar = new MenuBar();Menu menuStart = new Menu(BUNDLE.getString(&quot;menu.start&quot;));Menu menuView = new Menu(BUNDLE.getString(&quot;menu.view&quot;));Menu menuHelp = new Menu(BUNDLE.getString(&quot;menu.help&quot;));menuBar.getMenus().addAll(menuStart, menuView, menuHelp);((VBox) stage.getScene().getRoot()).getChildren().add(menuBar);TabPane tabPane = new TabPane();((VBox) stage.getScene().getRoot()).getChildren().add(tabPane);stage.setScene(scene);stage.show();Ofcourse there is some more code, but it only contains drag'n'drop related listeners, and this problem occurs way before any of them ever did anything (they print to console everytime they do something).The Tab setup:final Tab tab = new Tab();final Label label = new Label(&quot;Tab&quot; +text);tab.setGraphic(label);StackPane pane = new StackPane();int red = rng.nextInt(256);int green = rng.nextInt(256);int blue = rng.nextInt(256);String style = String.format(&quot;-fx-background-color: rgb(%d, %d, %d);&quot;, red, green, blue);pane.setStyle(style);Label label = new Label(&quot;This is tab &quot; + text);label.setStyle(String.format(&quot;-fx-text-fill: rgb(%d, %d, %d);&quot;, 256 - red, 256 - green, 256 - blue));pane.setPrefSize(500, 500);pane.getChildren().add(label);tab.setContent(pane);Which is from How to drag and drop tab nodes between tab panesjavafxShareImprove this questionFollowedited May 23, 2017 at 12:24Community's user avatarCommunityBot111 silver badgeasked Aug 6, 2014 at 15:18wlfbck's user avatarwlfbck56488 silver badges2222 bronze badges1Just a tip: if you first construct the MenuBar and the TabPane, then the VBox and finally the Scene, you can avoid digging into children and type casting: VBox root = new VBox(0, menuBar, tabPane); Scene scene = new Scene(root, 800, 600); – Tomas Mikula Aug 6, 2014 at 15:36 Add a comment1 AnswerSorted by:Highest score (default)9VBox.setVgrow(tabPane, Priority.ALWAYS);ShareImprove this answerFollowanswered Aug 6, 2014 at 15:30Tomas Mikula's user avatarTomas Mikula6,5272424 silver badges3939 bronze badgesWell that was easier than expected^^ Thank you very much! Is there a way to set this behaviour automatically for all gui-elements? – wlfbck Aug 6, 2014 at 15:46Add a commentYour AnswerSign up or log inPost as a guestNameEmailRequired, but never shownBy clicking “Post Your Answer”, you agree to our terms of service, privacy policy and cookie policyNot the answer you're looking for? Browse other questions tagged javafx or ask your own question.The Overflow BlogFrom Smalltalk to smart contracts, reflecting on 50 years of programming (Ep....From cryptography to consensus: Q&amp;A with CTO David Schwartz on building...sponsored postFeatured on MetaImproving the copy in the close modal and post notices - 2023 editionPlagiarism flag and moderator tooling has launched to Stack Overflow!Temporary policy: ChatGPT is bannedDo you observe increased relevance of Related Questions with our Machine...Linked5How to drag and drop tab nodes between tab panesRelated3JavaFX - TabPane/Tab How to make tab title invisible?1How to make TabPane borders green5JavaFX TabPane and resizing parent Stage2How to make an empty view for JavaFX TabPane2Make ScrollPane fit to its parent in javafx0How do I make JavaFX MediaView stretch media to fill parent?2JavaFX: Stretching Tabs to fit parent TabPaneHot Network QuestionsExotic smooth structureWhy does the right seem to rely on &quot;communism&quot; as a snarl word more so than the left?How to have an opamp's input voltage greater than the supply voltage of the opamp itselfIn &gt;&amp;N, why is N treated as file descriptor instead as file name (as the manual seems to say)?Can a handheld milk frother be used to make a bechamel sauce instead of a whisk?Is renormalization different to just ignoring infinite expressions?Dealing with unknowledgeable check-in staffHow to convince the FAA to cancel family member's medical certificate?Could my planet be habitable (Or partially habitable) by humans?Cosine similarity of two vectorsWhy would I want to hit myself with a Face Flask?How many sigops are in the invalid block 783426?Prove HAKMEM Item 23: connection between arithmetic operations and bitwise operations on integersSQL as a means of avoiding &quot;releases&quot;Enumeration of free polyominoesWhy were kitchen work surfaces in Sweden apparently so low before the 1950s or so?What is Netherlands?How to use bearer token to authenticate with Tridion Sites 9.6 WCF CoreserviceHow to properly calculate USD income when paid in foreign currency like EUR?Can an attorney plead the 5th if attorney-client privilege is pierced?Split a CSV file based on second column valueCan I offset short term capital gain using short term and long term capital losses?How can I &quot;number&quot; polygons with the same field values with sequential lettersWould spinning bush planes' tundra tires in flight be useful? Question feedSTACK OVERFLOWQuestionsHelpPRODUCTSTeamsAdvertisingCollectivesTalentCOMPANYAboutPressWork HereLegalPrivacy PolicyTerms of ServiceContact UsCookie SettingsCookie PolicySTACK EXCHANGE NETWORKTechnologyCulture &amp; recreationLife &amp; artsScienceProfessionalBusinessAPIDataBlogFacebookTwitterLinkedInInstagramSite design / logo © 2023 Stack Exchange Inc; user contributions licensed under CC BY-SA. rev 2023.4.5.43379" />
+
                                        </content>
                                     </Tab>
                                     <Tab fx:id="employeesOperationTab" closable="false" text="Employees Operation">
@@ -559,15 +639,15 @@
                                        <content>
                                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                              <children>
-                                                <TableView fx:id="ordersList" layoutX="164.0" layoutY="103.0" prefHeight="591.0" prefWidth="804.0">
+                                                <TableView fx:id="ordersTable" layoutX="164.0" layoutY="103.0" prefHeight="591.0" prefWidth="804.0">
                                                    <columns>
-                                                      <TableColumn fx:id="orderNumberCol" prefWidth="93.38180541992188" text="Order No." />
-                                                      <TableColumn fx:id="orderDateCol" minWidth="6.103515625E-5" prefWidth="100.0" text="Order Date" />
-                                                      <TableColumn fx:id="requiredDateCol" prefWidth="100.0" text="Required Date" />
-                                                      <TableColumn fx:id="shippedDateCol" prefWidth="100.0" text="Shipped Date" />
-                                                      <TableColumn fx:id="statusCol" prefWidth="96.00009155273438" text="Status" />
-                                                      <TableColumn fx:id="commentsCol" prefWidth="190.25457763671875" text="Comments" />
-                                                      <TableColumn fx:id="customerNumberCol" prefWidth="122.18182373046875" text="Customer No." />
+                                                      <TableColumn fx:id="orderNumberOrd" prefWidth="93.38180541992188" text="Order No." />
+                                                      <TableColumn fx:id="orderDateOrd" minWidth="6.103515625E-5" prefWidth="100.0" text="Order Date" />
+                                                      <TableColumn fx:id="requiredDateOrd" prefWidth="100.0" text="Required Date" />
+                                                      <TableColumn fx:id="shippedDateOrd" prefWidth="100.0" text="Shipped Date" />
+                                                      <TableColumn fx:id="statusOrd" prefWidth="96.00009155273438" text="Status" />
+                                                      <TableColumn fx:id="commentsOrd" prefWidth="193.74554443359375" text="Comments" />
+                                                      <TableColumn fx:id="customerNumberOrd" prefWidth="117.81815280378453" text="Customer No." />
                                                    </columns>
                                                 </TableView>
                                                 <JFXButton fx:id="removeOrderButton" layoutX="889.0" layoutY="63.0" onAction="#handleRemoveOrder" prefHeight="26.0" prefWidth="79.0" text="Remove" />
