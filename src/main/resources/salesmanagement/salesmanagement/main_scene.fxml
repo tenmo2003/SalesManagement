@@ -17,7 +17,6 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
@@ -29,45 +28,37 @@
    <children>
       <SplitPane fx:id="firstSplitPane" dividerPositions="0.05" focusTraversable="false" orientation="VERTICAL" prefHeight="600.8" prefWidth="1200.8" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
-            <AnchorPane fx:id="menuPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
+            <StackPane fx:id="menuPane">
                <children>
-                  <BorderPane prefHeight="200.0" prefWidth="1199.2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <left>
-                        <HBox fx:id="statusIconBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <ImageView fx:id="statusIcon" disable="true" fitHeight="24.0" fitWidth="94.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@img/login.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </HBox>
-                     </left>
-                  </BorderPane>
-                  <BorderPane prefHeight="200.0" prefWidth="1199.2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <center>
-                        <Text fx:id="appName" fill="#29a3e8" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Sales Management" textAlignment="CENTER" wrappingWidth="874.7435298442833" BorderPane.alignment="CENTER">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Text>
-                     </center>
-                  </BorderPane>
-                  <BorderPane prefHeight="200.0" prefWidth="1199.2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <right>
-                        <JFXButton fx:id="closeIcon" buttonType="RAISED" contentDisplay="CENTER" focusTraversable="false" minWidth="40.0" onMouseClicked="#closeStage" prefHeight="24.0" prefWidth="40.0" style="-fx-background-radius: 10; -fx-border-radius: 10;" textFill="TRANSPARENT" BorderPane.alignment="CENTER">
-                           <graphic>
-                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@img/close_icon.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </JFXButton>
-                     </right>
-                  </BorderPane>
+                  <Text fx:id="companyName" fill="#29a3e8" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Alpha Trading Corporation Joint Stock Company" textAlignment="CENTER" wrappingWidth="874.7435298442833">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Text>
+                  <JFXButton fx:id="closeIcon" buttonType="RAISED" contentDisplay="CENTER" focusTraversable="false" minWidth="40.0" onMouseClicked="#closeStage" prefHeight="24.0" prefWidth="40.0" style="-fx-background-radius: 10; -fx-border-radius: 10;" textFill="TRANSPARENT" StackPane.alignment="CENTER_RIGHT">
+                     <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@img/close_icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+                  <HBox fx:id="appName" alignment="CENTER" spacing="15.0" StackPane.alignment="CENTER_LEFT">
+                     <children>
+                        <ImageView disable="true" fitHeight="38.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@img/app_icon.png" />
+                           </image>
+                        </ImageView>
+                        <Label style="-fx-font-family: SVN-Poppins; -fx-font-size: 25; -fx-font-weight: 800;" text="SAMA" textFill="#329cfe" />
+                     </children>
+                     <StackPane.margin>
+                        <Insets right="1600.0" />
+                     </StackPane.margin>
+                  </HBox>
                </children>
-            </AnchorPane>
+            </StackPane>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                <children>
                   <SplitPane fx:id="secondSplitPane" dividerPositions="0.16666" focusTraversable="false" prefHeight="569.6" prefWidth="1199.2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -94,7 +85,7 @@
                                           </Text>
                                        </children>
                                     </VBox>
-                                    <VBox alignment="TOP_CENTER" maxHeight="516.0" maxWidth="209.0" minHeight="362.0" minWidth="180.0" prefHeight="371.0" prefWidth="198.0" spacing="5.0">
+                                    <VBox alignment="TOP_CENTER" maxHeight="516.0" maxWidth="559.0" minHeight="362.0" minWidth="180.0" prefHeight="516.0" prefWidth="435.0" spacing="5.0">
                                        <children>
                                           <Label prefHeight="34.0" prefWidth="242.0" style="-fx-font-family: SVN-Poppins; -fx-font-weight: 800;" text="MENU" textFill="#7c8db5">
                                              <VBox.margin>
@@ -104,7 +95,7 @@
                                                 <Font size="15.0" />
                                              </font>
                                           </Label>
-                                          <JFXButton fx:id="ordersTabButton" buttonType="RAISED" focusTraversable="false" onAction="#tabSelectingEffect" onMouseClicked="#goToOrdersTab" prefHeight="50.0" prefWidth="240.0" styleClass="main-button" textFill="WHITE">
+                                          <JFXButton fx:id="ordersTabButton" buttonType="RAISED" focusTraversable="false" onAction="#tabSelectingEffect" onMouseClicked="#goToOrdersTab" prefHeight="50.0" prefWidth="383.0" styleClass="main-button" textFill="WHITE">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
@@ -112,7 +103,7 @@
                                                 <Insets />
                                              </VBox.margin>
                                              <graphic>
-                                                <HBox alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="182.0" spacing="10.0">
+                                                <HBox alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="258.0" spacing="10.0">
                                                    <children>
                                                       <ImageView fitHeight="22.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
@@ -131,12 +122,12 @@
                                                 </HBox>
                                              </graphic>
                                           </JFXButton>
-                                          <JFXButton fx:id="productsTabButton" buttonType="RAISED" focusTraversable="false" onAction="#tabSelectingEffect" onMouseClicked="#goToProductsOperationTab" prefHeight="50.0" prefWidth="223.0" styleClass="main-button" textFill="WHITE">
+                                          <JFXButton fx:id="productsTabButton" buttonType="RAISED" focusTraversable="false" onAction="#tabSelectingEffect" onMouseClicked="#goToProductsOperationTab" prefHeight="50.0" prefWidth="523.0" styleClass="main-button" textFill="WHITE">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
                                              <graphic>
-                                                <HBox alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="182.0" spacing="10.0">
+                                                <HBox alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="246.0" spacing="10.0">
                                                    <children>
                                                       <ImageView fitHeight="22.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
@@ -158,12 +149,12 @@
                                                 <Insets />
                                              </VBox.margin>
                                           </JFXButton>
-                                          <JFXButton fx:id="employeesTabButton" buttonType="RAISED" focusTraversable="false" onAction="#tabSelectingEffect" onMouseClicked="#goToEmployeesTab" prefHeight="50.0" prefWidth="244.0" styleClass="main-button" textFill="WHITE">
+                                          <JFXButton fx:id="employeesTabButton" buttonType="RAISED" focusTraversable="false" onAction="#tabSelectingEffect" onMouseClicked="#displayEmployeesTab" prefHeight="50.0" prefWidth="435.0" styleClass="main-button" textFill="WHITE">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
                                              <graphic>
-                                                <HBox fx:id="boxInEmployeesTabButton" alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="181.0" spacing="10.0">
+                                                <HBox fx:id="boxInEmployeesTabButton" alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="270.0" spacing="10.0">
                                                    <children>
                                                       <ImageView fitHeight="22.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
@@ -185,7 +176,7 @@
                                                 <Insets />
                                              </VBox.margin>
                                           </JFXButton>
-                                          <Label prefHeight="37.0" prefWidth="198.0" style="-fx-font-family: SVN-Poppins; -fx-font-weight: 800;" text="OTHERS" textFill="#7c8db5">
+                                          <Label prefHeight="38.0" prefWidth="320.0" style="-fx-font-family: SVN-Poppins; -fx-font-weight: 800;" text="OTHERS" textFill="#7c8db5">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
@@ -193,12 +184,12 @@
                                                 <Insets left="10.0" />
                                              </VBox.margin>
                                           </Label>
-                                          <JFXButton fx:id="newsTabButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" focusTraversable="false" onAction="#tabSelectingEffect" onMouseClicked="#goToNewsTab" prefHeight="50.0" prefWidth="218.0" styleClass="main-button" textFill="WHITE">
+                                          <JFXButton fx:id="newsTabButton" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" focusTraversable="false" onAction="#tabSelectingEffect" onMouseClicked="#goToNewsTab" prefHeight="50.0" prefWidth="378.0" styleClass="main-button" textFill="WHITE">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
                                              <graphic>
-                                                <HBox fx:id="boxInNewsTabButton" alignment="CENTER_LEFT" prefHeight="44.0" prefWidth="180.0" spacing="10.0">
+                                                <HBox fx:id="boxInNewsTabButton" alignment="CENTER_LEFT" prefHeight="44.0" prefWidth="294.0" spacing="10.0">
                                                    <children>
                                                       <ImageView fitHeight="22.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
@@ -220,12 +211,12 @@
                                                 <Insets />
                                              </VBox.margin>
                                           </JFXButton>
-                                          <JFXButton fx:id="settingsTabButton" buttonType="RAISED" focusTraversable="false" onAction="#tabSelectingEffect" onMouseClicked="#goToSettingTab" prefHeight="50.0" prefWidth="234.0" styleClass="main-button" textFill="WHITE">
+                                          <JFXButton fx:id="settingsTabButton" buttonType="RAISED" focusTraversable="false" onAction="#tabSelectingEffect" onMouseClicked="#goToSettingTab" prefHeight="50.0" prefWidth="425.0" styleClass="main-button" textFill="WHITE">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
                                              <graphic>
-                                                <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="196.0" spacing="10.0">
+                                                <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="280.0" spacing="10.0">
                                                    <children>
                                                       <ImageView fitHeight="22.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
@@ -442,56 +433,58 @@
                                        <content>
                                         <AnchorPane fx:id="employeeOperationPane" minHeight="0.0" minWidth="0.0" prefHeight="773.0" prefWidth="987.0">
                                              <children>
-                                                <VBox fx:id="employeeTabBox" alignment="CENTER" prefHeight="720.0" prefWidth="997.6" spacing="20.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                <VBox fx:id="employeeInfoBox" prefHeight="992.8" prefWidth="1596.8" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                    <children>
-                                                      <TableView fx:id="employeeTable" maxWidth="1019.0" minWidth="552.0" pickOnBounds="false" prefHeight="560.0" prefWidth="841.0" stylesheets="@table.css">
-                                                         <columns>
-                                                            <TableColumn fx:id="employeeNumber" prefWidth="98.4000244140625" text="ID" />
-                                                            <TableColumn fx:id="lastName" prefWidth="136.8000030517578" text="Last name" />
-                                                            <TableColumn fx:id="firstName" prefWidth="152.80001831054688" text="First Name" />
-                                                            <TableColumn fx:id="email" prefWidth="185.5999755859375" sortable="false" text="Email" />
-                                                            <TableColumn fx:id="officeCode" minWidth="0.0" prefWidth="90.39996337890625" sortable="false" text="Office Code" />
-                                                            <TableColumn fx:id="reportsTo" minWidth="0.0" prefWidth="100.800048828125" sortable="false" text="Reports To" />
-                                                            <TableColumn fx:id="jobTitle" minWidth="0.0" prefWidth="114.4000244140625" sortable="false" text="Job Title" />
-                                                            <TableColumn fx:id="operation" maxWidth="173.5999755859375" prefWidth="130.39999999999998" resizable="false" sortable="false" text="Operation" />
-                                                         </columns>
-                                                         <columnResizePolicy>
-                                                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                                         </columnResizePolicy>
-                                                      </TableView>
-                                                   </children>
-                                                </VBox>
-                                                <StackPane fx:id="employeeInfoBoxContainer" mouseTransparent="true" prefHeight="560.0" prefWidth="997.6" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                                <VBox prefHeight="720.0" prefWidth="997.6" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                   <children>
-                                                      <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="987.0">
+                                                      <StackPane prefHeight="48.0" prefWidth="1597.0">
                                                          <children>
-                                                            <Label text="Ngũ Thành An">
+                                                            <Label alignment="CENTER" text="Ngũ Thành An" StackPane.alignment="CENTER_LEFT">
                                                                <font>
                                                                   <Font size="20.0" />
                                                                </font>
-                                                               <HBox.margin>
+                                                               <StackPane.margin>
                                                                   <Insets left="20.0" />
-                                                               </HBox.margin>
+                                                               </StackPane.margin>
                                                             </Label>
+                                                            <JFXButton buttonType="RAISED" onMouseClicked="#goBackToEmployeeTableBox" style="-fx-background-color: #329cfe; -fx-border-radius: 10; -fx-background-radius: 10; -fx-border-color: #329cfe; -fx-background-size: 20 20 20 20;" text="BACK" StackPane.alignment="CENTER_RIGHT">
+                                                               <StackPane.margin>
+                                                                  <Insets right="30.0" />
+                                                               </StackPane.margin>
+                                                            </JFXButton>
                                                          </children>
-                                                      </HBox>
+                                                      </StackPane>
                                                       <TabPane prefHeight="606.0" prefWidth="966.0" tabClosingPolicy="UNAVAILABLE">
                                                         <tabs>
                                                           <Tab closable="false" text="DETAILS">
                                                                <content>
-                                                                  <HBox alignment="CENTER">
+                                                                  <HBox alignment="TOP_CENTER">
                                                                      <children>
-                                                                        <VBox fx:id="boxaaa" prefHeight="622.0" prefWidth="734.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                                                                        <VBox alignment="CENTER_RIGHT" prefHeight="556.0" prefWidth="1101.0" spacing="10.0">
                                                                            <children>
-                                                                              <HBox alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="634.0" spacing="20.0">
+                                                                              <HBox alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="900.0" spacing="20.0">
+                                                                                 <children>
+                                                                                    <Label text="S.No">
+                                                                                       <font>
+                                                                                          <Font size="19.0" />
+                                                                                       </font>
+                                                                                    </Label>
+                                                                                    <JFXTextField fx:id="employeeNumberTextField" focusColor="GREY" prefHeight="26.0" prefWidth="500.0" style="-fx-text-fill: gray;" text="21000001" unFocusColor="GREY">
+                                                                                       <HBox.margin>
+                                                                                          <Insets right="150.0" />
+                                                                                       </HBox.margin>
+                                                                                       <font>
+                                                                                          <Font size="19.0" />
+                                                                                       </font>
+                                                                                    </JFXTextField>
+                                                                                 </children>
+                                                                              </HBox>
+                                                                              <HBox alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="900.0" spacing="20.0">
                                                                                  <children>
                                                                                     <Label text="Last Name">
                                                                                        <font>
                                                                                           <Font size="19.0" />
                                                                                        </font>
                                                                                     </Label>
-                                                                                    <JFXTextField focusColor="GREY" prefHeight="26.0" prefWidth="282.0" style="-fx-text-fill: gray;" text="Ngũ" unFocusColor="GREY">
+                                                                                    <JFXTextField focusColor="GREY" prefHeight="26.0" prefWidth="500.0" style="-fx-text-fill: gray;" text="Donald" unFocusColor="GREY">
                                                                                        <HBox.margin>
                                                                                           <Insets right="150.0" />
                                                                                        </HBox.margin>
@@ -500,18 +493,15 @@
                                                                                        </font>
                                                                                     </JFXTextField>
                                                                                  </children>
-                                                                                 <VBox.margin>
-                                                                                    <Insets top="30.0" />
-                                                                                 </VBox.margin>
                                                                               </HBox>
-                                                                              <HBox alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="634.0" spacing="20.0">
+                                                                              <HBox alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="900.0" spacing="20.0">
                                                                                  <children>
                                                                                     <Label text="First Name">
                                                                                        <font>
                                                                                           <Font size="19.0" />
                                                                                        </font>
                                                                                     </Label>
-                                                                                    <JFXTextField focusColor="GREY" prefHeight="26.0" prefWidth="282.0" style="-fx-text-fill: gray;" text="Thành An" unFocusColor="GREY">
+                                                                                    <JFXTextField focusColor="GREY" prefHeight="26.0" prefWidth="500.0" style="-fx-text-fill: gray;" text="Peter" unFocusColor="GREY">
                                                                                        <HBox.margin>
                                                                                           <Insets right="150.0" />
                                                                                        </HBox.margin>
@@ -521,42 +511,42 @@
                                                                                     </JFXTextField>
                                                                                  </children>
                                                                               </HBox>
-                                                                              <HBox alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="634.0" spacing="20.0">
+                                                                              <HBox alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="900.0" spacing="20.0">
                                                                                  <children>
                                                                                     <Label text="Gender">
                                                                                        <font>
                                                                                           <Font size="19.0" />
                                                                                        </font>
                                                                                     </Label>
-                                                                                    <JFXComboBox prefHeight="28.0" prefWidth="282.0">
+                                                                                    <JFXComboBox prefHeight="28.0" prefWidth="500.0" promptText="MALE">
                                                                                        <HBox.margin>
                                                                                           <Insets right="150.0" />
                                                                                        </HBox.margin>
                                                                                     </JFXComboBox>
                                                                                  </children>
                                                                               </HBox>
-                                                                              <HBox alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="634.0" spacing="20.0">
+                                                                              <HBox alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="900.0" spacing="20.0">
                                                                                  <children>
-                                                                                    <Label text="Status">
+                                                                                    <Label text="Phone">
                                                                                        <font>
                                                                                           <Font size="19.0" />
                                                                                        </font>
                                                                                     </Label>
-                                                                                    <JFXComboBox prefHeight="28.0" prefWidth="282.0">
+                                                                                    <JFXComboBox prefHeight="28.0" prefWidth="500.0" promptText="0853858295">
                                                                                        <HBox.margin>
                                                                                           <Insets right="150.0" />
                                                                                        </HBox.margin>
                                                                                     </JFXComboBox>
                                                                                  </children>
                                                                               </HBox>
-                                                                              <HBox alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="634.0" spacing="20.0">
+                                                                              <HBox alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="900.0" spacing="20.0">
                                                                                  <children>
-                                                                                    <Label text="Last Active Device">
+                                                                                    <Label text="Email">
                                                                                        <font>
                                                                                           <Font size="19.0" />
                                                                                        </font>
                                                                                     </Label>
-                                                                                    <JFXTextField focusColor="GREY" prefHeight="26.0" prefWidth="282.0" style="-fx-text-fill: gray;" text="PC101" unFocusColor="GREY">
+                                                                                    <JFXTextField focusColor="GREY" prefHeight="26.0" prefWidth="500.0" style="-fx-text-fill: gray;" text="samplemail@gmail.com" unFocusColor="GREY">
                                                                                        <HBox.margin>
                                                                                           <Insets right="150.0" />
                                                                                        </HBox.margin>
@@ -566,14 +556,48 @@
                                                                                     </JFXTextField>
                                                                                  </children>
                                                                               </HBox>
-                                                                              <HBox alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="634.0" spacing="20.0">
+                                                                              <HBox alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="900.0" spacing="20.0">
                                                                                  <children>
-                                                                                    <Label text="Payment Account">
+                                                                                    <Label text="Address Line">
                                                                                        <font>
                                                                                           <Font size="19.0" />
                                                                                        </font>
                                                                                     </Label>
-                                                                                    <JFXTextField focusColor="GREY" prefHeight="26.0" prefWidth="282.0" style="-fx-text-fill: gray;" text="0123456789" unFocusColor="GREY">
+                                                                                    <JFXTextField focusColor="GREY" prefHeight="26.0" prefWidth="500.0" style="-fx-text-fill: gray;" text="Số 144, Xuân Thủy, Cầu Giấy, Hà Nội" unFocusColor="GREY">
+                                                                                       <HBox.margin>
+                                                                                          <Insets right="150.0" />
+                                                                                       </HBox.margin>
+                                                                                       <font>
+                                                                                          <Font size="19.0" />
+                                                                                       </font>
+                                                                                    </JFXTextField>
+                                                                                 </children>
+                                                                              </HBox>
+                                                                              <HBox alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="900.0" spacing="20.0">
+                                                                                 <children>
+                                                                                    <Label text="Reports To">
+                                                                                       <font>
+                                                                                          <Font size="19.0" />
+                                                                                       </font>
+                                                                                    </Label>
+                                                                                    <JFXTextField focusColor="GREY" prefHeight="26.0" prefWidth="500.0" style="-fx-text-fill: gray;" text="21000007" unFocusColor="GREY">
+                                                                                       <HBox.margin>
+                                                                                          <Insets right="150.0" />
+                                                                                       </HBox.margin>
+                                                                                       <font>
+                                                                                          <Font size="19.0" />
+                                                                                       </font>
+                                                                                    </JFXTextField>
+                                                                                 </children>
+                                                                              </HBox>
+                                                                              <HBox alignment="CENTER_RIGHT" prefHeight="47.0" prefWidth="900.0" spacing="20.0">
+                                                                                 <children>
+                                                                                    <Label text="Status">
+                                                                                       <font>
+                                                                                          <Font size="19.0" />
+                                                                                       </font>
+                                                                                    </Label>
+                                                                                    <JFXTextField focusColor="GREY" prefHeight="26.0" prefWidth="500.0" style="-fx-text-fill: gray;" text="ACTIVE" unFocusColor="GREY">
                                                                                        <HBox.margin>
                                                                                           <Insets right="150.0" />
                                                                                        </HBox.margin>
@@ -585,20 +609,24 @@
                                                                               </HBox>
                                                                            </children>
                                                                         </VBox>
-                                                                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                                                                           <image>
-                                                                              <Image url="@img/sample_avatar.jpg" />
-                                                                           </image>
-                                                                        </ImageView>
+                                                                        <StackPane prefHeight="556.0" prefWidth="365.0">
+                                                                           <children>
+                                                                              <ImageView fitHeight="150.0" fitWidth="221.0" pickOnBounds="true" preserveRatio="true">
+                                                                                 <image>
+                                                                                    <Image url="@img/sample_avatar.jpg" />
+                                                                                 </image>
+                                                                              </ImageView>
+                                                                           </children>
+                                                                        </StackPane>
                                                                      </children>
                                                                   </HBox>
                                                                </content>
                                                           </Tab>
-                                                          <Tab text="ORDER">
+                                                          <Tab text="ORDERS">
                                                             <content>
-                                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="635.0" prefWidth="1576.0">
                                                                      <children>
-                                                                        <TableView fx:id="employeeTable1" layoutX="-185.0" layoutY="-6.0" maxWidth="1019.0" minWidth="552.0" pickOnBounds="false" prefHeight="548.0" prefWidth="966.4" stylesheets="@table.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0">
+                                                                        <TableView fx:id="employeeTable1" layoutX="-185.0" layoutY="-6.0" maxWidth="1536.0" minWidth="552.0" pickOnBounds="false" prefHeight="548.0" prefWidth="1576.0" stylesheets="@table.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
                                                                            <columns>
                                                                               <TableColumn fx:id="orderNumberColumn" prefWidth="100.0" text="Order Number" />
                                                                               <TableColumn fx:id="orderDateColumn" prefWidth="155.9999542236328" text="Order Date" />
@@ -627,6 +655,23 @@
                                                             <Insets left="10.0" right="10.0" />
                                                          </VBox.margin>
                                                       </TabPane>
+                                                   </children>
+                                                </VBox>
+                                                <VBox fx:id="employeeTableBox" alignment="TOP_CENTER" prefHeight="720.0" prefWidth="997.6" spacing="20.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
+                                                   <children>
+                                                      <TableView fx:id="employeeTable" maxWidth="1510.0" minWidth="552.0" pickOnBounds="false" prefHeight="560.0" prefWidth="1510.0" stylesheets="@table.css">
+                                                         <columns>
+                                                            <TableColumn fx:id="employeeNumberColumn" prefWidth="98.4000244140625" text="S.No" />
+                                                            <TableColumn fx:id="nameColumn" prefWidth="136.8000030517578" text="Employee Name" />
+                                                            <TableColumn fx:id="phoneColumn" prefWidth="152.80001831054688" text="Phone" />
+                                                            <TableColumn fx:id="emailColumn" prefWidth="185.5999755859375" sortable="false" text="Email" />
+                                                            <TableColumn fx:id="employeeStatusColumn" minWidth="0.0" prefWidth="90.39996337890625" sortable="false" text="Status" />
+                                                            <TableColumn fx:id="actionColumn" minWidth="0.0" prefWidth="100.800048828125" sortable="false" text="Action" />
+                                                         </columns>
+                                                         <columnResizePolicy>
+                                                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                         </columnResizePolicy>
+                                                      </TableView>
                                                    </children>
                                                 </VBox>
                                              </children>

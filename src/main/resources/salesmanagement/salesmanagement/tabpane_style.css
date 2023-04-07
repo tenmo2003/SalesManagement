@@ -3,3 +3,32 @@
     visibility: hidden ;
     -fx-padding: -20 0 0 0;
 }
+.tab {
+    -fx-background-color: #329cfe;
+    -fx-text-fill: white;
+    -fx-font-size: 16;
+}
+
+.tab:selected {
+    -fx-background-color: #0077c2;
+    -fx-radius-color: #0077c2;
+}
+.tab-pane .tab {
+    -fx-min-width: 110px;
+    -fx-pref-width: 110px;
+    -fx-max-width: 110px;
+    -fx-min-height: 50px;
+    -fx-pref-height: 50px;
+    -fx-max-height: 50px;
+}
+.tab-pane .tab-header-background {
+    -fx-background-color:transparent;
+}
+.tab-pane .tab .tab-label {
+    -fx-text-fill: white;
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab > .tab-container > .tab-label {
+    -fx-pref-width: 80;
+    -fx-alignment: CENTER;
+}
