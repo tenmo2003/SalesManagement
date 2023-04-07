@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -12,6 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -86,12 +88,6 @@ public class MainSceneController extends SceneController {
         tabPane.getSelectionModel().select(ordersTab);
     }
 
-    @FXML
-    void goToEmployeesTab() {
-        tabPane.getSelectionModel().select(employeesOperationTab);
-        haveChangeInEmployeesTab = true;
-    }
-
 
     @FXML
     void goToProductsOperationTab() {
@@ -123,7 +119,6 @@ public class MainSceneController extends SceneController {
             ResultSet resultSet = sqlConnection.getDataQuery(query);
             try {
                 if (resultSet.next()) {
-                    //content.wrappingWidthProperty().bind(contentBox.widthProperty().multiply(0.9));
                     content.setWrappingWidth(contentBox.getWidth() * 0.9);
                     content.setText(resultSet.getString("content"));
                     notificationTitle.setText(resultSet.getString("title"));
@@ -143,32 +138,30 @@ public class MainSceneController extends SceneController {
     ImageView statusIcon;
 
     /**
-     * Handle employee management tab.
+     * Handle EMPLOYEES tab.
      */
     @FXML
     TableView<Employee> employeeTable;
     @FXML
-    private TableColumn<?, ?> email;
+    private TableColumn<?, ?> emailColumn;
     @FXML
-    private TableColumn<Employee, Integer> employeeNumber;
+    private TableColumn<Employee, Integer> employeeNumberColumn;
     @FXML
-    private TableColumn<?, ?> firstName;
+    private TableColumn<?, ?> nameColumn;
     @FXML
-    private TableColumn<?, ?> jobTitle;
+    private TableColumn<?, ?> actionColumn;
     @FXML
-    private TableColumn<?, ?> lastName;
+    private TableColumn<?, ?> phoneColumn;
     @FXML
-    private TableColumn<?, ?> officeCode;
-    @FXML
-    private TableColumn<?, ?> operation;
-    @FXML
-    private TableColumn<?, ?> reportsTo;
+    private TableColumn<?, ?> employeeStatusColumn;
     @FXML
     AnchorPane employeeOperationPane;
     ArrayList<Employee> employees;
 
     @FXML
-    void selectEmployeesTab() {
+    void displayEmployeesTab() {
+        tabPane.getSelectionModel().select(employeesOperationTab);
+
         employeeTable.setSelectionModel(null);
         ArrayList<Employee> employees = new ArrayList<>();
         runTask(() -> {
@@ -189,16 +182,49 @@ public class MainSceneController extends SceneController {
     }
 
     @FXML
+    VBox employeeInfoBox;
+
+    /**
+     * When click on Name Text in Employee table, this function will be called to
+     * display detail information of employee. It's called by an Employee object.
+     * It hides employees table box and shows employee information box.
+     */
+    public void displayEmployeeInfoBox() {
+        employeeInfoBox.toFront();
+        employeeInfoBox.setVisible(true);
+        employeeInfoBox.setDisable(false);
+
+        employeeTableBox.toBack();
+        employeeTableBox.setVisible(false);
+        employeeTableBox.setDisable(true);
+    }
+
+    /**
+     * Called when clicking "BACK" button, return to employees list.
+     * It shows employees table box and hides employee information box.
+     * It relates to {@link  #displayEmployeeInfoBox()};
+     */
+    @FXML
+    void goBackToEmployeeTableBox() {
+        employeeInfoBox.toBack();
+        employeeInfoBox.setVisible(false);
+        employeeInfoBox.setDisable(true);
+
+        employeeTableBox.toFront();
+        employeeTableBox.setVisible(true);
+        employeeTableBox.setDisable(false);
+    }
+
+    @FXML
     SplitPane firstSplitPane;
     @FXML
     SplitPane secondSplitPane;
     @FXML
     SplitPane thirdSplitPane;
     @FXML
-    VBox employeeTabBox;
+    VBox employeeTableBox;
     @FXML
-    HBox statusIconBox;
-
+    HBox appName;
     @FXML
     ImageView smallAvatar;
 
@@ -215,17 +241,19 @@ public class MainSceneController extends SceneController {
         ordersTab,
         productsTab
     }
-@FXML
+
+    @FXML
     ScrollPane scrollpane;
     @FXML
-    VBox boxaaa;
+    StackPane menuPane;
+
     public void initialSetup() {
         // Load current UI.
         user = new Employee(sqlConnection, loggerID);
         usernameText.setText(user.getFullName());
 
         firstSplitPane.setMaxHeight(Screen.getPrimary().getVisualBounds().getHeight());
-        ((AnchorPane) firstSplitPane.getItems().get(0)).setMinHeight(0.05 * Screen.getPrimary().getVisualBounds().getHeight());
+        ((StackPane) firstSplitPane.getItems().get(0)).setMinHeight(0.05 * Screen.getPrimary().getVisualBounds().getHeight());
         ((AnchorPane) firstSplitPane.getItems().get(1)).setMinHeight(0.95 * Screen.getPrimary().getVisualBounds().getHeight());
         secondSplitPane.setMaxWidth(Screen.getPrimary().getVisualBounds().getWidth());
         ((AnchorPane) secondSplitPane.getItems().get(0)).setMinWidth(0.1667 * Screen.getPrimary().getVisualBounds().getWidth());
@@ -234,18 +262,17 @@ public class MainSceneController extends SceneController {
         ((VBox) thirdSplitPane.getItems().get(0)).setMinWidth(0.75 * thirdSplitPane.getMaxWidth());
         ((VBox) thirdSplitPane.getItems().get(1)).setMinWidth(0.25 * thirdSplitPane.getMaxWidth());
 
-        statusIconBox.setPrefWidth(0.1667 * Screen.getPrimary().getVisualBounds().getWidth());
+        Insets hboxMargin = new Insets(0, 0.8333 * Screen.getPrimary().getVisualBounds().getWidth(), 0, 0);
+        StackPane.setMargin(appName, hboxMargin);
 
-        double tableWidth = employeeTabBox.getWidth() * 0.95;
+        double tableWidth = employeeTableBox.getWidth() * 0.95;
         employeeTable.setMaxWidth(tableWidth);
-        employeeNumber.setMinWidth(0.1 * tableWidth);
-        firstName.setMinWidth(0.125 * tableWidth);
-        lastName.setMinWidth(0.125 * tableWidth);
-        email.setMinWidth(0.15 * tableWidth);
-        officeCode.setMinWidth(0.125 * tableWidth);
-        reportsTo.setMinWidth(0.125 * tableWidth);
-        jobTitle.setMinWidth(0.125 * tableWidth);
-        operation.setMinWidth(0.125 * tableWidth);
+        employeeNumberColumn.setMinWidth(0.1 * tableWidth);
+        nameColumn.setMinWidth(0.25 * tableWidth);
+        phoneColumn.setMinWidth(0.15 * tableWidth);
+        emailColumn.setMinWidth(0.2 * tableWidth);
+        employeeStatusColumn.setMinWidth(0.1 * tableWidth);
+        actionColumn.setMinWidth(0.2 * tableWidth);
 
         Circle clip = new Circle();
         clip.setRadius(35);
@@ -253,8 +280,8 @@ public class MainSceneController extends SceneController {
         clip.setCenterY(35);
         smallAvatar.setClip(clip);
 
-        employeeForm = new EmployeeForm(employeeInfoBoxContainer);
-        employeeForm.closeForm(() -> employeeInfoBoxContainer.setMouseTransparent(true));
+        //employeeForm = new EmployeeForm(employeeInfoBoxContainer);
+        //employeeForm.closeForm(() -> employeeInfoBoxContainer.setMouseTransparent(true));
 
         currentTabButton = newsTabButton;
         goToNewsTab();
@@ -278,14 +305,12 @@ public class MainSceneController extends SceneController {
                 e.printStackTrace();
             }
 
-            employeeNumber.setCellValueFactory(new PropertyValueFactory<>("employeeNumber"));
-            lastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-            firstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-            email.setCellValueFactory(new PropertyValueFactory<>("email"));
-            officeCode.setCellValueFactory(new PropertyValueFactory<>("officeCode"));
-            reportsTo.setCellValueFactory(new PropertyValueFactory<>("reportsTo"));
-            jobTitle.setCellValueFactory(new PropertyValueFactory<>("jobTitle"));
-            operation.setCellValueFactory(new PropertyValueFactory<>("operation"));
+            employeeNumberColumn.setCellValueFactory(new PropertyValueFactory<>("employeeNumber"));
+            nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+            phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
+            emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
+            employeeStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+            actionColumn.setCellValueFactory(new PropertyValueFactory<>("action"));
         }, null, null, null);
     }
 
@@ -307,32 +332,19 @@ public class MainSceneController extends SceneController {
         @Override
         public void handle(long l) {
             if (MainSceneController.loggerID > 0) {
-                reloadFlagListener.start();
+                runTask(() -> {
+                    Platform.runLater(()->{
+                        stage.setScene(MainSceneController.this.scene);
+                        stage.hide();
+                        initialSetup();
+                        stage.setX(0);
+                        stage.setY(0);
+                        stage.show();
+                        uploadNotificationText();
+                    });
+
+                }, null, null, null);
                 stop();
-            }
-        }
-    };
-    private final AnimationTimer reloadFlagListener = new AnimationTimer() {
-        @Override
-        public void handle(long l) {
-            if (haveJustOpened) {
-                haveJustOpened = false;
-                stage.setScene(MainSceneController.this.scene);
-                stage.hide();
-                initialSetup();
-                stage.setX(0);
-                stage.setY(0);
-                stage.show();
-                uploadNotificationText();
-            }
-
-            if (haveChangeInEmployeesTab) {
-                haveChangeInEmployeesTab = false;
-                selectEmployeesTab();
-            }
-
-            if (haveChangeInHomeTab) {
-
             }
         }
     };
@@ -357,15 +369,12 @@ public class MainSceneController extends SceneController {
         productCodeOD.setCellValueFactory(new PropertyValueFactory<Order, String>("productCode"));
         quantityOD.setCellValueFactory(new PropertyValueFactory<Order, Integer>("quantityOrdered"));
         priceEachOD.setCellValueFactory(new PropertyValueFactory<Order, Double>("priceEach"));
-        totalOD.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Order, Double>, ObservableValue<Double>>() {
-            @Override
-            public ObservableValue<Double> call(TableColumn.CellDataFeatures<Order, Double> param) {
-                Order order = param.getValue();
-                int quantity = order.getQuantityOrdered();
-                double price = order.getPriceEach();
-                double total = quantity * price;
-                return new SimpleDoubleProperty(total).asObject();
-            }
+        totalOD.setCellValueFactory(param -> {
+            Order order = param.getValue();
+            int quantity = order.getQuantityOrdered();
+            double price = order.getPriceEach();
+            double total = quantity * price;
+            return new SimpleDoubleProperty(total).asObject();
         });
 
         orderDetailsTable.setItems(getList());
@@ -554,6 +563,9 @@ public class MainSceneController extends SceneController {
 
     }
 
+    /**
+     * Handle ORDERS tab.
+     */
     @FXML
     TableView<ObservableList<Object>> ordersTable;
     @FXML
@@ -577,54 +589,19 @@ public class MainSceneController extends SceneController {
 
     void initOrders() {
         ordersTable.getItems().clear();
-        orderNumberOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, Integer>, ObservableValue<Integer>>() {
-            @Override
-            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<ObservableList<Object>, Integer> param) {
-                return new SimpleObjectProperty<Integer>((Integer) param.getValue().get(0));
-            }
-        });
+        orderNumberOrd.setCellValueFactory(param -> new SimpleObjectProperty<>((Integer) param.getValue().get(0)));
 
-        orderDateOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate>, ObservableValue<LocalDate>>() {
-            @Override
-            public ObservableValue<LocalDate> call(TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate> param) {
-                return new SimpleObjectProperty<LocalDate>((LocalDate) param.getValue().get(1));
-            }
-        });
+        orderDateOrd.setCellValueFactory(param -> new SimpleObjectProperty<>((LocalDate) param.getValue().get(1)));
 
-        requiredDateOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate>, ObservableValue<LocalDate>>() {
-            @Override
-            public ObservableValue<LocalDate> call(TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate> param) {
-                return new SimpleObjectProperty<LocalDate>((LocalDate) param.getValue().get(2));
-            }
-        });
+        requiredDateOrd.setCellValueFactory(param -> new SimpleObjectProperty<>((LocalDate) param.getValue().get(2)));
 
-        shippedDateOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate>, ObservableValue<LocalDate>>() {
-            @Override
-            public ObservableValue<LocalDate> call(TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate> param) {
-                return new SimpleObjectProperty<LocalDate>((LocalDate) param.getValue().get(3));
-            }
-        });
+        shippedDateOrd.setCellValueFactory(param -> new SimpleObjectProperty<>((LocalDate) param.getValue().get(3)));
 
-        statusOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
-                return new SimpleStringProperty((String) param.getValue().get(4));
-            }
-        });
+        statusOrd.setCellValueFactory(param -> new SimpleStringProperty((String) param.getValue().get(4)));
 
-        commentsOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
-                return new SimpleStringProperty((String) param.getValue().get(5));
-            }
-        });
+        commentsOrd.setCellValueFactory(param -> new SimpleStringProperty((String) param.getValue().get(5)));
 
-        customerNumberOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, Integer>, ObservableValue<Integer>>() {
-            @Override
-            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<ObservableList<Object>, Integer> param) {
-                return new SimpleObjectProperty<Integer>((Integer) param.getValue().get(6));
-            }
-        });
+        customerNumberOrd.setCellValueFactory(param -> new SimpleObjectProperty<>((Integer) param.getValue().get(6)));
         try {
             String query = "SELECT orderNumber, orderDate, requiredDate, shippedDate, status, comments, customerNumber FROM orders";
             ResultSet resultSet = sqlConnection.getDataQuery(query);
@@ -675,7 +652,7 @@ public class MainSceneController extends SceneController {
     TableColumn<ObservableList<Object>, String> productNameProd;
     @FXML
     TableColumn<ObservableList<Object>, String> productLineProd;
-//    @FXML
+    //    @FXML
 //    TableColumn<ObservableList<Object>, String> productScaleProd;
 //    @FXML
 //    TableColumn<ObservableList<Object>, String> productVendorProd;
@@ -693,6 +670,7 @@ public class MainSceneController extends SceneController {
     AnchorPane productDetailsPane;
     @FXML
     JFXButton closeProductDetailsButton;
+
     void initProducts() {
         productsTable.getItems().clear();
         productsTable.setOnMouseClicked((MouseEvent event) -> {
@@ -707,26 +685,11 @@ public class MainSceneController extends SceneController {
             bgPane.setVisible(false);
             productDetailsPane.setVisible(false);
         });
-        productCodeProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
-                return new SimpleObjectProperty<String>((String) param.getValue().get(0));
-            }
-        });
+        productCodeProd.setCellValueFactory(param -> new SimpleObjectProperty<>((String) param.getValue().get(0)));
 
-        productNameProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
-                return new SimpleObjectProperty<String>((String) param.getValue().get(1));
-            }
-        });
+        productNameProd.setCellValueFactory(param -> new SimpleObjectProperty<>((String) param.getValue().get(1)));
 
-        productLineProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
-                return new SimpleObjectProperty<String>((String) param.getValue().get(2));
-            }
-        });
+        productLineProd.setCellValueFactory(param -> new SimpleObjectProperty<>((String) param.getValue().get(2)));
 
 //        productScaleProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
 //            @Override
@@ -791,6 +754,7 @@ public class MainSceneController extends SceneController {
             ex.printStackTrace();
         }
     }
+
     @FXML
     JFXTextField productCodePDetails;
     @FXML
@@ -837,5 +801,7 @@ public class MainSceneController extends SceneController {
             e.printStackTrace();
         }
     }
+
+
 }
 

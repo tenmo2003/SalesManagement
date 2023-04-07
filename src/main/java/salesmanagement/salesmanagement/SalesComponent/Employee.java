@@ -1,20 +1,18 @@
 package salesmanagement.salesmanagement.SalesComponent;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXTextField;
-import javafx.animation.ScaleTransition;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
-import javafx.scene.image.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.util.Duration;
+import javafx.scene.text.Text;
 import salesmanagement.salesmanagement.ImageController;
 import salesmanagement.salesmanagement.SQLConnection;
 import salesmanagement.salesmanagement.scenecontrollers.MainSceneController;
-import salesmanagement.salesmanagement.scenecontrollers.SceneController;
 
 import java.io.InputStream;
 import java.sql.PreparedStatement;
@@ -27,32 +25,12 @@ import java.util.Objects;
  * @since 1.3
  */
 public class Employee {
-    private void convertGrayToGreen(ImageView imageView) {
-        PixelReader pixelReader = imageView.getImage().getPixelReader();
-
-        WritableImage writableImage = new WritableImage(pixelReader, (int) imageView.getFitWidth(), (int) imageView.getFitHeight());
-
-        PixelWriter pixelWriter = writableImage.getPixelWriter();
-
-        for (int x = 0; x < (int) imageView.getFitWidth(); x++) {
-            for (int y = 0; y < (int) imageView.getFitHeight(); y++) {
-                Color color = pixelReader.getColor(x, y);
-
-                if (color.getRed() == color.getGreen() && color.getGreen() == color.getBlue()) {
-                    Color newColor = Color.GREEN;
-                    pixelWriter.setColor(x, y, newColor);
-                } else {
-                    pixelWriter.setColor(x, y, color);
-                }
-            }
-        }
-
-        imageView.setImage(writableImage);
-    }
-
     private int employeeNumber;
     private String lastName;
     private String firstName;
+    private Text status;
+    private String phone;
+    private Text name;
     private String email;
     private String officeCode;
     private int reportsTo;
@@ -60,7 +38,7 @@ public class Employee {
     private ImageView avatar = new ImageView();
     private static SQLConnection sqlConnection;
     private MainSceneController mainSceneController;
-    private HBox operation = new HBox();
+    private HBox action = new HBox();
 
     /**
      * This constructor is used to create an employee object
@@ -69,6 +47,8 @@ public class Employee {
      */
     public Employee(ResultSet employeeRecord, MainSceneController mainSceneController) {
         try {
+            this.mainSceneController = mainSceneController;
+
             employeeNumber = employeeRecord.getInt("employeeNumber");
             lastName = employeeRecord.getString("lastName");
             firstName = employeeRecord.getString("firstName");
@@ -76,6 +56,17 @@ public class Employee {
             officeCode = employeeRecord.getString("officeCode");
             reportsTo = employeeRecord.getInt("reportsTo");
             jobTitle = employeeRecord.getString("jobTitle");
+            name = new Text(lastName + " " + firstName);
+            status = new Text(employeeRecord.getString("status"));
+            phone = employeeRecord.getString("phone");
+            status.setStyle("-fx-background-color: GREEN;");
+            status.setFill(Color.WHITE);
+
+            name.setOnMouseClicked(event -> {
+                mainSceneController.displayEmployeeInfoBox();
+            });
+            name.setFill(Color.web("#329cfe"));
+            name.setCursor(Cursor.HAND);
 
             try {
                 PreparedStatement ps = sqlConnection.getConnection().prepareStatement("SELECT avatar FROM employees WHERE employeeNumber = ?");
@@ -84,7 +75,7 @@ public class Employee {
                 if (rs.next()) {
                     InputStream is = rs.getBinaryStream("avatar");
                     Image image;
-                    if(is==null) image = ImageController.getImage("sample_avatar.jpg");
+                    if (is == null) image = ImageController.getImage("sample_avatar.jpg");
                     else image = new Image(is);
                     avatar.setImage(image);
                 }
@@ -94,7 +85,7 @@ public class Employee {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        this.mainSceneController = mainSceneController;
+
         // Operation is a hbox include
         JFXButton removeButton = new JFXButton();
         ImageView removeImg = new ImageView(ImageController.getImage("remove.png"));
@@ -108,17 +99,13 @@ public class Employee {
         editImg.setFitHeight(20);
         editButton.setGraphic(editImg);
 
-        operation.getChildren().add(editButton);
-        operation.getChildren().add(removeButton);
+        action.getChildren().add(editButton);
+        action.getChildren().add(removeButton);
 
-        removeButton.setOnMouseClicked(event -> {
-            removeEmployee();
-        });
+        removeButton.setOnMouseClicked(event -> removeEmployee());
 
 
-        editButton.setOnMouseClicked(event -> {
-            mainSceneController.editEmployees(this);
-        });
+        editButton.setOnMouseClicked(event -> mainSceneController.editEmployees(this));
     }
 
     public void editEmployeeInfo() {
@@ -128,12 +115,12 @@ public class Employee {
     private void removeEmployee() {
 
         Dialog dialog = new Dialog<>();
-      //  dialog.getDialogPane(mainSceneController.getEmployeeOperationPane());
+        //  dialog.getDialogPane(mainSceneController.getEmployeeOperationPane());
 
         VBox vBox = new VBox();
         Label a = new Label("abc");
         JFXTextField b = new JFXTextField("abc");
-        vBox.getChildren().addAll(Arrays.asList(a,b));
+        vBox.getChildren().addAll(Arrays.asList(a, b));
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setGraphic(vBox);
         alert.setTitle("Modifying Confirmation!");
@@ -262,12 +249,12 @@ public class Employee {
         this.jobTitle = jobTitle;
     }
 
-    public HBox getOperation() {
-        return operation;
+    public HBox getAction() {
+        return action;
     }
 
-    public void setOperation(HBox operation) {
-        this.operation = operation;
+    public void setAction(HBox action) {
+        this.action = action;
     }
 
     public ImageView getAvatar() {
@@ -276,5 +263,29 @@ public class Employee {
 
     public void setAvatar(ImageView avatar) {
         this.avatar = avatar;
+    }
+
+    public Text getStatus() {
+        return status;
+    }
+
+    public void setStatus(Text status) {
+        this.status = status;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Text getName() {
+        return name;
+    }
+
+    public void setName(Text name) {
+        this.name = name;
     }
 }
