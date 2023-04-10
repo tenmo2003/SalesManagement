@@ -13,6 +13,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.web.HTMLEditor;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -34,14 +39,21 @@ import salesmanagement.salesmanagement.Form;
 import salesmanagement.salesmanagement.ImageController;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesComponent.Order;
+import salesmanagement.salesmanagement.SalesManagement;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.net.URL;
+import java.util.List;
+import java.util.Objects;
 
 public class MainSceneController extends SceneController {
     @FXML
@@ -222,6 +234,15 @@ public class MainSceneController extends SceneController {
     }
 
     @FXML
+    void uploadAvatar() {
+
+    }
+
+    @FXML
+    void uploadImageNews() {
+
+    }
+    @FXML
     SplitPane firstSplitPane;
     @FXML
     SplitPane secondSplitPane;
@@ -253,14 +274,26 @@ public class MainSceneController extends SceneController {
     @FXML
     StackPane menuPane;
 
+    @FXML
+    WebView webView;
+    @FXML
+    VBox rightNewsBox;
+    @FXML
+    HBox newsdetail;
+    @FXML
+    HTMLEditor htmlEditor;
+
+
+    MenuButton insertMenuButton;
+
     public void initialSetup() {
         // Load current UI.
         user = new Employee(sqlConnection, loggerID);
         usernameText.setText(user.getFullName());
 
         firstSplitPane.setMaxHeight(Screen.getPrimary().getVisualBounds().getHeight());
-        ((StackPane) firstSplitPane.getItems().get(0)).setMinHeight(0.05 * Screen.getPrimary().getVisualBounds().getHeight());
-        ((AnchorPane) firstSplitPane.getItems().get(1)).setMinHeight(0.95 * Screen.getPrimary().getVisualBounds().getHeight());
+        ((StackPane) firstSplitPane.getItems().get(0)).setMinHeight(0.06 * Screen.getPrimary().getVisualBounds().getHeight());
+        ((AnchorPane) firstSplitPane.getItems().get(1)).setMinHeight(0.94 * Screen.getPrimary().getVisualBounds().getHeight());
         secondSplitPane.setMaxWidth(Screen.getPrimary().getVisualBounds().getWidth());
         ((AnchorPane) secondSplitPane.getItems().get(0)).setMinWidth(0.1667 * Screen.getPrimary().getVisualBounds().getWidth());
         ((AnchorPane) secondSplitPane.getItems().get(1)).setMinWidth(0.8333 * Screen.getPrimary().getVisualBounds().getWidth());
@@ -293,11 +326,20 @@ public class MainSceneController extends SceneController {
         goToNewsTab();
 
         //TODO: test area
-
+        insertMenuButton = new MenuButton("Insert...");
+        ToolBar bar = null;
+        Node node = htmlEditor.lookup(".top-toolbar");
+        if (node instanceof ToolBar) {
+            bar = (ToolBar) node;
+        }
+        System.out.println(bar.getItems().get(4).getClass());
+        if (bar != null) {
+            bar.getItems().add(insertMenuButton);
+        }
 
         // Load UI for others.
         runTask(() -> {
-            //Load small avatar.
+            // Load small avatar.
             try {
                 PreparedStatement ps = sqlConnection.getConnection().prepareStatement("SELECT avatar FROM employees WHERE employeeNumber = ?");
                 ps.setInt(1, loggerID);
@@ -311,12 +353,15 @@ public class MainSceneController extends SceneController {
                 e.printStackTrace();
             }
 
+            // Prepare for employee table structure.
             employeeNumberColumn.setCellValueFactory(new PropertyValueFactory<>("employeeNumber"));
             nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
             phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
             emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
             employeeStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
             actionColumn.setCellValueFactory(new PropertyValueFactory<>("action"));
+
+            // Prepare for
         }, null, null, null);
     }
 
@@ -339,7 +384,7 @@ public class MainSceneController extends SceneController {
         public void handle(long l) {
             if (MainSceneController.loggerID > 0) {
                 runTask(() -> {
-                    Platform.runLater(()->{
+                    Platform.runLater(() -> {
                         stage.setScene(MainSceneController.this.scene);
                         stage.hide();
                         initialSetup();
@@ -482,7 +527,7 @@ public class MainSceneController extends SceneController {
     @FXML
     JFXButton submitOrderButton;
 
-    public void createOrder(){
+    public void createOrder() {
         runTask(() -> {
             String orderDate;
             if (orderDateInput.getValue() == null) {

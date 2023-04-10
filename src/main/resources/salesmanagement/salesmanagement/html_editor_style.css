@@ -1,0 +1,16 @@
+.combo-box {
+    -fx-border-color: #d1d1d1;
+    -fx-font-size: 15;
+}
+
+.button {
+    -fx-padding: 8 10 8 10;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+}
+
+.toggle-button {
+    -fx-padding: 10 10 10 10;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+}

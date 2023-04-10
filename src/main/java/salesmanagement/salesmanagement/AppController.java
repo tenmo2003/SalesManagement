@@ -37,9 +37,9 @@ public class AppController {
         return appController;
     }
 
-    private final String url = "jdbc:mysql://bjeoeejo9jrw0qoibqmj-mysql.services.clever-cloud.com:3306/bjeoeejo9jrw0qoibqmj";
-    private final String user = "ugxxkw9sh32lhroy";
-    private final String password = "QtXTyK7jzCyWztQv80TM";
+    private final String url = "jdbc:mysql://b7kidpocyxjnjhwdw73i-mysql.services.clever-cloud.com:3306/b7kidpocyxjnjhwdw73i";
+    private final String user = "udomuzbs3hfulslz";
+    private final String password = "lbfj2nEwsHTelFcZAqLU";
 
     public synchronized void run() {
         //Load login scene.

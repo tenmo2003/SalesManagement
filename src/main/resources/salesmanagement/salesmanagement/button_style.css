@@ -1,0 +1,13 @@
+.button {
+    -fx-background-color: #e74c3c;
+    -fx-text-color: #fff;
+    -fx-background-position: relative;
+    -fx-padding: 1em;
+    -fx-font-weight: bold;
+    -fx-opacity: 0.8;
+    -fx-effect: dropshadow(three-pass-box, #993300, 0, 1.0, 0, 3);
+}
+.button .drop-shadow {
+    -fx-blend-mode: SRC_ATOP;
+    -fx-background-color: white;
+}

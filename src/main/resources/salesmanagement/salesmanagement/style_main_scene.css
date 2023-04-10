@@ -28,7 +28,7 @@
 .main-button {
     -fx-border-radius: 0;
     -fx-border-width: 0 0 0 4;
-    -fx-border-color: transparent;
+    -fx-border-color: rgba(0, 0, 0, 0);
     -fx-background-color :#ffffff;
 }
 @font-face {
@@ -36,3 +36,28 @@
     src: url('/salesmanagement/salesmanagement/SVN-Poppins.ttf');
     font-weight: 10;
 }
+
+.text-field-box {
+    -fx-padding: 4 0 4 10;
+    -fx-background-color: white;
+    -fx-border-color:  #d1d1d1;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 3px;
+    -jfx-unfocus-color: transparent;
+    -jfx-focus-color: transparent;
+
+}
+.text-field-box:focused {
+    -fx-border-color: #007acc;
+}
+
+.combo-box-style {
+    -jfx-unfocus-color: transparent;
+    -fx-border-insets:  4 0 -2 0;
+    -fx-border-color: #d1d1d1;
+    -fx-border-radius: 3;
+    -fx-font-size: 15;
+}
+
+
+

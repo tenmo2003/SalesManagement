@@ -1,79 +1,33 @@
 package salesmanagement.salesmanagement;
 
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXDialogLayout;
-import com.jfoenix.controls.JFXPasswordField;
-import com.jfoenix.controls.JFXTextField;
-import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
-import javafx.scene.Scene;
+import java.util.List;
+import java.util.regex.Pattern;
+import javafx.application.*;
+import javafx.collections.FXCollections;
+import javafx.event.*;
+import javafx.scene.*;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.effect.*;
+import javafx.scene.image.*;
+import javafx.scene.layout.VBox;
+import javafx.scene.web.HTMLEditor;
 import javafx.stage.Stage;
-import javafx.util.Pair;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Optional;
 
 public class Test extends Application {
+
     @Override
-    public void start(Stage primaryStage) throws IOException, SQLException {
-        Dialog<Pair<String, String>> dialog = new Dialog<>();
-        dialog.setTitle("login Dialog");
-        dialog.setHeaderText("Sign Up");
+    public void start(Stage stage) {
+        Button button = new Button("Click me!");
 
-        ButtonType loginButtonType = new ButtonType("login", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+        // Thêm CSS style cho button
+        button.setStyle("-fx-background-color: #6c5ce7; -fx-text-fill: #fff; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 10px 20px; -fx-border-radius: 5px; -fx-effect: dropshadow(gaussian, rgba(162, 155, 254, 0.5), 0, 5, 0, 0);");
 
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(20, 150, 10, 10));
+        // Tạo layout và thêm button vào đó
+        VBox root = new VBox(button);
 
-        JFXTextField userName = new JFXTextField();
-        userName.setPromptText("Username");
-        JFXPasswordField password = new JFXPasswordField();
-        password.setPromptText("Password");
-
-        grid.add(new Label("Username:"), 0, 0);
-        grid.add(userName, 1, 0);
-        grid.add(new Label("Password:"), 0, 1);
-        grid.add(password, 1, 1);
-
-        Node loginButton = dialog.getDialogPane().lookupButton(loginButtonType);
-        loginButton.setDisable(true);
-
-        userName.textProperty().addListener((observable, oldValue, newValue) -> {
-            loginButton.setDisable(newValue.trim().isEmpty());
-        });
-        dialog.getDialogPane().setContent(grid);
-
-        dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == loginButtonType){
-                return new Pair<>(userName.getText(), password.getText());
-            }
-            return null;
-        } );
-        Optional<Pair<String, String>> result = dialog.showAndWait();
-        result.ifPresent(userNamepassword -> {
-            System.out.println("Username="+userNamepassword.getKey()+", Password="+userNamepassword.getValue());
-        });
-
-        primaryStage.setScene(new Scene(grid));
-    }
-
-
-    public static void main(String[] args) {
-        launch(args);
+        // Tạo scene và hiển thị stage
+        Scene scene = new Scene(root, 400, 300);
+        stage.setScene(scene);
+        stage.show();
     }
 }

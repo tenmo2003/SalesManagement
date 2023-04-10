@@ -1,7 +1,7 @@
 
 .main-tab-pane > .tab-header-area {
     visibility: hidden ;
-    -fx-padding: -20 0 0 0;
+    -fx-padding: -50 0 0 0;
 }
 .tab {
     -fx-background-color: #329cfe;
