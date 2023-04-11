@@ -6,7 +6,7 @@ module salesmanagement.salesmanagement {
     requires org.controlsfx.controls;
     requires java.mail;
     requires javafx.web;
-
+    requires de.jensd.fx.glyphs.fontawesome;
     opens salesmanagement.salesmanagement to javafx.fxml;
     exports salesmanagement.salesmanagement;
     exports salesmanagement.salesmanagement.SalesComponent;

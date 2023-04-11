@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -68,9 +69,11 @@ public class AppController {
         ((AnchorPane) mainScene.getRoot()).setPrefHeight(Screen.getPrimary().getVisualBounds().getHeight());
 
         //Set up stage config.
+
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.setTitle("Sales Management");
         stage.setScene(loginScene);
+        loginScene.setFill(Color.TRANSPARENT);
         stage.getIcons().add(ImageController.getImage("app_icon.png"));
         stage.show();
 
@@ -80,7 +83,7 @@ public class AppController {
             sqlConnection.logInSQLServer(url, user, password);
             loginSceneController.setSqlConnection(sqlConnection, stage);
             mainSceneController.setSqlConnection(sqlConnection, stage);
-        },null, loginSceneController.getProgressIndicator(), loginSceneController.getLoginPane());
+        }, null, loginSceneController.getProgressIndicator(), loginSceneController.getLoginPane());
 
         // Login event.
         mainSceneController.loginDataListener.start();
