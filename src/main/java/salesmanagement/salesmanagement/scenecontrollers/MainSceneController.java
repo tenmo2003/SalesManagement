@@ -84,7 +84,6 @@ public class MainSceneController extends SceneController {
     void goToCreateOrderTab() {
         tabPane.getSelectionModel().select(createOrderTab);
         initCreateOrder();
-        statusIcon.setImage(ImageController.getImage("create_order_icon.png"));
     }
 
     @FXML
@@ -259,6 +258,11 @@ public class MainSceneController extends SceneController {
     private void goToNewsTab() {
         tabPane.getSelectionModel().select(homeTab);
         newsTabButton.fire();
+    }
+
+    @Override
+    protected void maximumStage() {
+
     }
 
     enum tab {
@@ -717,7 +721,6 @@ public class MainSceneController extends SceneController {
 
             }
         }, null, progressIndicator, ordersTab.getTabPane());
-
     }
 
     public void handleRemoveOrder() {

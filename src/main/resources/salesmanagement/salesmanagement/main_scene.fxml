@@ -41,11 +41,25 @@
                         <Font size="20.0" />
                      </font>
                   </Text>
-                  <JFXButton fx:id="closeIcon" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" minWidth="41.0" onMouseClicked="#closeStage" prefHeight="24.0" prefWidth="41.0" style="-fx-background-radius: 10; -fx-border-radius: 10;" textAlignment="CENTER" textFill="TRANSPARENT" StackPane.alignment="CENTER_RIGHT">
-                     <graphic>
-                        <FontAwesomeIconView fill="#29a3e8" glyphName="CLOSE" size="30" textAlignment="CENTER" wrappingWidth="30.0" />
-                     </graphic>
-                  </JFXButton>
+                  <HBox alignment="CENTER_RIGHT">
+                     <children>
+                        <JFXButton fx:id="minimizeIcon" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" minWidth="36.0" onMouseClicked="#minimizeStage" prefHeight="28.0" prefWidth="34.0" style="-fx-background-radius: 10; -fx-border-radius: 10;" textAlignment="CENTER" textFill="TRANSPARENT">
+                           <graphic>
+                              <FontAwesomeIconView boundsType="VISUAL" fill="#29a3e8" glyphName="WINDOW_MINIMIZE" size="25" textAlignment="CENTER" wrappingWidth="30.0" />
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton fx:id="maximumIcon" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" minWidth="36.0" onMouseClicked="#maximumStage" prefHeight="28.0" prefWidth="34.0" style="-fx-background-radius: 10; -fx-border-radius: 10;" textAlignment="CENTER" textFill="TRANSPARENT">
+                           <graphic>
+                              <FontAwesomeIconView boundsType="VISUAL" fill="#29a3e8" glyphName="WINDOW_MAXIMIZE" size="25" textAlignment="CENTER" wrappingWidth="30.0" />
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton fx:id="closeIcon" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" minWidth="41.0" onMouseClicked="#closeStage" prefHeight="24.0" prefWidth="41.0" style="-fx-background-radius: 10; -fx-border-radius: 10;" textAlignment="CENTER" textFill="TRANSPARENT">
+                           <graphic>
+                              <FontAwesomeIconView fill="#29a3e8" glyphName="CLOSE" size="30" textAlignment="CENTER" wrappingWidth="30.0" />
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                  </HBox>
                   <HBox fx:id="appName" alignment="CENTER" spacing="15.0" StackPane.alignment="CENTER_LEFT">
                      <children>
                         <ImageView disable="true" fitHeight="38.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true">

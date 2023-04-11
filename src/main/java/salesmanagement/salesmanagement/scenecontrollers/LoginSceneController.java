@@ -6,6 +6,7 @@ import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.SplitPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -30,7 +31,7 @@ public class LoginSceneController extends SceneController implements Initializab
     private VBox loginPane;
 
     @FXML
-    private StackPane loginRoot;
+    private SplitPane loginRoot;
 
     public VBox getLoginPane() {
         return loginPane;

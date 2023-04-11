@@ -8,7 +8,7 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.stage.Stage;
 import salesmanagement.salesmanagement.SQLConnection;
 
-public class SceneController {
+public abstract class SceneController {
     SQLConnection sqlConnection;
     Stage stage;
 
@@ -27,6 +27,14 @@ public class SceneController {
             sqlConnection.addClosingWork();
         System.exit(0);
     }
+    @FXML
+    protected void minimizeStage() {
+        stage.setIconified(true);
+    }
+    @FXML
+    protected void maximumStage(){
+
+    };
 
     protected Scene scene;
 
