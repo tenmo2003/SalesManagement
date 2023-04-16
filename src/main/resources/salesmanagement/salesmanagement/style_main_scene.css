@@ -59,11 +59,11 @@
 }
 
 .combo-box-style {
-    -jfx-unfocus-color: transparent;
-    -fx-border-insets: 4 0 -2 0;
-    -fx-border-color: #d1d1d1;
-    -fx-border-radius: 3;
-    -fx-font-size: 15;
+    /*-jfx-unfocus-color: transparent;*/
+    /*-fx-border-insets: 4 0 -2 0;*/
+    /*-fx-border-color: #d1d1d1;*/
+    /*-fx-border-radius: 3;*/
+    /*-fx-font-size: 15;*/
 }
 
 .text-style {

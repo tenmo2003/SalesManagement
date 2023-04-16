@@ -1,6 +1,10 @@
 package salesmanagement.salesmanagement;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
@@ -10,11 +14,13 @@ import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import salesmanagement.salesmanagement.scenecontrollers.LoginSceneController;
 import salesmanagement.salesmanagement.scenecontrollers.MainSceneController;
 import salesmanagement.salesmanagement.scenecontrollers.SceneController;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Objects;
 
 import static salesmanagement.salesmanagement.scenecontrollers.SceneController.runTask;
@@ -84,14 +90,22 @@ public class AppController {
 
         // Set up SQL Connection for scene controllers.
         runTask(() -> {
-            sqlConnection = new SQLConnection();
-            sqlConnection.logInSQLServer(url, user, password);
+            sqlConnection = new SQLConnection(url, user, password);
+            sqlConnection.connectServer();
             loginSceneController.setSqlConnection(sqlConnection, stage);
             mainSceneController.setSqlConnection(sqlConnection, stage);
         }, null, loginSceneController.getProgressIndicator(), loginSceneController.getLoginPane());
-        // Login event.
         mainSceneController.loginDataListener.start();
-
+        AnimationTimer notifyInternetConnection = new AnimationTimer() {
+            @Override
+            public void handle(long l) {
+                if(sqlConnection.isReconnecting()){
+                    sqlConnection.setReconnecting(false);
+                    Platform.runLater(() -> NotificationSystem.throwNotification(NotificationCode.NETWORK_ERROR, stage));
+                }
+            }
+        };
+        notifyInternetConnection.start();
         // Create timer to update the date/time every frame.
        /* AnimationTimer timer = new AnimationTimer() {
             @Override

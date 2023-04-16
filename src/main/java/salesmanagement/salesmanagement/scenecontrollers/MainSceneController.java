@@ -1,11 +1,10 @@
 package salesmanagement.salesmanagement.scenecontrollers;
 
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.jfoenix.controls.*;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
 import javafx.embed.swing.SwingFXUtils;
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXTextField;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -54,6 +53,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+
+import com.google.i18n.phonenumbers.Phonenumber;
 
 public class MainSceneController extends SceneController {
     @FXML
@@ -117,24 +120,11 @@ public class MainSceneController extends SceneController {
         tabPane.getSelectionModel().select(settingTab);
     }
 
-    @FXML
-    Text author;
-    @FXML
-    Text notificationTitle;
-    @FXML
-    Text publishedDate;
-    String newsContent;
-    StringBinding stringBinding = Bindings.createStringBinding(() -> {
-        if (newsContent != null) {
-            return newsContent;
-        }
-        return "";
-    });
+    public Node getMainScenePane() {
+        return secondSplitPane;
+    }
 
-
-    /**
-     * Handle EMPLOYEES tab.
-     */
+    //region Employees Tab: list employees, employee's info: details, order, operations.
     @FXML
     TableView<Employee> employeeTable;
     @FXML
@@ -160,14 +150,19 @@ public class MainSceneController extends SceneController {
         employeeTable.setSelectionModel(null);
         ArrayList<Employee> employees = new ArrayList<>();
         runTask(() -> {
+            ResultSet resultSet = null;
             String query = "SELECT * FROM employees";
+            resultSet = sqlConnection.getDataQuery(query);
+//            while (resultSet == null) {
+//                System.out.println("reconnect...");
+//                sqlConnection.connectServer();
+//                resultSet = sqlConnection.getDataQuery(query);
+//            }
             try {
-                ResultSet resultSet = sqlConnection.getDataQuery(query);
                 while (resultSet.next()) {
                     employees.add(new Employee(resultSet, MainSceneController.this));
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException ignored) {
             }
         }, () -> {
             ObservableList<Employee> employeeList = FXCollections.observableArrayList(employees);
@@ -178,13 +173,15 @@ public class MainSceneController extends SceneController {
 
     @FXML
     VBox employeeInfoBox;
+    @FXML
+    VBox detailsInfoBox;
 
     /**
      * When click on Name Text in Employee table, this function will be called to
      * display detail information of employee. It's called by an Employee object.
      * It hides employees table box and shows employee information box.
      */
-    public void displayEmployeeInfoBox() {
+    public void displayEmployeeInfoBox(Employee employee) {
         employeeInfoBox.toFront();
         employeeInfoBox.setVisible(true);
         employeeInfoBox.setDisable(false);
@@ -192,12 +189,35 @@ public class MainSceneController extends SceneController {
         employeeTableBox.toBack();
         employeeTableBox.setVisible(false);
         employeeTableBox.setDisable(true);
+        fullNameLabel.setText(employee.getFullName());
+        avatar.setImage(employee.getAvatar().getImage());
+        lastNameTextField.setText(employee.getLastName());
+        firstNameTextField.setText(employee.getFirstName());
+        usernameTextField.setText(employee.getUsername());
+        passwordField.setText(employee.getPassword());
+        birthDatePicker.setValue(employee.getBirthDate());
+        emailTextField.setText(employee.getEmail());
+        phoneCodeBox.setValue(employee.getPhoneCode());
+        joiningDatePicker.setValue(employee.getJoiningDate());
+        lastWorkingDatePicker.setValue(employee.getLastWorkingDate());
+        phoneNumberTextField.setText(employee.getPhone());
+        statusBox.setValue(employee.getStatus().getText());
+        accessibilityBox.setValue(employee.getJobTitle());
+        if (Objects.equals(employee.getGender(), "male")) maleRadioButton.setSelected(true);
+        else if (Objects.equals(employee.getGender(), "female")) femaleRadioButton.setSelected(false);
+    }
+    @FXML
+
+    TableView orders_employeeTable;
+    @FXML
+    public void chooseOrders_employeeTable() {
+
     }
 
     /**
      * Called when clicking "BACK" button, return to employees list.
      * It shows employees table box and hides employee information box.
-     * It relates to {@link  #displayEmployeeInfoBox()};
+     * It relates to {@link  #displayEmployeeInfoBox(Employee)};
      */
     @FXML
     void goBackToEmployeeTableBox() {
@@ -208,26 +228,69 @@ public class MainSceneController extends SceneController {
         employeeTableBox.toFront();
         employeeTableBox.setVisible(true);
         employeeTableBox.setDisable(false);
+
+        maleRadioButton.setSelected(false);
+        femaleRadioButton.setSelected(false);
     }
 
     @FXML
     void uploadAvatar() {
-
-    }
-
-    @FXML
-    void uploadImageNews(MouseEvent event) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choose News Image");
+        fileChooser.setTitle("Choose Avatar Image");
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Image", "*.png", "*.jpg", "*.gif")
         );
         File selectedFile = fileChooser.showOpenDialog(stage);
         if (selectedFile != null) {
-            ((ImageView) event.getSource()).setImage(new Image(selectedFile.toURI().toString()));
+            avatar.setImage(new Image(selectedFile.toURI().toString()));
+            avatarAddress.setDisable(false);
+            avatarAddress.setText(selectedFile.getAbsolutePath());
+            avatarAddress.setDisable(true);
         }
     }
 
+    @FXML
+    ImageView avatar;
+    @FXML
+    Label fullNameLabel;
+    @FXML
+    JFXTextField lastNameTextField;
+    @FXML
+    JFXTextField firstNameTextField;
+    @FXML
+    DatePicker birthDatePicker;
+    @FXML
+    JFXRadioButton maleRadioButton;
+    @FXML
+    JFXRadioButton femaleRadioButton;
+    @FXML
+    JFXTextField avatarAddress;
+    @FXML
+    JFXComboBox<String> statusBox;
+    @FXML
+    JFXTextField emailTextField;
+    @FXML
+    JFXButton verifyButton;
+    @FXML
+    JFXComboBox<String> phoneCodeBox;
+    @FXML
+    JFXTextField phoneNumberTextField;
+    @FXML
+    JFXTextField usernameTextField;
+    @FXML
+    JFXPasswordField passwordField;
+    @FXML
+    JFXTextField employeeCodeTextField;
+    @FXML
+    JFXComboBox<String> accessibilityBox;
+    @FXML
+    JFXTextField supervisorTextField;
+    @FXML
+    DatePicker joiningDatePicker;
+    @FXML
+    DatePicker lastWorkingDatePicker;
+
+    //endregion
     @FXML
     SplitPane firstSplitPane;
     @FXML
@@ -259,8 +322,6 @@ public class MainSceneController extends SceneController {
     @FXML
     WebView webPreview;
     @FXML
-    VBox rightNewsBox;
-    @FXML
     HTMLEditor htmlEditor;
     String htmlText;
     MenuButton insertMenuButton;
@@ -274,6 +335,9 @@ public class MainSceneController extends SceneController {
     ImageView newsImageInserted;
     @FXML
     WebView newsDisplayedView;
+    @FXML
+    VBox newsPiecesBox;
+    String mainContent = "";
 
     @FXML
     void goToCreateNews() {
@@ -324,10 +388,6 @@ public class MainSceneController extends SceneController {
         newsCreatingBox.setDisable(true);
     }
 
-    @FXML
-    VBox newsPiecesBox;
-    String mainContent = "";
-
     private void uploadNotificationText() {
         runTask(() -> {
             String query = "SELECT * FROM notifications ORDER BY notifications.notificationID DESC LIMIT 6;";
@@ -353,6 +413,19 @@ public class MainSceneController extends SceneController {
             }
         }, null, (Pane) thirdSplitPane.getItems().get(0));
 
+    }
+
+    @FXML
+    void uploadImageNews(MouseEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose News Image");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image", "*.png", "*.jpg", "*.gif")
+        );
+        File selectedFile = fileChooser.showOpenDialog(stage);
+        if (selectedFile != null) {
+            ((ImageView) event.getSource()).setImage(new Image(selectedFile.toURI().toString()));
+        }
     }
     //endregion
 
@@ -431,7 +504,23 @@ public class MainSceneController extends SceneController {
             employeeStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
             actionColumn.setCellValueFactory(new PropertyValueFactory<>("action"));
 
-            // Prepare for
+            // Employees Tab Preparation.
+            List<String> phoneCodes = new ArrayList<>();
+            PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
+            for (String regionCode : phoneUtil.getSupportedRegions()) {
+                Phonenumber.PhoneNumber exampleNumber = phoneUtil.getExampleNumber(regionCode);
+                if (exampleNumber != null) {
+                    int countryCode = exampleNumber.getCountryCode();
+                    phoneCodes.add(String.format("+%d (%s)", countryCode, phoneUtil.getRegionCodeForCountryCode(countryCode)));
+                }
+            }
+            phoneCodeBox.getItems().addAll(phoneCodes);
+
+            List<String> accessibilitiesList = new ArrayList<>(Arrays.asList("HR", "Manager", "Employee", "Admin"));
+            accessibilityBox.getItems().addAll(accessibilitiesList);
+
+            List<String> statusList = new ArrayList<>(Arrays.asList("ACTIVE", "INACTIVE"));
+            statusBox.getItems().addAll(statusList);
         }, null, null, null);
     }
 
@@ -654,7 +743,6 @@ public class MainSceneController extends SceneController {
             sqlConnection.updateQuery(orderdetails.toString());
         }, null, progressIndicator, createOrderTab.getTabPane());
         goToOrdersTab();
-
     }
 
     public void editEmployees(Employee employee) {
@@ -941,9 +1029,6 @@ public class MainSceneController extends SceneController {
                 e.printStackTrace();
             }
         }, null, progressIndicator, null);
-
     }
-
-
 }
 
