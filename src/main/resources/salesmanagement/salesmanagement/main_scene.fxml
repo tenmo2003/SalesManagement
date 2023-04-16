@@ -8,8 +8,13 @@
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
@@ -31,7 +36,6 @@
 <?import javafx.scene.web.HTMLEditor?>
 <?import javafx.scene.web.WebView?>
 
-<?import javafx.scene.control.ListView?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.scenecontrollers.MainSceneController">
    <children>
       <SplitPane fx:id="firstSplitPane" dividerPositions="0.06" focusTraversable="false" orientation="VERTICAL" prefHeight="1080.0" prefWidth="1920.0" styleClass="split-pane-1" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -111,7 +115,7 @@
                                           <Font size="15.0" />
                                        </font>
                                     </Label>
-                                    <JFXButton focusTraversable="false" prefHeight="50.0" prefWidth="383.0" styleClass="main-button" textFill="WHITE">
+                                    <JFXButton focusTraversable="false" onAction="#tabSelectingEffect" onMouseClicked="#displayDashBoardTab" prefHeight="50.0" prefWidth="383.0" styleClass="main-button" textFill="WHITE">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -613,53 +617,6 @@
                            <content>
                               <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-border-width: 0;">
                                  <children>
-                                    <JFXButton fx:id="submitOrderButton" layoutX="445.0" layoutY="584.0" prefHeight="65.0" prefWidth="215.0" stylesheets="@button_style.css" text="Create Order" />
-                                    <JFXComboBox fx:id="statusInput" layoutX="176.0" layoutY="442.0" prefHeight="35.0" prefWidth="143.0" promptText="Status" />
-                                    <JFXTextField fx:id="commentsInput" layoutX="176.0" layoutY="512.0" prefHeight="45.0" prefWidth="685.0" />
-                                    <DatePicker fx:id="requiredDateInput" layoutX="449.0" layoutY="400.0" prefHeight="26.0" prefWidth="154.0" promptText="Required Date" />
-                                    <Text layoutX="176.0" layoutY="506.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Comments" wrappingWidth="102.90938186645508">
-                                       <font>
-                                          <Font size="16.0" />
-                                       </font>
-                                    </Text>
-                                    <DatePicker fx:id="shippedDateInput" layoutX="704.0" layoutY="400.0" prefHeight="26.0" prefWidth="154.0" promptText="Shipped Date" />
-                                    <JFXTextField fx:id="quantityInput" layoutX="335.0" layoutY="88.0" prefHeight="26.0" prefWidth="73.0" />
-                                    <JFXButton fx:id="addButton" layoutX="656.0" layoutY="88.0" onAction="#addItem" text="Add/Update" />
-                                    <JFXButton fx:id="removeButton" layoutX="749.0" layoutY="88.0" onAction="#removeItems" text="Remove" />
-                                    <JFXTextField fx:id="priceEachInput" editable="false" focusTraversable="false" layoutX="424.0" layoutY="88.0" prefHeight="26.0" prefWidth="86.0" />
-                                    <DatePicker fx:id="orderDateInput" layoutX="179.0" layoutY="400.0" prefHeight="26.0" prefWidth="154.0" promptText="Order Date" />
-                                    <TableView fx:id="orderDetailsTable" layoutX="176.0" layoutY="130.0" prefHeight="232.0" prefWidth="696.0">
-                                       <columns>
-                                          <TableColumn fx:id="productCodeOD" onEditCommit="#changeProductCode" prefWidth="246.98178100585938" text="Item" />
-                                          <TableColumn fx:id="quantityOD" onEditCommit="#changeQuantity" prefWidth="143.12725830078125" text="Quantity" />
-                                          <TableColumn fx:id="priceEachOD" minWidth="0.0" onEditCommit="#changePriceEach" prefWidth="144.00006103515625" text="Price" />
-                                          <TableColumn fx:id="totalOD" minWidth="0.0" prefWidth="160.58178626194558" text="Total" />
-                                       </columns>
-                                    </TableView>
-                                    <JFXTextField fx:id="productCodeInput" layoutX="176.0" layoutY="88.0" />
-                                    <ListView fx:id="suggestionList" layoutX="176.0" layoutY="114.0" prefHeight="127.0" prefWidth="136.0" visible="false" />
-                                    <JFXButton fx:id="clearButton" layoutX="817.0" layoutY="88.0" onAction="#clearItems" text="Clear" />
-                                    <Text layoutX="176.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Code">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Text>
-                                    <Text layoutX="335.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Quantity">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Text>
-                                    <Text layoutX="424.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Price each">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Text>
-                                    <JFXTextField fx:id="totalInput" editable="false" focusTraversable="false" layoutX="538.0" layoutY="88.0" prefHeight="26.0" prefWidth="100.0" />
-                                    <Text layoutX="538.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Text>
                                     <VBox layoutX="176.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="58.0" prefWidth="240.0">
                                        <children>
                                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Customer Name">
@@ -670,7 +627,36 @@
                                           <JFXTextField fx:id="customerNameInput" prefHeight="26.0" prefWidth="240.0" />
                                        </children>
                                     </VBox>
-                                    <VBox layoutX="455.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="58.0" prefWidth="164.0">
+                                    <JFXButton fx:id="submitOrderButton" layoutX="394.0" layoutY="486.0" onAction="#createOrder" prefHeight="65.0" prefWidth="215.0" text="Create Order" />
+                                    <JFXComboBox fx:id="statusInput" layoutX="176.0" layoutY="347.0" prefHeight="35.0" prefWidth="143.0" promptText="Status" />
+                                    <JFXTextField fx:id="commentsInput" layoutX="176.0" layoutY="413.0" prefHeight="44.0" prefWidth="574.0" />
+                                    <DatePicker fx:id="requiredDateInput" layoutX="384.0" layoutY="315.0" prefHeight="26.0" prefWidth="154.0" promptText="Required Date" />
+                                    <Text layoutX="176.0" layoutY="407.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Comments" wrappingWidth="102.90938186645508">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Text>
+                                    <DatePicker fx:id="shippedDateInput" layoutX="595.0" layoutY="314.0" prefHeight="26.0" prefWidth="154.0" promptText="Shipped Date" />
+                                    <JFXTextField fx:id="quantityInput" layoutX="326.0" layoutY="88.0" prefHeight="26.0" prefWidth="85.0" promptText="Quantity" />
+                                    <JFXButton fx:id="addButton" layoutX="598.0" layoutY="88.0" onAction="#addItem" text="Add/Update" />
+                                    <JFXButton fx:id="removeButton" layoutX="690.0" layoutY="88.0" onAction="#removeItems" text="Remove" />
+                                    <JFXTextField fx:id="priceEachInput" layoutX="432.0" layoutY="88.0" prefHeight="26.0" prefWidth="100.0" promptText="Price Each" />
+                                    <DatePicker fx:id="orderDateInput" layoutX="176.0" layoutY="315.0" prefHeight="26.0" prefWidth="154.0" promptText="Order Date" />
+                                    <TableView fx:id="orderDetailsTable" layoutX="176.0" layoutY="128.0" prefHeight="176.0" prefWidth="574.0">
+                                       <columns>
+                                          <TableColumn fx:id="productCodeOD" onEditCommit="#changeProductCode" prefWidth="246.98178100585938" text="Item" />
+                                          <TableColumn fx:id="quantityOD" onEditCommit="#changeQuantity" prefWidth="105.5999755859375" text="Quantity" />
+                                          <TableColumn fx:id="priceEachOD" minWidth="0.0" onEditCommit="#changePriceEach" prefWidth="102.109130859375" text="Price" />
+                                          <TableColumn fx:id="totalOD" prefWidth="118.69091796875" text="Total" />
+                                       </columns>
+                                    </TableView>
+                                    <VBox layoutX="176.0" layoutY="87.0" prefHeight="148.0" prefWidth="141.0">
+                                       <children>
+                                          <JFXTextField fx:id="productCodeInput" promptText="Product Code" />
+                                          <ListView fx:id="suggestionList" prefHeight="201.0" prefWidth="120.0" visible="false" />
+                                       </children>
+                                    </VBox>
+                                    <VBox layoutX="456.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="58.0" prefWidth="164.0">
                                        <children>
                                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Phone Number">
                                              <font>
@@ -680,18 +666,6 @@
                                           <JFXTextField fx:id="phoneNumberInput" prefHeight="26.0" prefWidth="168.0" />
                                        </children>
                                     </VBox>
-                                    <Text layoutX="179.0" layoutY="392.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Order Date">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font></Text>
-                                    <Text layoutX="449.0" layoutY="392.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Required Date">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font></Text>
-                                    <Text layoutX="704.0" layoutY="391.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Shipped Date">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font></Text>
                                  </children>
                               </AnchorPane>
                            </content>
@@ -1290,6 +1264,27 @@
                                           </TableView>
                                        </children>
                                     </VBox>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </Tab>
+                        <Tab fx:id="dashBoardTab" text="Orders">
+                           <content>
+                              <AnchorPane>
+                                 <children>
+                                    <PieChart prefHeight="939.0" prefWidth="1505.0" />
+                                    <StackPane layoutX="58.0" layoutY="26.0" prefHeight="451.0" prefWidth="847.0">
+                                       <children>
+                                          <BarChart fx:id="barChart" prefHeight="684.0" prefWidth="1054.0">
+                                            <xAxis>
+                                              <CategoryAxis side="BOTTOM" />
+                                            </xAxis>
+                                            <yAxis>
+                                              <NumberAxis side="LEFT" />
+                                            </yAxis>
+                                          </BarChart>
+                                       </children>
+                                    </StackPane>
                                  </children>
                               </AnchorPane>
                            </content>

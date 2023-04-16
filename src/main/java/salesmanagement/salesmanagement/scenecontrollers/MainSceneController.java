@@ -18,6 +18,8 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -123,6 +125,26 @@ public class MainSceneController extends SceneController {
     public Node getMainScenePane() {
         return secondSplitPane;
     }
+
+    //region DashBoard Tab
+    @FXML
+    Tab dashBoardTab;
+    @FXML
+    private BarChart barChart;
+
+    @FXML
+    public void displayDashBoardTab() {
+        XYChart.Series dataSeries1 = new XYChart.Series();
+        dataSeries1.setName("Popular programming languages rated by GitHub");
+
+        dataSeries1.getData().add(new XYChart.Data("JavaScript", 2300));
+        dataSeries1.getData().add(new XYChart.Data("Python", 1000));
+        dataSeries1.getData().add(new XYChart.Data("Java", 986));
+        dataSeries1.getData().add(new XYChart.Data("Ruby", 870));
+        dataSeries1.getData().add(new XYChart.Data("C++", 413));
+        dataSeries1.getData().add(new XYChart.Data("C#", 326));
+        barChart.getData().add(dataSeries1);    }
+    //endregion
 
     //region Employees Tab: list employees, employee's info: details, order, operations.
     @FXML
@@ -685,6 +707,11 @@ public class MainSceneController extends SceneController {
     JFXTextField commentsInput;
     @FXML
     JFXButton submitOrderButton;
+    @FXML
+    JFXTextField customerNameInput;
+    @FXML
+    JFXTextField phoneNumberInput;
+
 
     public void createOrder() {
         runTask(() -> {
@@ -702,9 +729,23 @@ public class MainSceneController extends SceneController {
             } else {
                 shippedDate = "null";
             }
-            String comment;
-            if (commentsInput.getText().equals("")) {
-                comment = "null";
+            String check = "SELECT customerNumber FROM customers WHERE customerName = '" + customerNameInput.getText() + "' AND phone = '" + phoneNumberInput.getText() + "';" ;
+            ResultSet result = sqlConnection.getDataQuery(check);
+            int customerNumber = -1;
+            try {
+                if (result.next()) {
+                    customerNumber = result.getInt("customerNumber");
+                } else {
+                    check = "INSERT INTO customers (customerName, phone) VALUES ('" + customerNameInput.getText() + "', '" + phoneNumberInput.getText() + "')";
+                    sqlConnection.updateQuery(check);
+                    check = "SELECT LAST_INSERT_ID() FROM customers;";
+                    result = sqlConnection.getDataQuery(check);
+                    if (result.next()) {
+                        customerNumber = result.getInt(1);
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
             String order = "insert into orders(orderDate, requiredDate, shippedDate, status, comments, customerNumber) values ('"
                     + orderDate + "','"
@@ -712,9 +753,9 @@ public class MainSceneController extends SceneController {
                     + shippedDate + ",'"
                     + statusInput.getValue() + "','"
                     + commentsInput.getText() + "',"
-                    + Integer.parseInt(customerNumberInput.getText()) + ");";
+                    + customerNumber + ");";
             sqlConnection.updateQuery(order);
-            ResultSet result = sqlConnection.getDataQuery("SELECT LAST_INSERT_ID() FROM orders;");
+            result = sqlConnection.getDataQuery("SELECT LAST_INSERT_ID() FROM orders;");
 
             int orderNumber = 0;
             try {
@@ -742,6 +783,13 @@ public class MainSceneController extends SceneController {
             orderdetails.append(';');
             sqlConnection.updateQuery(orderdetails.toString());
         }, null, progressIndicator, createOrderTab.getTabPane());
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Order created successfully!", ButtonType.OK);
+        alert.setTitle(null);
+        alert.setHeaderText(null);
+        alert.setGraphic(null);
+
+        alert.showAndWait();
         goToOrdersTab();
     }
 
@@ -805,7 +853,6 @@ public class MainSceneController extends SceneController {
 
     void initOrders() {
         runTask(() -> {
-            ordersInit = true;
             ordersTable.getItems().clear();
             orderNumberOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, Integer>, ObservableValue<Integer>>() {
                 @Override
@@ -872,7 +919,6 @@ public class MainSceneController extends SceneController {
                 ordersTable.refresh();
             } catch (SQLException ex) {
                 ex.printStackTrace();
-
             }
         }, null, progressIndicator, ordersTab.getTabPane());
     }
