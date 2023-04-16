@@ -18,7 +18,10 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -59,6 +62,8 @@ import java.util.List;
 import java.util.Objects;
 
 import com.google.i18n.phonenumbers.Phonenumber;
+
+import static salesmanagement.salesmanagement.Utils.getAllNodes;
 
 public class MainSceneController extends SceneController {
     @FXML
@@ -129,21 +134,49 @@ public class MainSceneController extends SceneController {
     //region DashBoard Tab
     @FXML
     Tab dashBoardTab;
-    @FXML
-    private BarChart barChart;
 
     @FXML
+    private StackPane chartPane;
+
     public void displayDashBoardTab() {
-        XYChart.Series dataSeries1 = new XYChart.Series();
-        dataSeries1.setName("Popular programming languages rated by GitHub");
 
-        dataSeries1.getData().add(new XYChart.Data("JavaScript", 2300));
-        dataSeries1.getData().add(new XYChart.Data("Python", 1000));
-        dataSeries1.getData().add(new XYChart.Data("Java", 986));
-        dataSeries1.getData().add(new XYChart.Data("Ruby", 870));
-        dataSeries1.getData().add(new XYChart.Data("C++", 413));
-        dataSeries1.getData().add(new XYChart.Data("C#", 326));
-        barChart.getData().add(dataSeries1);    }
+        tabPane.getSelectionModel().select(dashBoardTab);
+        final CategoryAxis xAxis = new CategoryAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        final BarChart<String, Number> bc =
+                new BarChart<>(xAxis, yAxis);
+        chartPane.getChildren().add(bc);
+        bc.setTitle("Country Summary");
+        xAxis.setLabel("Country");
+        yAxis.setLabel("Value");
+
+        XYChart.Series series1 = new XYChart.Series();
+        series1.setName("2003");
+        series1.getData().add(new XYChart.Data("austria", 25601.34));
+        series1.getData().add(new XYChart.Data("brazil", 20148.82));
+        series1.getData().add(new XYChart.Data("france", 10000));
+        series1.getData().add(new XYChart.Data("italy", 35407.15));
+        series1.getData().add(new XYChart.Data("usa", 12000));
+
+
+        XYChart.Series series2 = new XYChart.Series();
+        series2.setName("2004");
+        series2.getData().add(new XYChart.Data("austria", 57401.85));
+        series2.getData().add(new XYChart.Data("brazil", 41941.19));
+        series2.getData().add(new XYChart.Data("france", 45263.37));
+        series2.getData().add(new XYChart.Data("italy", 117320.16));
+        series2.getData().add(new XYChart.Data("usa", 14845.27));
+
+        XYChart.Series series3 = new XYChart.Series();
+        series3.setName("2005");
+        series3.getData().add(new XYChart.Data("austria", 45000.65));
+        series3.getData().add(new XYChart.Data("brazil", 44835.76));
+        series3.getData().add(new XYChart.Data("france", 18722.18));
+        series3.getData().add(new XYChart.Data("italy", 17557.31));
+        series3.getData().add(new XYChart.Data("usa", 92633.68));
+        bc.getData().addAll(series1, series2, series3);
+
+    }
     //endregion
 
     //region Employees Tab: list employees, employee's info: details, order, operations.
@@ -164,6 +197,9 @@ public class MainSceneController extends SceneController {
     @FXML
     AnchorPane employeeOperationPane;
     ArrayList<Employee> employees;
+    Employee employeeSelected;
+
+
 
     @FXML
     void displayEmployeesTab() {
@@ -197,6 +233,10 @@ public class MainSceneController extends SceneController {
     VBox employeeInfoBox;
     @FXML
     VBox detailsInfoBox;
+    @FXML
+    JFXButton editInfoButton;
+    @FXML
+    JFXButton saveInfoButton;
 
     /**
      * When click on Name Text in Employee table, this function will be called to
@@ -206,11 +246,14 @@ public class MainSceneController extends SceneController {
     public void displayEmployeeInfoBox(Employee employee) {
         employeeInfoBox.toFront();
         employeeInfoBox.setVisible(true);
-        employeeInfoBox.setDisable(false);
 
         employeeTableBox.toBack();
         employeeTableBox.setVisible(false);
-        employeeTableBox.setDisable(true);
+
+        for (Node node : getAllNodes(detailsInfoBox)) {
+            node.setDisable(false);
+        }
+
         fullNameLabel.setText(employee.getFullName());
         avatar.setImage(employee.getAvatar().getImage());
         lastNameTextField.setText(employee.getLastName());
@@ -226,15 +269,52 @@ public class MainSceneController extends SceneController {
         statusBox.setValue(employee.getStatus().getText());
         accessibilityBox.setValue(employee.getJobTitle());
         if (Objects.equals(employee.getGender(), "male")) maleRadioButton.setSelected(true);
-        else if (Objects.equals(employee.getGender(), "female")) femaleRadioButton.setSelected(false);
-    }
-    @FXML
+        else if (Objects.equals(employee.getGender(), "female")) femaleRadioButton.setSelected(true);
 
+        // LOCK ALL
+        for (Node node : getAllNodes(detailsInfoBox)) {
+            if (node instanceof JFXTextField || node instanceof JFXPasswordField || node instanceof JFXButton || node instanceof JFXRadioButton || node instanceof JFXComboBox<?> || node instanceof DatePicker) {
+                node.setDisable(true);
+            }
+        }
+        editInfoButton.setDisable(false);
+    }
+
+
+
+    @FXML
+    public void editEmployeeInfo() {
+        // UNLOCK ALL
+        for (Node node : getAllNodes(detailsInfoBox)) {
+            node.setDisable(false);
+
+        }
+        employeeCodeTextField.setDisable(true);
+    }
+
+    @FXML
+    public void saveEmployeeInfo() {
+        // LOCK ALL
+        for (Node node : getAllNodes(detailsInfoBox)) {
+            if (node instanceof JFXTextField || node instanceof JFXPasswordField || node instanceof JFXButton || node instanceof JFXRadioButton || node instanceof JFXComboBox<?> || node instanceof DatePicker) {
+                node.setDisable(true);
+            }
+        }
+        editInfoButton.setDisable(false);
+        // Save DATA To DB
+
+    }
+
+    @FXML
     TableView orders_employeeTable;
+
     @FXML
-    public void chooseOrders_employeeTable() {
+    public void chooseOrders_employeeTab() {
 
     }
+
+    @FXML
+    private JFXButton employeeBackButton;
 
     /**
      * Called when clicking "BACK" button, return to employees list.
@@ -243,13 +323,12 @@ public class MainSceneController extends SceneController {
      */
     @FXML
     void goBackToEmployeeTableBox() {
+        System.out.println(123);
         employeeInfoBox.toBack();
         employeeInfoBox.setVisible(false);
-        employeeInfoBox.setDisable(true);
 
         employeeTableBox.toFront();
-        employeeTableBox.setVisible(true);
-        employeeTableBox.setDisable(false);
+        employeeInfoBox.setVisible(true);
 
         maleRadioButton.setSelected(false);
         femaleRadioButton.setSelected(false);
@@ -411,6 +490,7 @@ public class MainSceneController extends SceneController {
     }
 
     private void uploadNotificationText() {
+        System.out.println(123);
         runTask(() -> {
             String query = "SELECT * FROM notifications ORDER BY notifications.notificationID DESC LIMIT 6;";
             ResultSet resultSet = sqlConnection.getDataQuery(query);
@@ -489,9 +569,9 @@ public class MainSceneController extends SceneController {
 
         insertMenuButton = new MenuButton("Insert...");
         ToolBar bar = null;
-        Node node = htmlEditor.lookup(".top-toolbar");
-        if (node instanceof ToolBar) {
-            bar = (ToolBar) node;
+        Node topToolbar = htmlEditor.lookup(".top-toolbar");
+        if (topToolbar instanceof ToolBar) {
+            bar = (ToolBar) topToolbar;
         }
         if (bar != null) {
             bar.getItems().add(insertMenuButton);
@@ -544,6 +624,8 @@ public class MainSceneController extends SceneController {
             List<String> statusList = new ArrayList<>(Arrays.asList("ACTIVE", "INACTIVE"));
             statusBox.getItems().addAll(statusList);
         }, null, null, null);
+
+
     }
 
 
@@ -729,7 +811,7 @@ public class MainSceneController extends SceneController {
             } else {
                 shippedDate = "null";
             }
-            String check = "SELECT customerNumber FROM customers WHERE customerName = '" + customerNameInput.getText() + "' AND phone = '" + phoneNumberInput.getText() + "';" ;
+            String check = "SELECT customerNumber FROM customers WHERE customerName = '" + customerNameInput.getText() + "' AND phone = '" + phoneNumberInput.getText() + "';";
             ResultSet result = sqlConnection.getDataQuery(check);
             int customerNumber = -1;
             try {

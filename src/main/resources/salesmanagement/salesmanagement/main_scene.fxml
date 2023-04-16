@@ -8,10 +8,6 @@
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
-<?import javafx.scene.chart.BarChart?>
-<?import javafx.scene.chart.CategoryAxis?>
-<?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -755,16 +751,11 @@
                            <content>
                             <AnchorPane fx:id="employeeOperationPane" minHeight="0.0" minWidth="0.0" prefHeight="773.0" prefWidth="987.0">
                                  <children>
-                                    <VBox fx:id="employeeInfoBox" prefHeight="992.8" prefWidth="1596.8" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <VBox fx:id="employeeInfoBox" prefHeight="992.8" prefWidth="1596.8" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
                                           <StackPane prefHeight="48.0" prefWidth="1597.0">
                                              <children>
-                                                <JFXButton buttonType="RAISED" onMouseClicked="#goBackToEmployeeTableBox" style="-fx-background-color: #329cfe; -fx-border-radius: 10; -fx-background-radius: 10; -fx-border-color: #329cfe; -fx-background-size: 20 20 20 20;" text="BACK" StackPane.alignment="CENTER_RIGHT">
-                                                   <StackPane.margin>
-                                                      <Insets right="30.0" />
-                                                   </StackPane.margin>
-                                                </JFXButton>
-                                                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                                                <HBox alignment="CENTER_LEFT" prefHeight="54.0" prefWidth="1559.0" spacing="10.0">
                                                    <children>
                                                       <ImageView fx:id="avatar" fitHeight="54.0" fitWidth="73.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
@@ -781,6 +772,11 @@
                                                       <Insets left="30.0" />
                                                    </padding>
                                                 </HBox>
+                                                <JFXButton fx:id="employeeBackButton" buttonType="RAISED" onMouseClicked="#goBackToEmployeeTableBox" style="-fx-background-color: #329cfe; -fx-border-radius: 10; -fx-background-radius: 10; -fx-border-color: #329cfe; -fx-background-size: 20 20 20 20;" text="BACK" StackPane.alignment="CENTER_RIGHT">
+                                                   <StackPane.margin>
+                                                      <Insets right="30.0" />
+                                                   </StackPane.margin>
+                                                </JFXButton>
                                              </children>
                                           </StackPane>
                                           <TabPane id="tabPane" prefHeight="606.0" prefWidth="966.0" stylesheets="@innerTabPane.css" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
@@ -793,7 +789,7 @@
                                                                <children>
                                                                   <StackPane alignment="CENTER_RIGHT" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                                                                      <children>
-                                                                        <JFXButton text="EDIT" />
+                                                                        <JFXButton fx:id="editInfoButton" onMouseClicked="#editEmployeeInfo" text="EDIT" />
                                                                      </children>
                                                                      <VBox.margin>
                                                                         <Insets right="20.0" />
@@ -1200,7 +1196,7 @@
                                                                   </HBox>
                                                                   <StackPane alignment="CENTER_RIGHT" prefHeight="150.0" prefWidth="200.0">
                                                                      <children>
-                                                                        <JFXButton text="SAVE" />
+                                                                        <JFXButton fx:id="saveInfoButton" onMouseClicked="#saveEmployeeInfo" text="SAVE" />
                                                                      </children>
                                                                      <VBox.margin>
                                                                         <Insets bottom="20.0" />
@@ -1212,7 +1208,7 @@
                                                       </ScrollPane>
                                                    </content>
                                               </Tab>
-                                              <Tab onSelectionChanged="#chooseOrders_employeeTable" text="ORDERS">
+                                              <Tab onSelectionChanged="#chooseOrders_employeeTab" text="ORDERS">
                                                 <content>
                                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="635.0" prefWidth="1576.0">
                                                          <children>
@@ -1247,7 +1243,7 @@
                                           </TabPane>
                                        </children>
                                     </VBox>
-                                    <VBox fx:id="employeeTableBox" alignment="TOP_CENTER" prefHeight="720.0" prefWidth="997.6" spacing="20.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
+                                    <VBox fx:id="employeeTableBox" alignment="TOP_CENTER" prefHeight="720.0" prefWidth="997.6" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
                                        <children>
                                           <TableView fx:id="employeeTable" maxWidth="1510.0" minWidth="552.0" pickOnBounds="false" prefHeight="560.0" prefWidth="1510.0" stylesheets="@table.css">
                                              <columns>
@@ -1272,19 +1268,7 @@
                            <content>
                               <AnchorPane>
                                  <children>
-                                    <PieChart prefHeight="939.0" prefWidth="1505.0" />
-                                    <StackPane layoutX="58.0" layoutY="26.0" prefHeight="451.0" prefWidth="847.0">
-                                       <children>
-                                          <BarChart fx:id="barChart" prefHeight="684.0" prefWidth="1054.0">
-                                            <xAxis>
-                                              <CategoryAxis side="BOTTOM" />
-                                            </xAxis>
-                                            <yAxis>
-                                              <NumberAxis side="LEFT" />
-                                            </yAxis>
-                                          </BarChart>
-                                       </children>
-                                    </StackPane>
+                                    <StackPane fx:id="chartPane" layoutX="58.0" layoutY="26.0" prefHeight="451.0" prefWidth="847.0" />
                                  </children>
                               </AnchorPane>
                            </content>
