@@ -13,21 +13,62 @@ import javafx.scene.layout.VBox;
 import javafx.scene.web.HTMLEditor;
 import javafx.stage.Stage;
 
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Pagination;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
 public class Test extends Application {
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     @Override
-    public void start(Stage stage) {
-        Button button = new Button("Click me!");
+    public void start(Stage primaryStage) {
+        primaryStage.setTitle("Test pagination");
 
-        // Thêm CSS style cho button
-        button.setStyle("-fx-background-color: #6c5ce7; -fx-text-fill: #fff; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 10px 20px; -fx-border-radius: 5px; -fx-effect: dropshadow(gaussian, rgba(162, 155, 254, 0.5), 0, 5, 0, 0);");
+        Pagination pagination = new Pagination();
+        pagination.setPageCount(4);
+        pagination.setMaxPageIndicatorCount(4);
+        pagination.setCurrentPageIndex(0);
 
-        // Tạo layout và thêm button vào đó
-        VBox root = new VBox(button);
+        pagination.setPageFactory((pageIndex) -> {
 
-        // Tạo scene và hiển thị stage
-        Scene scene = new Scene(root, 400, 300);
-        stage.setScene(scene);
-        stage.show();
+            Pane pagePane = new Pane();
+            pagePane.setPrefWidth(600);
+            pagePane.setPrefHeight(400);
+            pagePane.setStyle("-fx-background-color: #DDF1F8;"); //sky color
+            Button button = new Button("Hide/show page buttons");
+            button.setOnAction(new EventHandler<ActionEvent>()
+            {
+                @Override
+                public void handle(ActionEvent event)
+                {
+                    HBox paginationHBox = (HBox)pagination.lookup(".control-box");
+                    Node paginationControl = pagination.lookup(".pagination-control");
+                    paginationControl.setStyle("-fx-background-color: gray;");
+                    paginationControl.setVisible(!paginationControl.isVisible()); //switch visibility
+                    paginationControl.setManaged(paginationControl.isVisible());
+                    paginationControl.minHeight(0.0);
+                    paginationControl.prefHeight(0.0);
+                    paginationControl.maxHeight(0.0);
+                }
+            });
+            pagePane.getChildren().add(button);
+            return pagePane;
+        });
+
+        VBox vBox = new VBox(pagination);
+        Scene scene = new Scene(vBox, 800, 600);
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 }

@@ -19,7 +19,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.Objects;
 
 /**
  * @since 1.3
@@ -104,7 +103,6 @@ public class Employee {
 
         removeButton.setOnMouseClicked(event -> removeEmployee());
 
-
         editButton.setOnMouseClicked(event -> mainSceneController.editEmployees(this));
     }
 
@@ -112,6 +110,22 @@ public class Employee {
 
     }
 
+    /**
+     * This function appears to be removing an employee from a database,
+     * and it does so by showing a confirmation dialog box to the user.
+     * The dialog box contains a label, a text field, and a message
+     * asking the user if they are sure they want to delete the employee.
+     * If the user confirms that they want to delete the employee,
+     * the function will remove the employee from a list and then
+     * execute a SQL command to delete the employee from the database.
+     *
+     * Overall, the code appears to be well-written and organized.
+     * The use of a dialog box to confirm the deletion of the employee
+     * adds an extra layer of safety, ensuring that the user does not
+     * accidentally delete an employee. However, without knowing the
+     * context in which this code is being used, it is difficult
+     * to fully assess the quality of the code.
+     */
     private void removeEmployee() {
 
         Dialog dialog = new Dialog<>();
@@ -130,11 +144,6 @@ public class Employee {
         ButtonType okButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
         ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
         alert.getButtonTypes().setAll(okButton, noButton);
-
-        DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.getStylesheets().add(
-                Objects.requireNonNull(getClass().getResource("/salesmanagement/salesmanagement/img/myDialogs.css")).toExternalForm());
-        dialogPane.getStyleClass().add("myDialog");
 
         alert.showAndWait().ifPresent(type -> {
             if (type == okButton) {
@@ -187,6 +196,16 @@ public class Employee {
         return lastName + " " + firstName;
     }
 
+    /**
+     * This code defines a toString() method to return a string
+     * representation of the current Employee object. Specifically,
+     * the method uses the String class to create a string that
+     * combines the properties of the Employee object, including
+     * the employee number, full name, email address, and office code.
+     * Finally, the method returns this string as the result.
+     * Defining a toString() method is very useful for displaying
+     * object information in a readable and user-friendly way.
+     */
     @Override
     public String toString() {
         String employeeRecord = String.format("Employee: %d \nFull Name: %s \nEmail: %s \nOffice Code: %s", employeeNumber, getFullName(), email, officeCode);

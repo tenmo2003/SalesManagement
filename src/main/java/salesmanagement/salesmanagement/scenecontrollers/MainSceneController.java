@@ -1,5 +1,8 @@
 package salesmanagement.salesmanagement.scenecontrollers;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
+import javafx.embed.swing.SwingFXUtils;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
@@ -12,6 +15,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -21,6 +25,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -37,7 +42,10 @@ import salesmanagement.salesmanagement.ImageController;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesComponent.Order;
 
+import javax.imageio.ImageIO;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -45,6 +53,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainSceneController extends SceneController {
     @FXML
@@ -114,36 +123,14 @@ public class MainSceneController extends SceneController {
     Text notificationTitle;
     @FXML
     Text publishedDate;
-    @FXML
-    Text content;
-    @FXML
-    HBox contentBox;
+    String newsContent;
+    StringBinding stringBinding = Bindings.createStringBinding(() -> {
+        if (newsContent != null) {
+            return newsContent;
+        }
+        return "";
+    });
 
-    private void uploadNotificationText() {
-        runTask(() -> {
-            String query = "SELECT * FROM notifications  " +
-                    "WHERE notificationID = (SELECT MAX(notificationID) " +
-                    "FROM notifications)";
-            ResultSet resultSet = sqlConnection.getDataQuery(query);
-            try {
-                if (resultSet.next()) {
-                    content.setWrappingWidth(contentBox.getWidth() * 0.9);
-                    content.setText(resultSet.getString("content"));
-                    notificationTitle.setText(resultSet.getString("title"));
-                    int authorID = Integer.parseInt(resultSet.getString("employeeNumber"));
-                    Employee employee = new Employee(authorID);
-                    author.setText("\t\tPosted by " + employee.getFullName() + ".");
-                    publishedDate.setText("\t\tPublished " + resultSet.getString("publishedDate") + ".");
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }, null, progressIndicator, homeTab.getTabPane());
-
-    }
-
-    @FXML
-    ImageView statusIcon;
 
     /**
      * Handle EMPLOYEES tab.
@@ -261,34 +248,113 @@ public class MainSceneController extends SceneController {
     }
 
     @Override
-    protected void maximumStage() {
+    protected void maximumStage(MouseEvent mouseEvent) {
 
     }
 
-    enum tab {
-        newsTab,
-        employeesTab,
-        settingsTab,
-        ordersTab,
-        productsTab
-    }
-
-    @FXML
-    ScrollPane scrollpane;
     @FXML
     StackPane menuPane;
 
+    //region News Tab: display news, post news.
     @FXML
-    WebView webView;
+    WebView webPreview;
     @FXML
     VBox rightNewsBox;
     @FXML
-    HBox newsdetail;
-    @FXML
     HTMLEditor htmlEditor;
-
-
+    String htmlText;
     MenuButton insertMenuButton;
+    @FXML
+    VBox newsPreviewBox;
+    @FXML
+    VBox newsCreatingBox;
+    @FXML
+    JFXTextField newsTitle;
+    @FXML
+    ImageView newsImageInserted;
+    @FXML
+    WebView newsDisplayedView;
+
+    @FXML
+    void goToCreateNews() {
+        thirdSplitPane.setVisible(false);
+        thirdSplitPane.setDisable(true);
+        newsCreatingBox.setVisible(true);
+        newsCreatingBox.setDisable(false);
+    }
+
+    @FXML
+    public void previewNews() {
+        newsPreviewBox.setVisible(true);
+        newsPreviewBox.setDisable(false);
+        newsCreatingBox.setVisible(false);
+        htmlText = htmlEditor.getHtmlText();
+        htmlText = htmlText.replace("<body contenteditable=\"true\">", "<body style='background : rgba(0,0,0,0);' contenteditable=\"false\";> " + "<h1 style=\"text-align:center; font-size:30px; font-weight:bold;\">" + newsTitle.getText() + "</h1>\n");
+        webPreview.setPageFill(Color.TRANSPARENT);
+        webPreview.getEngine().loadContent(htmlText);
+    }
+
+    @FXML
+    public void backToNewsCreatingBox() {
+        newsPreviewBox.setVisible(false);
+        newsPreviewBox.setDisable(true);
+        newsCreatingBox.setVisible(true);
+    }
+
+    @FXML
+    public void postNews() throws SQLException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            ImageIO.write(SwingFXUtils.fromFXImage(newsImageInserted.getImage(), null), "png", outputStream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        byte[] imageBytes = outputStream.toByteArray();
+        String postNewsQuery = "insert into notifications(employeeNumber, title, content, newsImage) values (?,?,?,?)";
+        PreparedStatement statement = sqlConnection.getConnection().prepareStatement(postNewsQuery);
+        statement.setInt(1, user.getEmployeeNumber());
+        statement.setString(2, newsTitle.getText());
+        statement.setString(3, htmlText);
+        statement.setBytes(4, imageBytes);
+        statement.executeUpdate();
+
+        thirdSplitPane.setVisible(true);
+        thirdSplitPane.setDisable(false);
+        newsCreatingBox.setVisible(false);
+        newsCreatingBox.setDisable(true);
+    }
+
+    @FXML
+    VBox newsPiecesBox;
+    String mainContent = "";
+
+    private void uploadNotificationText() {
+        runTask(() -> {
+            String query = "SELECT * FROM notifications ORDER BY notifications.notificationID DESC LIMIT 6;";
+            ResultSet resultSet = sqlConnection.getDataQuery(query);
+            try {
+                if (resultSet.next()) {
+                    mainContent = resultSet.getString("content");
+                }
+                Platform.runLater(() -> {
+                    newsDisplayedView.getEngine().loadContent(mainContent);
+                });
+                int newsPieceCount = 0;
+                while (resultSet.next()) {
+                    HBox newsPiece = ((HBox) newsPiecesBox.getChildren().get(newsPieceCount));
+                    ((Text) newsPiece.getChildren().get(1)).setText(resultSet.getString("title"));
+                    InputStream is = resultSet.getBinaryStream("newsImage");
+                    Image image = new Image(is);
+                    ((ImageView) newsPiece.getChildren().get(0)).setImage(image);
+                    newsPieceCount++;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }, null, (Pane) thirdSplitPane.getItems().get(0));
+
+    }
+    //endregion
 
     public void initialSetup() {
         // Load current UI.
@@ -297,14 +363,14 @@ public class MainSceneController extends SceneController {
 
         firstSplitPane.setMaxHeight(Screen.getPrimary().getVisualBounds().getHeight());
         ((StackPane) firstSplitPane.getItems().get(0)).setMinHeight(0.06 * Screen.getPrimary().getVisualBounds().getHeight());
-        ((AnchorPane) firstSplitPane.getItems().get(1)).setMinHeight(0.94 * Screen.getPrimary().getVisualBounds().getHeight());
+        ((SplitPane) firstSplitPane.getItems().get(1)).setMinHeight(0.94 * Screen.getPrimary().getVisualBounds().getHeight());
         secondSplitPane.setMaxWidth(Screen.getPrimary().getVisualBounds().getWidth());
         ((AnchorPane) secondSplitPane.getItems().get(0)).setMinWidth(0.1667 * Screen.getPrimary().getVisualBounds().getWidth());
-        ((AnchorPane) secondSplitPane.getItems().get(1)).setMinWidth(0.8333 * Screen.getPrimary().getVisualBounds().getWidth());
-        thirdSplitPane.setMaxWidth(0.8333 * Screen.getPrimary().getVisualBounds().getWidth());
-        ((VBox) thirdSplitPane.getItems().get(0)).setMinWidth(0.75 * thirdSplitPane.getMaxWidth());
-        ((VBox) thirdSplitPane.getItems().get(1)).setMinWidth(0.25 * thirdSplitPane.getMaxWidth());
+        ((TabPane) secondSplitPane.getItems().get(1)).setMinWidth(0.8333 * Screen.getPrimary().getVisualBounds().getWidth());
 
+        thirdSplitPane.setMaxWidth(0.8333 * Screen.getPrimary().getVisualBounds().getWidth());
+        ((Pane) thirdSplitPane.getItems().get(0)).setMinWidth(0.75 * thirdSplitPane.getMaxWidth());
+        ((Pane) thirdSplitPane.getItems().get(1)).setMinWidth(0.25 * thirdSplitPane.getMaxWidth());
         Insets hboxMargin = new Insets(0, 0.8333 * Screen.getPrimary().getVisualBounds().getWidth(), 0, 0);
         StackPane.setMargin(appName, hboxMargin);
 
@@ -323,23 +389,23 @@ public class MainSceneController extends SceneController {
         clip.setCenterY(35);
         smallAvatar.setClip(clip);
 
-        //employeeForm = new EmployeeForm(employeeInfoBoxContainer);
-        //employeeForm.closeForm(() -> employeeInfoBoxContainer.setMouseTransparent(true));
-
         currentTabButton = newsTabButton;
         goToNewsTab();
 
-        //TODO: test area
         insertMenuButton = new MenuButton("Insert...");
         ToolBar bar = null;
         Node node = htmlEditor.lookup(".top-toolbar");
         if (node instanceof ToolBar) {
             bar = (ToolBar) node;
         }
-        System.out.println(bar.getItems().get(4).getClass());
         if (bar != null) {
             bar.getItems().add(insertMenuButton);
         }
+
+        webPreview.setPageFill(Color.TRANSPARENT);
+        newsDisplayedView.setPageFill(Color.TRANSPARENT);
+
+        //TODO: test area
 
         // Load UI for others.
         runTask(() -> {
