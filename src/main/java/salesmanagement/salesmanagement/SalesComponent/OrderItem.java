@@ -1,6 +1,6 @@
 package salesmanagement.salesmanagement.SalesComponent;
 
-public class Order {
+public class OrderItem {
 //    int orderNumber;
 //    Date orderDate;
 //    Date requiredDate;
@@ -11,7 +11,7 @@ public class Order {
     int quantityOrdered;
     double priceEach;
 
-    public Order(String productCode, int quantityOrdered, double priceEach) {
+    public OrderItem(String productCode, int quantityOrdered, double priceEach) {
         this.productCode = productCode;
         this.quantityOrdered = quantityOrdered;
         this.priceEach = priceEach;

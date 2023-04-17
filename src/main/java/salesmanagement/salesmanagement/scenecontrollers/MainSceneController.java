@@ -2,8 +2,6 @@ package salesmanagement.salesmanagement.scenecontrollers;
 
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.jfoenix.controls.*;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.StringBinding;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
@@ -14,11 +12,10 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -28,8 +25,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -44,28 +41,26 @@ import javafx.util.converter.IntegerStringConverter;
 import salesmanagement.salesmanagement.Form;
 import salesmanagement.salesmanagement.ImageController;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
-import salesmanagement.salesmanagement.SalesComponent.Order;
+import salesmanagement.salesmanagement.SalesComponent.OrderItem;
 
 import javax.imageio.ImageIO;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import com.google.i18n.phonenumbers.Phonenumber;
 
 import static salesmanagement.salesmanagement.Utils.getAllNodes;
 
-public class MainSceneController extends SceneController {
+public class MainSceneController extends SceneController implements Initializable {
     @FXML
     Text usernameText;
     @FXML
@@ -113,6 +108,9 @@ public class MainSceneController extends SceneController {
         tabPane.getSelectionModel().select(ordersTab);
     }
 
+    void goToEditOrderTab() {
+        tabPane.getSelectionModel().select(createOrderTab);
+    }
 
     @FXML
     void goToProductsOperationTab() {
@@ -668,10 +666,8 @@ public class MainSceneController extends SceneController {
     @FXML
     JFXComboBox statusInput;
 
-    public void initCreateOrder() {
-        customerNumberInput.clear();
-        commentsInput.clear();
-        statusInput.getItems().clear();
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         statusInput.getItems().add("Cancelled");
         statusInput.getItems().add("Disputed");
         statusInput.getItems().add("In Process");
@@ -679,29 +675,339 @@ public class MainSceneController extends SceneController {
         statusInput.getItems().add("Resolved");
         statusInput.getItems().add("Shipped");
 
-        productCodeOD.setCellValueFactory(new PropertyValueFactory<Order, String>("productCode"));
-        quantityOD.setCellValueFactory(new PropertyValueFactory<Order, Integer>("quantityOrdered"));
-        priceEachOD.setCellValueFactory(new PropertyValueFactory<Order, Double>("priceEach"));
+        productCodeOD.setCellValueFactory(new PropertyValueFactory<OrderItem, String>("productCode"));
+        quantityOD.setCellValueFactory(new PropertyValueFactory<OrderItem, Integer>("quantityOrdered"));
+        priceEachOD.setCellValueFactory(new PropertyValueFactory<OrderItem, Double>("priceEach"));
         totalOD.setCellValueFactory(param -> {
-            Order order = param.getValue();
-            int quantity = order.getQuantityOrdered();
-            double price = order.getPriceEach();
+            OrderItem orderItem = param.getValue();
+            int quantity = orderItem.getQuantityOrdered();
+            double price = orderItem.getPriceEach();
             double total = quantity * price;
-            return new SimpleDoubleProperty(total).asObject();
+            return new SimpleStringProperty(String.format("%.2f", total));
         });
-
-        orderDetailsTable.setItems(getList());
 
         orderDetailsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        orderDetailsTable.setEditable(true);
-        productCodeOD.setCellFactory(TextFieldTableCell.forTableColumn());
-        quantityOD.setCellFactory(TextFieldTableCell.forTableColumn((new IntegerStringConverter())));
-        priceEachOD.setCellFactory(TextFieldTableCell.forTableColumn((new DoubleStringConverter())));
+        orderDetailsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                priceEachInput.setText(String.valueOf(newSelection.getPriceEach()));
+                productCodeInput.setText(newSelection.getProductCode());
+                quantityInput.setText(String.valueOf(newSelection.getQuantityOrdered()));
+            }
+        });
+
+        orderDetailsTable.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (!newVal) {
+                orderDetailsTable.getSelectionModel().clearSelection();
+            }
+        });
+
+        // Add a listener to the text property of the text field
+        productCodeInput.setOnKeyReleased(event -> {
+            if (!(event.getCode() == KeyCode.TAB || event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.UP)) {
+                String newValue = productCodeInput.getText();
+                // Update the suggestion list based on the current input
+                if (newValue.equals("")) {
+                    suggestionList.setVisible(false);
+                    suggestionList.setMouseTransparent(true);
+                } else {
+                    if (newValue.length() > 2) {
+                        List<String> suggestions = new ArrayList<>(); // Replace with your own function to retrieve suggestions
+                        String sql = "SELECT productCode, sellPrice FROM products WHERE upper(productCode) LIKE upper('" + newValue + "%');";
+                        ResultSet rs = sqlConnection.getDataQuery(sql);
+                        try {
+                            // Add each suggestion to the list
+                            while (rs.next()) {
+                                suggestions.add(rs.getString("productCode"));
+                            }
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
+
+                        if (suggestions.isEmpty() || (!suggestions.isEmpty() && suggestions.get(0).equals(newValue))) {
+                            suggestionList.setMouseTransparent(true);
+                            suggestionList.setVisible(false);
+                            if (!suggestions.isEmpty() && suggestions.get(0).equals(newValue)) {
+                                setPrice();
+                            }
+                        } else {
+                            suggestionList.getItems().setAll(suggestions);
+                            suggestionList.getSelectionModel().selectFirst();
+                            suggestionList.setMouseTransparent(false);
+                            suggestionList.setVisible(true);
+                        }
+                    }
+                }
+            }
+        });
+
+        // Add an event handler to the suggestion list
+        suggestionList.setOnMouseClicked(event -> {
+            String selectedValue = suggestionList.getSelectionModel().getSelectedItem();
+            if (selectedValue != null) {
+                productCodeInput.setText(selectedValue);
+                setPrice();
+                suggestionList.setVisible(false);
+            }
+        });
+
+        productCodeInput.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                String selectedValue = suggestionList.getSelectionModel().getSelectedItem();
+                if (selectedValue != null) {
+                    productCodeInput.setText(selectedValue);
+                    setPrice();
+                    suggestionList.setVisible(false);
+                    productCodeInput.requestFocus();
+                }
+            } else if (event.getCode() == KeyCode.TAB || event.getCode() == KeyCode.DOWN) {
+                suggestionList.getSelectionModel().selectNext();
+                event.consume();
+                productCodeInput.requestFocus();
+            } else if (event.getCode() == KeyCode.UP) {
+                suggestionList.getSelectionModel().selectPrevious();
+                event.consume();
+                productCodeInput.requestFocus();
+            }
+        });
+
+        quantityInput.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.equals("")) {
+                totalInput.setText("");
+            } else if (!priceEachInput.getText().equals(""))
+                totalInput.setText(String.format("%.2f", Integer.parseInt(newValue) * Double.parseDouble(priceEachInput.getText())));
+        });
+
+        priceEachInput.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.equals("")) {
+                totalInput.setText("");
+            } else if (!quantityInput.getText().equals(""))
+                totalInput.setText(String.format("%.2f", Double.parseDouble(newValue) * Integer.parseInt(quantityInput.getText())));
+        });
+
+        orderNumberOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, Integer>, ObservableValue<Integer>>() {
+            @Override
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<ObservableList<Object>, Integer> param) {
+                return new SimpleObjectProperty<Integer>((Integer) param.getValue().get(0));
+            }
+        });
+
+        orderDateOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate>, ObservableValue<LocalDate>>() {
+            @Override
+            public ObservableValue<LocalDate> call(TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate> param) {
+                return new SimpleObjectProperty<LocalDate>((LocalDate) param.getValue().get(1));
+            }
+        });
+
+        requiredDateOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate>, ObservableValue<LocalDate>>() {
+            @Override
+            public ObservableValue<LocalDate> call(TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate> param) {
+                return new SimpleObjectProperty<LocalDate>((LocalDate) param.getValue().get(2));
+            }
+        });
+
+        shippedDateOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate>, ObservableValue<LocalDate>>() {
+            @Override
+            public ObservableValue<LocalDate> call(TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate> param) {
+                return new SimpleObjectProperty<LocalDate>((LocalDate) param.getValue().get(3));
+            }
+        });
+
+        statusOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
+                return new SimpleStringProperty((String) param.getValue().get(4));
+            }
+        });
+
+        commentsOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
+                return new SimpleStringProperty((String) param.getValue().get(5));
+            }
+        });
+
+        customerNumberOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, Integer>, ObservableValue<Integer>>() {
+            @Override
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<ObservableList<Object>, Integer> param) {
+                return new SimpleObjectProperty<Integer>((Integer) param.getValue().get(6));
+            }
+        });
+
+        ordersTable.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) { // check for double-click event
+                ObservableList<Object> selectedOrderRow = ordersTable.getSelectionModel().getSelectedItem();
+                initEditOrder(selectedOrderRow);
+                goToEditOrderTab();
+            }
+        });
+
+        productsTable.setOnMouseClicked((MouseEvent event) -> {
+            if (event.getClickCount() == 2) {
+                ObservableList<Object> selected = productsTable.getSelectionModel().getSelectedItem();
+                initProductDetails(selected);
+                bgPane.setVisible(true);
+                productDetailsPane.setVisible(true);
+            }
+        });
+        closeProductDetailsButton.setOnAction(event -> {
+            bgPane.setVisible(false);
+            productDetailsPane.setVisible(false);
+        });
+        productCodeProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
+                return new SimpleObjectProperty<String>((String) param.getValue().get(0));
+            }
+        });
+
+        productNameProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
+                return new SimpleObjectProperty<String>((String) param.getValue().get(1));
+            }
+        });
+
+        productLineProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
+                return new SimpleObjectProperty<String>((String) param.getValue().get(2));
+            }
+        });
     }
 
-    public ObservableList<Order> getList() {
-        ObservableList<Order> items = FXCollections.observableArrayList();
+    private void initCreateOrder() {
+        clearCreateOrderTab();
+        submitOrderButton.setText("Create Order");
+        submitOrderButton.setOnAction(event -> {
+            createOrder();
+        });
+        orderDetailsTable.setItems(getList());
+    }
+
+    private void initEditOrder(ObservableList<Object> selectedOrderRow) {
+        clearCreateOrderTab();
+        submitOrderButton.setText("Save");
+        customerNameInput.setEditable(false);
+        phoneNumberInput.setEditable(false);
+        if (selectedOrderRow != null) {
+            // Extract the order number from the selected row
+            int orderNumber = (int) selectedOrderRow.get(0);
+
+            // Query the orderdetails table to get the order details information for the selected order
+            String query = String.format("SELECT productCode, quantityOrdered, priceEach FROM orderdetails WHERE orderNumber = %d", orderNumber);
+            ResultSet rs = sqlConnection.getDataQuery(query);
+            try {
+                while (rs.next()) {
+                    // Extract the relevant information from the result set
+                    String productCode = rs.getString("productCode");
+                    int quantity = rs.getInt("quantityOrdered");
+                    double priceEach = rs.getDouble("priceEach");
+                    OrderItem orderItem = new OrderItem(productCode, quantity, priceEach);
+                    orderDetailsTable.getItems().add(orderItem);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            // Set the date pickers and comments text field with values from the selected order
+            LocalDate orderDate = (LocalDate) selectedOrderRow.get(1);
+            LocalDate requiredDate = (LocalDate) selectedOrderRow.get(2);
+            LocalDate shippedDate = (LocalDate) selectedOrderRow.get(3);
+            String comments = (String) selectedOrderRow.get(5);
+            int customerNumber = (int) selectedOrderRow.get(6);
+            orderDateInput.setValue(orderDate);
+            requiredDateInput.setValue(requiredDate);
+            shippedDateInput.setValue(shippedDate);
+            commentsInput.setText(comments);
+
+            // Set the status combo box to the value from the selected order
+            String status = (String) selectedOrderRow.get(4);
+            statusInput.setValue(status);
+
+            query = String.format("SELECT customerName, phone FROM customers WHERE customerNumber = %d", customerNumber);
+            rs = sqlConnection.getDataQuery(query);
+            try {
+                if (rs.next()) {
+                    // Extract the customer name and phone number from the result set
+                    String customerName = rs.getString("customerName");
+                    String phoneNumber = rs.getString("phone");
+
+                    // Set the customer name and phone number fields
+                    customerNameInput.setText(customerName);
+                    phoneNumberInput.setText(phoneNumber);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            submitOrderButton.setOnAction(event -> {
+                editOrder(orderNumber);
+            });
+        }
+    }
+
+    private void editOrder(int orderNumber) {
+        runTask(() -> {
+            String query = String.format("DELETE FROM orderdetails WHERE orderNumber = %d", orderNumber);
+            sqlConnection.updateQuery(query);
+            for (OrderItem orderItem : orderDetailsTable.getItems()) {
+                String productCode = orderItem.getProductCode();
+                int quantity = orderItem.getQuantityOrdered();
+                double priceEach = orderItem.getPriceEach();
+                query = String.format("INSERT INTO orderdetails (orderNumber, productCode, quantityOrdered, priceEach) VALUES (%d, '%s', %d, %f)", orderNumber, productCode, quantity, priceEach);
+                sqlConnection.updateQuery(query);
+            }
+
+            // Get the values from the input fields
+            LocalDate orderDate = orderDateInput.getValue();
+            LocalDate requiredDate = requiredDateInput.getValue();
+            String shippedDate = shippedDateInput.getValue() != null ? "'" + shippedDateInput.getValue().toString() + "'" : "null";
+            String status = (String) statusInput.getValue();
+            String comments = commentsInput.getText();
+
+            // Get the customer number from the customer name input field
+            String customerName = customerNameInput.getText();
+            String phoneNumber = phoneNumberInput.getText();
+            int customerNumber = 0;
+
+            query = String.format("UPDATE orders SET orderDate = '%s', requiredDate = '%s', shippedDate = %s, status = '%s', comments = '%s' WHERE orderNumber = %d", orderDate.toString(), requiredDate.toString(), shippedDate, status, comments, orderNumber);
+            sqlConnection.updateQuery(query);
+
+        }, null, progressIndicator, createOrderTab.getTabPane());
+        customerNameInput.setEditable(true);
+        phoneNumberInput.setEditable(true);
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Order edited successfully!", ButtonType.OK);
+        alert.setTitle(null);
+        alert.setHeaderText(null);
+
+        alert.showAndWait();
+        goToOrdersTab();
+    }
+
+    private void setPrice() {
+        String productCode = productCodeInput.getText();
+
+        // Query the database for the sellPrice of the product with the given code
+        double sellPrice = -1;
+
+        String sql = "SELECT sellPrice FROM products WHERE productCode = '" + productCode + "';";
+        ResultSet result = sqlConnection.getDataQuery(sql);
+        try {
+            if (result.next()) {
+                sellPrice = result.getDouble("sellPrice");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Set the sellPrice as the text of the priceEachInput
+        priceEachInput.setText(Double.toString(sellPrice));
+    }
+
+    public ObservableList<OrderItem> getList() {
+        ObservableList<OrderItem> items = FXCollections.observableArrayList();
         return items;
     }
 
@@ -711,19 +1017,19 @@ public class MainSceneController extends SceneController {
         double priceEach = Double.parseDouble(priceEachInput.getText());
 
         // Check if an order with the same productCode already exists
-        for (Order order : orderDetailsTable.getItems()) {
-            if (order.getProductCode().equals(productCode)) {
+        for (OrderItem orderItem : orderDetailsTable.getItems()) {
+            if (orderItem.getProductCode().equals(productCode)) {
                 // Update the existing order
-                order.setQuantityOrdered(quantity);
-                order.setPriceEach(priceEach);
+                orderItem.setQuantityOrdered(quantity);
+                orderItem.setPriceEach(priceEach);
                 orderDetailsTable.refresh();
                 return;
             }
         }
 
         // If no existing order was found, create a new one and add it to the tableView
-        Order order = new Order(productCode, quantity, priceEach);
-        orderDetailsTable.getItems().add(order);
+        OrderItem orderItem = new OrderItem(productCode, quantity, priceEach);
+        orderDetailsTable.getItems().add(orderItem);
 
         productCodeInput.clear();
         quantityInput.clear();
@@ -731,7 +1037,7 @@ public class MainSceneController extends SceneController {
     }
 
     public void removeItems() {
-        ObservableList<Order> selectedRows, allItems;
+        ObservableList<OrderItem> selectedRows, allItems;
         allItems = orderDetailsTable.getItems();
 
         selectedRows = orderDetailsTable.getSelectionModel().getSelectedItems();
@@ -739,42 +1045,32 @@ public class MainSceneController extends SceneController {
         allItems.removeAll(selectedRows);
     }
 
-    public void changeProductCode(TableColumn.CellEditEvent edittedCell) {
-        Order selected = orderDetailsTable.getSelectionModel().getSelectedItem();
-        selected.setProductCode(edittedCell.getNewValue().toString());
-        orderDetailsTable.refresh();
-    }
-
-    public void changeQuantity(TableColumn.CellEditEvent edittedCell) {
-        Order selected = orderDetailsTable.getSelectionModel().getSelectedItem();
-        selected.setQuantityOrdered((int) edittedCell.getNewValue());
-        orderDetailsTable.refresh();
-    }
-
-    public void changePriceEach(TableColumn.CellEditEvent edittedCell) {
-        Order selected = orderDetailsTable.getSelectionModel().getSelectedItem();
-        selected.setPriceEach((double) edittedCell.getNewValue());
-        orderDetailsTable.refresh();
+    public void clearItems() {
+        orderDetailsTable.getItems().clear();
     }
 
     @FXML
-    TableView<Order> orderDetailsTable;
+    TableView<OrderItem> orderDetailsTable;
     @FXML
-    TableColumn<Order, String> productCodeOD;
+    TableColumn<OrderItem, String> productCodeOD;
     @FXML
-    TableColumn<Order, Integer> quantityOD;
+    TableColumn<OrderItem, Integer> quantityOD;
     @FXML
-    TableColumn<Order, Double> priceEachOD;
+    TableColumn<OrderItem, Double> priceEachOD;
     @FXML
-    TableColumn<Order, Double> totalOD;
+    TableColumn<OrderItem, String> totalOD;
     @FXML
     JFXTextField customerNumberInput;
     @FXML
     JFXTextField productCodeInput;
     @FXML
+    ListView<String> suggestionList;
+    @FXML
     JFXTextField quantityInput;
     @FXML
     JFXTextField priceEachInput;
+    @FXML
+    JFXTextField totalInput;
     @FXML
     JFXButton addButton;
     @FXML
@@ -849,9 +1145,9 @@ public class MainSceneController extends SceneController {
             }
 
             StringBuilder orderdetails = new StringBuilder("insert into orderdetails values");
-            ObservableList<Order> items = orderDetailsTable.getItems();
+            ObservableList<OrderItem> items = orderDetailsTable.getItems();
 
-            for (Order item : items) {
+            for (OrderItem item : items) {
                 orderdetails.append("(").append(orderNumber)
                         .append(", '")
                         .append(item.getProductCode())
@@ -936,54 +1232,7 @@ public class MainSceneController extends SceneController {
     void initOrders() {
         runTask(() -> {
             ordersTable.getItems().clear();
-            orderNumberOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, Integer>, ObservableValue<Integer>>() {
-                @Override
-                public ObservableValue<Integer> call(TableColumn.CellDataFeatures<ObservableList<Object>, Integer> param) {
-                    return new SimpleObjectProperty<Integer>((Integer) param.getValue().get(0));
-                }
-            });
 
-            orderDateOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate>, ObservableValue<LocalDate>>() {
-                @Override
-                public ObservableValue<LocalDate> call(TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate> param) {
-                    return new SimpleObjectProperty<LocalDate>((LocalDate) param.getValue().get(1));
-                }
-            });
-
-            requiredDateOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate>, ObservableValue<LocalDate>>() {
-                @Override
-                public ObservableValue<LocalDate> call(TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate> param) {
-                    return new SimpleObjectProperty<LocalDate>((LocalDate) param.getValue().get(2));
-                }
-            });
-
-            shippedDateOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate>, ObservableValue<LocalDate>>() {
-                @Override
-                public ObservableValue<LocalDate> call(TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate> param) {
-                    return new SimpleObjectProperty<LocalDate>((LocalDate) param.getValue().get(3));
-                }
-            });
-
-            statusOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
-                @Override
-                public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
-                    return new SimpleStringProperty((String) param.getValue().get(4));
-                }
-            });
-
-            commentsOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
-                @Override
-                public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
-                    return new SimpleStringProperty((String) param.getValue().get(5));
-                }
-            });
-
-            customerNumberOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, Integer>, ObservableValue<Integer>>() {
-                @Override
-                public ObservableValue<Integer> call(TableColumn.CellDataFeatures<ObservableList<Object>, Integer> param) {
-                    return new SimpleObjectProperty<Integer>((Integer) param.getValue().get(6));
-                }
-            });
             try {
                 String query = "SELECT orderNumber, orderDate, requiredDate, shippedDate, status, comments, customerNumber FROM orders";
                 ResultSet resultSet = sqlConnection.getDataQuery(query);
@@ -1003,6 +1252,7 @@ public class MainSceneController extends SceneController {
                 ex.printStackTrace();
             }
         }, null, progressIndicator, ordersTab.getTabPane());
+
     }
 
     public void handleRemoveOrder() {
@@ -1035,18 +1285,6 @@ public class MainSceneController extends SceneController {
     TableColumn<ObservableList<Object>, String> productNameProd;
     @FXML
     TableColumn<ObservableList<Object>, String> productLineProd;
-    //    @FXML
-//    TableColumn<ObservableList<Object>, String> productScaleProd;
-//    @FXML
-//    TableColumn<ObservableList<Object>, String> productVendorProd;
-//    @FXML
-//    TableColumn<ObservableList<Object>, String> productDescriptionProd;
-//    @FXML
-//    TableColumn<ObservableList<Object>, Integer> inStockProd;
-//    @FXML
-//    TableColumn<ObservableList<Object>, Float> buyPriceProd;
-//    @FXML
-//    TableColumn<ObservableList<Object>, Float> MSRPProd;
     @FXML
     Pane bgPane;
     @FXML
@@ -1058,39 +1296,6 @@ public class MainSceneController extends SceneController {
         runTask(() -> {
             productsInit = true;
             productsTable.getItems().clear();
-            productsTable.setOnMouseClicked((MouseEvent event) -> {
-                if (event.getClickCount() == 2) {
-                    ObservableList<Object> selected = productsTable.getSelectionModel().getSelectedItem();
-                    initProductDetails(selected);
-                    bgPane.setVisible(true);
-                    productDetailsPane.setVisible(true);
-                }
-            });
-            closeProductDetailsButton.setOnAction(event -> {
-                bgPane.setVisible(false);
-                productDetailsPane.setVisible(false);
-            });
-            productCodeProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
-                @Override
-                public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
-                    return new SimpleObjectProperty<String>((String) param.getValue().get(0));
-                }
-            });
-
-            productNameProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
-                @Override
-                public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
-                    return new SimpleObjectProperty<String>((String) param.getValue().get(1));
-                }
-            });
-
-            productLineProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
-                @Override
-                public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
-                    return new SimpleObjectProperty<String>((String) param.getValue().get(2));
-                }
-            });
-
 
             try {
                 String query = "SELECT productCode, productName, productLine FROM products";
@@ -1125,38 +1330,52 @@ public class MainSceneController extends SceneController {
     @FXML
     JFXTextField buyPricePDetails;
     @FXML
-    JFXTextField MSRPPDetails;
+    JFXTextField sellPricePDetails;
     @FXML
     JFXTextField productDescriptionPDetails;
 
     void initProductDetails(ObservableList<Object> selected) {
-        runTask(() -> {
-            try {
-                productLinePDetails.getItems().clear();
-                String query = "SELECT productLine FROM productlines";
-                ResultSet resultSet = sqlConnection.getDataQuery(query);
+        try {
+            productLinePDetails.getItems().clear();
+            String query = "SELECT productLine FROM productlines";
+            ResultSet resultSet = sqlConnection.getDataQuery(query);
 
-                while (resultSet.next()) {
-                    String productLine = resultSet.getString("productLine");
-                    productLinePDetails.getItems().add(productLine);
-                }
-                query = "SELECT productCode, productName, productLine, productScale, productVendor, productDescription, quantityInStock, buyPrice, MSRP FROM products WHERE productCode = '" + selected.get(0).toString() + "'";
-                resultSet = sqlConnection.getDataQuery(query);
-                if (resultSet.next()) {
-                    productCodePDetails.setText(resultSet.getString("productCode"));
-                    productNamePDetails.setText(resultSet.getString("productName"));
-                    productLinePDetails.setValue(resultSet.getString("productLine"));
-                    productScalePDetails.setText(resultSet.getString("productScale"));
-                    productVendorPDetails.setText(resultSet.getString("productVendor"));
-                    productDescriptionPDetails.setText(resultSet.getString("productDescription"));
-                    inStockPDetails.setText(resultSet.getString("quantityInStock"));
-                    buyPricePDetails.setText(resultSet.getString("buyPrice"));
-                    MSRPPDetails.setText(resultSet.getString("MSRP"));
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
+            while (resultSet.next()) {
+                String productLine = resultSet.getString("productLine");
+                productLinePDetails.getItems().add(productLine);
             }
-        }, null, progressIndicator, null);
+            query = "SELECT productCode, productName, productLine, productScale, productVendor, productDescription, quantityInStock, buyPrice, sellPrice FROM products WHERE productCode = '" + selected.get(0).toString() + "'";
+            resultSet = sqlConnection.getDataQuery(query);
+            if (resultSet.next()) {
+                productCodePDetails.setText(resultSet.getString("productCode"));
+                productNamePDetails.setText(resultSet.getString("productName"));
+                productLinePDetails.setValue(resultSet.getString("productLine"));
+                productScalePDetails.setText(resultSet.getString("productScale"));
+                productVendorPDetails.setText(resultSet.getString("productVendor"));
+                productDescriptionPDetails.setText(resultSet.getString("productDescription"));
+                inStockPDetails.setText(resultSet.getString("quantityInStock"));
+                buyPricePDetails.setText(resultSet.getString("buyPrice"));
+                sellPricePDetails.setText(resultSet.getString("sellPrice"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void clearCreateOrderTab() {
+        orderDetailsTable.getItems().clear();
+        productCodeInput.clear();
+        quantityInput.clear();
+        priceEachInput.clear();
+        totalInput.clear();
+        customerNameInput.clear();
+        phoneNumberInput.clear();
+        orderDateInput.setValue(null);
+        requiredDateInput.setValue(null);
+        shippedDateInput.setValue(null);
+        statusInput.setValue(null);
+        commentsInput.clear();
     }
 }
 
