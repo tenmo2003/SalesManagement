@@ -625,7 +625,7 @@
                                     <DatePicker fx:id="shippedDateInput" layoutX="704.0" layoutY="400.0" prefHeight="26.0" prefWidth="154.0" promptText="Shipped Date" />
                                     <JFXTextField fx:id="quantityInput" layoutX="335.0" layoutY="88.0" prefHeight="26.0" prefWidth="73.0" />
                                     <JFXButton fx:id="addButton" layoutX="656.0" layoutY="88.0" onAction="#addItem" text="Add/Update" />
-                                    <JFXButton fx:id="removeButton" layoutX="749.0" layoutY="88.0" onAction="#removeItems" text="Remove" />
+                                    <JFXButton fx:id="removeItemButton" layoutX="749.0" layoutY="88.0" text="Remove" />
                                     <JFXTextField fx:id="priceEachInput" editable="false" focusTraversable="false" layoutX="424.0" layoutY="88.0" prefHeight="26.0" prefWidth="86.0" />
                                     <DatePicker fx:id="orderDateInput" layoutX="179.0" layoutY="400.0" prefHeight="26.0" prefWidth="154.0" promptText="Order Date" />
                                     <TableView fx:id="orderDetailsTable" layoutX="176.0" layoutY="130.0" prefHeight="232.0" prefWidth="696.0">
@@ -712,7 +712,6 @@
                                        <children>
                                           <JFXTextField fx:id="productCodePDetails" layoutX="54.0" layoutY="72.0" prefHeight="26.0" prefWidth="195.0" />
                                           <JFXTextField fx:id="productNamePDetails" layoutX="382.0" layoutY="72.0" prefWidth="195.0" />
-                                          <JFXTextField fx:id="productScalePDetails" layoutX="382.0" layoutY="128.0" prefWidth="195.0" />
                                           <Text layoutX="54.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Code">
                                              <font>
                                                 <Font size="14.0" />
@@ -726,11 +725,7 @@
                                              <font>
                                                 <Font size="14.0" />
                                              </font></Text>
-                                          <Text layoutX="54.0" layoutY="124.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Line">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font></Text>
-                                          <Text layoutX="384.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Scale">
+                                          <Text layoutX="53.0" layoutY="238.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Line">
                                              <font>
                                                 <Font size="14.0" />
                                              </font></Text>
@@ -739,39 +734,42 @@
                                                 <Font name="System Bold" size="14.0" />
                                              </font>
                                           </JFXButton>
-                                          <JFXTextField fx:id="productVendorPDetails" layoutX="54.0" layoutY="189.0" prefWidth="195.0" />
-                                          <Text layoutX="53.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Vendor">
+                                          <JFXTextField fx:id="productVendorPDetails" layoutX="54.0" layoutY="133.0" prefWidth="195.0" />
+                                          <Text layoutX="54.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Vendor">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
                                           </Text>
-                                          <JFXTextField fx:id="inStockPDetails" layoutX="382.0" layoutY="189.0" prefWidth="195.0" />
-                                          <Text layoutX="382.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="In Stock">
+                                          <JFXTextField fx:id="inStockPDetails" layoutX="382.0" layoutY="133.0" prefWidth="195.0" />
+                                          <Text layoutX="385.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" text="In Stock">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
                                           </Text>
-                                          <JFXTextField fx:id="buyPricePDetails" layoutX="54.0" layoutY="251.0" prefWidth="195.0" />
-                                          <Text layoutX="54.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Buy Price">
+                                          <JFXTextField fx:id="buyPricePDetails" layoutX="53.0" layoutY="191.0" prefWidth="195.0" />
+                                          <Text layoutX="53.0" layoutY="183.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Buy Price">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
                                           </Text>
-                                          <JFXTextField fx:id="sellPricePDetails" layoutX="382.0" layoutY="251.0" prefWidth="195.0" />
-                                          <Text layoutX="382.0" layoutY="246.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sell Price">
+                                          <JFXTextField fx:id="sellPricePDetails" layoutX="382.0" layoutY="191.0" prefWidth="195.0" />
+                                          <Text layoutX="382.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sell Price">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
                                           </Text>
-                                          <JFXComboBox fx:id="productLinePDetails" layoutX="54.0" layoutY="128.0" prefHeight="26.0" prefWidth="195.0" />
+                                          <JFXComboBox fx:id="productLinePDetails" layoutX="53.0" layoutY="248.0" prefHeight="26.0" prefWidth="195.0" />
                                           <JFXTextField fx:id="productDescriptionPDetails" layoutX="53.0" layoutY="323.0" maxHeight="60.0" prefHeight="34.0" prefWidth="531.0" />
                                           <Text layoutX="54.0" layoutY="315.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Description">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
                                           </Text>
+                                          <JFXButton fx:id="productDetailsButton" layoutX="298.0" layoutY="398.0" text="Save" />
                                        </children>
                                     </AnchorPane>
+                                    <JFXButton fx:id="addProductButton" layoutX="1079.0" layoutY="57.0" onAction="#initAddProduct" text="Add" />
+                                    <JFXButton fx:id="removeProductButton" layoutX="1134.0" layoutY="57.0" text="Remove" />
                                  </children>
                               </AnchorPane>
 
@@ -1318,8 +1316,9 @@
                                           <TableColumn fx:id="customerNumberOrd" prefWidth="117.81815280378453" text="Customer No." />
                                        </columns>
                                     </TableView>
-                                    <JFXButton fx:id="removeOrderButton" layoutX="889.0" layoutY="63.0" onAction="#handleRemoveOrder" prefHeight="26.0" prefWidth="79.0" text="Remove" />
+                                    <JFXButton fx:id="removeOrderButton" layoutX="889.0" layoutY="63.0" prefHeight="26.0" prefWidth="79.0" text="Remove" />
                                     <JFXButton fx:id="createOrderButton" layoutX="775.0" layoutY="63.0" onAction="#goToCreateOrderTab" text="Create New Order" />
+                                    <JFXButton fx:id="editOrderButton" layoutX="738.0" layoutY="63.0" text="Edit" />
                                  </children>
                               </AnchorPane>
                            </content>
