@@ -691,11 +691,26 @@ public class MainSceneController extends SceneController implements Initializabl
             }
         });
 
-        orderDetailsTable.focusedProperty().addListener((obs, oldVal, newVal) -> {
-            if (!newVal) {
-                orderDetailsTable.getSelectionModel().clearSelection();
-            }
-        });
+//        orderDetailsTable.focusedProperty().addListener((obs, oldVal, newVal) -> {
+//            if (!newVal && !removeItemButtonClicked) {
+//                orderDetailsTable.getSelectionModel().clearSelection();
+//            }
+//            removeItemButtonClicked = false;
+//        });
+//
+//        productsTable.focusedProperty().addListener((obs, oldVal, newVal) -> {
+//            if (!newVal && !removeProductButtonClicked) {
+//                productsTable.getSelectionModel().clearSelection();
+//            }
+//            removeProductButtonClicked = false;
+//        });
+//
+//        ordersTable.focusedProperty().addListener((obs, oldVal, newVal) -> {
+//            if (!newVal && !removeOrderButtonClicked) {
+//                ordersTable.getSelectionModel().clearSelection();
+//            }
+//            removeOrderButtonClicked = false;
+//        });
 
         // Add a listener to the text property of the text field
         productCodeInput.setOnKeyReleased(event -> {
@@ -837,10 +852,16 @@ public class MainSceneController extends SceneController implements Initializabl
             }
         });
 
+        editOrderButton.setOnAction(e -> {
+            ObservableList<Object> selectedRow = ordersTable.getSelectionModel().getSelectedItem();
+            initEditOrder(selectedRow);
+            goToEditOrderTab();
+        });
+
         productsTable.setOnMouseClicked((MouseEvent event) -> {
             if (event.getClickCount() == 2) {
                 ObservableList<Object> selected = productsTable.getSelectionModel().getSelectedItem();
-                initProductDetails(selected);
+                initEditProductDetails(selected);
                 bgPane.setVisible(true);
                 productDetailsPane.setVisible(true);
             }
@@ -867,6 +888,53 @@ public class MainSceneController extends SceneController implements Initializabl
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
                 return new SimpleObjectProperty<String>((String) param.getValue().get(2));
+            }
+        });
+
+        removeItemButton.setOnAction(event -> {
+            removeItemButtonClicked = true;
+            removeItems();
+        });
+
+        removeProductButton.setOnAction(event -> {
+            removeProductButtonClicked = true;
+            ObservableList<Object> selected = productsTable.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirm Delete");
+                alert.setHeaderText("Are you sure you want to delete this product?");
+                alert.setContentText("This action cannot be undone.");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    // User clicked OK, so delete the item
+                    String query = String.format("DELETE FROM products WHERE productCode = '%s'", selected.get(0));
+                    sqlConnection.updateQuery(query);
+                    productsTable.getItems().remove(selected);
+                } else {
+                    // User clicked Cancel or closed the dialog box, so do nothing
+                    // ...
+                }
+            }
+        });
+
+        removeOrderButton.setOnAction(event -> {
+            removeOrderButtonClicked = true;
+            ObservableList<Object> selected = productsTable.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirm Delete");
+                alert.setHeaderText("Are you sure you want to delete this order?");
+                alert.setContentText("This action cannot be undone.");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    // User clicked OK, so delete the item
+                    handleRemoveOrder();
+                } else {
+                    // User clicked Cancel or closed the dialog box, so do nothing
+                    // ...
+                }
             }
         });
     }
@@ -1055,8 +1123,6 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     TableColumn<OrderItem, String> totalOD;
     @FXML
-    JFXTextField customerNumberInput;
-    @FXML
     JFXTextField productCodeInput;
     @FXML
     ListView<String> suggestionList;
@@ -1069,7 +1135,8 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     JFXButton addButton;
     @FXML
-    JFXButton removeButton;
+    JFXButton removeItemButton;
+    private boolean removeItemButtonClicked = false;
     @FXML
     DatePicker orderDateInput;
     @FXML
@@ -1222,7 +1289,10 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     JFXButton createOrderButton;
     @FXML
+    JFXButton editOrderButton;
+    @FXML
     JFXButton removeOrderButton;
+    private boolean removeOrderButtonClicked = false;
 
     void initOrders() {
         runTask(() -> {
@@ -1281,6 +1351,13 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     TableColumn<ObservableList<Object>, String> productLineProd;
     @FXML
+    JFXButton productDetailsButton;
+    @FXML
+    JFXButton addProductButton;
+    @FXML
+    JFXButton removeProductButton;
+    private boolean removeProductButtonClicked = false;
+    @FXML
     Pane bgPane;
     @FXML
     AnchorPane productDetailsPane;
@@ -1303,6 +1380,14 @@ public class MainSceneController extends SceneController implements Initializabl
                     productsTable.getItems().add(row);
                 }
                 productsTable.refresh();
+                productLinePDetails.getItems().clear();
+                query = "SELECT productLine FROM productlines";
+                resultSet = sqlConnection.getDataQuery(query);
+
+                while (resultSet.next()) {
+                    String productLine = resultSet.getString("productLine");
+                    productLinePDetails.getItems().add(productLine);
+                }
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
@@ -1317,8 +1402,6 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     JFXComboBox productLinePDetails;
     @FXML
-    JFXTextField productScalePDetails;
-    @FXML
     JFXTextField productVendorPDetails;
     @FXML
     JFXTextField inStockPDetails;
@@ -1329,23 +1412,57 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     JFXTextField productDescriptionPDetails;
 
-    void initProductDetails(ObservableList<Object> selected) {
-        try {
-            productLinePDetails.getItems().clear();
-            String query = "SELECT productLine FROM productlines";
-            ResultSet resultSet = sqlConnection.getDataQuery(query);
+    public void initAddProduct() {
+        productDetailsButton.setText("Add");
+        productCodePDetails.setText("");
+        productNamePDetails.setText("");
+        productVendorPDetails.setText("");
+        productLinePDetails.setValue(null);
+        inStockPDetails.setText("");
+        buyPricePDetails.setText("");
+        sellPricePDetails.setText("");
+        productDescriptionPDetails.setText("");
 
-            while (resultSet.next()) {
-                String productLine = resultSet.getString("productLine");
-                productLinePDetails.getItems().add(productLine);
-            }
-            query = "SELECT productCode, productName, productLine, productScale, productVendor, productDescription, quantityInStock, buyPrice, sellPrice FROM products WHERE productCode = '" + selected.get(0).toString() + "'";
-            resultSet = sqlConnection.getDataQuery(query);
+        bgPane.setVisible(true);
+        productDetailsPane.setVisible(true);
+
+        productDetailsButton.setOnAction(event -> {
+            String query = String.format("insert into products(productCode, productName, productLine, productVendor, productDescription, quantityInStock, buyPrice, sellPrice) " +
+                            "VALUES ('%s', '%s', '%s', '%s', '%s', %d, %f, %f);", productCodePDetails.getText(), productNamePDetails.getText(),
+                            productLinePDetails.getValue(), productVendorPDetails.getText(), productDescriptionPDetails.getText(),
+                            Integer.parseInt(inStockPDetails.getText()), Double.parseDouble(buyPricePDetails.getText()), Double.parseDouble(sellPricePDetails.getText()));
+            sqlConnection.updateQuery(query);
+
+            ObservableList<Object> row = FXCollections.observableArrayList();
+            row.add(productCodePDetails.getText());
+            row.add(productNamePDetails.getText());
+            row.add(productLinePDetails.getValue());
+            productsTable.getItems().add(0, row);
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Product added successfully!", ButtonType.OK);
+            alert.setTitle(null);
+            alert.setHeaderText(null);
+
+            alert.showAndWait();
+
+            bgPane.setVisible(false);
+            productDetailsPane.setVisible(false);
+
+            productsTable.refresh();
+
+
+        });
+    }
+
+    void initEditProductDetails(ObservableList<Object> selected) {
+        productDetailsButton.setText("Save");
+        try {
+            String query = "SELECT productCode, productName, productLine, productVendor, productDescription, quantityInStock, buyPrice, sellPrice FROM products WHERE productCode = '" + selected.get(0).toString() + "'";
+            ResultSet resultSet = sqlConnection.getDataQuery(query);
             if (resultSet.next()) {
                 productCodePDetails.setText(resultSet.getString("productCode"));
                 productNamePDetails.setText(resultSet.getString("productName"));
                 productLinePDetails.setValue(resultSet.getString("productLine"));
-                productScalePDetails.setText(resultSet.getString("productScale"));
                 productVendorPDetails.setText(resultSet.getString("productVendor"));
                 productDescriptionPDetails.setText(resultSet.getString("productDescription"));
                 inStockPDetails.setText(resultSet.getString("quantityInStock"));
@@ -1356,6 +1473,27 @@ public class MainSceneController extends SceneController implements Initializabl
             e.printStackTrace();
         }
 
+        productDetailsButton.setOnAction(e -> {
+            String query = String.format("UPDATE products SET productCode = '%s', productName = '%s', productLine = '%s', productVendor = '%s', productDescription = '%s', quantityInStock = %d, buyPrice = %f, sellPrice = %f WHERE productCode = '%s'",
+                    productCodePDetails.getText(), productNamePDetails.getText(), productLinePDetails.getValue(), productVendorPDetails.getText(),
+                    productDescriptionPDetails.getText(), Integer.parseInt(inStockPDetails.getText()),
+                    Double.parseDouble(buyPricePDetails.getText()), Double.parseDouble(sellPricePDetails.getText()), selected.get(0));
+            sqlConnection.updateQuery(query);
+
+            selected.set(0, productCodePDetails.getText());
+            selected.set(1, productNamePDetails.getText());
+            selected.set(2, productLinePDetails.getValue());
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Product details saved successfully!", ButtonType.OK);
+            alert.setTitle(null);
+            alert.setHeaderText(null);
+
+            alert.showAndWait();
+
+            productsTable.refresh();
+
+
+        });
     }
 
     private void clearCreateOrderTab() {
