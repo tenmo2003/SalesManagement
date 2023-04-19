@@ -35,6 +35,12 @@ import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.util.Callback;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 import salesmanagement.salesmanagement.Form;
 import salesmanagement.salesmanagement.ImageController;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
@@ -844,6 +850,13 @@ public class MainSceneController extends SceneController implements Initializabl
             }
         });
 
+        customerNameOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
+                return new SimpleStringProperty((String) param.getValue().get(7));
+            }
+        });
+
         ordersTable.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) { // check for double-click event
                 ObservableList<Object> selectedOrderRow = ordersTable.getSelectionModel().getSelectedItem();
@@ -854,8 +867,10 @@ public class MainSceneController extends SceneController implements Initializabl
 
         editOrderButton.setOnAction(e -> {
             ObservableList<Object> selectedRow = ordersTable.getSelectionModel().getSelectedItem();
-            initEditOrder(selectedRow);
-            goToEditOrderTab();
+            if (selectedRow != null) {
+                initEditOrder(selectedRow);
+                goToEditOrderTab();
+            }
         });
 
         productsTable.setOnMouseClicked((MouseEvent event) -> {
@@ -920,7 +935,7 @@ public class MainSceneController extends SceneController implements Initializabl
 
         removeOrderButton.setOnAction(event -> {
             removeOrderButtonClicked = true;
-            ObservableList<Object> selected = productsTable.getSelectionModel().getSelectedItem();
+            ObservableList<Object> selected = ordersTable.getSelectionModel().getSelectedItem();
             if (selected != null) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Confirm Delete");
@@ -941,6 +956,8 @@ public class MainSceneController extends SceneController implements Initializabl
 
     private void initCreateOrder() {
         clearCreateOrderTab();
+        customerNameInput.setEditable(true);
+        phoneNumberInput.setEditable(true);
         submitOrderButton.setText("Create Order");
         submitOrderButton.setOnAction(event -> {
             createOrder();
@@ -957,6 +974,10 @@ public class MainSceneController extends SceneController implements Initializabl
             // Extract the order number from the selected row
             int orderNumber = (int) selectedOrderRow.get(0);
 
+            printInvoiceButton.setOnAction(event -> {
+                printInvoice(orderNumber);
+            });
+
             // Query the orderdetails table to get the order details information for the selected order
             String query = String.format("SELECT productCode, quantityOrdered, priceEach FROM orderdetails WHERE orderNumber = %d", orderNumber);
             ResultSet rs = sqlConnection.getDataQuery(query);
@@ -966,7 +987,7 @@ public class MainSceneController extends SceneController implements Initializabl
                     String productCode = rs.getString("productCode");
                     int quantity = rs.getInt("quantityOrdered");
                     double priceEach = rs.getDouble("priceEach");
-                    OrderItem orderItem = new OrderItem(productCode, quantity, priceEach);
+                    OrderItem orderItem = new OrderItem(productCode, quantity, priceEach, quantity * priceEach);
                     orderDetailsTable.getItems().add(orderItem);
                 }
             } catch (SQLException e) {
@@ -1091,7 +1112,7 @@ public class MainSceneController extends SceneController implements Initializabl
         }
 
         // If no existing order was found, create a new one and add it to the tableView
-        OrderItem orderItem = new OrderItem(productCode, quantity, priceEach);
+        OrderItem orderItem = new OrderItem(productCode, quantity, priceEach, quantity * priceEach);
         orderDetailsTable.getItems().add(orderItem);
 
         productCodeInput.clear();
@@ -1147,6 +1168,8 @@ public class MainSceneController extends SceneController implements Initializabl
     JFXTextField commentsInput;
     @FXML
     JFXButton submitOrderButton;
+    @FXML
+    JFXButton printInvoiceButton;
     @FXML
     JFXTextField customerNameInput;
     @FXML
@@ -1222,6 +1245,11 @@ public class MainSceneController extends SceneController implements Initializabl
             orderdetails.deleteCharAt(orderdetails.length() - 1);
             orderdetails.append(';');
             sqlConnection.updateQuery(orderdetails.toString());
+
+            int finalOrderNumber = orderNumber;
+            printInvoiceButton.setOnAction(event -> {
+                printInvoice(finalOrderNumber);
+            });
         }, null, progressIndicator, createOrderTab.getTabPane());
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION, "Order created successfully!", ButtonType.OK);
@@ -1287,6 +1315,8 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     TableColumn<ObservableList<Object>, Integer> customerNumberOrd;
     @FXML
+    TableColumn<ObservableList<Object>, String> customerNameOrd;
+    @FXML
     JFXButton createOrderButton;
     @FXML
     JFXButton editOrderButton;
@@ -1299,7 +1329,7 @@ public class MainSceneController extends SceneController implements Initializabl
             ordersTable.getItems().clear();
 
             try {
-                String query = "SELECT orderNumber, orderDate, requiredDate, shippedDate, status, comments, customerNumber FROM orders";
+                String query = "SELECT orderNumber, orderDate, requiredDate, shippedDate, status, comments, orders.customerNumber, customerName FROM orders INNER JOIN customers ON orders.customerNumber = customers.customerNumber";
                 ResultSet resultSet = sqlConnection.getDataQuery(query);
                 while (resultSet.next()) {
                     ObservableList<Object> row = FXCollections.observableArrayList();
@@ -1310,6 +1340,7 @@ public class MainSceneController extends SceneController implements Initializabl
                     row.add(resultSet.getString("status"));
                     row.add(resultSet.getString("comments"));
                     row.add(resultSet.getInt("customerNumber"));
+                    row.add(resultSet.getString("customerName"));
                     ordersTable.getItems().add(row);
                 }
                 ordersTable.refresh();
@@ -1494,6 +1525,43 @@ public class MainSceneController extends SceneController implements Initializabl
 
 
         });
+    }
+
+    public void printInvoice(int orderNumber) {
+        String sourceFile = "src/main/resources/salesmanagement/salesmanagement/invoice.jrxml";
+        try {
+            JasperReport jr = JasperCompileManager.compileReport(sourceFile);
+            HashMap<String, Object> para = new HashMap<>();
+            para.put("invoiceNo", "INV" + String.format("%04d", orderNumber));
+            para.put("customerName", customerNameInput.getText());
+            para.put("contact", phoneNumberInput.getText());
+            para.put("totalAmount", "totalAmount");
+            para.put("otherAmount", "discount");
+            para.put("paybleAmount", "toBePaid");
+            para.put("paidAmount", "paid");
+            para.put("dueAmount", "due");
+            para.put("comments", commentsInput.getText());
+            para.put("point1", "Lorem Ipsum is simply dummy text of the printing and typesetting industry.");
+            para.put("point2", "If you have any questions concerning this invoice, use the following contact information:");
+            para.put("point3", "+243 999999999, purchase@example.com");
+            LocalDate orderDate = orderDateInput.getValue() != null ? orderDateInput.getValue() : LocalDate.now();
+            para.put("orderYear", orderDate.getYear() - 1900);
+            para.put("orderMonth", orderDate.getMonthValue() - 1);
+            para.put("orderDay", orderDate.getDayOfMonth());
+
+            ArrayList<OrderItem> plist = new ArrayList<>();
+
+            for (OrderItem item : orderDetailsTable.getItems()) {
+                plist.add(new OrderItem(item.getProductCode(), item.getQuantityOrdered(), item.getPriceEach(), item.getQuantityOrdered() * item.getPriceEach()));
+            }
+
+            JRBeanCollectionDataSource jcs = new JRBeanCollectionDataSource(plist);
+            JasperPrint jp = JasperFillManager.fillReport(jr, para, jcs);
+            JasperViewer.viewReport(jp, false);
+
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
     }
 
     private void clearCreateOrderTab() {

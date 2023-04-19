@@ -9,6 +9,7 @@ module salesmanagement.salesmanagement {
     requires javafx.swing;
     requires de.jensd.fx.glyphs.fontawesome;
     requires libphonenumber;
+    requires jasperreports;
     opens salesmanagement.salesmanagement to javafx.fxml;
     exports salesmanagement.salesmanagement;
     exports salesmanagement.salesmanagement.SalesComponent;

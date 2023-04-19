@@ -692,6 +692,7 @@
                                        <font>
                                           <Font size="14.0" />
                                        </font></Text>
+                                    <JFXButton fx:id="printInvoiceButton" layoutX="532.0" layoutY="649.0" text="Print" />
                                  </children>
                               </AnchorPane>
                            </content>
@@ -1305,7 +1306,7 @@
                            <content>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
-                                    <TableView fx:id="ordersTable" layoutX="164.0" layoutY="103.0" prefHeight="591.0" prefWidth="804.0" stylesheets="@table.css">
+                                    <TableView fx:id="ordersTable" layoutX="164.0" layoutY="103.0" prefHeight="592.0" prefWidth="913.0" stylesheets="@table.css">
                                        <columns>
                                           <TableColumn fx:id="orderNumberOrd" prefWidth="93.38180541992188" text="Order No." />
                                           <TableColumn fx:id="orderDateOrd" minWidth="6.103515625E-5" prefWidth="100.0" text="Order Date" />
@@ -1313,12 +1314,13 @@
                                           <TableColumn fx:id="shippedDateOrd" prefWidth="100.0" text="Shipped" />
                                           <TableColumn fx:id="statusOrd" prefWidth="96.00009155273438" text="Status" />
                                           <TableColumn fx:id="commentsOrd" prefWidth="193.74554443359375" text="Comments" />
-                                          <TableColumn fx:id="customerNumberOrd" prefWidth="117.81815280378453" text="Customer No." />
+                                          <TableColumn fx:id="customerNumberOrd" prefWidth="105.5999755859375" text="Customer No." />
+                                          <TableColumn fx:id="customerNameOrd" prefWidth="121.30902149042913" text="Customer Name" />
                                        </columns>
                                     </TableView>
-                                    <JFXButton fx:id="removeOrderButton" layoutX="889.0" layoutY="63.0" prefHeight="26.0" prefWidth="79.0" text="Remove" />
-                                    <JFXButton fx:id="createOrderButton" layoutX="775.0" layoutY="63.0" onAction="#goToCreateOrderTab" text="Create New Order" />
-                                    <JFXButton fx:id="editOrderButton" layoutX="738.0" layoutY="63.0" text="Edit" />
+                                    <JFXButton fx:id="removeOrderButton" layoutX="988.0" layoutY="63.0" prefHeight="26.0" prefWidth="79.0" text="Remove" />
+                                    <JFXButton fx:id="createOrderButton" layoutX="874.0" layoutY="63.0" onAction="#goToCreateOrderTab" text="Create New Order" />
+                                    <JFXButton fx:id="editOrderButton" layoutX="837.0" layoutY="63.0" text="Edit" />
                                  </children>
                               </AnchorPane>
                            </content>

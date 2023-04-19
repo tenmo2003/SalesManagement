@@ -1,20 +1,22 @@
 package salesmanagement.salesmanagement.SalesComponent;
 
 public class OrderItem {
-//    int orderNumber;
+    //    int orderNumber;
 //    Date orderDate;
 //    Date requiredDate;
 //    Date shippedDate;
 //    String status;
 //    String comments;
     String productCode;
-    int quantityOrdered;
-    double priceEach;
+    Integer quantityOrdered;
+    Double priceEach;
+    Double amount;
 
-    public OrderItem(String productCode, int quantityOrdered, double priceEach) {
+    public OrderItem(String productCode, int quantityOrdered, double priceEach, double amount) {
         this.productCode = productCode;
         this.quantityOrdered = quantityOrdered;
         this.priceEach = priceEach;
+        this.amount = amount;
     }
 
     public String getProductCode() {
@@ -25,19 +27,26 @@ public class OrderItem {
         this.productCode = productCode;
     }
 
-    public int getQuantityOrdered() {
+    public Integer getQuantityOrdered() {
         return quantityOrdered;
     }
 
     public void setQuantityOrdered(int quantityOrdered) {
         this.quantityOrdered = quantityOrdered;
+        amount = priceEach * quantityOrdered;
     }
 
-    public double getPriceEach() {
+    public Double getPriceEach() {
         return priceEach;
     }
 
     public void setPriceEach(double priceEach) {
         this.priceEach = priceEach;
+        amount = priceEach * quantityOrdered;
     }
+
+    public Double getAmount() {
+        return amount;
+    }
+
 }
