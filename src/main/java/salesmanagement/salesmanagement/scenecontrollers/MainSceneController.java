@@ -5,6 +5,8 @@ import com.google.i18n.phonenumbers.Phonenumber;
 import com.jfoenix.controls.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -98,7 +100,7 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     void goToCreateOrderTab() {
         tabPane.getSelectionModel().select(createOrderTab);
-        initCreateOrder();
+
     }
 
     @FXML
@@ -653,7 +655,7 @@ public class MainSceneController extends SceneController implements Initializabl
                         stage.setX(0);
                         stage.setY(0);
                         stage.show();
-                        uploadNotificationText();
+//                        uploadNotificationText();
                     });
 
                 }, null, null, null);
@@ -696,6 +698,22 @@ public class MainSceneController extends SceneController implements Initializabl
                 quantityInput.setText(String.valueOf(newSelection.getQuantityOrdered()));
             }
         });
+
+//        orderDetailsTable.getItems().addListener((ListChangeListener<OrderItem>) c -> {
+//            while (c.next()) {
+//                if (c.wasAdded()) {
+//                    double addedTotal = c.getAddedSubList().stream()
+//                            .mapToDouble(OrderItem::getAmount)
+//                            .sum();
+//                    totalAmount.set(totalAmount.get() + addedTotal);
+//                } else if (c.wasRemoved()) {
+//                    double removedTotal = c.getRemoved().stream()
+//                            .mapToDouble(OrderItem::getAmount)
+//                            .sum();
+//                    totalAmount.set(totalAmount.get() - removedTotal);
+//                }
+//            }
+//        });
 
 //        orderDetailsTable.focusedProperty().addListener((obs, oldVal, newVal) -> {
 //            if (!newVal && !removeItemButtonClicked) {
@@ -801,6 +819,8 @@ public class MainSceneController extends SceneController implements Initializabl
                 totalInput.setText(String.format("%.2f", Double.parseDouble(newValue) * Integer.parseInt(quantityInput.getText())));
         });
 
+        totalAmountForOrder.textProperty().bind(totalAmount.asString("%.2f"));
+
         orderNumberOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, Integer>, ObservableValue<Integer>>() {
             @Override
             public ObservableValue<Integer> call(TableColumn.CellDataFeatures<ObservableList<Object>, Integer> param) {
@@ -815,45 +835,38 @@ public class MainSceneController extends SceneController implements Initializabl
             }
         });
 
-        requiredDateOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate>, ObservableValue<LocalDate>>() {
-            @Override
-            public ObservableValue<LocalDate> call(TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate> param) {
-                return new SimpleObjectProperty<LocalDate>((LocalDate) param.getValue().get(2));
-            }
-        });
-
-        shippedDateOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate>, ObservableValue<LocalDate>>() {
-            @Override
-            public ObservableValue<LocalDate> call(TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate> param) {
-                return new SimpleObjectProperty<LocalDate>((LocalDate) param.getValue().get(3));
-            }
-        });
-
-        statusOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
+        typeOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
-                return new SimpleStringProperty((String) param.getValue().get(4));
+                return new SimpleObjectProperty<String>((String) param.getValue().get(2));
             }
         });
 
         commentsOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
-                return new SimpleStringProperty((String) param.getValue().get(5));
+                return new SimpleObjectProperty<String>((String) param.getValue().get(3));
             }
         });
 
-        customerNumberOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, Integer>, ObservableValue<Integer>>() {
+        valueOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<ObservableList<Object>, Integer> param) {
-                return new SimpleObjectProperty<Integer>((Integer) param.getValue().get(6));
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
+                return new SimpleStringProperty((String) param.getValue().get(4));
             }
         });
 
         customerNameOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
-                return new SimpleStringProperty((String) param.getValue().get(7));
+                return new SimpleStringProperty((String) param.getValue().get(5));
+            }
+        });
+
+        contactOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
+                return new SimpleObjectProperty<String>((String) param.getValue().get(6));
             }
         });
 
@@ -933,6 +946,22 @@ public class MainSceneController extends SceneController implements Initializabl
             }
         });
 
+        createOrderButton.setOnAction(e -> {
+            String type = "";
+            // Create a ChoiceDialog to ask the user for the order type
+            ChoiceDialog<String> dialog = new ChoiceDialog<>("onsite", "onsite", "online");
+            dialog.setTitle("Order Type");
+            dialog.setHeaderText("Select the order type:");
+            dialog.setContentText("Order Type:");
+
+            // Show the dialog and wait for the user's response
+            dialog.showAndWait().ifPresent(orderType -> {
+                // Handle the user's selection
+                goToCreateOrderTab();
+                initCreateOrder(orderType);
+            });
+        });
+
         removeOrderButton.setOnAction(event -> {
             removeOrderButtonClicked = true;
             ObservableList<Object> selected = ordersTable.getSelectionModel().getSelectedItem();
@@ -954,13 +983,27 @@ public class MainSceneController extends SceneController implements Initializabl
         });
     }
 
-    private void initCreateOrder() {
+    private void initCreateOrder(String type) {
+        if (type.equals("online")) {
+            requiredDateInput.setVisible(true);
+            requiredDateText.setVisible(true);
+            shippedDateInput.setVisible(true);
+            shippedDateText.setVisible(true);
+            statusInput.setVisible(true);
+        } else {
+            requiredDateInput.setVisible(false);
+            requiredDateText.setVisible(false);
+            shippedDateInput.setVisible(false);
+            shippedDateText.setVisible(false);
+            statusInput.setVisible(false);
+        }
         clearCreateOrderTab();
+        totalAmount.set(0);
         customerNameInput.setEditable(true);
         phoneNumberInput.setEditable(true);
         submitOrderButton.setText("Create Order");
         submitOrderButton.setOnAction(event -> {
-            createOrder();
+            createOrder(type);
         });
         orderDetailsTable.setItems(getList());
     }
@@ -970,7 +1013,9 @@ public class MainSceneController extends SceneController implements Initializabl
         submitOrderButton.setText("Save");
         customerNameInput.setEditable(false);
         phoneNumberInput.setEditable(false);
+        totalAmount.set(0);
         if (selectedOrderRow != null) {
+
             // Extract the order number from the selected row
             int orderNumber = (int) selectedOrderRow.get(0);
 
@@ -989,41 +1034,67 @@ public class MainSceneController extends SceneController implements Initializabl
                     double priceEach = rs.getDouble("priceEach");
                     OrderItem orderItem = new OrderItem(productCode, quantity, priceEach, quantity * priceEach);
                     orderDetailsTable.getItems().add(orderItem);
+                    totalAmount.set(totalAmount.get() + orderItem.getAmount());
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
+            }
+
+
+            if (selectedOrderRow.get(2).equals("online")) {
+                requiredDateInput.setVisible(true);
+                requiredDateText.setVisible(true);
+                shippedDateInput.setVisible(true);
+                shippedDateText.setVisible(true);
+                statusInput.setVisible(true);
+                LocalDate requiredDate = null;
+                LocalDate shippedDate = null;
+                String status = null;
+                query = String.format("SELECT requiredDate, shippedDate, status FROM orders WHERE orderNumber = %d", orderNumber);
+                rs = sqlConnection.getDataQuery(query);
+                try {
+                    if (rs.next()) {
+                        requiredDate = rs.getDate("requiredDate").toLocalDate();
+                        shippedDate = rs.getDate("shippedDate") != null ? rs.getDate("shippedDate").toLocalDate() : null;
+                        status = rs.getString("status");
+                    }
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+                requiredDateInput.setValue(requiredDate);
+                shippedDateInput.setValue(shippedDate);
+
+                // Set the status combo box to the value from the selected ord
+                statusInput.setValue(status);
+            } else {
+                requiredDateInput.setVisible(false);
+                requiredDateText.setVisible(false);
+                shippedDateInput.setVisible(false);
+                shippedDateText.setVisible(false);
+                statusInput.setVisible(false);
+            }
+
+
+            int customerNumber = -1;
+            query = String.format("SELECT customerNumber FROM customers WHERE customerName = '%s' AND phone = '%s'", selectedOrderRow.get(5), selectedOrderRow.get(6));
+            rs = sqlConnection.getDataQuery(query);
+            try {
+                if (rs.next()) {
+                    customerNumber = rs.getInt("customerNumber");
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
 
             // Set the date pickers and comments text field with values from the selected order
             LocalDate orderDate = (LocalDate) selectedOrderRow.get(1);
-            LocalDate requiredDate = (LocalDate) selectedOrderRow.get(2);
-            LocalDate shippedDate = (LocalDate) selectedOrderRow.get(3);
-            String comments = (String) selectedOrderRow.get(5);
-            int customerNumber = (int) selectedOrderRow.get(6);
+            String comments = (String) selectedOrderRow.get(3);
             orderDateInput.setValue(orderDate);
-            requiredDateInput.setValue(requiredDate);
-            shippedDateInput.setValue(shippedDate);
             commentsInput.setText(comments);
 
-            // Set the status combo box to the value from the selected order
-            String status = (String) selectedOrderRow.get(4);
-            statusInput.setValue(status);
-
-            query = String.format("SELECT customerName, phone FROM customers WHERE customerNumber = %d", customerNumber);
-            rs = sqlConnection.getDataQuery(query);
-            try {
-                if (rs.next()) {
-                    // Extract the customer name and phone number from the result set
-                    String customerName = rs.getString("customerName");
-                    String phoneNumber = rs.getString("phone");
-
-                    // Set the customer name and phone number fields
-                    customerNameInput.setText(customerName);
-                    phoneNumberInput.setText(phoneNumber);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            customerNameInput.setText((String) selectedOrderRow.get(5));
+            phoneNumberInput.setText((String) selectedOrderRow.get(6));
 
             submitOrderButton.setOnAction(event -> {
                 editOrder(orderNumber);
@@ -1104,6 +1175,7 @@ public class MainSceneController extends SceneController implements Initializabl
         for (OrderItem orderItem : orderDetailsTable.getItems()) {
             if (orderItem.getProductCode().equals(productCode)) {
                 // Update the existing order
+                totalAmount.set(totalAmount.get() - orderItem.getAmount() + quantity * priceEach);
                 orderItem.setQuantityOrdered(quantity);
                 orderItem.setPriceEach(priceEach);
                 orderDetailsTable.refresh();
@@ -1114,6 +1186,8 @@ public class MainSceneController extends SceneController implements Initializabl
         // If no existing order was found, create a new one and add it to the tableView
         OrderItem orderItem = new OrderItem(productCode, quantity, priceEach, quantity * priceEach);
         orderDetailsTable.getItems().add(orderItem);
+
+        totalAmount.set(totalAmount.get() + quantity * priceEach);
 
         productCodeInput.clear();
         quantityInput.clear();
@@ -1126,11 +1200,16 @@ public class MainSceneController extends SceneController implements Initializabl
 
         selectedRows = orderDetailsTable.getSelectionModel().getSelectedItems();
 
+        for (OrderItem orderItem : selectedRows) {
+            totalAmount.set(totalAmount.get() - orderItem.getAmount());
+        }
+
         allItems.removeAll(selectedRows);
     }
 
     public void clearItems() {
         orderDetailsTable.getItems().clear();
+        totalAmount.set(0);
     }
 
     @FXML
@@ -1157,13 +1236,21 @@ public class MainSceneController extends SceneController implements Initializabl
     JFXButton addButton;
     @FXML
     JFXButton removeItemButton;
+    @FXML
+    TextField totalAmountForOrder;
+    private DoubleProperty totalAmount = new SimpleDoubleProperty(0);
+
     private boolean removeItemButtonClicked = false;
     @FXML
     DatePicker orderDateInput;
     @FXML
     DatePicker requiredDateInput;
     @FXML
+    Text requiredDateText;
+    @FXML
     DatePicker shippedDateInput;
+    @FXML
+    Text shippedDateText;
     @FXML
     JFXTextField commentsInput;
     @FXML
@@ -1176,7 +1263,7 @@ public class MainSceneController extends SceneController implements Initializabl
     JFXTextField phoneNumberInput;
 
 
-    public void createOrder() {
+    public void createOrder(String type) {
         runTask(() -> {
             String orderDate;
             if (orderDateInput.getValue() == null) {
@@ -1185,12 +1272,19 @@ public class MainSceneController extends SceneController implements Initializabl
                 orderDate = orderDateInput.getValue().format(DateTimeFormatter.ISO_DATE);
             }
             String shippedDate;
-            if (shippedDateInput.getValue() != null) {
-                shippedDate = shippedDateInput.getValue().format(DateTimeFormatter.ISO_DATE);
-                shippedDate = "'" + shippedDate;
-                shippedDate += "'";
+            String requiredDate;
+            if (type.equals("online")) {
+                if (shippedDateInput.getValue() != null) {
+                    shippedDate = shippedDateInput.getValue().format(DateTimeFormatter.ISO_DATE);
+                    shippedDate = "'" + shippedDate;
+                    shippedDate += "'";
+                } else {
+                    shippedDate = "null";
+                }
+                requiredDate = "'" + requiredDateInput.getValue().format(DateTimeFormatter.ISO_DATE) + "'";
             } else {
                 shippedDate = "null";
+                requiredDate = "null";
             }
             String check = "SELECT customerNumber FROM customers WHERE customerName = '" + customerNameInput.getText() + "' AND phone = '" + phoneNumberInput.getText() + "';";
             ResultSet result = sqlConnection.getDataQuery(check);
@@ -1210,13 +1304,19 @@ public class MainSceneController extends SceneController implements Initializabl
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            String order = "insert into orders(orderDate, requiredDate, shippedDate, status, comments, customerNumber) values ('"
-                    + orderDate + "','"
-                    + requiredDateInput.getValue().format(DateTimeFormatter.ISO_DATE) + "',"
+
+            double value = 0;
+            for (OrderItem item : orderDetailsTable.getItems()) {
+                value += item.getAmount();
+            }
+
+            String order = "insert into orders(orderDate, requiredDate, shippedDate, status, comments, customerNumber, type, value) values ('"
+                    + orderDate + "',"
+                    + requiredDate + ","
                     + shippedDate + ",'"
                     + statusInput.getValue() + "','"
                     + commentsInput.getText() + "',"
-                    + customerNumber + ");";
+                    + customerNumber + ", '" + type + "', " + value + ");";
             sqlConnection.updateQuery(order);
             result = sqlConnection.getDataQuery("SELECT LAST_INSERT_ID() FROM orders;");
 
@@ -1305,17 +1405,15 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     TableColumn<ObservableList<Object>, LocalDate> orderDateOrd;
     @FXML
-    TableColumn<ObservableList<Object>, LocalDate> requiredDateOrd;
-    @FXML
-    TableColumn<ObservableList<Object>, LocalDate> shippedDateOrd;
-    @FXML
-    TableColumn<ObservableList<Object>, String> statusOrd;
+    TableColumn<ObservableList<Object>, String> typeOrd;
     @FXML
     TableColumn<ObservableList<Object>, String> commentsOrd;
     @FXML
-    TableColumn<ObservableList<Object>, Integer> customerNumberOrd;
+    TableColumn<ObservableList<Object>, String> valueOrd;
     @FXML
     TableColumn<ObservableList<Object>, String> customerNameOrd;
+    @FXML
+    TableColumn<ObservableList<Object>, String> contactOrd;
     @FXML
     JFXButton createOrderButton;
     @FXML
@@ -1329,18 +1427,17 @@ public class MainSceneController extends SceneController implements Initializabl
             ordersTable.getItems().clear();
 
             try {
-                String query = "SELECT orderNumber, orderDate, requiredDate, shippedDate, status, comments, orders.customerNumber, customerName FROM orders INNER JOIN customers ON orders.customerNumber = customers.customerNumber";
+                String query = "SELECT orderNumber, orderDate, type, comments, value, customerName, phone FROM orders INNER JOIN customers ON orders.customerNumber = customers.customerNumber";
                 ResultSet resultSet = sqlConnection.getDataQuery(query);
                 while (resultSet.next()) {
                     ObservableList<Object> row = FXCollections.observableArrayList();
                     row.add(resultSet.getInt("orderNumber"));
                     row.add(resultSet.getDate("orderDate").toLocalDate());
-                    row.add(resultSet.getDate("requiredDate").toLocalDate());
-                    row.add(resultSet.getDate("shippedDate") != null ? resultSet.getDate("shippedDate").toLocalDate() : null);
-                    row.add(resultSet.getString("status"));
+                    row.add(resultSet.getString("type"));
                     row.add(resultSet.getString("comments"));
-                    row.add(resultSet.getInt("customerNumber"));
+                    row.add(String.valueOf(resultSet.getDouble("value")));
                     row.add(resultSet.getString("customerName"));
+                    row.add(resultSet.getString("phone"));
                     ordersTable.getItems().add(row);
                 }
                 ordersTable.refresh();
@@ -1548,6 +1645,12 @@ public class MainSceneController extends SceneController implements Initializabl
             para.put("orderYear", orderDate.getYear() - 1900);
             para.put("orderMonth", orderDate.getMonthValue() - 1);
             para.put("orderDay", orderDate.getDayOfMonth());
+            String query = String.format("SELECT value, type FROM orders WHERE orderNumber = %d", orderNumber);
+            ResultSet rs = sqlConnection.getDataQuery(query);
+            if (rs.next()) {
+                para.put("totalAmount", rs.getDouble(1));
+                para.put("type", rs.getString(2));
+            }
 
             ArrayList<OrderItem> plist = new ArrayList<>();
 

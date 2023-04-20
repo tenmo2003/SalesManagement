@@ -60,7 +60,6 @@
     <parameter name="customerName" class="java.lang.String"/>
     <parameter name="contact" class="java.lang.String"/>
     <parameter name="invoiceNo" class="java.lang.String"/>
-    <parameter name="totalAmount" class="java.lang.String"/>
     <parameter name="otherAmount" class="java.lang.String"/>
     <parameter name="paybleAmount" class="java.lang.String"/>
     <parameter name="paidAmount" class="java.lang.String"/>
@@ -70,10 +69,11 @@
     <parameter name="point2" class="java.lang.String"/>
     <parameter name="point3" class="java.lang.String"/>
     <parameter name="currency" class="java.lang.String"/>
-    <parameter name="taux" class="java.lang.String"/>
+    <parameter name="type" class="java.lang.String"/>
     <parameter name="orderYear" class="java.lang.Integer"/>
     <parameter name="orderMonth" class="java.lang.Integer"/>
     <parameter name="orderDay" class="java.lang.Integer"/>
+    <parameter name="totalAmount" class="java.lang.Double"/>
     <queryString>
         <![CDATA[select * from dual]]>
     </queryString>
@@ -175,7 +175,7 @@
                 <textElement textAlignment="Left">
                     <font size="9" isBold="true"/>
                 </textElement>
-                <text><![CDATA[Taux]]></text>
+                <text><![CDATA[Order type]]></text>
             </staticText>
             <textField>
                 <reportElement x="85" y="84" width="90" height="15" uuid="803bc527-a631-4733-a335-6c7d03071bea">
@@ -193,7 +193,7 @@
                 <textElement>
                     <font size="9"/>
                 </textElement>
-                <textFieldExpression><![CDATA[$P{taux}]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$P{type}]]></textFieldExpression>
             </textField>
         </band>
     </title>

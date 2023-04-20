@@ -46,7 +46,8 @@ public class OrderItem {
     }
 
     public Double getAmount() {
-        return amount;
+        String formattedAmount = String.format("%.2f", amount);
+        return Double.parseDouble(formattedAmount);
     }
 
 }

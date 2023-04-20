@@ -18,6 +18,7 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -613,21 +614,21 @@
                            <content>
                               <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-border-width: 0;">
                                  <children>
-                                    <JFXButton fx:id="submitOrderButton" layoutX="445.0" layoutY="584.0" prefHeight="65.0" prefWidth="215.0" stylesheets="@button_style.css" text="Create Order" />
-                                    <JFXComboBox fx:id="statusInput" layoutX="176.0" layoutY="442.0" prefHeight="35.0" prefWidth="143.0" promptText="Status" />
-                                    <JFXTextField fx:id="commentsInput" layoutX="176.0" layoutY="512.0" prefHeight="45.0" prefWidth="685.0" />
-                                    <DatePicker fx:id="requiredDateInput" layoutX="449.0" layoutY="400.0" prefHeight="26.0" prefWidth="154.0" promptText="Required Date" />
-                                    <Text layoutX="176.0" layoutY="506.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Comments" wrappingWidth="102.90938186645508">
+                                    <JFXButton fx:id="submitOrderButton" layoutX="445.0" layoutY="621.0" prefHeight="65.0" prefWidth="215.0" stylesheets="@button_style.css" text="Create Order" />
+                                    <JFXComboBox fx:id="statusInput" layoutX="176.0" layoutY="479.0" prefHeight="35.0" prefWidth="143.0" promptText="Status" />
+                                    <JFXTextField fx:id="commentsInput" layoutX="176.0" layoutY="549.0" prefHeight="45.0" prefWidth="685.0" />
+                                    <DatePicker fx:id="requiredDateInput" layoutX="449.0" layoutY="437.0" prefHeight="26.0" prefWidth="154.0" promptText="Required Date" />
+                                    <Text layoutX="176.0" layoutY="543.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Comments" wrappingWidth="102.90938186645508">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
                                     </Text>
-                                    <DatePicker fx:id="shippedDateInput" layoutX="704.0" layoutY="400.0" prefHeight="26.0" prefWidth="154.0" promptText="Shipped Date" />
+                                    <DatePicker fx:id="shippedDateInput" layoutX="704.0" layoutY="437.0" prefHeight="26.0" prefWidth="154.0" promptText="Shipped Date" />
                                     <JFXTextField fx:id="quantityInput" layoutX="335.0" layoutY="88.0" prefHeight="26.0" prefWidth="73.0" />
                                     <JFXButton fx:id="addButton" layoutX="656.0" layoutY="88.0" onAction="#addItem" text="Add/Update" />
                                     <JFXButton fx:id="removeItemButton" layoutX="749.0" layoutY="88.0" text="Remove" />
                                     <JFXTextField fx:id="priceEachInput" editable="false" focusTraversable="false" layoutX="424.0" layoutY="88.0" prefHeight="26.0" prefWidth="86.0" />
-                                    <DatePicker fx:id="orderDateInput" layoutX="179.0" layoutY="400.0" prefHeight="26.0" prefWidth="154.0" promptText="Order Date" />
+                                    <DatePicker fx:id="orderDateInput" layoutX="179.0" layoutY="437.0" prefHeight="26.0" prefWidth="154.0" promptText="Order Date" />
                                     <TableView fx:id="orderDetailsTable" layoutX="176.0" layoutY="130.0" prefHeight="232.0" prefWidth="696.0">
                                        <columns>
                                           <TableColumn fx:id="productCodeOD" prefWidth="246.98178100585938" text="Item" />
@@ -680,19 +681,25 @@
                                           <JFXTextField fx:id="phoneNumberInput" prefHeight="26.0" prefWidth="168.0" />
                                        </children>
                                     </VBox>
-                                    <Text layoutX="179.0" layoutY="392.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Order Date">
+                                    <Text layoutX="179.0" layoutY="429.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Order Date">
                                        <font>
                                           <Font size="14.0" />
                                        </font></Text>
-                                    <Text layoutX="449.0" layoutY="392.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Required Date">
+                                    <Text fx:id="requiredDateText" layoutX="449.0" layoutY="429.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Required Date">
                                        <font>
                                           <Font size="14.0" />
                                        </font></Text>
-                                    <Text layoutX="704.0" layoutY="391.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Shipped Date">
+                                    <Text fx:id="shippedDateText" layoutX="704.0" layoutY="428.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Shipped Date">
                                        <font>
                                           <Font size="14.0" />
                                        </font></Text>
-                                    <JFXButton fx:id="printInvoiceButton" layoutX="532.0" layoutY="649.0" text="Print" />
+                                    <JFXButton fx:id="printInvoiceButton" layoutX="532.0" layoutY="686.0" text="Print" />
+                                    <Text layoutX="607.0" layoutY="388.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Amount: ">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Text>
+                                    <TextField fx:id="totalAmountForOrder" editable="false" focusTraversable="false" layoutX="712.0" layoutY="369.0" prefWidth="160.58178626194558" />
                                  </children>
                               </AnchorPane>
                            </content>
@@ -1310,16 +1317,15 @@
                                        <columns>
                                           <TableColumn fx:id="orderNumberOrd" prefWidth="93.38180541992188" text="Order No." />
                                           <TableColumn fx:id="orderDateOrd" minWidth="6.103515625E-5" prefWidth="100.0" text="Order Date" />
-                                          <TableColumn fx:id="requiredDateOrd" prefWidth="100.0" text="Required" />
-                                          <TableColumn fx:id="shippedDateOrd" prefWidth="100.0" text="Shipped" />
-                                          <TableColumn fx:id="statusOrd" prefWidth="96.00009155273438" text="Status" />
-                                          <TableColumn fx:id="commentsOrd" prefWidth="193.74554443359375" text="Comments" />
-                                          <TableColumn fx:id="customerNumberOrd" prefWidth="105.5999755859375" text="Customer No." />
-                                          <TableColumn fx:id="customerNameOrd" prefWidth="121.30902149042913" text="Customer Name" />
+                                          <TableColumn fx:id="typeOrd" prefWidth="100.0" text="Type" />
+                                          <TableColumn fx:id="commentsOrd" prefWidth="241.7454833984375" text="Comments" />
+                                          <TableColumn fx:id="valueOrd" prefWidth="105.60003662109375" text="Value" />
+                                          <TableColumn fx:id="customerNameOrd" prefWidth="144.872802734375" text="Customer Name" />
+                                          <TableColumn fx:id="contactOrd" prefWidth="128.2908935546875" text="Contact" />
                                        </columns>
                                     </TableView>
                                     <JFXButton fx:id="removeOrderButton" layoutX="988.0" layoutY="63.0" prefHeight="26.0" prefWidth="79.0" text="Remove" />
-                                    <JFXButton fx:id="createOrderButton" layoutX="874.0" layoutY="63.0" onAction="#goToCreateOrderTab" text="Create New Order" />
+                                    <JFXButton fx:id="createOrderButton" layoutX="874.0" layoutY="63.0" text="Create New Order" />
                                     <JFXButton fx:id="editOrderButton" layoutX="837.0" layoutY="63.0" text="Edit" />
                                  </children>
                               </AnchorPane>
