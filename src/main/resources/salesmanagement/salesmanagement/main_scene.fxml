@@ -8,6 +8,7 @@
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -614,21 +615,20 @@
                            <content>
                               <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-border-width: 0;">
                                  <children>
-                                    <JFXButton fx:id="submitOrderButton" layoutX="445.0" layoutY="621.0" prefHeight="65.0" prefWidth="215.0" stylesheets="@button_style.css" text="Create Order" />
-                                    <JFXComboBox fx:id="statusInput" layoutX="176.0" layoutY="479.0" prefHeight="35.0" prefWidth="143.0" promptText="Status" />
-                                    <JFXTextField fx:id="commentsInput" layoutX="176.0" layoutY="549.0" prefHeight="45.0" prefWidth="685.0" />
-                                    <DatePicker fx:id="requiredDateInput" layoutX="449.0" layoutY="437.0" prefHeight="26.0" prefWidth="154.0" promptText="Required Date" />
-                                    <Text layoutX="176.0" layoutY="543.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Comments" wrappingWidth="102.90938186645508">
+                                    <JFXButton fx:id="submitOrderButton" layoutX="445.0" layoutY="696.0" prefHeight="53.0" prefWidth="216.0" stylesheets="@button_style.css" text="Create Order" />
+                                    <JFXTextField fx:id="commentsInput" layoutX="176.0" layoutY="586.0" prefHeight="45.0" prefWidth="685.0" />
+                                    <DatePicker fx:id="requiredDateInput" layoutX="449.0" layoutY="437.0" prefHeight="34.0" prefWidth="154.0" promptText="Required Date" />
+                                    <Text layoutX="176.0" layoutY="580.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Comments" wrappingWidth="102.90938186645508">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
                                     </Text>
-                                    <DatePicker fx:id="shippedDateInput" layoutX="704.0" layoutY="437.0" prefHeight="26.0" prefWidth="154.0" promptText="Shipped Date" />
+                                    <DatePicker fx:id="shippedDateInput" layoutX="704.0" layoutY="437.0" prefHeight="34.0" prefWidth="154.0" promptText="Shipped Date" />
                                     <JFXTextField fx:id="quantityInput" layoutX="335.0" layoutY="88.0" prefHeight="26.0" prefWidth="73.0" />
                                     <JFXButton fx:id="addButton" layoutX="656.0" layoutY="88.0" onAction="#addItem" text="Add/Update" />
                                     <JFXButton fx:id="removeItemButton" layoutX="749.0" layoutY="88.0" text="Remove" />
                                     <JFXTextField fx:id="priceEachInput" editable="false" focusTraversable="false" layoutX="424.0" layoutY="88.0" prefHeight="26.0" prefWidth="86.0" />
-                                    <DatePicker fx:id="orderDateInput" layoutX="179.0" layoutY="437.0" prefHeight="26.0" prefWidth="154.0" promptText="Order Date" />
+                                    <DatePicker fx:id="orderDateInput" layoutX="179.0" layoutY="437.0" prefHeight="34.0" prefWidth="154.0" promptText="Order Date" />
                                     <TableView fx:id="orderDetailsTable" layoutX="176.0" layoutY="130.0" prefHeight="232.0" prefWidth="696.0">
                                        <columns>
                                           <TableColumn fx:id="productCodeOD" prefWidth="246.98178100585938" text="Item" />
@@ -693,13 +693,15 @@
                                        <font>
                                           <Font size="14.0" />
                                        </font></Text>
-                                    <JFXButton fx:id="printInvoiceButton" layoutX="532.0" layoutY="686.0" text="Print" />
+                                    <JFXButton fx:id="printInvoiceButton" layoutX="499.0" layoutY="749.0" prefHeight="38.0" prefWidth="107.0" text="Print" />
                                     <Text layoutX="607.0" layoutY="388.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Amount: ">
                                        <font>
                                           <Font name="System Bold" size="14.0" />
                                        </font>
                                     </Text>
                                     <TextField fx:id="totalAmountForOrder" editable="false" focusTraversable="false" layoutX="712.0" layoutY="369.0" prefWidth="160.58178626194558" />
+                                    <ComboBox fx:id="statusInput" layoutX="179.0" layoutY="500.0" prefHeight="31.0" prefWidth="150.0" promptText="Status" />
+                                    <ComboBox fx:id="paymentMethodInput" layoutX="179.0" layoutY="658.0" prefHeight="31.0" prefWidth="150.0" promptText="Payment Method" />
                                  </children>
                               </AnchorPane>
                            </content>
@@ -708,6 +710,8 @@
                            <content>
                               <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                  <children>
+                                    <JFXButton fx:id="addProductButton" layoutX="1079.0" layoutY="57.0" onAction="#initAddProduct" text="Add" />
+                                    <JFXButton fx:id="removeProductButton" layoutX="1134.0" layoutY="57.0" text="Remove" />
                                     <TableView fx:id="productsTable" layoutX="255.0" layoutY="95.0" prefHeight="675.0" prefWidth="950.0" stylesheets="@table.css">
                                        <columns>
                                           <TableColumn fx:id="productCodeProd" prefWidth="210.32733154296875" text="Product Code" />
@@ -716,7 +720,7 @@
                                        </columns>
                                     </TableView>
                                     <Pane fx:id="bgPane" opacity="0.5" prefHeight="900.0" prefWidth="1500.0" style="-fx-background-color: black;" visible="false" />
-                                    <AnchorPane fx:id="productDetailsPane" layoutX="385.0" layoutY="199.0" prefHeight="466.0" prefWidth="677.0" style="-fx-background-color: white;" visible="false">
+                                    <AnchorPane fx:id="productDetailsPane" focusTraversable="true" layoutX="385.0" layoutY="199.0" prefHeight="466.0" prefWidth="677.0" style="-fx-background-color: white;" visible="false">
                                        <children>
                                           <JFXTextField fx:id="productCodePDetails" layoutX="54.0" layoutY="72.0" prefHeight="26.0" prefWidth="195.0" />
                                           <JFXTextField fx:id="productNamePDetails" layoutX="382.0" layoutY="72.0" prefWidth="195.0" />
@@ -766,7 +770,6 @@
                                                 <Font size="14.0" />
                                              </font>
                                           </Text>
-                                          <JFXComboBox fx:id="productLinePDetails" layoutX="53.0" layoutY="248.0" prefHeight="26.0" prefWidth="195.0" />
                                           <JFXTextField fx:id="productDescriptionPDetails" layoutX="53.0" layoutY="323.0" maxHeight="60.0" prefHeight="34.0" prefWidth="531.0" />
                                           <Text layoutX="54.0" layoutY="315.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Description">
                                              <font>
@@ -774,10 +777,10 @@
                                              </font>
                                           </Text>
                                           <JFXButton fx:id="productDetailsButton" layoutX="298.0" layoutY="398.0" text="Save" />
+                                          <JFXTextField fx:id="productLinePDetails" layoutX="53.0" layoutY="248.0" prefHeight="26.0" prefWidth="195.0" />
+                                          <ListView fx:id="plSuggestionList" layoutX="53.0" layoutY="274.0" prefHeight="117.0" prefWidth="195.0" visible="false" />
                                        </children>
                                     </AnchorPane>
-                                    <JFXButton fx:id="addProductButton" layoutX="1079.0" layoutY="57.0" onAction="#initAddProduct" text="Add" />
-                                    <JFXButton fx:id="removeProductButton" layoutX="1134.0" layoutY="57.0" text="Remove" />
                                  </children>
                               </AnchorPane>
 

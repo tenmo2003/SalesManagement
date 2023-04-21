@@ -68,7 +68,7 @@
     <parameter name="point1" class="java.lang.String"/>
     <parameter name="point2" class="java.lang.String"/>
     <parameter name="point3" class="java.lang.String"/>
-    <parameter name="currency" class="java.lang.String"/>
+    <parameter name="paymentMethod" class="java.lang.String"/>
     <parameter name="type" class="java.lang.String"/>
     <parameter name="orderYear" class="java.lang.Integer"/>
     <parameter name="orderMonth" class="java.lang.Integer"/>
@@ -167,7 +167,7 @@
                 <textElement textAlignment="Left">
                     <font size="9" isBold="true"/>
                 </textElement>
-                <text><![CDATA[Currency]]></text>
+                <text><![CDATA[Order Type]]></text>
             </staticText>
             <staticText>
                 <reportElement x="-5" y="102" width="60" height="15" uuid="7248ae1b-4d00-4a60-b6c5-584b5fbe72d7"/>
@@ -175,7 +175,7 @@
                 <textElement textAlignment="Left">
                     <font size="9" isBold="true"/>
                 </textElement>
-                <text><![CDATA[Order type]]></text>
+                <text><![CDATA[Payment Method]]></text>
             </staticText>
             <textField>
                 <reportElement x="85" y="84" width="90" height="15" uuid="803bc527-a631-4733-a335-6c7d03071bea">
@@ -184,7 +184,7 @@
                 <textElement>
                     <font size="9"/>
                 </textElement>
-                <textFieldExpression><![CDATA[$P{currency}]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$P{type}]]></textFieldExpression>
             </textField>
             <textField>
                 <reportElement x="85" y="100" width="90" height="15" uuid="a2abf847-d814-475c-9845-2b0cb6742a34">
@@ -193,7 +193,7 @@
                 <textElement>
                     <font size="9"/>
                 </textElement>
-                <textFieldExpression><![CDATA[$P{type}]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$P{paymentMethod}]]></textFieldExpression>
             </textField>
         </band>
     </title>

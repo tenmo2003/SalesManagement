@@ -667,7 +667,7 @@ public class MainSceneController extends SceneController implements Initializabl
     StackPane employeeInfoBoxContainer;
     Form employeeForm;
     @FXML
-    JFXComboBox statusInput;
+    ComboBox statusInput;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -737,42 +737,44 @@ public class MainSceneController extends SceneController implements Initializabl
 //        });
 
         // Add a listener to the text property of the text field
-        productCodeInput.setOnKeyReleased(event -> {
-            if (!(event.getCode() == KeyCode.TAB || event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.UP)) {
-                String newValue = productCodeInput.getText();
-                // Update the suggestion list based on the current input
-                if (newValue.equals("")) {
-                    suggestionList.setVisible(false);
-                    suggestionList.setMouseTransparent(true);
-                } else {
-                    if (newValue.length() > 2) {
-                        List<String> suggestions = new ArrayList<>(); // Replace with your own function to retrieve suggestions
-                        String sql = "SELECT productCode, sellPrice FROM products WHERE upper(productCode) LIKE upper('" + newValue + "%');";
-                        ResultSet rs = sqlConnection.getDataQuery(sql);
-                        try {
-                            // Add each suggestion to the list
-                            while (rs.next()) {
-                                suggestions.add(rs.getString("productCode"));
-                            }
-                        } catch (SQLException ex) {
-                            ex.printStackTrace();
-                        }
+        productCodeInput.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue.length() > 2 && newValue.length() > oldValue.length() && suggestionList.getItems().isEmpty()) {
 
-                        if (suggestions.isEmpty() || (!suggestions.isEmpty() && suggestions.get(0).equals(newValue))) {
-                            suggestionList.setMouseTransparent(true);
-                            suggestionList.setVisible(false);
-                            if (!suggestions.isEmpty() && suggestions.get(0).equals(newValue)) {
-                                setPrice();
+                } else {
+                    // Update the suggestion list based on the current input
+                    if (newValue.equals("")) {
+                        suggestionList.setVisible(false);
+                        suggestionList.setMouseTransparent(true);
+                    } else {
+                        if (newValue.length() > 1) {
+                            List<String> suggestions = new ArrayList<>(); // Replace with your own function to retrieve suggestions
+                            String sql = "SELECT productCode, sellPrice FROM products WHERE upper(productCode) LIKE upper('" + newValue + "%');";
+                            ResultSet rs = sqlConnection.getDataQuery(sql);
+                            try {
+                                // Add each suggestion to the list
+                                while (rs.next()) {
+                                    suggestions.add(rs.getString("productCode"));
+                                }
+                            } catch (SQLException ex) {
+                                ex.printStackTrace();
                             }
-                        } else {
-                            suggestionList.getItems().setAll(suggestions);
-                            suggestionList.getSelectionModel().selectFirst();
-                            suggestionList.setMouseTransparent(false);
-                            suggestionList.setVisible(true);
+                            if (suggestions.isEmpty() || (!suggestions.isEmpty() && suggestions.get(0).equals(newValue))) {
+                                suggestionList.setMouseTransparent(true);
+                                suggestionList.setVisible(false);
+                                suggestionList.getItems().clear();
+                                if (!suggestions.isEmpty() && suggestions.get(0).equals(newValue)) {
+                                    setPrice();
+                                }
+                            } else {
+                                suggestionList.getItems().setAll(suggestions);
+                                suggestionList.getSelectionModel().selectFirst();
+                                suggestionList.setMouseTransparent(false);
+                                suggestionList.setVisible(true);
+                            }
                         }
                     }
                 }
-            }
+
         });
 
         // Add an event handler to the suggestion list
@@ -782,6 +784,7 @@ public class MainSceneController extends SceneController implements Initializabl
                 productCodeInput.setText(selectedValue);
                 setPrice();
                 suggestionList.setVisible(false);
+                suggestionList.getItems().clear();
             }
         });
 
@@ -792,16 +795,109 @@ public class MainSceneController extends SceneController implements Initializabl
                     productCodeInput.setText(selectedValue);
                     setPrice();
                     suggestionList.setVisible(false);
+                    suggestionList.getItems().clear();
                     productCodeInput.requestFocus();
                 }
             } else if (event.getCode() == KeyCode.TAB || event.getCode() == KeyCode.DOWN) {
-                suggestionList.getSelectionModel().selectNext();
+                int selectedIndex = suggestionList.getSelectionModel().getSelectedIndex();
+                if (selectedIndex < suggestionList.getItems().size() - 1) {
+                    suggestionList.getSelectionModel().selectNext();
+                    suggestionList.scrollTo(selectedIndex + 1);
+                }
                 event.consume();
                 productCodeInput.requestFocus();
             } else if (event.getCode() == KeyCode.UP) {
-                suggestionList.getSelectionModel().selectPrevious();
+                int selectedIndex = suggestionList.getSelectionModel().getSelectedIndex();
+                if (selectedIndex > 0) {
+                    suggestionList.getSelectionModel().selectPrevious();
+                    suggestionList.scrollTo(selectedIndex - 1);
+                }
                 event.consume();
                 productCodeInput.requestFocus();
+            }
+        });
+
+
+        productLinePDetails.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal) {
+                // TextField has focus, show suggestion list
+                if (!plSuggestionList.getItems().isEmpty()) {
+                    plSuggestionList.setVisible(true);
+                    plSuggestionList.setMouseTransparent(false);
+                }
+            } else {
+                if (plSuggestionList.getItems().isEmpty()) {
+                    plSuggestionList.setVisible(false);
+                    plSuggestionList.setMouseTransparent(true);
+                }
+            }
+        });
+
+        productLinePDetails.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > oldValue.length() && plSuggestionList.getItems().isEmpty()) {
+
+            } else {
+                // Update the suggestion list based on the current input
+                List<String> suggestions = new ArrayList<>(); // Replace with your own function to retrieve suggestions
+                String sql = "SELECT productLine FROM productlines WHERE upper(productLine) LIKE upper('" + newValue + "%');";
+                ResultSet rs = sqlConnection.getDataQuery(sql);
+                try {
+                    // Add each suggestion to the list
+                    while (rs.next()) {
+                        suggestions.add(rs.getString("productLine"));
+                    }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+                if (suggestions.isEmpty() || (!suggestions.isEmpty() && suggestions.get(0).equals(newValue))) {
+                    plSuggestionList.setMouseTransparent(true);
+                    plSuggestionList.setVisible(false);
+                    plSuggestionList.getItems().clear();
+                } else {
+                    plSuggestionList.getItems().setAll(suggestions);
+                    plSuggestionList.getSelectionModel().selectFirst();
+                    plSuggestionList.setMouseTransparent(false);
+                    plSuggestionList.setVisible(true);
+                }
+            }
+        });
+
+        // Add an event handler to the suggestion list
+        plSuggestionList.setOnMouseClicked(event -> {
+            String selectedValue = plSuggestionList.getSelectionModel().getSelectedItem();
+            if (selectedValue != null) {
+                productLinePDetails.setText(selectedValue);
+                plSuggestionList.setVisible(false);
+                plSuggestionList.getItems().clear();
+                plSuggestionList.setMouseTransparent(true);
+            }
+        });
+
+        productLinePDetails.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                String selectedValue = plSuggestionList.getSelectionModel().getSelectedItem();
+                if (selectedValue != null) {
+                    productLinePDetails.setText(selectedValue);
+                    plSuggestionList.setVisible(false);
+                    plSuggestionList.getItems().clear();
+                    productLinePDetails.requestFocus();
+                }
+            } else if (event.getCode() == KeyCode.TAB || event.getCode() == KeyCode.DOWN) {
+                int selectedIndex = plSuggestionList.getSelectionModel().getSelectedIndex();
+                if (selectedIndex < plSuggestionList.getItems().size() - 1) {
+                    plSuggestionList.getSelectionModel().selectNext();
+                    plSuggestionList.scrollTo(selectedIndex + 1);
+                }
+                event.consume();
+                productLinePDetails.requestFocus();
+            } else if (event.getCode() == KeyCode.UP) {
+                int selectedIndex = plSuggestionList.getSelectionModel().getSelectedIndex();
+                if (selectedIndex > 0) {
+                    plSuggestionList.getSelectionModel().selectPrevious();
+                    plSuggestionList.scrollTo(selectedIndex - 1);
+                }
+                event.consume();
+                productLinePDetails.requestFocus();
             }
         });
 
@@ -894,10 +990,12 @@ public class MainSceneController extends SceneController implements Initializabl
                 productDetailsPane.setVisible(true);
             }
         });
+
         closeProductDetailsButton.setOnAction(event -> {
             bgPane.setVisible(false);
             productDetailsPane.setVisible(false);
         });
+
         productCodeProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
@@ -990,12 +1088,16 @@ public class MainSceneController extends SceneController implements Initializabl
             shippedDateInput.setVisible(true);
             shippedDateText.setVisible(true);
             statusInput.setVisible(true);
+            paymentMethodInput.getItems().clear();
+            paymentMethodInput.getItems().addAll("Cash On Delivery", "Credit Card", "Debit Card", "E-Wallet", "Bank Transfer");
         } else {
             requiredDateInput.setVisible(false);
             requiredDateText.setVisible(false);
             shippedDateInput.setVisible(false);
             shippedDateText.setVisible(false);
             statusInput.setVisible(false);
+            paymentMethodInput.getItems().clear();
+            paymentMethodInput.getItems().addAll("Cash", "Credit Card", "Debit Card", "E-Wallet", "Bank Transfer");
         }
         clearCreateOrderTab();
         totalAmount.set(0);
@@ -1047,16 +1149,20 @@ public class MainSceneController extends SceneController implements Initializabl
                 shippedDateInput.setVisible(true);
                 shippedDateText.setVisible(true);
                 statusInput.setVisible(true);
+                paymentMethodInput.getItems().clear();
+                paymentMethodInput.getItems().addAll("Cash On Delivery", "Credit Card", "Debit Card", "E-Wallet", "Bank Transfer");
                 LocalDate requiredDate = null;
                 LocalDate shippedDate = null;
                 String status = null;
-                query = String.format("SELECT requiredDate, shippedDate, status FROM orders WHERE orderNumber = %d", orderNumber);
+                String paymentMethod = null;
+                query = String.format("SELECT requiredDate, shippedDate, status, payment_method FROM orders WHERE orderNumber = %d", orderNumber);
                 rs = sqlConnection.getDataQuery(query);
                 try {
                     if (rs.next()) {
                         requiredDate = rs.getDate("requiredDate").toLocalDate();
                         shippedDate = rs.getDate("shippedDate") != null ? rs.getDate("shippedDate").toLocalDate() : null;
                         status = rs.getString("status");
+                        paymentMethod = rs.getString("payment_method");
                     }
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
@@ -1067,12 +1173,27 @@ public class MainSceneController extends SceneController implements Initializabl
 
                 // Set the status combo box to the value from the selected ord
                 statusInput.setValue(status);
+                paymentMethodInput.setValue(paymentMethod);
             } else {
                 requiredDateInput.setVisible(false);
                 requiredDateText.setVisible(false);
                 shippedDateInput.setVisible(false);
                 shippedDateText.setVisible(false);
                 statusInput.setVisible(false);
+                paymentMethodInput.getItems().clear();
+                paymentMethodInput.getItems().addAll("Cash", "Credit Card", "Debit Card", "E-Wallet", "Bank Transfer");
+                String paymentMethod = null;
+
+                query = String.format("SELECT payment_method FROM orders WHERE orderNumber = %d", orderNumber);
+                rs = sqlConnection.getDataQuery(query);
+                try {
+                    if (rs.next()) {
+                        paymentMethod =  rs.getString(1);
+                    }
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+                paymentMethodInput.setValue(paymentMethod);
             }
 
 
@@ -1116,17 +1237,12 @@ public class MainSceneController extends SceneController implements Initializabl
 
             // Get the values from the input fields
             LocalDate orderDate = orderDateInput.getValue();
-            LocalDate requiredDate = requiredDateInput.getValue();
+            String requiredDate = requiredDateInput.getValue() != null ? "'" + requiredDateInput.getValue().toString() + "'" : null;
             String shippedDate = shippedDateInput.getValue() != null ? "'" + shippedDateInput.getValue().toString() + "'" : "null";
             String status = (String) statusInput.getValue();
             String comments = commentsInput.getText();
 
-            // Get the customer number from the customer name input field
-            String customerName = customerNameInput.getText();
-            String phoneNumber = phoneNumberInput.getText();
-            int customerNumber = 0;
-
-            query = String.format("UPDATE orders SET orderDate = '%s', requiredDate = '%s', shippedDate = %s, status = '%s', comments = '%s' WHERE orderNumber = %d", orderDate.toString(), requiredDate.toString(), shippedDate, status, comments, orderNumber);
+            query = String.format("UPDATE orders SET orderDate = '%s', requiredDate = %s, shippedDate = %s, status = '%s', comments = '%s', payment_method = '%s' WHERE orderNumber = %d", orderDate.toString(), requiredDate, shippedDate, status, comments, paymentMethodInput.getValue(), orderNumber);
             sqlConnection.updateQuery(query);
 
         }, null, progressIndicator, createOrderTab.getTabPane());
@@ -1254,6 +1370,8 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     JFXTextField commentsInput;
     @FXML
+    ComboBox paymentMethodInput;
+    @FXML
     JFXButton submitOrderButton;
     @FXML
     JFXButton printInvoiceButton;
@@ -1310,13 +1428,16 @@ public class MainSceneController extends SceneController implements Initializabl
                 value += item.getAmount();
             }
 
-            String order = "insert into orders(orderDate, requiredDate, shippedDate, status, comments, customerNumber, type, value) values ('"
+            String order = "insert into orders(orderDate, requiredDate, shippedDate, status, comments, customerNumber, type, value, payment_method) values ('"
                     + orderDate + "',"
                     + requiredDate + ","
                     + shippedDate + ",'"
                     + statusInput.getValue() + "','"
                     + commentsInput.getText() + "',"
-                    + customerNumber + ", '" + type + "', " + value + ");";
+                    + customerNumber + ", '"
+                    + type + "', "
+                    + value + ", '"
+                    + paymentMethodInput.getValue() + "');";
             sqlConnection.updateQuery(order);
             result = sqlConnection.getDataQuery("SELECT LAST_INSERT_ID() FROM orders;");
 
@@ -1508,14 +1629,7 @@ public class MainSceneController extends SceneController implements Initializabl
                     productsTable.getItems().add(row);
                 }
                 productsTable.refresh();
-                productLinePDetails.getItems().clear();
-                query = "SELECT productLine FROM productlines";
-                resultSet = sqlConnection.getDataQuery(query);
 
-                while (resultSet.next()) {
-                    String productLine = resultSet.getString("productLine");
-                    productLinePDetails.getItems().add(productLine);
-                }
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
@@ -1528,7 +1642,9 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     JFXTextField productNamePDetails;
     @FXML
-    JFXComboBox productLinePDetails;
+    JFXTextField productLinePDetails;
+    @FXML
+    ListView<String> plSuggestionList;
     @FXML
     JFXTextField productVendorPDetails;
     @FXML
@@ -1545,7 +1661,7 @@ public class MainSceneController extends SceneController implements Initializabl
         productCodePDetails.setText("");
         productNamePDetails.setText("");
         productVendorPDetails.setText("");
-        productLinePDetails.setValue(null);
+        productLinePDetails.setText("");
         inStockPDetails.setText("");
         buyPricePDetails.setText("");
         sellPricePDetails.setText("");
@@ -1555,16 +1671,28 @@ public class MainSceneController extends SceneController implements Initializabl
         productDetailsPane.setVisible(true);
 
         productDetailsButton.setOnAction(event -> {
-            String query = String.format("insert into products(productCode, productName, productLine, productVendor, productDescription, quantityInStock, buyPrice, sellPrice) " +
+            String query = String.format("SELECT productLine FROM productlines WHERE productLine = '%s'", productLinePDetails.getText());
+            ResultSet rs = sqlConnection.getDataQuery(query);
+            try {
+                if (!rs.next()) {
+                    query = String.format("insert into productlines(productLine) values ('%s')", productLinePDetails.getText());
+                    sqlConnection.updateQuery(query);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+
+            query = String.format("insert into products(productCode, productName, productLine, productVendor, productDescription, quantityInStock, buyPrice, sellPrice) " +
                             "VALUES ('%s', '%s', '%s', '%s', '%s', %d, %f, %f);", productCodePDetails.getText(), productNamePDetails.getText(),
-                            productLinePDetails.getValue(), productVendorPDetails.getText(), productDescriptionPDetails.getText(),
+                            productLinePDetails.getText(), productVendorPDetails.getText(), productDescriptionPDetails.getText(),
                             Integer.parseInt(inStockPDetails.getText()), Double.parseDouble(buyPricePDetails.getText()), Double.parseDouble(sellPricePDetails.getText()));
             sqlConnection.updateQuery(query);
 
             ObservableList<Object> row = FXCollections.observableArrayList();
             row.add(productCodePDetails.getText());
             row.add(productNamePDetails.getText());
-            row.add(productLinePDetails.getValue());
+            row.add(productLinePDetails.getText());
             productsTable.getItems().add(0, row);
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Product added successfully!", ButtonType.OK);
@@ -1590,7 +1718,7 @@ public class MainSceneController extends SceneController implements Initializabl
             if (resultSet.next()) {
                 productCodePDetails.setText(resultSet.getString("productCode"));
                 productNamePDetails.setText(resultSet.getString("productName"));
-                productLinePDetails.setValue(resultSet.getString("productLine"));
+                productLinePDetails.setText(resultSet.getString("productLine"));
                 productVendorPDetails.setText(resultSet.getString("productVendor"));
                 productDescriptionPDetails.setText(resultSet.getString("productDescription"));
                 inStockPDetails.setText(resultSet.getString("quantityInStock"));
@@ -1602,15 +1730,26 @@ public class MainSceneController extends SceneController implements Initializabl
         }
 
         productDetailsButton.setOnAction(e -> {
-            String query = String.format("UPDATE products SET productCode = '%s', productName = '%s', productLine = '%s', productVendor = '%s', productDescription = '%s', quantityInStock = %d, buyPrice = %f, sellPrice = %f WHERE productCode = '%s'",
-                    productCodePDetails.getText(), productNamePDetails.getText(), productLinePDetails.getValue(), productVendorPDetails.getText(),
+            String query = String.format("SELECT productLine FROM productlines WHERE productLine = '%s'", productLinePDetails.getText());
+            ResultSet rs = sqlConnection.getDataQuery(query);
+            try {
+                if (!rs.next()) {
+                    query = String.format("insert into productlines(productLine) values ('%s')", productLinePDetails.getText());
+                    sqlConnection.updateQuery(query);
+                }
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+
+            query = String.format("UPDATE products SET productCode = '%s', productName = '%s', productLine = '%s', productVendor = '%s', productDescription = '%s', quantityInStock = %d, buyPrice = %f, sellPrice = %f WHERE productCode = '%s'",
+                    productCodePDetails.getText(), productNamePDetails.getText(), productLinePDetails.getText(), productVendorPDetails.getText(),
                     productDescriptionPDetails.getText(), Integer.parseInt(inStockPDetails.getText()),
                     Double.parseDouble(buyPricePDetails.getText()), Double.parseDouble(sellPricePDetails.getText()), selected.get(0));
             sqlConnection.updateQuery(query);
 
             selected.set(0, productCodePDetails.getText());
             selected.set(1, productNamePDetails.getText());
-            selected.set(2, productLinePDetails.getValue());
+            selected.set(2, productLinePDetails.getText());
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Product details saved successfully!", ButtonType.OK);
             alert.setTitle(null);
@@ -1645,11 +1784,12 @@ public class MainSceneController extends SceneController implements Initializabl
             para.put("orderYear", orderDate.getYear() - 1900);
             para.put("orderMonth", orderDate.getMonthValue() - 1);
             para.put("orderDay", orderDate.getDayOfMonth());
+            para.put("paymentMethod", paymentMethodInput.getValue());
             String query = String.format("SELECT value, type FROM orders WHERE orderNumber = %d", orderNumber);
             ResultSet rs = sqlConnection.getDataQuery(query);
             if (rs.next()) {
                 para.put("totalAmount", rs.getDouble(1));
-                para.put("type", rs.getString(2));
+                para.put("type", rs.getString(2).substring(0, 1).toUpperCase() + rs.getString(2).substring(1));
             }
 
             ArrayList<OrderItem> plist = new ArrayList<>();
