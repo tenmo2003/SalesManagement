@@ -35,10 +35,12 @@ import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.util.Callback;
+import javafx.util.Pair;
 import salesmanagement.salesmanagement.Form;
 import salesmanagement.salesmanagement.ImageController;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesComponent.OrderItem;
+import salesmanagement.salesmanagement.Utils;
 
 import javax.imageio.ImageIO;
 import java.io.ByteArrayOutputStream;
@@ -168,7 +170,6 @@ public class MainSceneController extends SceneController implements Initializabl
         series3.getData().add(new XYChart.Data("italy", 17557.31));
         series3.getData().add(new XYChart.Data("usa", 92633.68));
         bc.getData().addAll(series1, series2, series3);
-
     }
     //endregion
 
@@ -191,7 +192,6 @@ public class MainSceneController extends SceneController implements Initializabl
     AnchorPane employeeOperationPane;
     ArrayList<Employee> employees;
     Employee employeeSelected;
-
 
 
     @FXML
@@ -274,7 +274,6 @@ public class MainSceneController extends SceneController implements Initializabl
     }
 
 
-
     @FXML
     public void editEmployeeInfo() {
         // UNLOCK ALL
@@ -316,7 +315,6 @@ public class MainSceneController extends SceneController implements Initializabl
      */
     @FXML
     void goBackToEmployeeTableBox() {
-        System.out.println(123);
         employeeInfoBox.toBack();
         employeeInfoBox.setVisible(false);
 
@@ -482,32 +480,66 @@ public class MainSceneController extends SceneController implements Initializabl
         newsCreatingBox.setDisable(true);
     }
 
-    private void uploadNotificationText() {
-        System.out.println(123);
+    @FXML
+    public void openNews(MouseEvent event) {
+        Node node = (Node) event.getSource();
+        HBox newsPiece = (HBox) node.getParent();
+        int newsID = Utils.findPairWithKey(newsIDs, newsPiecesBox.getChildren().indexOf(newsPiece));
+        displayNewsTab(newsID);
+    }
+
+    ArrayList<Pair<Integer, Integer>> newsIDs = new ArrayList<>();
+
+    private void displayNewsTab(int newsID) {
+        //region Left pane to display main content.
         runTask(() -> {
-            String query = "SELECT * FROM notifications ORDER BY notifications.notificationID DESC LIMIT 6;";
+            String query;
+            if (newsID == -1) {
+                query = "SELECT content FROM notifications ORDER BY notifications.notificationID DESC LIMIT 1;";
+            } else {
+                query = "SELECT content FROM notifications WHERE notificationID = " + newsID;
+            }
             ResultSet resultSet = sqlConnection.getDataQuery(query);
             try {
-                if (resultSet.next()) {
-                    mainContent = resultSet.getString("content");
-                }
-                Platform.runLater(() -> {
-                    newsDisplayedView.getEngine().loadContent(mainContent);
-                });
-                int newsPieceCount = 0;
-                while (resultSet.next()) {
-                    HBox newsPiece = ((HBox) newsPiecesBox.getChildren().get(newsPieceCount));
-                    ((Text) newsPiece.getChildren().get(1)).setText(resultSet.getString("title"));
-                    InputStream is = resultSet.getBinaryStream("newsImage");
-                    Image image = new Image(is);
-                    ((ImageView) newsPiece.getChildren().get(0)).setImage(image);
-                    newsPieceCount++;
+                {
+                    if (resultSet.next()) {
+                        mainContent = resultSet.getString("content");
+                    }
+                    Platform.runLater(() -> {
+                        newsDisplayedView.getEngine().loadContent(mainContent);
+                    });
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }, null, (Pane) thirdSplitPane.getItems().get(0));
+        //endregion
 
+        //region Right pane to display news pieces box.
+        runTask(() -> {
+            String query = "SELECT notificationID, title, newsImage FROM notifications ORDER BY notifications.notificationID DESC LIMIT 6;";
+            ResultSet resultSet = sqlConnection.getDataQuery(query);
+            try {
+                if (newsID == -1) resultSet.next();
+                int newsPieceCount = 0;
+                while (resultSet.next()) {
+                    if (resultSet.getInt("notificationID") == newsID) continue;
+                    HBox newsPiece = ((HBox) newsPiecesBox.getChildren().get(newsPieceCount));
+                    ((Text) newsPiece.getChildren().get(1)).setText(resultSet.getString("title"));
+                    InputStream is = resultSet.getBinaryStream("newsImage");
+                    Image image = new Image(is);
+                    ((ImageView) newsPiece.getChildren().get(0)).setImage(image);
+                    newsIDs.add(new Pair<>(newsPiecesBox.getChildren().indexOf(newsPiece), resultSet.getInt("notificationID")));
+                    newsPieceCount++;
+                }
+                for (int i = 0; i < newsIDs.size(); i++) {
+                    System.out.println(newsIDs.get(i).getValue());
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }, null, (Pane) thirdSplitPane.getItems().get(1));
+        //endregion
     }
 
     @FXML
@@ -647,7 +679,7 @@ public class MainSceneController extends SceneController implements Initializabl
                         stage.setX(0);
                         stage.setY(0);
                         stage.show();
-                        uploadNotificationText();
+                        displayNewsTab(-1);
                     });
 
                 }, null, null, null);
@@ -1429,8 +1461,8 @@ public class MainSceneController extends SceneController implements Initializabl
         productDetailsButton.setOnAction(event -> {
             String query = String.format("insert into products(productCode, productName, productLine, productVendor, productDescription, quantityInStock, buyPrice, sellPrice) " +
                             "VALUES ('%s', '%s', '%s', '%s', '%s', %d, %f, %f);", productCodePDetails.getText(), productNamePDetails.getText(),
-                            productLinePDetails.getValue(), productVendorPDetails.getText(), productDescriptionPDetails.getText(),
-                            Integer.parseInt(inStockPDetails.getText()), Double.parseDouble(buyPricePDetails.getText()), Double.parseDouble(sellPricePDetails.getText()));
+                    productLinePDetails.getValue(), productVendorPDetails.getText(), productDescriptionPDetails.getText(),
+                    Integer.parseInt(inStockPDetails.getText()), Double.parseDouble(buyPricePDetails.getText()), Double.parseDouble(sellPricePDetails.getText()));
             sqlConnection.updateQuery(query);
 
             ObservableList<Object> row = FXCollections.observableArrayList();

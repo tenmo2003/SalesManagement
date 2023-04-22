@@ -1,22 +1,42 @@
 package salesmanagement.salesmanagement;
 
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
-import com.google.i18n.phonenumbers.Phonenumber;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.application.Application;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import org.controlsfx.control.textfield.CustomTextField;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
-public class Test {
+public class Test extends Application {
+
+    private Parent createContent() {
+        Pane root = new Pane();
+        CustomTextField customTextField = new CustomTextField();
+        FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
+        customTextField.setLeft(icon);
+        root.getChildren().add(customTextField);
+        return root;
+    }
+
+    @Override
+    public void start(Stage primaryStage) {
+        Scene scene = new Scene(createContent());
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
     public static void main(String[] args) {
-        List<String> phoneCodes = new ArrayList<>();
-        PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
-
-        for (String regionCode : phoneUtil.getSupportedRegions()) {
-            Phonenumber.PhoneNumber exampleNumber = phoneUtil.getExampleNumber(regionCode);
-            Collections.sort(phoneCodes);
-            System.out.println(phoneUtil.getRegionCodeForCountryCode(84));
+        try (PrintWriter writer = new PrintWriter(new FileWriter("D:\\JAVA\\SalesManagement\\src\\main\\resources\\salesmanagement\\salesmanagement\\loginInfo.txt", false))) {
+            writer.println();
+            System.out.println("Dữ liệu đã được ghi vào tệp loginInfo.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -2,6 +2,7 @@ package salesmanagement.salesmanagement;
 
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,5 +83,19 @@ public class Utils {
                 node.setDisable(false);
             }
         }
+    }
+    /**
+     Finds a Pair in a list of Pair<int, int> based on the specified key value, and returns its corresponding value.
+     @param list The list of Pair<int, int> to search.
+     @param key The value of the key to match.
+     @return The value of the first Pair found with a key matching the specified value, or -1 if no matching Pair is found.
+     */
+    public static int findPairWithKey(ArrayList<Pair<Integer, Integer>> list, int key) {
+        for (Pair<Integer, Integer> pair : list) {
+            if (pair.getKey() == key) {
+                return pair.getValue();
+            }
+        }
+        return -1;
     }
 }

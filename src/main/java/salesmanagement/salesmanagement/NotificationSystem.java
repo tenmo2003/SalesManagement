@@ -23,6 +23,23 @@ public class NotificationSystem {
                 title = "Network notification";
                 content = "Please check your network connection again!";
                 break;
+            case INVALID_LOGIN_INFO:
+                title = "Login notification";
+                content = "Invalid username or email!";
+                break;
+            case INVALID_SECURITY_CODE:
+                title = "Login notification";
+                content = "Invalid security code!";
+                break;
+            case SUCCEED_VERIFY_MAIL:
+                title = "Login notification";
+                content = "Verify Mail Successfully!";
+                break;
+            case SUCCEED_RESET_PASSWORD:
+                title = "Login notification";
+                content = "Reset Password Successfully!";
+                break;
+
         }
         Notifications notificationBuilder = Notifications.create()
                 .title(title)
