@@ -42,19 +42,30 @@ public class SQLConnection {
      * @since 1.0
      */
     public void connectServer() {
-        if (reconnecting) {
-            reconnecting= false;
-            reconnectingNotification = false;
-            while (connection == null) {
-                try {
-                    connection = DriverManager.getConnection(url, user, password);
-                } catch (SQLException e) {
-                    reconnectingNotification = true;
-                    reconnecting =true;
-                }
-
+        while (connection == null) {
+            try {
+                connection = DriverManager.getConnection(url, user, password);
+            } catch (SQLException e) {
+                reconnectingNotification = true;
+                reconnecting = true;
             }
+
         }
+
+
+//        if (reconnecting) {
+//            reconnecting = false;
+//            reconnectingNotification = false;
+//            while (connection == null) {
+//                try {
+//                    connection = DriverManager.getConnection(url, user, password);
+//                } catch (SQLException e) {
+//                    reconnectingNotification = true;
+//                    reconnecting = true;
+//                }
+//
+//            }
+//        }
     }
 
     /**
@@ -92,7 +103,7 @@ public class SQLConnection {
     public void addClosingWork() {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             try {
-                connection.close();
+                if (connection != null) connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

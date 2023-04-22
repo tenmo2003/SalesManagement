@@ -124,7 +124,7 @@ private LocalDate joiningDate;
 
         removeButton.setOnMouseClicked(event -> removeEmployee());
 
-        editButton.setOnMouseClicked(event -> mainSceneController.editEmployees(this));
+        //editButton.setOnMouseClicked(event -> mainSceneController.editEmployees(this));
     }
 
     public void editEmployeeInfo() {
