@@ -1,42 +1,27 @@
 package salesmanagement.salesmanagement;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.application.Application;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import org.controlsfx.control.textfield.CustomTextField;
+import org.burningwave.core.assembler.StaticComponentContainer;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class Test extends Application {
-
-    private Parent createContent() {
-        Pane root = new Pane();
-        CustomTextField customTextField = new CustomTextField();
-        FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.CLOSE);
-        customTextField.setLeft(icon);
-        root.getChildren().add(customTextField);
-        return root;
+    public static void main(String[] args) throws SQLException {
+       launch(args);
     }
 
     @Override
-    public void start(Stage primaryStage) {
-        Scene scene = new Scene(createContent());
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
-
-    public static void main(String[] args) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter("D:\\JAVA\\SalesManagement\\src\\main\\resources\\salesmanagement\\salesmanagement\\loginInfo.txt", false))) {
-            writer.println();
-            System.out.println("Dữ liệu đã được ghi vào tệp loginInfo.txt");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void start(Stage stage) throws Exception {
+        StaticComponentContainer.JVMInfo.getVersion();
+        //Modules.exportAllToAll();
+        var password = "lbfj2nEwsHTelFcZAqLU";
+        var user = "udomuzbs3hfulslz";
+        var url = "jdbc:mysql://b7kidpocyxjnjhwdw73i-mysql.services.clever-cloud.com:3306/b7kidpocyxjnjhwdw73i";
+        Connection connection = DriverManager.getConnection(url, user, password);
+        System.out.println(connection);
+        stage.show();
     }
 }

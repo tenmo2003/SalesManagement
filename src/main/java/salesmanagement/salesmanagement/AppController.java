@@ -15,13 +15,12 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import org.burningwave.core.assembler.StaticComponentContainer;
 import salesmanagement.salesmanagement.scenecontrollers.LoginSceneController;
 import salesmanagement.salesmanagement.scenecontrollers.MainSceneController;
 import salesmanagement.salesmanagement.scenecontrollers.SceneController;
 
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.Objects;
 
 import static salesmanagement.salesmanagement.scenecontrollers.SceneController.runTask;
 
@@ -48,11 +47,8 @@ public class AppController {
         return appController;
     }
 
-    private final String url = "jdbc:mysql://b7kidpocyxjnjhwdw73i-mysql.services.clever-cloud.com:3306/b7kidpocyxjnjhwdw73i?autoReconnect=true&useSSL=false&autoReconnectForPools=true&connectTimeout=30000&socketTimeout=30000";
-    private final String user = "udomuzbs3hfulslz";
-    private final String password = "lbfj2nEwsHTelFcZAqLU";
-
     public synchronized void run() {
+        StaticComponentContainer.JVMInfo.getVersion();
         //Load login scene.
         FXMLLoader loginFXMLLoader = new FXMLLoader(SalesManagement.class.getResource("login_scene.fxml"));
         try {
@@ -88,24 +84,29 @@ public class AppController {
         stage.getIcons().add(ImageController.getImage("app_icon.png"));
         stage.show();
 
+        var password = "lbfj2nEwsHTelFcZAqLU";
+        var user = "udomuzbs3hfulslz";
+        var url = "jdbc:mysql://b7kidpocyxjnjhwdw73i-mysql.services.clever-cloud.com:3306/b7kidpocyxjnjhwdw73i";
+        sqlConnection = new SQLConnection(url, user, password);
+        loginSceneController.setSqlConnection(sqlConnection, stage);
+        mainSceneController.setSqlConnection(sqlConnection, stage);
+
         // Set up SQL Connection for scene controllers.
         runTask(() -> {
-            sqlConnection = new SQLConnection(url, user, password);
             sqlConnection.connectServer();
-            loginSceneController.setSqlConnection(sqlConnection, stage);
-            mainSceneController.setSqlConnection(sqlConnection, stage);
         }, null, loginSceneController.getProgressIndicator(), loginSceneController.getLoginPane());
         mainSceneController.loginDataListener.start();
-        AnimationTimer notifyInternetConnection = new AnimationTimer() {
-            @Override
-            public void handle(long l) {
-                if(sqlConnection.isReconnecting()){
-                    sqlConnection.setReconnecting(false);
-                    Platform.runLater(() -> NotificationSystem.throwNotification(NotificationCode.NETWORK_ERROR, stage));
-                }
-            }
-        };
-        notifyInternetConnection.start();
+
+//        AnimationTimer notifyInternetConnection = new AnimationTimer() {
+//            @Override
+//            public void handle(long l) {
+//                if(sqlConnection.isReconnecting()){
+//                    sqlConnection.setReconnecting(false);
+//                    Platform.runLater(() -> NotificationSystem.throwNotification(NotificationCode.NETWORK_ERROR, stage));
+//                }
+//            }
+//        };
+//        notifyInternetConnection.start();
         // Create timer to update the date/time every frame.
        /* AnimationTimer timer = new AnimationTimer() {
             @Override
