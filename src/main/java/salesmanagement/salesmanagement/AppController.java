@@ -1,24 +1,16 @@
 package salesmanagement.salesmanagement;
 
-import javafx.animation.AnimationTimer;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.util.Duration;
 import org.burningwave.core.assembler.StaticComponentContainer;
 import salesmanagement.salesmanagement.scenecontrollers.LoginSceneController;
 import salesmanagement.salesmanagement.scenecontrollers.MainSceneController;
-import salesmanagement.salesmanagement.scenecontrollers.SceneController;
 
 import java.io.IOException;
 

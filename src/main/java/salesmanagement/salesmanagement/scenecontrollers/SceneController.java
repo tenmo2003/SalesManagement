@@ -41,8 +41,6 @@ public abstract class SceneController {
 
     }
 
-    ;
-
     protected Scene scene;
 
     public void setScene(Scene scene) {
@@ -77,7 +75,7 @@ public abstract class SceneController {
      * UI elements. It is well-designed and easy to use, with the parameters clearly
      * indicating what functionality will be provided by the method. The code is concise
      * and uses JavaFX 's Task class to handle background processing and UI updates.
-     * Overall, this function promotes good coding practices and can help improve
+     * Overall, this function can help improve
      * the user experience in JavaFX applications.
      *
      * @author ThanhAn

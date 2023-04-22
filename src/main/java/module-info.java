@@ -11,6 +11,7 @@ module salesmanagement.salesmanagement {
     requires de.jensd.fx.glyphs.fontawesome;
     requires java.sql;
     requires org.burningwave.core;
+    requires org.apache.commons.net;
     opens salesmanagement.salesmanagement to javafx.fxml;
     exports salesmanagement.salesmanagement;
     exports salesmanagement.salesmanagement.SalesComponent;

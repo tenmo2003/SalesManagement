@@ -399,27 +399,36 @@
                                              <children>
                                                 <VBox fx:id="newsPiecesBox" fillWidth="false" prefHeight="1022.0" prefWidth="247.0" spacing="20.0">
                                                    <children>
-                                                      <HBox prefHeight="78.0" prefWidth="312.0" spacing="10.0">
+                                                      <HBox prefHeight="70.0" prefWidth="312.0" spacing="10.0">
                                                          <children>
-                                                            <ImageView fitHeight="77.0" fitWidth="86.0" onMouseClicked="#openNews" pickOnBounds="true" HBox.hgrow="ALWAYS">
-                                                               <image>
-                                                                  <Image url="@img/news_icon.png" />
-                                                               </image>
-                                                               <cursor>
-                                                                  <Cursor fx:constant="HAND" />
-                                                               </cursor>
-                                                            </ImageView>
-                                                            <Text onMouseClicked="#openNews" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-style" text="Thông báo lương thưởng nhân viên quý 1 năm 2023" wrappingWidth="178.52772521972656" HBox.hgrow="ALWAYS">
-                                                               <font>
-                                                                  <Font size="18.0" />
-                                                               </font>
+                                                            <StackPane prefHeight="70.0" prefWidth="74.0" HBox.hgrow="ALWAYS">
+                                                               <children>
+                                                                  <ImageView fitHeight="70.0" fitWidth="100.0" onMouseClicked="#openNews" pickOnBounds="true" StackPane.alignment="CENTER">
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                     <image>
+                                                                        <Image url="@img/transparent.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                                  <StackPane prefHeight="150.0" prefWidth="200.0" />
+                                                               </children>
+                                                            </StackPane>
+                                                            <StackPane HBox.hgrow="ALWAYS">
                                                                <HBox.margin>
                                                                   <Insets right="10.0" />
                                                                </HBox.margin>
-                                                               <cursor>
-                                                                  <Cursor fx:constant="HAND" />
-                                                               </cursor>
-                                                            </Text>
+                                                               <children>
+                                                                  <Text onMouseClicked="#openNews" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-style" wrappingWidth="178.52772521972656" StackPane.alignment="TOP_LEFT">
+                                                                     <font>
+                                                                        <Font size="18.0" />
+                                                                     </font>
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                  </Text>
+                                                               </children>
+                                                            </StackPane>
                                                          </children>
                                                          <padding>
                                                             <Insets left="10.0" />
@@ -428,27 +437,36 @@
                                                             <Cursor fx:constant="DEFAULT" />
                                                          </cursor>
                                                       </HBox>
-                                                      <HBox prefHeight="78.0" prefWidth="312.0" spacing="10.0">
+                                                      <HBox prefHeight="70.0" prefWidth="312.0" spacing="10.0">
                                                          <children>
-                                                            <ImageView fitHeight="77.0" fitWidth="86.0" onMouseClicked="#openNews" pickOnBounds="true" HBox.hgrow="ALWAYS">
-                                                               <image>
-                                                                  <Image url="@img/news_icon.png" />
-                                                               </image>
-                                                               <cursor>
-                                                                  <Cursor fx:constant="HAND" />
-                                                               </cursor>
-                                                            </ImageView>
-                                                            <Text onMouseClicked="#openNews" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-style" text="Thông báo lương thưởng nhân viên quý 1 năm 2023" wrappingWidth="178.52772521972656" HBox.hgrow="ALWAYS">
-                                                               <font>
-                                                                  <Font size="18.0" />
-                                                               </font>
+                                                            <StackPane prefHeight="70.0" prefWidth="74.0" HBox.hgrow="ALWAYS">
+                                                               <children>
+                                                                  <ImageView fitHeight="70.0" fitWidth="100.0" onMouseClicked="#openNews" pickOnBounds="true" StackPane.alignment="CENTER">
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                     <image>
+                                                                        <Image url="@img/transparent.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                                  <StackPane prefHeight="150.0" prefWidth="200.0" />
+                                                               </children>
+                                                            </StackPane>
+                                                            <StackPane HBox.hgrow="ALWAYS">
                                                                <HBox.margin>
                                                                   <Insets right="10.0" />
                                                                </HBox.margin>
-                                                               <cursor>
-                                                                  <Cursor fx:constant="HAND" />
-                                                               </cursor>
-                                                            </Text>
+                                                               <children>
+                                                                  <Text onMouseClicked="#openNews" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-style" wrappingWidth="178.52772521972656" StackPane.alignment="TOP_LEFT">
+                                                                     <font>
+                                                                        <Font size="18.0" />
+                                                                     </font>
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                  </Text>
+                                                               </children>
+                                                            </StackPane>
                                                          </children>
                                                          <padding>
                                                             <Insets left="10.0" />
@@ -457,27 +475,36 @@
                                                             <Cursor fx:constant="DEFAULT" />
                                                          </cursor>
                                                       </HBox>
-                                                      <HBox prefHeight="78.0" prefWidth="312.0" spacing="10.0">
+                                                      <HBox prefHeight="70.0" prefWidth="312.0" spacing="10.0">
                                                          <children>
-                                                            <ImageView fitHeight="77.0" fitWidth="86.0" onMouseClicked="#openNews" pickOnBounds="true" HBox.hgrow="ALWAYS">
-                                                               <image>
-                                                                  <Image url="@img/news_icon.png" />
-                                                               </image>
-                                                               <cursor>
-                                                                  <Cursor fx:constant="HAND" />
-                                                               </cursor>
-                                                            </ImageView>
-                                                            <Text onMouseClicked="#openNews" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-style" text="Thông báo lương thưởng nhân viên quý 1 năm 2023" wrappingWidth="178.52772521972656" HBox.hgrow="ALWAYS">
-                                                               <font>
-                                                                  <Font size="18.0" />
-                                                               </font>
+                                                            <StackPane prefHeight="70.0" prefWidth="74.0" HBox.hgrow="ALWAYS">
+                                                               <children>
+                                                                  <ImageView fitHeight="70.0" fitWidth="100.0" onMouseClicked="#openNews" pickOnBounds="true" StackPane.alignment="CENTER">
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                     <image>
+                                                                        <Image url="@img/transparent.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                                  <StackPane prefHeight="150.0" prefWidth="200.0" />
+                                                               </children>
+                                                            </StackPane>
+                                                            <StackPane HBox.hgrow="ALWAYS">
                                                                <HBox.margin>
                                                                   <Insets right="10.0" />
                                                                </HBox.margin>
-                                                               <cursor>
-                                                                  <Cursor fx:constant="HAND" />
-                                                               </cursor>
-                                                            </Text>
+                                                               <children>
+                                                                  <Text onMouseClicked="#openNews" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-style" wrappingWidth="178.52772521972656" StackPane.alignment="TOP_LEFT">
+                                                                     <font>
+                                                                        <Font size="18.0" />
+                                                                     </font>
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                  </Text>
+                                                               </children>
+                                                            </StackPane>
                                                          </children>
                                                          <padding>
                                                             <Insets left="10.0" />
@@ -486,27 +513,36 @@
                                                             <Cursor fx:constant="DEFAULT" />
                                                          </cursor>
                                                       </HBox>
-                                                      <HBox prefHeight="78.0" prefWidth="312.0" spacing="10.0">
+                                                      <HBox prefHeight="70.0" prefWidth="312.0" spacing="10.0">
                                                          <children>
-                                                            <ImageView fitHeight="77.0" fitWidth="86.0" onMouseClicked="#openNews" pickOnBounds="true" HBox.hgrow="ALWAYS">
-                                                               <image>
-                                                                  <Image url="@img/news_icon.png" />
-                                                               </image>
-                                                               <cursor>
-                                                                  <Cursor fx:constant="HAND" />
-                                                               </cursor>
-                                                            </ImageView>
-                                                            <Text onMouseClicked="#openNews" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-style" text="Thông báo lương thưởng nhân viên quý 1 năm 2023" wrappingWidth="178.52772521972656" HBox.hgrow="ALWAYS">
-                                                               <font>
-                                                                  <Font size="18.0" />
-                                                               </font>
+                                                            <StackPane prefHeight="70.0" prefWidth="74.0" HBox.hgrow="ALWAYS">
+                                                               <children>
+                                                                  <ImageView fitHeight="70.0" fitWidth="100.0" onMouseClicked="#openNews" pickOnBounds="true" StackPane.alignment="CENTER">
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                     <image>
+                                                                        <Image url="@img/transparent.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                                  <StackPane prefHeight="150.0" prefWidth="200.0" />
+                                                               </children>
+                                                            </StackPane>
+                                                            <StackPane HBox.hgrow="ALWAYS">
                                                                <HBox.margin>
                                                                   <Insets right="10.0" />
                                                                </HBox.margin>
-                                                               <cursor>
-                                                                  <Cursor fx:constant="HAND" />
-                                                               </cursor>
-                                                            </Text>
+                                                               <children>
+                                                                  <Text onMouseClicked="#openNews" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-style" wrappingWidth="178.52772521972656" StackPane.alignment="TOP_LEFT">
+                                                                     <font>
+                                                                        <Font size="18.0" />
+                                                                     </font>
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                  </Text>
+                                                               </children>
+                                                            </StackPane>
                                                          </children>
                                                          <padding>
                                                             <Insets left="10.0" />
@@ -515,27 +551,36 @@
                                                             <Cursor fx:constant="DEFAULT" />
                                                          </cursor>
                                                       </HBox>
-                                                      <HBox prefHeight="78.0" prefWidth="312.0" spacing="10.0">
+                                                      <HBox prefHeight="70.0" prefWidth="312.0" spacing="10.0">
                                                          <children>
-                                                            <ImageView fitHeight="77.0" fitWidth="86.0" onMouseClicked="#openNews" pickOnBounds="true" HBox.hgrow="ALWAYS">
-                                                               <image>
-                                                                  <Image url="@img/news_icon.png" />
-                                                               </image>
-                                                               <cursor>
-                                                                  <Cursor fx:constant="HAND" />
-                                                               </cursor>
-                                                            </ImageView>
-                                                            <Text onMouseClicked="#openNews" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-style" text="Thông báo lương thưởng nhân viên quý 1 năm 2023" wrappingWidth="178.52772521972656" HBox.hgrow="ALWAYS">
-                                                               <font>
-                                                                  <Font size="18.0" />
-                                                               </font>
+                                                            <StackPane prefHeight="70.0" prefWidth="74.0" HBox.hgrow="ALWAYS">
+                                                               <children>
+                                                                  <ImageView fitHeight="70.0" fitWidth="100.0" onMouseClicked="#openNews" pickOnBounds="true" StackPane.alignment="CENTER">
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                     <image>
+                                                                        <Image url="@img/transparent.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                                  <StackPane prefHeight="150.0" prefWidth="200.0" />
+                                                               </children>
+                                                            </StackPane>
+                                                            <StackPane HBox.hgrow="ALWAYS">
                                                                <HBox.margin>
                                                                   <Insets right="10.0" />
                                                                </HBox.margin>
-                                                               <cursor>
-                                                                  <Cursor fx:constant="HAND" />
-                                                               </cursor>
-                                                            </Text>
+                                                               <children>
+                                                                  <Text onMouseClicked="#openNews" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-style" wrappingWidth="178.52772521972656" StackPane.alignment="TOP_LEFT">
+                                                                     <font>
+                                                                        <Font size="18.0" />
+                                                                     </font>
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                  </Text>
+                                                               </children>
+                                                            </StackPane>
                                                          </children>
                                                          <padding>
                                                             <Insets left="10.0" />
@@ -544,27 +589,36 @@
                                                             <Cursor fx:constant="DEFAULT" />
                                                          </cursor>
                                                       </HBox>
-                                                      <HBox prefHeight="78.0" prefWidth="312.0" spacing="10.0">
+                                                      <HBox prefHeight="70.0" prefWidth="312.0" spacing="10.0">
                                                          <children>
-                                                            <ImageView fitHeight="77.0" fitWidth="86.0" onMouseClicked="#openNews" pickOnBounds="true" HBox.hgrow="ALWAYS">
-                                                               <image>
-                                                                  <Image url="@img/news_icon.png" />
-                                                               </image>
-                                                               <cursor>
-                                                                  <Cursor fx:constant="HAND" />
-                                                               </cursor>
-                                                            </ImageView>
-                                                            <Text onMouseClicked="#openNews" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-style" text="Thông báo lương thưởng nhân viên quý 1 năm 2023" wrappingWidth="178.52772521972656" HBox.hgrow="ALWAYS">
-                                                               <font>
-                                                                  <Font size="18.0" />
-                                                               </font>
+                                                            <StackPane prefHeight="70.0" prefWidth="74.0" HBox.hgrow="ALWAYS">
+                                                               <children>
+                                                                  <ImageView fitHeight="70.0" fitWidth="100.0" onMouseClicked="#openNews" pickOnBounds="true" StackPane.alignment="CENTER">
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                     <image>
+                                                                        <Image url="@img/transparent.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                                  <StackPane prefHeight="150.0" prefWidth="200.0" />
+                                                               </children>
+                                                            </StackPane>
+                                                            <StackPane HBox.hgrow="ALWAYS">
                                                                <HBox.margin>
                                                                   <Insets right="10.0" />
                                                                </HBox.margin>
-                                                               <cursor>
-                                                                  <Cursor fx:constant="HAND" />
-                                                               </cursor>
-                                                            </Text>
+                                                               <children>
+                                                                  <Text onMouseClicked="#openNews" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-style" wrappingWidth="178.52772521972656" StackPane.alignment="TOP_LEFT">
+                                                                     <font>
+                                                                        <Font size="18.0" />
+                                                                     </font>
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                  </Text>
+                                                               </children>
+                                                            </StackPane>
                                                          </children>
                                                          <padding>
                                                             <Insets left="10.0" />
@@ -573,27 +627,74 @@
                                                             <Cursor fx:constant="DEFAULT" />
                                                          </cursor>
                                                       </HBox>
-                                                      <HBox prefHeight="78.0" prefWidth="312.0" spacing="10.0">
+                                                      <HBox prefHeight="70.0" prefWidth="312.0" spacing="10.0">
                                                          <children>
-                                                            <ImageView fitHeight="77.0" fitWidth="86.0" onMouseClicked="#openNews" pickOnBounds="true" HBox.hgrow="ALWAYS">
-                                                               <image>
-                                                                  <Image url="@img/news_icon.png" />
-                                                               </image>
-                                                               <cursor>
-                                                                  <Cursor fx:constant="HAND" />
-                                                               </cursor>
-                                                            </ImageView>
-                                                            <Text onMouseClicked="#openNews" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-style" text="Thông báo lương thưởng nhân viên quý 1 năm 2023" wrappingWidth="178.52772521972656" HBox.hgrow="ALWAYS">
-                                                               <font>
-                                                                  <Font size="18.0" />
-                                                               </font>
+                                                            <StackPane prefHeight="70.0" prefWidth="74.0" HBox.hgrow="ALWAYS">
+                                                               <children>
+                                                                  <ImageView fitHeight="70.0" fitWidth="100.0" onMouseClicked="#openNews" pickOnBounds="true" StackPane.alignment="CENTER">
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                     <image>
+                                                                        <Image url="@img/transparent.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                                  <StackPane prefHeight="150.0" prefWidth="200.0" />
+                                                               </children>
+                                                            </StackPane>
+                                                            <StackPane HBox.hgrow="ALWAYS">
                                                                <HBox.margin>
                                                                   <Insets right="10.0" />
                                                                </HBox.margin>
-                                                               <cursor>
-                                                                  <Cursor fx:constant="HAND" />
-                                                               </cursor>
-                                                            </Text>
+                                                               <children>
+                                                                  <Text onMouseClicked="#openNews" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-style" wrappingWidth="178.52772521972656" StackPane.alignment="TOP_LEFT">
+                                                                     <font>
+                                                                        <Font size="18.0" />
+                                                                     </font>
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                  </Text>
+                                                               </children>
+                                                            </StackPane>
+                                                         </children>
+                                                         <padding>
+                                                            <Insets left="10.0" />
+                                                         </padding>
+                                                         <cursor>
+                                                            <Cursor fx:constant="DEFAULT" />
+                                                         </cursor>
+                                                      </HBox>
+                                                      <HBox prefHeight="70.0" prefWidth="312.0" spacing="10.0">
+                                                         <children>
+                                                            <StackPane prefHeight="70.0" prefWidth="74.0" HBox.hgrow="ALWAYS">
+                                                               <children>
+                                                                  <ImageView fitHeight="70.0" fitWidth="100.0" onMouseClicked="#openNews" pickOnBounds="true" StackPane.alignment="CENTER">
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                     <image>
+                                                                        <Image url="@img/transparent.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                                  <StackPane prefHeight="150.0" prefWidth="200.0" />
+                                                               </children>
+                                                            </StackPane>
+                                                            <StackPane HBox.hgrow="ALWAYS">
+                                                               <HBox.margin>
+                                                                  <Insets right="10.0" />
+                                                               </HBox.margin>
+                                                               <children>
+                                                                  <Text onMouseClicked="#openNews" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-style" wrappingWidth="178.52772521972656" StackPane.alignment="TOP_LEFT">
+                                                                     <font>
+                                                                        <Font size="18.0" />
+                                                                     </font>
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                  </Text>
+                                                               </children>
+                                                            </StackPane>
                                                          </children>
                                                          <padding>
                                                             <Insets left="10.0" />
