@@ -15,7 +15,7 @@
 <?import org.controlsfx.control.textfield.CustomPasswordField?>
 <?import org.controlsfx.control.textfield.CustomTextField?>
 
-<StackPane id="loginRoot" fx:id="loginRoot" prefHeight="475.0" prefWidth="800.0" stylesheets="@login.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.scenecontrollers.LoginSceneController">
+<StackPane id="loginRoot" fx:id="loginRoot" prefHeight="475.0" prefWidth="800.0" stylesheets="@login_scene_style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.scenecontrollers.LoginSceneController">
    <children>
       <VBox prefHeight="434.0" prefWidth="777.0" StackPane.alignment="TOP_CENTER">
          <children>
@@ -97,16 +97,34 @@
                                           <Font size="21.0" />
                                        </font>
                                     </Label>
-                                    <CustomTextField id="inputTextField" fx:id="usernameForgot" prefHeight="35.0" prefWidth="300.0" promptText="Username" />
-                                    <CustomTextField id="inputTextField" fx:id="emailForgot" prefHeight="35.0" prefWidth="300.0" promptText="Email" />
-                                    <JFXButton id="submitButton" alignment="CENTER" onMouseClicked="#checkLoginInfo" prefHeight="35.0" prefWidth="300.0" text="Next" textAlignment="CENTER">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                       <cursor>
-                                          <Cursor fx:constant="HAND" />
-                                       </cursor>
-                                    </JFXButton>
+                                    <CustomTextField id="inputTextField" fx:id="usernameForgot" onKeyPressed="#checkLoginInfo" prefHeight="35.0" prefWidth="300.0" promptText="Username" />
+                                    <CustomTextField id="inputTextField" fx:id="emailForgot" onKeyPressed="#checkLoginInfo" prefHeight="35.0" prefWidth="300.0" promptText="Email" />
+                                    <StackPane prefHeight="38.0" prefWidth="299.0">
+                                       <children>
+                                          <JFXButton id="backButton" alignment="CENTER" onMouseClicked="#backToLoginPane" prefHeight="40.0" prefWidth="69.0" text="Back" textAlignment="CENTER" StackPane.alignment="CENTER_LEFT">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                             <StackPane.margin>
+                                                <Insets left="30.0" />
+                                             </StackPane.margin>
+                                          </JFXButton>
+                                          <JFXButton id="submitButton" alignment="CENTER" onMouseClicked="#checkLoginInfo" prefHeight="38.0" prefWidth="80.0" text="Next" textAlignment="CENTER" StackPane.alignment="CENTER_RIGHT">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                             <StackPane.margin>
+                                                <Insets right="30.0" />
+                                             </StackPane.margin>
+                                          </JFXButton>
+                                       </children>
+                                    </StackPane>
                                  </children>
                               </VBox>
                               <VBox id="loginPane" fx:id="resetPasswordPane" alignment="TOP_CENTER" fillWidth="false" layoutX="206.0" layoutY="50.0" prefHeight="325.0" prefWidth="387.0" spacing="15.0" visible="false">
@@ -122,14 +140,32 @@
                                        </font>
                                     </Label>
                                     <CustomPasswordField id="inputTextField" fx:id="passwordReset" prefHeight="35.0" prefWidth="300.0" promptText="New Password" />
-                                    <JFXButton id="submitButton" alignment="CENTER" onMouseClicked="#resetPassword" prefHeight="35.0" prefWidth="300.0" text="Reset" textAlignment="CENTER">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                       <cursor>
-                                          <Cursor fx:constant="HAND" />
-                                       </cursor>
-                                    </JFXButton>
+                                    <StackPane prefHeight="40.0" prefWidth="296.0">
+                                       <children>
+                                          <JFXButton id="backButton" alignment="CENTER" onMouseClicked="#backToLoginPane" prefHeight="40.0" prefWidth="69.0" text="Back" textAlignment="CENTER" StackPane.alignment="CENTER_LEFT">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                             <StackPane.margin>
+                                                <Insets left="30.0" />
+                                             </StackPane.margin>
+                                          </JFXButton>
+                                          <JFXButton id="submitButton" alignment="CENTER" onMouseClicked="#resetPassword" prefHeight="38.0" prefWidth="80.0" text="Reset" textAlignment="CENTER" StackPane.alignment="CENTER_RIGHT">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                             <StackPane.margin>
+                                                <Insets right="30.0" />
+                                             </StackPane.margin>
+                                          </JFXButton>
+                                       </children>
+                                    </StackPane>
                                  </children>
                               </VBox>
                               <VBox id="loginPane" fx:id="emailVerifyPane" alignment="TOP_CENTER" fillWidth="false" layoutX="216.0" layoutY="60.0" prefHeight="325.0" prefWidth="387.0" spacing="15.0" visible="false">
@@ -157,14 +193,32 @@
                                           <Insets bottom="15.0" top="10.0" />
                                        </VBox.margin>
                                     </HBox>
-                                    <JFXButton id="submitButton" alignment="CENTER" onMouseClicked="#verifyEmail" prefHeight="35.0" prefWidth="300.0" text="Next" textAlignment="CENTER">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                       <cursor>
-                                          <Cursor fx:constant="HAND" />
-                                       </cursor>
-                                    </JFXButton>
+                                    <StackPane prefHeight="40.0" prefWidth="298.0">
+                                       <children>
+                                          <JFXButton id="submitButton" alignment="CENTER" onMouseClicked="#verifyEmail" prefHeight="38.0" prefWidth="80.0" text="Next" textAlignment="CENTER" StackPane.alignment="CENTER_RIGHT">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                             <StackPane.margin>
+                                                <Insets right="30.0" />
+                                             </StackPane.margin>
+                                          </JFXButton>
+                                          <JFXButton id="backButton" alignment="CENTER" onMouseClicked="#backToLoginPane" prefHeight="40.0" prefWidth="69.0" text="Back" textAlignment="CENTER" StackPane.alignment="CENTER_LEFT">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                             <StackPane.margin>
+                                                <Insets left="30.0" />
+                                             </StackPane.margin>
+                                          </JFXButton>
+                                       </children>
+                                    </StackPane>
                                  </children>
                               </VBox>
                            </children>

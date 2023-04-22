@@ -6,7 +6,6 @@ import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
@@ -27,6 +26,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+/**
+ * The LoginSceneController class controls the actions and behaviors of the login scene in the Sales Management application.
+ * It implements the Initializable interface to initialize the FXML components and SceneController abstract class to have access to the common functionalities.
+ * The class contains methods to check the login information of an employee, handle the forgot password and reset password functionality, and verify the email for password reset.
+ * It also contains methods to save login information in a text file and set the progress indicator status of a task.
+ * The class uses various FXML components and external libraries like ControlsFX, JavaFX, and JavaMail.
+ */
 public class LoginSceneController extends SceneController implements Initializable {
     @FXML
     CustomTextField username;
@@ -38,6 +44,22 @@ public class LoginSceneController extends SceneController implements Initializab
     private StackPane loginRoot;
     @FXML
     private JFXCheckBox rememberMeCheckBox;
+    @FXML
+    VBox forgotPasswordPane;
+    @FXML
+    VBox resetPasswordPane;
+    @FXML
+    VBox emailVerifyPane;
+    @FXML
+    CustomTextField usernameForgot;
+    @FXML
+    CustomTextField emailForgot;
+    @FXML
+    CustomPasswordField passwordReset;
+    @FXML
+    private HBox securityCodeBox;
+    private int securityCode;
+    private int employeeNumber;
 
     public VBox getLoginPane() {
         return loginPane;
@@ -53,10 +75,10 @@ public class LoginSceneController extends SceneController implements Initializab
         Task<Boolean> checkAccountTask = new Task<>() {
             @Override
             protected Boolean call() throws SQLException {
-                String query = "select employeeNumber, username, password from employees where username = '" + username + "' and password = '" + password + "'";
+                String query = "SELECT employeeNumber, username, password FROM employees WHERE username = '" + username + "' AND password = '" + password + "'";
                 ResultSet resultSet = sqlConnection.getDataQuery(query);
                 if (resultSet.next()) {
-                    if (!rememberMeCheckBox.isSelected()) {
+                    if (rememberMeCheckBox.isSelected()) {
                         saveLoginInfo();
                     }
                     MainSceneController.loggerID = resultSet.getInt("employeeNumber");
@@ -88,29 +110,18 @@ public class LoginSceneController extends SceneController implements Initializab
     }
 
     @FXML
-    VBox forgotPasswordPane;
-    @FXML
-    VBox resetPasswordPane;
-    @FXML
-    VBox emailVerifyPane;
-    @FXML
-    CustomTextField usernameForgot;
-    @FXML
-    CustomTextField emailForgot;
-    @FXML
-    CustomPasswordField passwordReset;
-
-    @FXML
     public void forgotPassword() {
         loginPane.setVisible(false);
         forgotPasswordPane.setVisible(true);
     }
 
-    int securityCode;
-    int employeeNumber;
-
     @FXML
-    public void checkLoginInfo() {
+    public void checkLoginInfo(Event event) {
+        if (event instanceof KeyEvent) {
+            if (((KeyEvent) event).getCode() != KeyCode.ENTER) {
+                return;
+            }
+        }
         runTask(() -> {
             String query = "select employeeNumber, email from employees where username = '" + usernameForgot.getText() + "' and email = '" + emailForgot.getText() + "'";
             ResultSet resultSet = sqlConnection.getDataQuery(query);
@@ -127,17 +138,15 @@ public class LoginSceneController extends SceneController implements Initializab
                 e.printStackTrace();
             }
         }, null, progressIndicator, forgotPasswordPane);
-
     }
 
-//    @FXML
-//    void changeNextSecurityCodeTextField(KeyEvent event) {
-//        int index = securityCodeBox.getChildren().indexOf((Node)event.getSource());
-//        securityCodeBox.getChildren().get(index + 1).requestFocus();
-//    }
-
     @FXML
-    HBox securityCodeBox;
+    public void backToLoginPane() {
+        loginPane.setVisible(true);
+        forgotPasswordPane.setVisible(false);
+        resetPasswordPane.setVisible(false);
+        emailVerifyPane.setVisible(false);
+    }
 
     @FXML
     public void verifyEmail() {
@@ -146,7 +155,7 @@ public class LoginSceneController extends SceneController implements Initializab
             for (int i = 0; i < 6; i++) {
                 securityCodeInput.append(((CustomTextField) securityCodeBox.getChildren().get(i)).getText());
             }
-            if (Integer.toString(securityCode).equals(securityCodeInput.toString())) {
+            if (Integer.toString(securityCode).contentEquals(securityCodeInput)) {
                 emailVerifyPane.setVisible(false);
                 resetPasswordPane.setVisible(true);
                 Platform.runLater(() -> NotificationSystem.throwNotification(NotificationCode.SUCCEED_VERIFY_MAIL, stage));
@@ -161,7 +170,6 @@ public class LoginSceneController extends SceneController implements Initializab
         runTask(() -> {
             String query = "UPDATE employees SET password = " + "'" + passwordReset.getCharacters().toString() + "' WHERE employeeNumber = " + employeeNumber;
             sqlConnection.updateQuery(query);
-
         }, () -> {
             Platform.runLater(() -> NotificationSystem.throwNotification(NotificationCode.SUCCEED_RESET_PASSWORD, stage));
             loginPane.setVisible(true);
@@ -169,17 +177,13 @@ public class LoginSceneController extends SceneController implements Initializab
         }, progressIndicator, resetPasswordPane);
     }
 
-
     public void setProgressIndicatorStatus(Task<?> databaseConnectionTask) {
         super.setProgressIndicatorStatus(databaseConnectionTask, loginPane);
     }
 
-
     public void setProgressIndicatorStatus(boolean loading) {
         if (loading) {
             showProgressIndicator();
-        } else {
-
         }
     }
 
@@ -191,8 +195,6 @@ public class LoginSceneController extends SceneController implements Initializab
         super.hideProgressIndicator(loginPane);
     }
 
-    ImageView[] imageViews = new ImageView[5];
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Rectangle rect = new Rectangle(loginRoot.getPrefWidth(), loginRoot.getPrefHeight());
@@ -201,7 +203,7 @@ public class LoginSceneController extends SceneController implements Initializab
         loginRoot.setClip(rect);
 
         for (int i = 0; i < securityCodeBox.getChildren().size(); i++) {
-            CustomTextField textField = (CustomTextField)securityCodeBox.getChildren().get(i);
+            CustomTextField textField = (CustomTextField) securityCodeBox.getChildren().get(i);
             int finalI = i;
             textField.setOnMouseClicked(event -> {
                 textField.selectAll();
@@ -215,8 +217,5 @@ public class LoginSceneController extends SceneController implements Initializab
             });
         }
 
-    }
-    private boolean isNumeric(String str) {
-        return str.matches("-?\\d+(\\.\\d+)?");
     }
 }

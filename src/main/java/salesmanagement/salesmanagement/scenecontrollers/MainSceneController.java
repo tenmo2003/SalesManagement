@@ -4,11 +4,14 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.jfoenix.controls.*;
 import javafx.animation.AnimationTimer;
+import javafx.animation.FadeTransition;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,14 +39,14 @@ import javafx.scene.web.HTMLEditor;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
-import javafx.util.Callback;
+import javafx.util.Duration;
+import javafx.util.Pair;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
-import javafx.util.Pair;
 import salesmanagement.salesmanagement.Form;
 import salesmanagement.salesmanagement.ImageController;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
@@ -66,6 +69,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static salesmanagement.salesmanagement.Utils.getAllNodes;
+import static salesmanagement.salesmanagement.Utils.getFileNameAndExtension;
 
 public class MainSceneController extends SceneController implements Initializable {
     @FXML
@@ -201,7 +205,6 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     AnchorPane employeeOperationPane;
     ArrayList<Employee> employees;
-    Employee employeeSelected;
 
 
     @FXML
@@ -469,21 +472,16 @@ public class MainSceneController extends SceneController implements Initializabl
 
     @FXML
     public void postNews() throws SQLException {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        try {
-            ImageIO.write(SwingFXUtils.fromFXImage(newsImageInserted.getImage(), null), "png", outputStream);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        byte[] imageBytes = outputStream.toByteArray();
-        String postNewsQuery = "insert into notifications(employeeNumber, title, content, newsImage) values (?,?,?,?)";
+        String postNewsQuery = "insert into notifications(employeeNumber, title, content) values (?,?,?)";
         PreparedStatement statement = sqlConnection.getConnection().prepareStatement(postNewsQuery);
         statement.setInt(1, user.getEmployeeNumber());
         statement.setString(2, newsTitle.getText());
         statement.setString(3, htmlText);
-        statement.setBytes(4, imageBytes);
         statement.executeUpdate();
-
+        String getLatestIDQuery = "SELECT notificationID from notifications ORDER BY notificationID LIMIT 1";
+        ResultSet resultSet = sqlConnection.getDataQuery(getLatestIDQuery);
+        if (resultSet.next())
+            ImageController.uploadImage(newsImageInserted.getImage().getUrl(), "newsImage_" + resultSet.getInt("notificationID") + ".jpg");
         thirdSplitPane.setVisible(true);
         thirdSplitPane.setDisable(false);
         newsCreatingBox.setVisible(false);
@@ -492,13 +490,42 @@ public class MainSceneController extends SceneController implements Initializabl
 
     @FXML
     public void openNews(MouseEvent event) {
-        Node node = (Node) event.getSource();
-        HBox newsPiece = (HBox) node.getParent();
+        Node newsPiece = (Node) event.getSource();
+        while (!(newsPiece instanceof HBox)) {
+            newsPiece = newsPiece.getParent();
+        }
         int newsID = Utils.findPairWithKey(newsIDs, newsPiecesBox.getChildren().indexOf(newsPiece));
         displayNewsTab(newsID);
     }
 
     ArrayList<Pair<Integer, Integer>> newsIDs = new ArrayList<>();
+
+    private void loadNewsPiece(int newsPieceIndex) {
+        HBox newsPiece = ((HBox) newsPiecesBox.getChildren().get(newsPieceIndex));
+        ((ImageView) ((StackPane) newsPiece.getChildren().get(0)).getChildren().get(0)).setImage(null);
+        ((Text) ((StackPane) newsPiece.getChildren().get(1)).getChildren().get(0)).setText("");
+        imageLoadingAnimation[newsPieceIndex].set(true);
+        titleLoadingAnimation[newsPieceIndex].set(true);
+        final int newsID = newsIDs.get(newsPieceIndex).getValue();
+        runTask(() -> {
+                    Image image = ImageController.getImage("newsImage_" + newsID + ".jpg", true);
+                    ((ImageView) ((StackPane) newsPiece.getChildren().get(0)).getChildren().get(0)).setImage(image);
+                    Platform.runLater(() -> imageLoadingAnimation[newsPieceIndex].set(false));
+
+        }, null, null, null);
+        runTask(() -> {
+            String query = "SELECT title FROM notifications WHERE notificationID = " + newsID;
+            ResultSet resultSet = sqlConnection.getDataQuery(query);
+            try {
+                if (resultSet.next()) {
+                    ((Text) ((StackPane) newsPiece.getChildren().get(1)).getChildren().get(0)).setText(resultSet.getString("title"));
+                    titleLoadingAnimation[newsPieceIndex].set(false);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }, null, null, null);
+    }
 
     private void displayNewsTab(int newsID) {
         //region Left pane to display main content.
@@ -526,29 +553,50 @@ public class MainSceneController extends SceneController implements Initializabl
         //endregion
 
         //region Right pane to display news pieces box.
+        //Get news ID list task.
         runTask(() -> {
-            String query = "SELECT notificationID, title, newsImage FROM notifications ORDER BY notifications.notificationID DESC LIMIT 6;";
+            String query = "SELECT notificationID FROM notifications ORDER BY notifications.notificationID DESC LIMIT 9;";
             ResultSet resultSet = sqlConnection.getDataQuery(query);
+            newsIDs.clear();
             try {
                 if (newsID == -1) resultSet.next();
                 int newsPieceCount = 0;
                 while (resultSet.next()) {
                     if (resultSet.getInt("notificationID") == newsID) continue;
-                    HBox newsPiece = ((HBox) newsPiecesBox.getChildren().get(newsPieceCount));
-                    ((Text) newsPiece.getChildren().get(1)).setText(resultSet.getString("title"));
-                    InputStream is = resultSet.getBinaryStream("newsImage");
-                    Image image = new Image(is);
-                    ((ImageView) newsPiece.getChildren().get(0)).setImage(image);
-                    newsIDs.add(new Pair<>(newsPiecesBox.getChildren().indexOf(newsPiece), resultSet.getInt("notificationID")));
-                    newsPieceCount++;
-                }
-                for (int i = 0; i < newsIDs.size(); i++) {
-                    System.out.println(newsIDs.get(i).getValue());
+                    newsIDs.add(new Pair<>(newsPieceCount, resultSet.getInt("notificationID")));
+                    if (++newsPieceCount >= 8) {
+                        break;
+                    }
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }, null, (Pane) thirdSplitPane.getItems().get(1));
+        }, () -> {
+            for (int i = 0; i < 8; i++) {
+                loadNewsPiece(i);
+            }
+        }, null, null);
+
+//        runTask(() -> {
+//            String query = "SELECT notificationID, title, newsImage FROM notifications ORDER BY notifications.notificationID DESC LIMIT 6;";
+//            ResultSet resultSet = sqlConnection.getDataQuery(query);
+//            try {
+//                if (newsID == -1) resultSet.next();
+//                int newsPieceCount = 0;
+//                while (resultSet.next()) {
+//                    if (resultSet.getInt("notificationID") == newsID) continue;
+//                    HBox newsPiece = ((HBox) newsPiecesBox.getChildren().get(newsPieceCount));
+//                    ((Text) newsPiece.getChildren().get(1)).setText(resultSet.getString("title"));
+//                    InputStream is = resultSet.getBinaryStream("newsImage");
+//                    Image image = new Image(is);
+//                    ((ImageView) newsPiece.getChildren().get(0)).setImage(image);
+//                    newsIDs.add(new Pair<>(newsPiecesBox.getChildren().indexOf(newsPiece), resultSet.getInt("notificationID")));
+//                    newsPieceCount++;
+//                }
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//        }, null, (Pane) thirdSplitPane.getItems().get(1));
         //endregion
     }
 
@@ -564,7 +612,10 @@ public class MainSceneController extends SceneController implements Initializabl
             ((ImageView) event.getSource()).setImage(new Image(selectedFile.toURI().toString()));
         }
     }
+
     //endregion
+    private final BooleanProperty[] imageLoadingAnimation = new BooleanProperty[8];
+    private final BooleanProperty[] titleLoadingAnimation = new BooleanProperty[8];
 
     public void initialSetup() {
         // Load current UI.
@@ -616,6 +667,57 @@ public class MainSceneController extends SceneController implements Initializabl
         newsDisplayedView.setPageFill(Color.TRANSPARENT);
 
         //TODO: test area
+
+        for (int i = 0; i < 8; i++) {
+            imageLoadingAnimation[i] = new javafx.beans.property.SimpleBooleanProperty(true);
+            titleLoadingAnimation[i] = new javafx.beans.property.SimpleBooleanProperty(true);
+
+            HBox hBox = (HBox) newsPiecesBox.getChildren().get(i);
+
+            StackPane newsImagePane = (StackPane) ((StackPane) hBox.getChildren().get(0)).getChildren().get(1);
+            newsImagePane.setStyle("-fx-background-color: grey;-fx-background-radius: 30;");
+            FadeTransition imageFadeTransition = new FadeTransition(Duration.seconds(2), newsImagePane);
+            imageFadeTransition.setFromValue(0.2);
+            imageFadeTransition.setToValue(0.6);
+            imageFadeTransition.setCycleCount(Timeline.INDEFINITE);
+            imageFadeTransition.setAutoReverse(true);
+            imageFadeTransition.play();
+
+            StackPane newsTitlePane = (StackPane) hBox.getChildren().get(1);
+            newsTitlePane.setStyle("-fx-background-color: grey;-fx-background-radius: 30;");
+            FadeTransition titleFadeTransition = new FadeTransition(Duration.seconds(2), newsTitlePane);
+            titleFadeTransition.setFromValue(0.2);
+            titleFadeTransition.setToValue(0.6);
+            titleFadeTransition.setCycleCount(Timeline.INDEFINITE);
+            titleFadeTransition.setAutoReverse(true);
+            titleFadeTransition.play();
+
+            ChangeListener<Boolean> imageLoadingListener = (observable, oldValue, newValue) -> {
+                if (newValue) {
+                    newsImagePane.setStyle("-fx-background-color: grey;-fx-background-radius: 30;");
+                    imageFadeTransition.play();
+                    newsImagePane.setDisable(false);
+                } else {
+                    imageFadeTransition.pause();
+                    newsImagePane.setStyle("-fx-background-color: transparent");
+                    Platform.runLater(() -> newsImagePane.setDisable(true));
+                }
+            };
+            imageLoadingAnimation[i].addListener(imageLoadingListener);
+
+            ChangeListener<Boolean> titleLoadingListener = (observable, oldValue, newValue) -> {
+                if (newValue) {
+                    newsTitlePane.setStyle("-fx-background-color: grey;-fx-background-radius: 30;");
+                    titleFadeTransition.play();
+                } else {
+                    titleFadeTransition.pause();
+                    newsTitlePane.setStyle("-fx-background-color: transparent");
+                    newsTitlePane.setOpacity(1);
+                }
+            };
+            titleLoadingAnimation[i].addListener(titleLoadingListener);
+        }
+
 
         // Load UI for others.
         runTask(() -> {
@@ -772,42 +874,42 @@ public class MainSceneController extends SceneController implements Initializabl
 
         // Add a listener to the text property of the text field
         productCodeInput.textProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue.length() > 2 && newValue.length() > oldValue.length() && suggestionList.getItems().isEmpty()) {
+            if (newValue.length() > 2 && newValue.length() > oldValue.length() && suggestionList.getItems().isEmpty()) {
 
+            } else {
+                // Update the suggestion list based on the current input
+                if (newValue.equals("")) {
+                    suggestionList.setVisible(false);
+                    suggestionList.setMouseTransparent(true);
                 } else {
-                    // Update the suggestion list based on the current input
-                    if (newValue.equals("")) {
-                        suggestionList.setVisible(false);
-                        suggestionList.setMouseTransparent(true);
-                    } else {
-                        if (newValue.length() > 1) {
-                            List<String> suggestions = new ArrayList<>(); // Replace with your own function to retrieve suggestions
-                            String sql = "SELECT productCode, sellPrice FROM products WHERE upper(productCode) LIKE upper('" + newValue + "%');";
-                            ResultSet rs = sqlConnection.getDataQuery(sql);
-                            try {
-                                // Add each suggestion to the list
-                                while (rs.next()) {
-                                    suggestions.add(rs.getString("productCode"));
-                                }
-                            } catch (SQLException ex) {
-                                ex.printStackTrace();
+                    if (newValue.length() > 1) {
+                        List<String> suggestions = new ArrayList<>(); // Replace with your own function to retrieve suggestions
+                        String sql = "SELECT productCode, sellPrice FROM products WHERE upper(productCode) LIKE upper('" + newValue + "%');";
+                        ResultSet rs = sqlConnection.getDataQuery(sql);
+                        try {
+                            // Add each suggestion to the list
+                            while (rs.next()) {
+                                suggestions.add(rs.getString("productCode"));
                             }
-                            if (suggestions.isEmpty() || (!suggestions.isEmpty() && suggestions.get(0).equals(newValue))) {
-                                suggestionList.setMouseTransparent(true);
-                                suggestionList.setVisible(false);
-                                suggestionList.getItems().clear();
-                                if (!suggestions.isEmpty() && suggestions.get(0).equals(newValue)) {
-                                    setPrice();
-                                }
-                            } else {
-                                suggestionList.getItems().setAll(suggestions);
-                                suggestionList.getSelectionModel().selectFirst();
-                                suggestionList.setMouseTransparent(false);
-                                suggestionList.setVisible(true);
+                        } catch (SQLException ex) {
+                            ex.printStackTrace();
+                        }
+                        if (suggestions.isEmpty() || (!suggestions.isEmpty() && suggestions.get(0).equals(newValue))) {
+                            suggestionList.setMouseTransparent(true);
+                            suggestionList.setVisible(false);
+                            suggestionList.getItems().clear();
+                            if (!suggestions.isEmpty() && suggestions.get(0).equals(newValue)) {
+                                setPrice();
                             }
+                        } else {
+                            suggestionList.getItems().setAll(suggestions);
+                            suggestionList.getSelectionModel().selectFirst();
+                            suggestionList.setMouseTransparent(false);
+                            suggestionList.setVisible(true);
                         }
                     }
                 }
+            }
 
         });
 
@@ -1468,7 +1570,6 @@ public class MainSceneController extends SceneController implements Initializabl
         else if (currentTabButton.equals(settingsTabButton)) buttonIcon.setImage(ImageController.blueSettingsIcon);
 
         currentTabButton.setStyle("-fx-border-color: #60b1fd; -fx-background-color : #fafafa;-fx-border-width: 0 0 0 4; -fx-border-radius: 0;");
-
     }
 
     /**
@@ -1652,11 +1753,11 @@ public class MainSceneController extends SceneController implements Initializabl
             query = String.format("insert into products(productCode, productName, productLine, productVendor, productDescription, quantityInStock, buyPrice, sellPrice) " +
                             "VALUES ('%s', '%s', '%s', '%s', '%s', %d, %f, %f);", productCodePDetails.getText(), productNamePDetails.getText(),
 
-                            productLinePDetails.getText(), productVendorPDetails.getText(), productDescriptionPDetails.getText(),
-                            Integer.parseInt(inStockPDetails.getText()), Double.parseDouble(buyPricePDetails.getText()), Double.parseDouble(sellPricePDetails.getText()));
+                    productLinePDetails.getText(), productVendorPDetails.getText(), productDescriptionPDetails.getText(),
+                    Integer.parseInt(inStockPDetails.getText()), Double.parseDouble(buyPricePDetails.getText()), Double.parseDouble(sellPricePDetails.getText()));
             sqlConnection.updateQuery(query);
 
-            Product product = new Product( productCodePDetails.getText(), productNamePDetails.getText(),
+            Product product = new Product(productCodePDetails.getText(), productNamePDetails.getText(),
                     productLinePDetails.getText(), productVendorPDetails.getText(), productDescriptionPDetails.getText(),
                     Integer.parseInt(inStockPDetails.getText()), Double.parseDouble(buyPricePDetails.getText()), Double.parseDouble(sellPricePDetails.getText()));
             productsTable.getItems().add(0, product);

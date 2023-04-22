@@ -4,6 +4,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.util.Pair;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,11 +85,13 @@ public class Utils {
             }
         }
     }
+
     /**
-     Finds a Pair in a list of Pair<int, int> based on the specified key value, and returns its corresponding value.
-     @param list The list of Pair<int, int> to search.
-     @param key The value of the key to match.
-     @return The value of the first Pair found with a key matching the specified value, or -1 if no matching Pair is found.
+     * Finds a Pair in a list of Pair<int, int> based on the specified key value, and returns its corresponding value.
+     *
+     * @param list The list of Pair<int, int> to search.
+     * @param key  The value of the key to match.
+     * @return The value of the first Pair found with a key matching the specified value, or -1 if no matching Pair is found.
      */
     public static int findPairWithKey(ArrayList<Pair<Integer, Integer>> list, int key) {
         for (Pair<Integer, Integer> pair : list) {
@@ -97,5 +100,22 @@ public class Utils {
             }
         }
         return -1;
+    }
+
+    /**
+     * Returns the name and extension of a file from a given address.
+     *
+     * @param address the address of the file, e.g. "D:\\DOWNLOAD\\commons-net-3.9.0-src.zip".
+     * @return a string containing the file name and extension, e.g. "commons-net-3.9.0-src.zip".
+     */
+    public static String getFileNameAndExtension(String address) {
+        File file = new File(address);
+        String fileName = file.getName();
+        String extension = "";
+        int index = fileName.lastIndexOf(".");
+        if (index > 0) {
+            extension = fileName.substring(index + 1);
+        }
+        return fileName + "." + extension;
     }
 }
