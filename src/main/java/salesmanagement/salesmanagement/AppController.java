@@ -48,7 +48,7 @@ public class AppController {
     }
 
     public synchronized void run() {
-        StaticComponentContainer.JVMInfo.getVersion();
+//        StaticComponentContainer.JVMInfo.getVersion();
         //Load login scene.
         FXMLLoader loginFXMLLoader = new FXMLLoader(SalesManagement.class.getResource("login_scene.fxml"));
         try {

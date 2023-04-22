@@ -7,11 +7,10 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -36,7 +35,6 @@ import javafx.scene.web.HTMLEditor;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
-import javafx.util.Callback;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -951,6 +949,32 @@ public class MainSceneController extends SceneController implements Initializabl
 
         totalAmountForOrder.textProperty().bind(totalAmount.asString("%.2f"));
 
+        addOrderFilterButton.setOnAction(event -> {
+            bgPaneOrders.setVisible(true);
+            orderFilterPane.setVisible(true);
+        });
+        typeFilter.getItems().add("online");
+        typeFilter.getItems().add("onsite");
+        applyOrderFilterButton.setOnAction(event -> {
+            updateOrderFilteredData();
+            bgPaneOrders.setVisible(false);
+            orderFilterPane.setVisible(false);
+        });
+        clearOrderFilterButton.setOnAction(event -> {
+            customerNameFilter.clear();
+            contactFilter.clear();
+            typeFilter.setValue(null);
+            commentsFilter.clear();
+            orderDateFilter.setValue(null);
+            updateOrderFilteredData();
+            bgPaneOrders.setVisible(false);
+            orderFilterPane.setVisible(false);
+        });
+        closeOrderFilterButton.setOnAction(event -> {
+            bgPaneOrders.setVisible(false);
+            orderFilterPane.setVisible(false);
+        });
+
         // Initialize columns
         orderNumberOrd.setCellValueFactory(new PropertyValueFactory<>("orderNumber"));
         orderDateOrd.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
@@ -976,17 +1000,25 @@ public class MainSceneController extends SceneController implements Initializabl
             }
         });
 
+        editProductButton.setOnAction(e -> {
+            Product selected = productsTable.getSelectionModel().getSelectedItem();
+            initEditProductDetails(selected);
+            bgPaneProducts.setVisible(true);
+            productDetailsPane.setVisible(true);
+        });
+
+
         productsTable.setOnMouseClicked((MouseEvent event) -> {
             if (event.getClickCount() == 2) {
                 Product selected = productsTable.getSelectionModel().getSelectedItem();
                 initEditProductDetails(selected);
-                bgPane.setVisible(true);
+                bgPaneProducts.setVisible(true);
                 productDetailsPane.setVisible(true);
             }
         });
 
         closeProductDetailsButton.setOnAction(event -> {
-            bgPane.setVisible(false);
+            bgPaneProducts.setVisible(false);
             productDetailsPane.setVisible(false);
         });
 
@@ -995,6 +1027,33 @@ public class MainSceneController extends SceneController implements Initializabl
         productNameProd.setCellValueFactory(new PropertyValueFactory<>("productName"));
 
         productLineProd.setCellValueFactory(new PropertyValueFactory<>("productLine"));
+
+        productVendorProd.setCellValueFactory(new PropertyValueFactory<>("productVendor"));
+
+        addProductFilterButton.setOnAction(event -> {
+            bgPaneProducts.setVisible(true);
+            productFilterPane.setVisible(true);
+        });
+        typeFilter.getItems().add("online");
+        typeFilter.getItems().add("onsite");
+        applyProductFilterButton.setOnAction(event -> {
+            updateProductFilteredData();
+            bgPaneProducts.setVisible(false);
+            productFilterPane.setVisible(false);
+        });
+        clearProductFilterButton.setOnAction(event -> {
+            productCodeFilter.clear();
+            productNameFilter.clear();
+            productLineFilter.clear();
+            productVendorFilter.clear();
+            updateProductFilteredData();
+            bgPaneProducts.setVisible(false);
+            productFilterPane.setVisible(false);
+        });
+        closeProductFilterButton.setOnAction(event -> {
+            bgPaneProducts.setVisible(false);
+            productFilterPane.setVisible(false);
+        });
 
         removeItemButton.setOnAction(event -> {
             removeItemButtonClicked = true;
@@ -1496,11 +1555,35 @@ public class MainSceneController extends SceneController implements Initializabl
     JFXButton editOrderButton;
     @FXML
     JFXButton removeOrderButton;
+    @FXML
+    JFXButton addOrderFilterButton;
+    @FXML
+    Pane bgPaneOrders;
+    @FXML
+    AnchorPane orderFilterPane;
+    @FXML
+    JFXTextField customerNameFilter;
+    @FXML
+    JFXTextField contactFilter;
+    @FXML
+    ComboBox<String> typeFilter;
+    @FXML
+    DatePicker orderDateFilter;
+    @FXML
+    JFXTextField commentsFilter;
+    @FXML
+    JFXButton applyOrderFilterButton;
+    @FXML
+    JFXButton clearOrderFilterButton;
+    @FXML
+    JFXButton closeOrderFilterButton;
+    FilteredList<Order> filteredOrders;
     private boolean removeOrderButtonClicked = false;
 
     void initOrders() {
         runTask(() -> {
-            ordersTable.getItems().clear();
+            ObservableList<Order> orders = FXCollections.observableArrayList();
+            ordersTable.setItems(orders);
 
             try {
                 String query = "SELECT orderNumber, orderDate, requiredDate, shippedDate, status, type, comments, value, payment_method, customerName, phone FROM orders INNER JOIN customers ON orders.customerNumber = customers.customerNumber";
@@ -1522,6 +1605,9 @@ public class MainSceneController extends SceneController implements Initializabl
                     ordersTable.getItems().add(order);
                 }
                 ordersTable.refresh();
+
+                filteredOrders = new FilteredList<>(FXCollections.observableArrayList(ordersTable.getItems()), p -> true);
+                ordersTable.setItems(filteredOrders);
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
@@ -1560,23 +1646,48 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     TableColumn<Product, String> productLineProd;
     @FXML
+    TableColumn<Product, String> productVendorProd;
+    @FXML
     JFXButton productDetailsButton;
+    @FXML
+    JFXButton editProductButton;
     @FXML
     JFXButton addProductButton;
     @FXML
     JFXButton removeProductButton;
+    @FXML
+    JFXTextField productCodeFilter;
+    @FXML
+    JFXTextField productNameFilter;
+    @FXML
+    JFXTextField productLineFilter;
+    @FXML
+    JFXTextField productVendorFilter;
+    @FXML
+    JFXButton applyProductFilterButton;
+    @FXML
+    JFXButton clearProductFilterButton;
+    @FXML
+    JFXButton closeProductFilterButton;
+    @FXML
+    JFXButton addProductFilterButton;
+    FilteredList<Product> filteredProducts;
+
     private boolean removeProductButtonClicked = false;
     @FXML
-    Pane bgPane;
+    Pane bgPaneProducts;
     @FXML
     AnchorPane productDetailsPane;
+    @FXML
+    AnchorPane productFilterPane;
     @FXML
     JFXButton closeProductDetailsButton;
 
     void initProducts() {
         runTask(() -> {
             productsInit = true;
-            productsTable.getItems().clear();
+            ObservableList<Product> products = FXCollections.observableArrayList();
+            productsTable.setItems(products);
 
             try {
                 String query = "SELECT productCode, productName, productLine, productVendor, productDescription, quantityInStock, buyPrice, sellPrice FROM products";
@@ -1596,6 +1707,8 @@ public class MainSceneController extends SceneController implements Initializabl
                 }
                 productsTable.refresh();
 
+                filteredProducts = new FilteredList<>(FXCollections.observableArrayList(productsTable.getItems()), p -> true);
+                productsTable.setItems(filteredProducts);
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
@@ -1633,7 +1746,7 @@ public class MainSceneController extends SceneController implements Initializabl
         sellPricePDetails.setText("");
         productDescriptionPDetails.setText("");
 
-        bgPane.setVisible(true);
+        bgPaneProducts.setVisible(true);
         productDetailsPane.setVisible(true);
 
         productDetailsButton.setOnAction(event -> {
@@ -1667,7 +1780,7 @@ public class MainSceneController extends SceneController implements Initializabl
 
             alert.showAndWait();
 
-            bgPane.setVisible(false);
+            bgPaneProducts.setVisible(false);
             productDetailsPane.setVisible(false);
 
             productsTable.refresh();
@@ -1764,6 +1877,35 @@ public class MainSceneController extends SceneController implements Initializabl
         } catch (Exception ex) {
             System.out.println(ex);
         }
+    }
+
+    private void updateOrderFilteredData() {
+        filteredOrders.setPredicate(order -> {
+            // Get the filter text from the text fields
+            String customerNameFilterText = customerNameFilter.getText().toLowerCase();
+            String contactFilterText = contactFilter.getText().toLowerCase();
+            LocalDate orderDateFilterValue = orderDateFilter.getValue();
+            String typeFilterText = typeFilter.getValue() != null ? typeFilter.getValue().toLowerCase() : "";
+            String commentsFilterText = commentsFilter.getText().toLowerCase();
+            // Check if the order matches the filter criteria
+            boolean customerNameMatch = customerNameFilterText.isEmpty() || order.getCustomerName().toLowerCase().contains(customerNameFilterText);
+            boolean contactMatch = contactFilterText.isEmpty() || order.getContact().toLowerCase().contains(contactFilterText);
+            boolean orderDateMatch = orderDateFilterValue == null || order.getOrderDate().equals(orderDateFilterValue);
+            boolean typeMatch = typeFilterText.isEmpty() || order.getType().toLowerCase().contains(typeFilterText);
+            boolean commentsMatch = commentsFilterText.isEmpty() || order.getComments().toLowerCase().contains(commentsFilterText);
+            return customerNameMatch && contactMatch && orderDateMatch && typeMatch && commentsMatch;
+        });
+    }
+
+    private void updateProductFilteredData() {
+        filteredProducts.setPredicate(product -> {
+            // Check if the order matches the filter criteria
+            boolean productCodeMatch = product.getProductCode().toLowerCase().contains(productCodeFilter.getText().toLowerCase());
+            boolean productLineMatch = product.getProductLine().toLowerCase().contains(productLineFilter.getText().toLowerCase());
+            boolean productNameMatch = product.getProductName().toLowerCase().contains(productNameFilter.getText().toLowerCase());
+            boolean productVendorMatch = product.getProductVendor().toLowerCase().contains(productVendorFilter.getText().toLowerCase());
+            return productCodeMatch && productLineMatch && productNameMatch && productVendorMatch;
+        });
     }
 
     private void clearCreateOrderTab() {
