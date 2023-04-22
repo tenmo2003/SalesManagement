@@ -8,6 +8,7 @@
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -818,12 +819,13 @@
                                     <JFXButton fx:id="removeProductButton" layoutX="1134.0" layoutY="57.0" text="Remove" />
                                     <TableView fx:id="productsTable" layoutX="255.0" layoutY="95.0" prefHeight="675.0" prefWidth="950.0" stylesheets="@table.css">
                                        <columns>
-                                          <TableColumn fx:id="productCodeProd" prefWidth="210.32733154296875" text="Product Code" />
-                                          <TableColumn fx:id="productNameProd" prefWidth="374.4000244140625" text="Name" />
-                                          <TableColumn fx:id="productLineProd" prefWidth="363.05456909179804" text="Product Line" />
+                                          <TableColumn fx:id="productCodeProd" prefWidth="163.199951171875" text="Product Code" />
+                                          <TableColumn fx:id="productNameProd" prefWidth="330.76373291015625" text="Name" />
+                                          <TableColumn fx:id="productLineProd" prefWidth="205.0909423828125" text="Product Line" />
+                                          <TableColumn fx:id="productVendorProd" prefWidth="254.8363037109375" text="Product Vendor" />
                                        </columns>
                                     </TableView>
-                                    <Pane fx:id="bgPane" opacity="0.5" prefHeight="900.0" prefWidth="1500.0" style="-fx-background-color: black;" visible="false" />
+                                    <Pane fx:id="bgPaneProducts" opacity="0.5" prefHeight="900.0" prefWidth="1500.0" style="-fx-background-color: black;" visible="false" />
                                     <AnchorPane fx:id="productDetailsPane" focusTraversable="true" layoutX="385.0" layoutY="199.0" prefHeight="466.0" prefWidth="677.0" style="-fx-background-color: white;" visible="false">
                                        <children>
                                           <JFXTextField fx:id="productCodePDetails" layoutX="54.0" layoutY="72.0" prefHeight="26.0" prefWidth="195.0" />
@@ -885,6 +887,49 @@
                                           <ListView fx:id="plSuggestionList" layoutX="53.0" layoutY="274.0" prefHeight="117.0" prefWidth="195.0" visible="false" />
                                        </children>
                                     </AnchorPane>
+                                    <JFXButton fx:id="editProductButton" layoutX="1018.0" layoutY="57.0" prefHeight="26.0" prefWidth="52.0" text="Edit" />
+                                    <AnchorPane fx:id="productFilterPane" focusTraversable="true" layoutX="400.0" layoutY="188.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="281.0" prefWidth="628.0" style="-fx-background-color: white;">
+                                       <children>
+                                          <Text layoutX="336.0" layoutY="144.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Vendor">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Text>
+                                          <Text layoutX="54.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="175.5630645751953">
+                                             <font>
+                                                <Font name="System Bold Italic" size="17.0" />
+                                             </font>
+                                          </Text>
+                                          <Text layoutX="90.0" layoutY="144.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Line">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Text>
+                                          <JFXButton fx:id="closeProductFilterButton" buttonType="RAISED" layoutX="553.0" layoutY="18.0" prefHeight="24.0" prefWidth="15.0" text="X">
+                                             <font>
+                                                <Font name="System Bold" size="14.0" />
+                                             </font>
+                                          </JFXButton>
+                                          <JFXTextField fx:id="productCodeFilter" layoutX="90.0" layoutY="75.0" prefWidth="195.0" />
+                                          <Text layoutX="90.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Code">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Text>
+                                          <JFXTextField fx:id="productNameFilter" layoutX="336.0" layoutY="75.0" prefWidth="195.0" />
+                                          <Text layoutX="336.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Name">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Text>
+                                          <JFXButton fx:id="applyProductFilterButton" layoutX="230.0" layoutY="219.0" text="Apply Filter" />
+                                          <ListView fx:id="plSuggestionList11" layoutX="53.0" layoutY="274.0" prefHeight="117.0" prefWidth="195.0" visible="false" />
+                                          <JFXButton fx:id="clearProductFilterButton" layoutX="319.0" layoutY="219.0" text="Clear Filters" />
+                                          <JFXTextField fx:id="productLineFilter" layoutX="90.0" layoutY="158.0" prefWidth="195.0" />
+                                          <JFXTextField fx:id="productVendorFilter" layoutX="336.0" layoutY="158.0" prefWidth="195.0" />
+                                       </children>
+                                    </AnchorPane>
+                                    <JFXButton fx:id="addProductFilterButton" layoutX="255.0" layoutY="58.0" text="Filter..." />
                                  </children>
                               </AnchorPane>
 
@@ -1427,13 +1472,62 @@
                                           <TableColumn fx:id="typeOrd" prefWidth="100.0" text="Type" />
                                           <TableColumn fx:id="commentsOrd" prefWidth="241.7454833984375" text="Comments" />
                                           <TableColumn fx:id="valueOrd" prefWidth="105.60003662109375" text="Value" />
-                                          <TableColumn fx:id="customerNameOrd" prefWidth="144.872802734375" text="Customer Name" />
+                                          <TableColumn fx:id="customerNameOrd" prefWidth="144.872802734375" text="Customer" />
                                           <TableColumn fx:id="contactOrd" prefWidth="128.2908935546875" text="Contact" />
                                        </columns>
                                     </TableView>
                                     <JFXButton fx:id="removeOrderButton" layoutX="988.0" layoutY="63.0" prefHeight="26.0" prefWidth="79.0" text="Remove" />
                                     <JFXButton fx:id="createOrderButton" layoutX="874.0" layoutY="63.0" text="Create New Order" />
                                     <JFXButton fx:id="editOrderButton" layoutX="837.0" layoutY="63.0" text="Edit" />
+                                    <JFXButton fx:id="addOrderFilterButton" layoutX="164.0" layoutY="64.0" prefHeight="26.0" prefWidth="73.0" text="Filter..." />
+                                    <Pane fx:id="bgPaneOrders" opacity="0.5" prefHeight="900.0" prefWidth="1500.0" style="-fx-background-color: black;" visible="false" />
+                                    <AnchorPane fx:id="orderFilterPane" focusTraversable="true" layoutX="326.0" layoutY="199.0" prefHeight="393.0" prefWidth="628.0" style="-fx-background-color: white;" visible="false">
+                                       <children>
+                                          <Text layoutX="91.0" layoutY="186.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Order Date">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Text>
+                                          <Text layoutX="54.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="175.5630645751953">
+                                             <font>
+                                                <Font name="System Bold Italic" size="17.0" />
+                                             </font>
+                                          </Text>
+                                          <Text layoutX="91.0" layoutY="125.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Order type">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Text>
+                                          <JFXButton fx:id="closeOrderFilterButton" buttonType="RAISED" layoutX="553.0" layoutY="18.0" prefHeight="24.0" prefWidth="15.0" text="X">
+                                             <font>
+                                                <Font name="System Bold" size="14.0" />
+                                             </font>
+                                          </JFXButton>
+                                          <JFXTextField fx:id="customerNameFilter" layoutX="90.0" layoutY="75.0" prefWidth="195.0" />
+                                          <Text layoutX="90.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Customer">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Text>
+                                          <JFXTextField fx:id="contactFilter" layoutX="336.0" layoutY="75.0" prefWidth="195.0" />
+                                          <Text layoutX="336.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Contact">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Text>
+                                          <JFXButton fx:id="applyOrderFilterButton" layoutX="230.0" layoutY="333.0" text="Apply Filter" />
+                                          <ListView fx:id="plSuggestionList1" layoutX="53.0" layoutY="274.0" prefHeight="117.0" prefWidth="195.0" visible="false" />
+                                          <DatePicker fx:id="orderDateFilter" layoutX="90.0" layoutY="197.0" />
+                                          <ComboBox fx:id="typeFilter" layoutX="90.0" layoutY="137.0" prefWidth="150.0" />
+                                          <Text layoutX="91.0" layoutY="249.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Comments">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Text>
+                                          <JFXTextField fx:id="commentsFilter" layoutX="89.0" layoutY="265.0" prefHeight="38.0" prefWidth="449.0" />
+                                          <JFXButton fx:id="clearOrderFilterButton" layoutX="319.0" layoutY="333.0" text="Clear Filters" />
+                                       </children>
+                                    </AnchorPane>
                                  </children>
                               </AnchorPane>
                            </content>
