@@ -8,7 +8,6 @@
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
-<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -700,8 +699,8 @@
                                        </font>
                                     </Text>
                                     <TextField fx:id="totalAmountForOrder" editable="false" focusTraversable="false" layoutX="712.0" layoutY="369.0" prefWidth="160.58178626194558" />
-                                    <ComboBox fx:id="statusInput" layoutX="179.0" layoutY="500.0" prefHeight="31.0" prefWidth="150.0" promptText="Status" />
-                                    <ComboBox fx:id="paymentMethodInput" layoutX="179.0" layoutY="658.0" prefHeight="31.0" prefWidth="150.0" promptText="Payment Method" />
+                                    <JFXComboBox fx:id="statusInput" layoutX="179.0" layoutY="500.0" prefHeight="31.0" prefWidth="150.0" promptText="Status" />
+                                    <JFXComboBox fx:id="paymentMethodInput" layoutX="179.0" layoutY="658.0" prefHeight="31.0" prefWidth="150.0" promptText="Payment Method" />
                                  </children>
                               </AnchorPane>
                            </content>
