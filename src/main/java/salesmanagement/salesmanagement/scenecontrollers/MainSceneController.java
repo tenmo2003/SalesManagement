@@ -5,6 +5,8 @@ import com.google.i18n.phonenumbers.Phonenumber;
 import com.jfoenix.controls.*;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -35,11 +37,19 @@ import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.util.Callback;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 import javafx.util.Pair;
 import salesmanagement.salesmanagement.Form;
 import salesmanagement.salesmanagement.ImageController;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
+import salesmanagement.salesmanagement.SalesComponent.Order;
 import salesmanagement.salesmanagement.SalesComponent.OrderItem;
+import salesmanagement.salesmanagement.SalesComponent.Product;
 import salesmanagement.salesmanagement.Utils;
 
 import javax.imageio.ImageIO;
@@ -94,7 +104,7 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     void goToCreateOrderTab() {
         tabPane.getSelectionModel().select(createOrderTab);
-        initCreateOrder();
+
     }
 
     @FXML
@@ -691,7 +701,7 @@ public class MainSceneController extends SceneController implements Initializabl
     StackPane employeeInfoBoxContainer;
     Form employeeForm;
     @FXML
-    JFXComboBox statusInput;
+    ComboBox<String> statusInput;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -723,6 +733,22 @@ public class MainSceneController extends SceneController implements Initializabl
             }
         });
 
+//        orderDetailsTable.getItems().addListener((ListChangeListener<OrderItem>) c -> {
+//            while (c.next()) {
+//                if (c.wasAdded()) {
+//                    double addedTotal = c.getAddedSubList().stream()
+//                            .mapToDouble(OrderItem::getAmount)
+//                            .sum();
+//                    totalAmount.set(totalAmount.get() + addedTotal);
+//                } else if (c.wasRemoved()) {
+//                    double removedTotal = c.getRemoved().stream()
+//                            .mapToDouble(OrderItem::getAmount)
+//                            .sum();
+//                    totalAmount.set(totalAmount.get() - removedTotal);
+//                }
+//            }
+//        });
+
 //        orderDetailsTable.focusedProperty().addListener((obs, oldVal, newVal) -> {
 //            if (!newVal && !removeItemButtonClicked) {
 //                orderDetailsTable.getSelectionModel().clearSelection();
@@ -745,42 +771,44 @@ public class MainSceneController extends SceneController implements Initializabl
 //        });
 
         // Add a listener to the text property of the text field
-        productCodeInput.setOnKeyReleased(event -> {
-            if (!(event.getCode() == KeyCode.TAB || event.getCode() == KeyCode.DOWN || event.getCode() == KeyCode.UP)) {
-                String newValue = productCodeInput.getText();
-                // Update the suggestion list based on the current input
-                if (newValue.equals("")) {
-                    suggestionList.setVisible(false);
-                    suggestionList.setMouseTransparent(true);
-                } else {
-                    if (newValue.length() > 2) {
-                        List<String> suggestions = new ArrayList<>(); // Replace with your own function to retrieve suggestions
-                        String sql = "SELECT productCode, sellPrice FROM products WHERE upper(productCode) LIKE upper('" + newValue + "%');";
-                        ResultSet rs = sqlConnection.getDataQuery(sql);
-                        try {
-                            // Add each suggestion to the list
-                            while (rs.next()) {
-                                suggestions.add(rs.getString("productCode"));
-                            }
-                        } catch (SQLException ex) {
-                            ex.printStackTrace();
-                        }
+        productCodeInput.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue.length() > 2 && newValue.length() > oldValue.length() && suggestionList.getItems().isEmpty()) {
 
-                        if (suggestions.isEmpty() || (!suggestions.isEmpty() && suggestions.get(0).equals(newValue))) {
-                            suggestionList.setMouseTransparent(true);
-                            suggestionList.setVisible(false);
-                            if (!suggestions.isEmpty() && suggestions.get(0).equals(newValue)) {
-                                setPrice();
+                } else {
+                    // Update the suggestion list based on the current input
+                    if (newValue.equals("")) {
+                        suggestionList.setVisible(false);
+                        suggestionList.setMouseTransparent(true);
+                    } else {
+                        if (newValue.length() > 1) {
+                            List<String> suggestions = new ArrayList<>(); // Replace with your own function to retrieve suggestions
+                            String sql = "SELECT productCode, sellPrice FROM products WHERE upper(productCode) LIKE upper('" + newValue + "%');";
+                            ResultSet rs = sqlConnection.getDataQuery(sql);
+                            try {
+                                // Add each suggestion to the list
+                                while (rs.next()) {
+                                    suggestions.add(rs.getString("productCode"));
+                                }
+                            } catch (SQLException ex) {
+                                ex.printStackTrace();
                             }
-                        } else {
-                            suggestionList.getItems().setAll(suggestions);
-                            suggestionList.getSelectionModel().selectFirst();
-                            suggestionList.setMouseTransparent(false);
-                            suggestionList.setVisible(true);
+                            if (suggestions.isEmpty() || (!suggestions.isEmpty() && suggestions.get(0).equals(newValue))) {
+                                suggestionList.setMouseTransparent(true);
+                                suggestionList.setVisible(false);
+                                suggestionList.getItems().clear();
+                                if (!suggestions.isEmpty() && suggestions.get(0).equals(newValue)) {
+                                    setPrice();
+                                }
+                            } else {
+                                suggestionList.getItems().setAll(suggestions);
+                                suggestionList.getSelectionModel().selectFirst();
+                                suggestionList.setMouseTransparent(false);
+                                suggestionList.setVisible(true);
+                            }
                         }
                     }
                 }
-            }
+
         });
 
         // Add an event handler to the suggestion list
@@ -790,6 +818,7 @@ public class MainSceneController extends SceneController implements Initializabl
                 productCodeInput.setText(selectedValue);
                 setPrice();
                 suggestionList.setVisible(false);
+                suggestionList.getItems().clear();
             }
         });
 
@@ -800,16 +829,109 @@ public class MainSceneController extends SceneController implements Initializabl
                     productCodeInput.setText(selectedValue);
                     setPrice();
                     suggestionList.setVisible(false);
+                    suggestionList.getItems().clear();
                     productCodeInput.requestFocus();
                 }
             } else if (event.getCode() == KeyCode.TAB || event.getCode() == KeyCode.DOWN) {
-                suggestionList.getSelectionModel().selectNext();
+                int selectedIndex = suggestionList.getSelectionModel().getSelectedIndex();
+                if (selectedIndex < suggestionList.getItems().size() - 1) {
+                    suggestionList.getSelectionModel().selectNext();
+                    suggestionList.scrollTo(selectedIndex + 1);
+                }
                 event.consume();
                 productCodeInput.requestFocus();
             } else if (event.getCode() == KeyCode.UP) {
-                suggestionList.getSelectionModel().selectPrevious();
+                int selectedIndex = suggestionList.getSelectionModel().getSelectedIndex();
+                if (selectedIndex > 0) {
+                    suggestionList.getSelectionModel().selectPrevious();
+                    suggestionList.scrollTo(selectedIndex - 1);
+                }
                 event.consume();
                 productCodeInput.requestFocus();
+            }
+        });
+
+
+        productLinePDetails.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal) {
+                // TextField has focus, show suggestion list
+                if (!plSuggestionList.getItems().isEmpty()) {
+                    plSuggestionList.setVisible(true);
+                    plSuggestionList.setMouseTransparent(false);
+                }
+            } else {
+                if (plSuggestionList.getItems().isEmpty()) {
+                    plSuggestionList.setVisible(false);
+                    plSuggestionList.setMouseTransparent(true);
+                }
+            }
+        });
+
+        productLinePDetails.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > oldValue.length() && plSuggestionList.getItems().isEmpty()) {
+
+            } else {
+                // Update the suggestion list based on the current input
+                List<String> suggestions = new ArrayList<>(); // Replace with your own function to retrieve suggestions
+                String sql = "SELECT productLine FROM productlines WHERE upper(productLine) LIKE upper('" + newValue + "%');";
+                ResultSet rs = sqlConnection.getDataQuery(sql);
+                try {
+                    // Add each suggestion to the list
+                    while (rs.next()) {
+                        suggestions.add(rs.getString("productLine"));
+                    }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+                if (suggestions.isEmpty() || (!suggestions.isEmpty() && suggestions.get(0).equals(newValue))) {
+                    plSuggestionList.setMouseTransparent(true);
+                    plSuggestionList.setVisible(false);
+                    plSuggestionList.getItems().clear();
+                } else {
+                    plSuggestionList.getItems().setAll(suggestions);
+                    plSuggestionList.getSelectionModel().selectFirst();
+                    plSuggestionList.setMouseTransparent(false);
+                    plSuggestionList.setVisible(true);
+                }
+            }
+        });
+
+        // Add an event handler to the suggestion list
+        plSuggestionList.setOnMouseClicked(event -> {
+            String selectedValue = plSuggestionList.getSelectionModel().getSelectedItem();
+            if (selectedValue != null) {
+                productLinePDetails.setText(selectedValue);
+                plSuggestionList.setVisible(false);
+                plSuggestionList.getItems().clear();
+                plSuggestionList.setMouseTransparent(true);
+            }
+        });
+
+        productLinePDetails.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                String selectedValue = plSuggestionList.getSelectionModel().getSelectedItem();
+                if (selectedValue != null) {
+                    productLinePDetails.setText(selectedValue);
+                    plSuggestionList.setVisible(false);
+                    plSuggestionList.getItems().clear();
+                    productLinePDetails.requestFocus();
+                }
+            } else if (event.getCode() == KeyCode.TAB || event.getCode() == KeyCode.DOWN) {
+                int selectedIndex = plSuggestionList.getSelectionModel().getSelectedIndex();
+                if (selectedIndex < plSuggestionList.getItems().size() - 1) {
+                    plSuggestionList.getSelectionModel().selectNext();
+                    plSuggestionList.scrollTo(selectedIndex + 1);
+                }
+                event.consume();
+                productLinePDetails.requestFocus();
+            } else if (event.getCode() == KeyCode.UP) {
+                int selectedIndex = plSuggestionList.getSelectionModel().getSelectedIndex();
+                if (selectedIndex > 0) {
+                    plSuggestionList.getSelectionModel().selectPrevious();
+                    plSuggestionList.scrollTo(selectedIndex - 1);
+                }
+                event.consume();
+                productLinePDetails.requestFocus();
             }
         });
 
@@ -827,101 +949,52 @@ public class MainSceneController extends SceneController implements Initializabl
                 totalInput.setText(String.format("%.2f", Double.parseDouble(newValue) * Integer.parseInt(quantityInput.getText())));
         });
 
-        orderNumberOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, Integer>, ObservableValue<Integer>>() {
-            @Override
-            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<ObservableList<Object>, Integer> param) {
-                return new SimpleObjectProperty<Integer>((Integer) param.getValue().get(0));
-            }
-        });
+        totalAmountForOrder.textProperty().bind(totalAmount.asString("%.2f"));
 
-        orderDateOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate>, ObservableValue<LocalDate>>() {
-            @Override
-            public ObservableValue<LocalDate> call(TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate> param) {
-                return new SimpleObjectProperty<LocalDate>((LocalDate) param.getValue().get(1));
-            }
-        });
-
-        requiredDateOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate>, ObservableValue<LocalDate>>() {
-            @Override
-            public ObservableValue<LocalDate> call(TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate> param) {
-                return new SimpleObjectProperty<LocalDate>((LocalDate) param.getValue().get(2));
-            }
-        });
-
-        shippedDateOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate>, ObservableValue<LocalDate>>() {
-            @Override
-            public ObservableValue<LocalDate> call(TableColumn.CellDataFeatures<ObservableList<Object>, LocalDate> param) {
-                return new SimpleObjectProperty<LocalDate>((LocalDate) param.getValue().get(3));
-            }
-        });
-
-        statusOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
-                return new SimpleStringProperty((String) param.getValue().get(4));
-            }
-        });
-
-        commentsOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
-                return new SimpleStringProperty((String) param.getValue().get(5));
-            }
-        });
-
-        customerNumberOrd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, Integer>, ObservableValue<Integer>>() {
-            @Override
-            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<ObservableList<Object>, Integer> param) {
-                return new SimpleObjectProperty<Integer>((Integer) param.getValue().get(6));
-            }
-        });
+        // Initialize columns
+        orderNumberOrd.setCellValueFactory(new PropertyValueFactory<>("orderNumber"));
+        orderDateOrd.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
+        typeOrd.setCellValueFactory(new PropertyValueFactory<>("type"));
+        commentsOrd.setCellValueFactory(new PropertyValueFactory<>("comments"));
+        valueOrd.setCellValueFactory(new PropertyValueFactory<>("value"));
+        customerNameOrd.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        contactOrd.setCellValueFactory(new PropertyValueFactory<>("contact"));
 
         ordersTable.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) { // check for double-click event
-                ObservableList<Object> selectedOrderRow = ordersTable.getSelectionModel().getSelectedItem();
+                Order selectedOrderRow = ordersTable.getSelectionModel().getSelectedItem();
                 initEditOrder(selectedOrderRow);
                 goToEditOrderTab();
             }
         });
 
         editOrderButton.setOnAction(e -> {
-            ObservableList<Object> selectedRow = ordersTable.getSelectionModel().getSelectedItem();
-            initEditOrder(selectedRow);
-            goToEditOrderTab();
+            Order selectedRow = ordersTable.getSelectionModel().getSelectedItem();
+            if (selectedRow != null) {
+                initEditOrder(selectedRow);
+                goToEditOrderTab();
+            }
         });
 
         productsTable.setOnMouseClicked((MouseEvent event) -> {
             if (event.getClickCount() == 2) {
-                ObservableList<Object> selected = productsTable.getSelectionModel().getSelectedItem();
+                Product selected = productsTable.getSelectionModel().getSelectedItem();
                 initEditProductDetails(selected);
                 bgPane.setVisible(true);
                 productDetailsPane.setVisible(true);
             }
         });
+
         closeProductDetailsButton.setOnAction(event -> {
             bgPane.setVisible(false);
             productDetailsPane.setVisible(false);
         });
-        productCodeProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
-                return new SimpleObjectProperty<String>((String) param.getValue().get(0));
-            }
-        });
 
-        productNameProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
-                return new SimpleObjectProperty<String>((String) param.getValue().get(1));
-            }
-        });
+        productCodeProd.setCellValueFactory(new PropertyValueFactory<>("productCode"));
 
-        productLineProd.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList<Object>, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList<Object>, String> param) {
-                return new SimpleObjectProperty<String>((String) param.getValue().get(2));
-            }
-        });
+        productNameProd.setCellValueFactory(new PropertyValueFactory<>("productName"));
+
+        productLineProd.setCellValueFactory(new PropertyValueFactory<>("productLine"));
 
         removeItemButton.setOnAction(event -> {
             removeItemButtonClicked = true;
@@ -930,7 +1003,7 @@ public class MainSceneController extends SceneController implements Initializabl
 
         removeProductButton.setOnAction(event -> {
             removeProductButtonClicked = true;
-            ObservableList<Object> selected = productsTable.getSelectionModel().getSelectedItem();
+            Product selected = productsTable.getSelectionModel().getSelectedItem();
             if (selected != null) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Confirm Delete");
@@ -940,7 +1013,7 @@ public class MainSceneController extends SceneController implements Initializabl
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.isPresent() && result.get() == ButtonType.OK) {
                     // User clicked OK, so delete the item
-                    String query = String.format("DELETE FROM products WHERE productCode = '%s'", selected.get(0));
+                    String query = String.format("DELETE FROM products WHERE productCode = '%s'", selected.getProductCode());
                     sqlConnection.updateQuery(query);
                     productsTable.getItems().remove(selected);
                 } else {
@@ -950,9 +1023,25 @@ public class MainSceneController extends SceneController implements Initializabl
             }
         });
 
+        createOrderButton.setOnAction(e -> {
+            String type = "";
+            // Create a ChoiceDialog to ask the user for the order type
+            ChoiceDialog<String> dialog = new ChoiceDialog<>("onsite", "onsite", "online");
+            dialog.setTitle("Order Type");
+            dialog.setHeaderText("Select the order type:");
+            dialog.setContentText("Order Type:");
+
+            // Show the dialog and wait for the user's response
+            dialog.showAndWait().ifPresent(orderType -> {
+                // Handle the user's selection
+                goToCreateOrderTab();
+                initCreateOrder(orderType);
+            });
+        });
+
         removeOrderButton.setOnAction(event -> {
             removeOrderButtonClicked = true;
-            ObservableList<Object> selected = productsTable.getSelectionModel().getSelectedItem();
+            Order selected = ordersTable.getSelectionModel().getSelectedItem();
             if (selected != null) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Confirm Delete");
@@ -971,23 +1060,51 @@ public class MainSceneController extends SceneController implements Initializabl
         });
     }
 
-    private void initCreateOrder() {
+    private void initCreateOrder(String type) {
+        if (type.equals("online")) {
+            requiredDateInput.setVisible(true);
+            requiredDateText.setVisible(true);
+            shippedDateInput.setVisible(true);
+            shippedDateText.setVisible(true);
+            statusInput.setVisible(true);
+            paymentMethodInput.getItems().clear();
+            paymentMethodInput.getItems().addAll("Cash On Delivery", "Credit Card", "Debit Card", "E-Wallet", "Bank Transfer");
+            paymentMethodInput.setValue(null);
+        } else {
+            requiredDateInput.setVisible(false);
+            requiredDateText.setVisible(false);
+            shippedDateInput.setVisible(false);
+            shippedDateText.setVisible(false);
+            statusInput.setVisible(false);
+            paymentMethodInput.getItems().clear();
+            paymentMethodInput.getItems().addAll("Cash", "Credit Card", "Debit Card", "E-Wallet", "Bank Transfer");
+            paymentMethodInput.setValue(null);
+        }
         clearCreateOrderTab();
+        totalAmount.set(0);
+        customerNameInput.setEditable(true);
+        phoneNumberInput.setEditable(true);
         submitOrderButton.setText("Create Order");
         submitOrderButton.setOnAction(event -> {
-            createOrder();
+            createOrder(type);
         });
         orderDetailsTable.setItems(getList());
     }
 
-    private void initEditOrder(ObservableList<Object> selectedOrderRow) {
+    private void initEditOrder(Order selectedOrderRow) {
         clearCreateOrderTab();
         submitOrderButton.setText("Save");
         customerNameInput.setEditable(false);
         phoneNumberInput.setEditable(false);
+        totalAmount.set(0);
         if (selectedOrderRow != null) {
+
             // Extract the order number from the selected row
-            int orderNumber = (int) selectedOrderRow.get(0);
+            int orderNumber = selectedOrderRow.getOrderNumber();
+
+            printInvoiceButton.setOnAction(event -> {
+                printInvoice(orderNumber);
+            });
 
             // Query the orderdetails table to get the order details information for the selected order
             String query = String.format("SELECT productCode, quantityOrdered, priceEach FROM orderdetails WHERE orderNumber = %d", orderNumber);
@@ -998,43 +1115,62 @@ public class MainSceneController extends SceneController implements Initializabl
                     String productCode = rs.getString("productCode");
                     int quantity = rs.getInt("quantityOrdered");
                     double priceEach = rs.getDouble("priceEach");
-                    OrderItem orderItem = new OrderItem(productCode, quantity, priceEach);
+                    OrderItem orderItem = new OrderItem(productCode, quantity, priceEach, quantity * priceEach);
                     orderDetailsTable.getItems().add(orderItem);
+                    totalAmount.set(totalAmount.get() + orderItem.getAmount());
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+
+
+            if (selectedOrderRow.getType().equals("online")) {
+                requiredDateInput.setVisible(true);
+                requiredDateText.setVisible(true);
+                shippedDateInput.setVisible(true);
+                shippedDateText.setVisible(true);
+                statusInput.setVisible(true);
+                paymentMethodInput.getItems().clear();
+                paymentMethodInput.getItems().addAll("Cash On Delivery", "Credit Card", "Debit Card", "E-Wallet", "Bank Transfer");
+
+                requiredDateInput.setValue(selectedOrderRow.getRequiredDate());
+                shippedDateInput.setValue(selectedOrderRow.getShippedDate());
+
+                // Set the status combo box to the value from the selected ord
+                statusInput.setValue(selectedOrderRow.getStatus());
+                paymentMethodInput.setValue(selectedOrderRow.getPayment_method());
+            } else {
+                requiredDateInput.setVisible(false);
+                requiredDateText.setVisible(false);
+                shippedDateInput.setVisible(false);
+                shippedDateText.setVisible(false);
+                statusInput.setVisible(false);
+                paymentMethodInput.getItems().clear();
+                paymentMethodInput.getItems().addAll("Cash", "Credit Card", "Debit Card", "E-Wallet", "Bank Transfer");
+
+                paymentMethodInput.setValue(selectedOrderRow.getPayment_method());
+            }
+
+
+//            int customerNumber = -1;
+//            query = String.format("SELECT customerNumber FROM customers WHERE customerName = '%s' AND phone = '%s'", selectedOrderRow.getCustomerName(), selectedOrderRow.getContact());
+//            rs = sqlConnection.getDataQuery(query);
+//            try {
+//                if (rs.next()) {
+//                    customerNumber = rs.getInt("customerNumber");
+//                }
+//            } catch (SQLException e) {
+//                throw new RuntimeException(e);
+//            }
 
             // Set the date pickers and comments text field with values from the selected order
-            LocalDate orderDate = (LocalDate) selectedOrderRow.get(1);
-            LocalDate requiredDate = (LocalDate) selectedOrderRow.get(2);
-            LocalDate shippedDate = (LocalDate) selectedOrderRow.get(3);
-            String comments = (String) selectedOrderRow.get(5);
-            int customerNumber = (int) selectedOrderRow.get(6);
+            LocalDate orderDate = selectedOrderRow.getOrderDate();
+            String comments = selectedOrderRow.getComments();
             orderDateInput.setValue(orderDate);
-            requiredDateInput.setValue(requiredDate);
-            shippedDateInput.setValue(shippedDate);
             commentsInput.setText(comments);
 
-            // Set the status combo box to the value from the selected order
-            String status = (String) selectedOrderRow.get(4);
-            statusInput.setValue(status);
-
-            query = String.format("SELECT customerName, phone FROM customers WHERE customerNumber = %d", customerNumber);
-            rs = sqlConnection.getDataQuery(query);
-            try {
-                if (rs.next()) {
-                    // Extract the customer name and phone number from the result set
-                    String customerName = rs.getString("customerName");
-                    String phoneNumber = rs.getString("phone");
-
-                    // Set the customer name and phone number fields
-                    customerNameInput.setText(customerName);
-                    phoneNumberInput.setText(phoneNumber);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            customerNameInput.setText(selectedOrderRow.getCustomerName());
+            phoneNumberInput.setText(selectedOrderRow.getContact());
 
             submitOrderButton.setOnAction(event -> {
                 editOrder(orderNumber);
@@ -1056,17 +1192,12 @@ public class MainSceneController extends SceneController implements Initializabl
 
             // Get the values from the input fields
             LocalDate orderDate = orderDateInput.getValue();
-            LocalDate requiredDate = requiredDateInput.getValue();
+            String requiredDate = requiredDateInput.getValue() != null ? "'" + requiredDateInput.getValue().toString() + "'" : null;
             String shippedDate = shippedDateInput.getValue() != null ? "'" + shippedDateInput.getValue().toString() + "'" : "null";
             String status = (String) statusInput.getValue();
             String comments = commentsInput.getText();
 
-            // Get the customer number from the customer name input field
-            String customerName = customerNameInput.getText();
-            String phoneNumber = phoneNumberInput.getText();
-            int customerNumber = 0;
-
-            query = String.format("UPDATE orders SET orderDate = '%s', requiredDate = '%s', shippedDate = %s, status = '%s', comments = '%s' WHERE orderNumber = %d", orderDate.toString(), requiredDate.toString(), shippedDate, status, comments, orderNumber);
+            query = String.format("UPDATE orders SET orderDate = '%s', requiredDate = %s, shippedDate = %s, status = '%s', comments = '%s', payment_method = '%s' WHERE orderNumber = %d", orderDate.toString(), requiredDate, shippedDate, status, comments, paymentMethodInput.getValue(), orderNumber);
             sqlConnection.updateQuery(query);
 
         }, null, progressIndicator, createOrderTab.getTabPane());
@@ -1115,6 +1246,7 @@ public class MainSceneController extends SceneController implements Initializabl
         for (OrderItem orderItem : orderDetailsTable.getItems()) {
             if (orderItem.getProductCode().equals(productCode)) {
                 // Update the existing order
+                totalAmount.set(totalAmount.get() - orderItem.getAmount() + quantity * priceEach);
                 orderItem.setQuantityOrdered(quantity);
                 orderItem.setPriceEach(priceEach);
                 orderDetailsTable.refresh();
@@ -1123,8 +1255,10 @@ public class MainSceneController extends SceneController implements Initializabl
         }
 
         // If no existing order was found, create a new one and add it to the tableView
-        OrderItem orderItem = new OrderItem(productCode, quantity, priceEach);
+        OrderItem orderItem = new OrderItem(productCode, quantity, priceEach, quantity * priceEach);
         orderDetailsTable.getItems().add(orderItem);
+
+        totalAmount.set(totalAmount.get() + quantity * priceEach);
 
         productCodeInput.clear();
         quantityInput.clear();
@@ -1137,11 +1271,16 @@ public class MainSceneController extends SceneController implements Initializabl
 
         selectedRows = orderDetailsTable.getSelectionModel().getSelectedItems();
 
+        for (OrderItem orderItem : selectedRows) {
+            totalAmount.set(totalAmount.get() - orderItem.getAmount());
+        }
+
         allItems.removeAll(selectedRows);
     }
 
     public void clearItems() {
         orderDetailsTable.getItems().clear();
+        totalAmount.set(0);
     }
 
     @FXML
@@ -1168,24 +1307,36 @@ public class MainSceneController extends SceneController implements Initializabl
     JFXButton addButton;
     @FXML
     JFXButton removeItemButton;
+    @FXML
+    TextField totalAmountForOrder;
+    private DoubleProperty totalAmount = new SimpleDoubleProperty(0);
+
     private boolean removeItemButtonClicked = false;
     @FXML
     DatePicker orderDateInput;
     @FXML
     DatePicker requiredDateInput;
     @FXML
+    Text requiredDateText;
+    @FXML
     DatePicker shippedDateInput;
+    @FXML
+    Text shippedDateText;
     @FXML
     JFXTextField commentsInput;
     @FXML
+    ComboBox<String> paymentMethodInput;
+    @FXML
     JFXButton submitOrderButton;
+    @FXML
+    JFXButton printInvoiceButton;
     @FXML
     JFXTextField customerNameInput;
     @FXML
     JFXTextField phoneNumberInput;
 
 
-    public void createOrder() {
+    public void createOrder(String type) {
         runTask(() -> {
             String orderDate;
             if (orderDateInput.getValue() == null) {
@@ -1194,12 +1345,19 @@ public class MainSceneController extends SceneController implements Initializabl
                 orderDate = orderDateInput.getValue().format(DateTimeFormatter.ISO_DATE);
             }
             String shippedDate;
-            if (shippedDateInput.getValue() != null) {
-                shippedDate = shippedDateInput.getValue().format(DateTimeFormatter.ISO_DATE);
-                shippedDate = "'" + shippedDate;
-                shippedDate += "'";
+            String requiredDate;
+            if (type.equals("online")) {
+                if (shippedDateInput.getValue() != null) {
+                    shippedDate = shippedDateInput.getValue().format(DateTimeFormatter.ISO_DATE);
+                    shippedDate = "'" + shippedDate;
+                    shippedDate += "'";
+                } else {
+                    shippedDate = "null";
+                }
+                requiredDate = "'" + requiredDateInput.getValue().format(DateTimeFormatter.ISO_DATE) + "'";
             } else {
                 shippedDate = "null";
+                requiredDate = "null";
             }
             String check = "SELECT customerNumber FROM customers WHERE customerName = '" + customerNameInput.getText() + "' AND phone = '" + phoneNumberInput.getText() + "';";
             ResultSet result = sqlConnection.getDataQuery(check);
@@ -1219,13 +1377,22 @@ public class MainSceneController extends SceneController implements Initializabl
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            String order = "insert into orders(orderDate, requiredDate, shippedDate, status, comments, customerNumber) values ('"
-                    + orderDate + "','"
-                    + requiredDateInput.getValue().format(DateTimeFormatter.ISO_DATE) + "',"
+
+            double value = 0;
+            for (OrderItem item : orderDetailsTable.getItems()) {
+                value += item.getAmount();
+            }
+
+            String order = "insert into orders(orderDate, requiredDate, shippedDate, status, comments, customerNumber, type, value, payment_method) values ('"
+                    + orderDate + "',"
+                    + requiredDate + ","
                     + shippedDate + ",'"
                     + statusInput.getValue() + "','"
                     + commentsInput.getText() + "',"
-                    + customerNumber + ");";
+                    + customerNumber + ", '"
+                    + type + "', "
+                    + value + ", '"
+                    + paymentMethodInput.getValue() + "');";
             sqlConnection.updateQuery(order);
             result = sqlConnection.getDataQuery("SELECT LAST_INSERT_ID() FROM orders;");
 
@@ -1254,6 +1421,11 @@ public class MainSceneController extends SceneController implements Initializabl
             orderdetails.deleteCharAt(orderdetails.length() - 1);
             orderdetails.append(';');
             sqlConnection.updateQuery(orderdetails.toString());
+
+            int finalOrderNumber = orderNumber;
+            printInvoiceButton.setOnAction(event -> {
+                printInvoice(finalOrderNumber);
+            });
         }, null, progressIndicator, createOrderTab.getTabPane());
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION, "Order created successfully!", ButtonType.OK);
@@ -1303,21 +1475,21 @@ public class MainSceneController extends SceneController implements Initializabl
      * Handle ORDERS tab.
      */
     @FXML
-    TableView<ObservableList<Object>> ordersTable;
+    TableView<Order> ordersTable;
     @FXML
-    TableColumn<ObservableList<Object>, Integer> orderNumberOrd;
+    TableColumn<Order, Integer> orderNumberOrd;
     @FXML
-    TableColumn<ObservableList<Object>, LocalDate> orderDateOrd;
+    TableColumn<Order, LocalDate> orderDateOrd;
     @FXML
-    TableColumn<ObservableList<Object>, LocalDate> requiredDateOrd;
+    TableColumn<Order, String> typeOrd;
     @FXML
-    TableColumn<ObservableList<Object>, LocalDate> shippedDateOrd;
+    TableColumn<Order, String> commentsOrd;
     @FXML
-    TableColumn<ObservableList<Object>, String> statusOrd;
+    TableColumn<Order, String> valueOrd;
     @FXML
-    TableColumn<ObservableList<Object>, String> commentsOrd;
+    TableColumn<Order, String> customerNameOrd;
     @FXML
-    TableColumn<ObservableList<Object>, Integer> customerNumberOrd;
+    TableColumn<Order, String> contactOrd;
     @FXML
     JFXButton createOrderButton;
     @FXML
@@ -1331,18 +1503,23 @@ public class MainSceneController extends SceneController implements Initializabl
             ordersTable.getItems().clear();
 
             try {
-                String query = "SELECT orderNumber, orderDate, requiredDate, shippedDate, status, comments, customerNumber FROM orders";
+                String query = "SELECT orderNumber, orderDate, requiredDate, shippedDate, status, type, comments, value, payment_method, customerName, phone FROM orders INNER JOIN customers ON orders.customerNumber = customers.customerNumber";
                 ResultSet resultSet = sqlConnection.getDataQuery(query);
                 while (resultSet.next()) {
-                    ObservableList<Object> row = FXCollections.observableArrayList();
-                    row.add(resultSet.getInt("orderNumber"));
-                    row.add(resultSet.getDate("orderDate").toLocalDate());
-                    row.add(resultSet.getDate("requiredDate").toLocalDate());
-                    row.add(resultSet.getDate("shippedDate") != null ? resultSet.getDate("shippedDate").toLocalDate() : null);
-                    row.add(resultSet.getString("status"));
-                    row.add(resultSet.getString("comments"));
-                    row.add(resultSet.getInt("customerNumber"));
-                    ordersTable.getItems().add(row);
+                    Order order = new Order(
+                            resultSet.getInt("orderNumber"),
+                            resultSet.getDate("orderDate").toLocalDate(),
+                            resultSet.getDate("requiredDate") != null ? resultSet.getDate("requiredDate").toLocalDate() : null,
+                            resultSet.getDate("shippedDate") != null ? resultSet.getDate("shippedDate").toLocalDate() : null,
+                            resultSet.getString("status"),
+                            resultSet.getString("comments"),
+                            resultSet.getString("customerName"),
+                            resultSet.getString("phone"),
+                            resultSet.getString("type"),
+                            resultSet.getDouble("value"),
+                            resultSet.getString("payment_method")
+                    );
+                    ordersTable.getItems().add(order);
                 }
                 ordersTable.refresh();
             } catch (SQLException ex) {
@@ -1354,11 +1531,11 @@ public class MainSceneController extends SceneController implements Initializabl
 
     public void handleRemoveOrder() {
         // Get the selected row in the TableView
-        ObservableList<Object> selectedRow = ordersTable.getSelectionModel().getSelectedItem();
+        Order selectedRow = ordersTable.getSelectionModel().getSelectedItem();
 
         // If a row is selected, delete the corresponding order from the database and TableView
         if (selectedRow != null) {
-            int orderNumber = (Integer) selectedRow.get(0);
+            int orderNumber = selectedRow.getOrderNumber();
 
             String deleteQuery = "DELETE FROM orderdetails WHERE orderNumber = " + orderNumber;
             // Delete the order from the database
@@ -1375,13 +1552,13 @@ public class MainSceneController extends SceneController implements Initializabl
     }
 
     @FXML
-    TableView<ObservableList<Object>> productsTable;
+    TableView<Product> productsTable;
     @FXML
-    TableColumn<ObservableList<Object>, String> productCodeProd;
+    TableColumn<Product, String> productCodeProd;
     @FXML
-    TableColumn<ObservableList<Object>, String> productNameProd;
+    TableColumn<Product, String> productNameProd;
     @FXML
-    TableColumn<ObservableList<Object>, String> productLineProd;
+    TableColumn<Product, String> productLineProd;
     @FXML
     JFXButton productDetailsButton;
     @FXML
@@ -1402,24 +1579,23 @@ public class MainSceneController extends SceneController implements Initializabl
             productsTable.getItems().clear();
 
             try {
-                String query = "SELECT productCode, productName, productLine FROM products";
+                String query = "SELECT productCode, productName, productLine, productVendor, productDescription, quantityInStock, buyPrice, sellPrice FROM products";
                 ResultSet resultSet = sqlConnection.getDataQuery(query);
                 while (resultSet.next()) {
-                    ObservableList<Object> row = FXCollections.observableArrayList();
-                    row.add(resultSet.getString("productCode"));
-                    row.add(resultSet.getString("productName"));
-                    row.add(resultSet.getString("productLine"));
-                    productsTable.getItems().add(row);
+                    Product product = new Product(
+                            resultSet.getString(1),
+                            resultSet.getString(2),
+                            resultSet.getString(3),
+                            resultSet.getString(4),
+                            resultSet.getString(5),
+                            resultSet.getInt(6),
+                            resultSet.getDouble(7),
+                            resultSet.getDouble(8)
+                    );
+                    productsTable.getItems().add(product);
                 }
                 productsTable.refresh();
-                productLinePDetails.getItems().clear();
-                query = "SELECT productLine FROM productlines";
-                resultSet = sqlConnection.getDataQuery(query);
 
-                while (resultSet.next()) {
-                    String productLine = resultSet.getString("productLine");
-                    productLinePDetails.getItems().add(productLine);
-                }
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
@@ -1432,7 +1608,9 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     JFXTextField productNamePDetails;
     @FXML
-    JFXComboBox productLinePDetails;
+    JFXTextField productLinePDetails;
+    @FXML
+    ListView<String> plSuggestionList;
     @FXML
     JFXTextField productVendorPDetails;
     @FXML
@@ -1449,7 +1627,7 @@ public class MainSceneController extends SceneController implements Initializabl
         productCodePDetails.setText("");
         productNamePDetails.setText("");
         productVendorPDetails.setText("");
-        productLinePDetails.setValue(null);
+        productLinePDetails.setText("");
         inStockPDetails.setText("");
         buyPricePDetails.setText("");
         sellPricePDetails.setText("");
@@ -1459,17 +1637,29 @@ public class MainSceneController extends SceneController implements Initializabl
         productDetailsPane.setVisible(true);
 
         productDetailsButton.setOnAction(event -> {
-            String query = String.format("insert into products(productCode, productName, productLine, productVendor, productDescription, quantityInStock, buyPrice, sellPrice) " +
+            String query = String.format("SELECT productLine FROM productlines WHERE productLine = '%s'", productLinePDetails.getText());
+            ResultSet rs = sqlConnection.getDataQuery(query);
+            try {
+                if (!rs.next()) {
+                    query = String.format("insert into productlines(productLine) values ('%s')", productLinePDetails.getText());
+                    sqlConnection.updateQuery(query);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+
+            query = String.format("insert into products(productCode, productName, productLine, productVendor, productDescription, quantityInStock, buyPrice, sellPrice) " +
                             "VALUES ('%s', '%s', '%s', '%s', '%s', %d, %f, %f);", productCodePDetails.getText(), productNamePDetails.getText(),
-                    productLinePDetails.getValue(), productVendorPDetails.getText(), productDescriptionPDetails.getText(),
-                    Integer.parseInt(inStockPDetails.getText()), Double.parseDouble(buyPricePDetails.getText()), Double.parseDouble(sellPricePDetails.getText()));
+
+                            productLinePDetails.getText(), productVendorPDetails.getText(), productDescriptionPDetails.getText(),
+                            Integer.parseInt(inStockPDetails.getText()), Double.parseDouble(buyPricePDetails.getText()), Double.parseDouble(sellPricePDetails.getText()));
             sqlConnection.updateQuery(query);
 
-            ObservableList<Object> row = FXCollections.observableArrayList();
-            row.add(productCodePDetails.getText());
-            row.add(productNamePDetails.getText());
-            row.add(productLinePDetails.getValue());
-            productsTable.getItems().add(0, row);
+            Product product = new Product( productCodePDetails.getText(), productNamePDetails.getText(),
+                    productLinePDetails.getText(), productVendorPDetails.getText(), productDescriptionPDetails.getText(),
+                    Integer.parseInt(inStockPDetails.getText()), Double.parseDouble(buyPricePDetails.getText()), Double.parseDouble(sellPricePDetails.getText()));
+            productsTable.getItems().add(0, product);
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Product added successfully!", ButtonType.OK);
             alert.setTitle(null);
@@ -1482,39 +1672,43 @@ public class MainSceneController extends SceneController implements Initializabl
 
             productsTable.refresh();
 
-
         });
     }
 
-    void initEditProductDetails(ObservableList<Object> selected) {
+    void initEditProductDetails(Product selected) {
         productDetailsButton.setText("Save");
-        try {
-            String query = "SELECT productCode, productName, productLine, productVendor, productDescription, quantityInStock, buyPrice, sellPrice FROM products WHERE productCode = '" + selected.get(0).toString() + "'";
-            ResultSet resultSet = sqlConnection.getDataQuery(query);
-            if (resultSet.next()) {
-                productCodePDetails.setText(resultSet.getString("productCode"));
-                productNamePDetails.setText(resultSet.getString("productName"));
-                productLinePDetails.setValue(resultSet.getString("productLine"));
-                productVendorPDetails.setText(resultSet.getString("productVendor"));
-                productDescriptionPDetails.setText(resultSet.getString("productDescription"));
-                inStockPDetails.setText(resultSet.getString("quantityInStock"));
-                buyPricePDetails.setText(resultSet.getString("buyPrice"));
-                sellPricePDetails.setText(resultSet.getString("sellPrice"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
+        productCodePDetails.setText(selected.getProductCode());
+        productNamePDetails.setText(selected.getProductName());
+        productLinePDetails.setText(selected.getProductLine());
+        productVendorPDetails.setText(selected.getProductVendor());
+        productDescriptionPDetails.setText(selected.getProductDescription());
+        inStockPDetails.setText(String.valueOf(selected.getQuantityInStock()));
+        buyPricePDetails.setText(String.valueOf(selected.getBuyPrice()));
+        sellPricePDetails.setText(String.valueOf(selected.getSellPrice()));
+
 
         productDetailsButton.setOnAction(e -> {
-            String query = String.format("UPDATE products SET productCode = '%s', productName = '%s', productLine = '%s', productVendor = '%s', productDescription = '%s', quantityInStock = %d, buyPrice = %f, sellPrice = %f WHERE productCode = '%s'",
-                    productCodePDetails.getText(), productNamePDetails.getText(), productLinePDetails.getValue(), productVendorPDetails.getText(),
+            String query = String.format("SELECT productLine FROM productlines WHERE productLine = '%s'", productLinePDetails.getText());
+            ResultSet rs = sqlConnection.getDataQuery(query);
+            try {
+                if (!rs.next()) {
+                    query = String.format("insert into productlines(productLine) values ('%s')", productLinePDetails.getText());
+                    sqlConnection.updateQuery(query);
+                }
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+
+            query = String.format("UPDATE products SET productCode = '%s', productName = '%s', productLine = '%s', productVendor = '%s', productDescription = '%s', quantityInStock = %d, buyPrice = %f, sellPrice = %f WHERE productCode = '%s'",
+                    productCodePDetails.getText(), productNamePDetails.getText(), productLinePDetails.getText(), productVendorPDetails.getText(),
                     productDescriptionPDetails.getText(), Integer.parseInt(inStockPDetails.getText()),
-                    Double.parseDouble(buyPricePDetails.getText()), Double.parseDouble(sellPricePDetails.getText()), selected.get(0));
+                    Double.parseDouble(buyPricePDetails.getText()), Double.parseDouble(sellPricePDetails.getText()), selected.getProductCode());
             sqlConnection.updateQuery(query);
 
-            selected.set(0, productCodePDetails.getText());
-            selected.set(1, productNamePDetails.getText());
-            selected.set(2, productLinePDetails.getValue());
+            selected.setProductCode(productCodePDetails.getText());
+            selected.setProductName(productNamePDetails.getText());
+            selected.setProductLine(productLinePDetails.getText());
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Product details saved successfully!", ButtonType.OK);
             alert.setTitle(null);
@@ -1526,6 +1720,50 @@ public class MainSceneController extends SceneController implements Initializabl
 
 
         });
+    }
+
+    public void printInvoice(int orderNumber) {
+        String sourceFile = "src/main/resources/salesmanagement/salesmanagement/invoice.jrxml";
+        try {
+            JasperReport jr = JasperCompileManager.compileReport(sourceFile);
+            HashMap<String, Object> para = new HashMap<>();
+            para.put("invoiceNo", "INV" + String.format("%04d", orderNumber));
+            para.put("customerName", customerNameInput.getText());
+            para.put("contact", phoneNumberInput.getText());
+            para.put("totalAmount", "totalAmount");
+            para.put("otherAmount", "discount");
+            para.put("paybleAmount", "toBePaid");
+            para.put("paidAmount", "paid");
+            para.put("dueAmount", "due");
+            para.put("comments", commentsInput.getText());
+            para.put("point1", "Lorem Ipsum is simply dummy text of the printing and typesetting industry.");
+            para.put("point2", "If you have any questions concerning this invoice, use the following contact information:");
+            para.put("point3", "+243 999999999, purchase@example.com");
+            LocalDate orderDate = orderDateInput.getValue() != null ? orderDateInput.getValue() : LocalDate.now();
+            para.put("orderYear", orderDate.getYear() - 1900);
+            para.put("orderMonth", orderDate.getMonthValue() - 1);
+            para.put("orderDay", orderDate.getDayOfMonth());
+            para.put("paymentMethod", paymentMethodInput.getValue());
+            String query = String.format("SELECT value, type FROM orders WHERE orderNumber = %d", orderNumber);
+            ResultSet rs = sqlConnection.getDataQuery(query);
+            if (rs.next()) {
+                para.put("totalAmount", rs.getDouble(1));
+                para.put("type", rs.getString(2).substring(0, 1).toUpperCase() + rs.getString(2).substring(1));
+            }
+
+            ArrayList<OrderItem> plist = new ArrayList<>();
+
+            for (OrderItem item : orderDetailsTable.getItems()) {
+                plist.add(new OrderItem(item.getProductCode(), item.getQuantityOrdered(), item.getPriceEach(), item.getQuantityOrdered() * item.getPriceEach()));
+            }
+
+            JRBeanCollectionDataSource jcs = new JRBeanCollectionDataSource(plist);
+            JasperPrint jp = JasperFillManager.fillReport(jr, para, jcs);
+            JasperViewer.viewReport(jp, false);
+
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
     }
 
     private void clearCreateOrderTab() {

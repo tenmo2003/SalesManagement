@@ -7,6 +7,7 @@ module salesmanagement.salesmanagement {
     requires javafx.swing;
     requires javafx.web;
     requires libphonenumber;
+    requires jasperreports;
     requires de.jensd.fx.glyphs.fontawesome;
     requires java.sql;
     requires org.burningwave.core;
