@@ -7,6 +7,8 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -29,6 +31,8 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.web.HTMLEditor?>
+<?import javafx.scene.web.WebView?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.scenecontrollers.MainSceneController">
    <children>
@@ -109,7 +113,7 @@
                                           <Font size="15.0" />
                                        </font>
                                     </Label>
-                                    <JFXButton fx:id="dashBoardTabButton" focusTraversable="false" onAction="#tabSelectingEffect" onMouseClicked="#displayDashBoardTab" prefHeight="50.0" prefWidth="383.0" styleClass="main-button" textFill="WHITE">
+                                    <JFXButton focusTraversable="false" onAction="#tabSelectingEffect" onMouseClicked="#displayDashBoardTab" prefHeight="50.0" prefWidth="383.0" styleClass="main-button" textFill="WHITE">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -222,6 +226,33 @@
                                           <Insets left="10.0" />
                                        </VBox.margin>
                                     </Label>
+                                    <JFXButton fx:id="newsTabButton" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" onAction="#tabSelectingEffect" onMouseClicked="#goToNewsTab" prefHeight="50.0" prefWidth="378.0" styleClass="main-button" textFill="WHITE">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                       <graphic>
+                                          <HBox fx:id="boxInNewsTabButton" alignment="CENTER_LEFT" prefHeight="44.0" prefWidth="294.0" spacing="10.0">
+                                             <children>
+                                                <ImageView fitHeight="22.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@img/news_icon.png" />
+                                                   </image>
+                                                   <HBox.margin>
+                                                      <Insets left="10.0" />
+                                                   </HBox.margin>
+                                                </ImageView>
+                                                <Label prefHeight="22.0" prefWidth="92.0" style="-fx-font-family: SVN-Poppins; -fx-font-weight: 800;" text="News" textFill="#7c8db5">
+                                                   <font>
+                                                      <Font size="15.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </HBox>
+                                       </graphic>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </JFXButton>
                                     <JFXButton fx:id="settingsTabButton" focusTraversable="false" onAction="#tabSelectingEffect" onMouseClicked="#goToSettingTab" prefHeight="50.0" prefWidth="425.0" styleClass="main-button" textFill="WHITE">
                                        <font>
                                           <Font size="16.0" />
@@ -257,6 +288,434 @@
                   </AnchorPane>
                   <TabPane fx:id="tabPane" prefHeight="758.4" prefWidth="997.6" styleClass="main-tab-pane" stylesheets="@tabpane_style.css" tabClosingPolicy="UNAVAILABLE">
                      <tabs>
+                        <Tab fx:id="homeTab" closable="false" text="HOME">
+                           <content>
+                              <StackPane>
+                                 <children>
+                                    <VBox fx:id="newsPreviewBox" prefHeight="200.0" prefWidth="100.0" spacing="20.0" visible="false">
+                                       <children>
+                                          <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
+                                             <children>
+                                                <JFXButton onMouseClicked="#backToNewsCreatingBox" text="BACK" />
+                                             </children>
+                                          </HBox>
+                                          <WebView fx:id="webPreview" prefHeight="506.0" prefWidth="1568.0" />
+                                          <HBox alignment="CENTER_LEFT">
+                                             <children>
+                                                <Label text="Schedule">
+                                                   <HBox.margin>
+                                                      <Insets right="20.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                                <DatePicker />
+                                             </children>
+                                          </HBox>
+                                          <StackPane prefHeight="40.0" prefWidth="1568.0">
+                                             <children>
+                                                <JFXButton id="sale" onMouseClicked="#postNews" stylesheets="@button_style.css" text="UPLOAD" />
+                                             </children>
+                                          </StackPane>
+                                       </children>
+                                       <padding>
+                                          <Insets left="30.0" right="30.0" />
+                                       </padding>
+                                       <StackPane.margin>
+                                          <Insets />
+                                       </StackPane.margin>
+                                    </VBox>
+                                    <VBox fx:id="newsCreatingBox" prefHeight="1002.0" prefWidth="1379.0" spacing="10.0" visible="false">
+                                       <children>
+                                          <Label text="CREATE NEW POST" textAlignment="CENTER">
+                                             <font>
+                                                <Font size="29.0" />
+                                             </font>
+                                          </Label>
+                                          <Label prefHeight="18.0" prefWidth="62.0" text="Title" textAlignment="RIGHT">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </Label>
+                                          <JFXTextField fx:id="newsTitle" prefHeight="26.0" prefWidth="1342.0" promptText="e.g. " styleClass="text-field-box" VBox.vgrow="ALWAYS">
+                                             <font>
+                                                <Font size="15.0" />
+                                             </font>
+                                          </JFXTextField>
+                                          <Label prefHeight="18.0" prefWidth="65.0" text="Image">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </Label>
+                                          <ImageView fx:id="newsImageInserted" fitHeight="104.0" fitWidth="153.0" onMouseClicked="#uploadImageNews" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@img/sample_image.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label prefHeight="18.0" prefWidth="65.0" text="Body">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </Label>
+                                          <HTMLEditor fx:id="htmlEditor" focusTraversable="false" htmlText="&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;" prefHeight="336.0" prefWidth="1538.0" />
+                                          <VBox alignment="TOP_CENTER">
+                                             <children>
+                                                <JFXButton id="sale" onMouseClicked="#previewNews" stylesheets="@button_style.css" text="PREVIEW" />
+                                             </children>
+                                             <padding>
+                                                <Insets top="20.0" />
+                                             </padding>
+                                          </VBox>
+                                       </children>
+                                       <padding>
+                                          <Insets left="30.0" right="30.0" />
+                                       </padding>
+                                    </VBox>
+                                    <SplitPane fx:id="thirdSplitPane" dividerPositions="0.75" prefHeight="200.0" prefWidth="200.0">
+                                       <items>
+                                          <StackPane prefHeight="945.0" prefWidth="1246.0">
+                                             <children>
+                                                <VBox>
+                                                   <children>
+                                                      <StackPane>
+                                                         <children>
+                                                            <JFXButton onMouseClicked="#goToCreateNews" text="Post News" StackPane.alignment="CENTER_RIGHT">
+                                                               <StackPane.margin>
+                                                                  <Insets right="30.0" />
+                                                               </StackPane.margin>
+                                                            </JFXButton>
+                                                         </children>
+                                                      </StackPane>
+                                                      <WebView fx:id="newsDisplayedView" prefHeight="885.0" prefWidth="1258.0" style="-fx-page-fill: transparent;" VBox.vgrow="ALWAYS">
+                                                         <VBox.margin>
+                                                            <Insets top="10.0" />
+                                                         </VBox.margin></WebView>
+                                                   </children>
+                                                </VBox>
+                                             </children>
+                                             <padding>
+                                                <Insets top="15.0" />
+                                             </padding>
+                                          </StackPane>
+                                          <StackPane SplitPane.resizableWithParent="false">
+                                             <children>
+                                                <VBox fx:id="newsPiecesBox" fillWidth="false" prefHeight="1022.0" prefWidth="247.0" spacing="20.0">
+                                                   <children>
+                                                      <HBox prefHeight="70.0" prefWidth="312.0" spacing="10.0">
+                                                         <children>
+                                                            <StackPane prefHeight="70.0" prefWidth="74.0" HBox.hgrow="ALWAYS">
+                                                               <children>
+                                                                  <ImageView fitHeight="70.0" fitWidth="100.0" onMouseClicked="#openNews" pickOnBounds="true" StackPane.alignment="CENTER">
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                     <image>
+                                                                        <Image url="@img/transparent.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                                  <StackPane prefHeight="150.0" prefWidth="200.0" />
+                                                               </children>
+                                                            </StackPane>
+                                                            <StackPane HBox.hgrow="ALWAYS">
+                                                               <HBox.margin>
+                                                                  <Insets right="10.0" />
+                                                               </HBox.margin>
+                                                               <children>
+                                                                  <Text onMouseClicked="#openNews" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-style" wrappingWidth="178.52772521972656" StackPane.alignment="TOP_LEFT">
+                                                                     <font>
+                                                                        <Font size="18.0" />
+                                                                     </font>
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                  </Text>
+                                                               </children>
+                                                            </StackPane>
+                                                         </children>
+                                                         <padding>
+                                                            <Insets left="10.0" />
+                                                         </padding>
+                                                         <cursor>
+                                                            <Cursor fx:constant="DEFAULT" />
+                                                         </cursor>
+                                                      </HBox>
+                                                      <HBox prefHeight="70.0" prefWidth="312.0" spacing="10.0">
+                                                         <children>
+                                                            <StackPane prefHeight="70.0" prefWidth="74.0" HBox.hgrow="ALWAYS">
+                                                               <children>
+                                                                  <ImageView fitHeight="70.0" fitWidth="100.0" onMouseClicked="#openNews" pickOnBounds="true" StackPane.alignment="CENTER">
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                     <image>
+                                                                        <Image url="@img/transparent.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                                  <StackPane prefHeight="150.0" prefWidth="200.0" />
+                                                               </children>
+                                                            </StackPane>
+                                                            <StackPane HBox.hgrow="ALWAYS">
+                                                               <HBox.margin>
+                                                                  <Insets right="10.0" />
+                                                               </HBox.margin>
+                                                               <children>
+                                                                  <Text onMouseClicked="#openNews" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-style" wrappingWidth="178.52772521972656" StackPane.alignment="TOP_LEFT">
+                                                                     <font>
+                                                                        <Font size="18.0" />
+                                                                     </font>
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                  </Text>
+                                                               </children>
+                                                            </StackPane>
+                                                         </children>
+                                                         <padding>
+                                                            <Insets left="10.0" />
+                                                         </padding>
+                                                         <cursor>
+                                                            <Cursor fx:constant="DEFAULT" />
+                                                         </cursor>
+                                                      </HBox>
+                                                      <HBox prefHeight="70.0" prefWidth="312.0" spacing="10.0">
+                                                         <children>
+                                                            <StackPane prefHeight="70.0" prefWidth="74.0" HBox.hgrow="ALWAYS">
+                                                               <children>
+                                                                  <ImageView fitHeight="70.0" fitWidth="100.0" onMouseClicked="#openNews" pickOnBounds="true" StackPane.alignment="CENTER">
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                     <image>
+                                                                        <Image url="@img/transparent.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                                  <StackPane prefHeight="150.0" prefWidth="200.0" />
+                                                               </children>
+                                                            </StackPane>
+                                                            <StackPane HBox.hgrow="ALWAYS">
+                                                               <HBox.margin>
+                                                                  <Insets right="10.0" />
+                                                               </HBox.margin>
+                                                               <children>
+                                                                  <Text onMouseClicked="#openNews" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-style" wrappingWidth="178.52772521972656" StackPane.alignment="TOP_LEFT">
+                                                                     <font>
+                                                                        <Font size="18.0" />
+                                                                     </font>
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                  </Text>
+                                                               </children>
+                                                            </StackPane>
+                                                         </children>
+                                                         <padding>
+                                                            <Insets left="10.0" />
+                                                         </padding>
+                                                         <cursor>
+                                                            <Cursor fx:constant="DEFAULT" />
+                                                         </cursor>
+                                                      </HBox>
+                                                      <HBox prefHeight="70.0" prefWidth="312.0" spacing="10.0">
+                                                         <children>
+                                                            <StackPane prefHeight="70.0" prefWidth="74.0" HBox.hgrow="ALWAYS">
+                                                               <children>
+                                                                  <ImageView fitHeight="70.0" fitWidth="100.0" onMouseClicked="#openNews" pickOnBounds="true" StackPane.alignment="CENTER">
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                     <image>
+                                                                        <Image url="@img/transparent.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                                  <StackPane prefHeight="150.0" prefWidth="200.0" />
+                                                               </children>
+                                                            </StackPane>
+                                                            <StackPane HBox.hgrow="ALWAYS">
+                                                               <HBox.margin>
+                                                                  <Insets right="10.0" />
+                                                               </HBox.margin>
+                                                               <children>
+                                                                  <Text onMouseClicked="#openNews" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-style" wrappingWidth="178.52772521972656" StackPane.alignment="TOP_LEFT">
+                                                                     <font>
+                                                                        <Font size="18.0" />
+                                                                     </font>
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                  </Text>
+                                                               </children>
+                                                            </StackPane>
+                                                         </children>
+                                                         <padding>
+                                                            <Insets left="10.0" />
+                                                         </padding>
+                                                         <cursor>
+                                                            <Cursor fx:constant="DEFAULT" />
+                                                         </cursor>
+                                                      </HBox>
+                                                      <HBox prefHeight="70.0" prefWidth="312.0" spacing="10.0">
+                                                         <children>
+                                                            <StackPane prefHeight="70.0" prefWidth="74.0" HBox.hgrow="ALWAYS">
+                                                               <children>
+                                                                  <ImageView fitHeight="70.0" fitWidth="100.0" onMouseClicked="#openNews" pickOnBounds="true" StackPane.alignment="CENTER">
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                     <image>
+                                                                        <Image url="@img/transparent.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                                  <StackPane prefHeight="150.0" prefWidth="200.0" />
+                                                               </children>
+                                                            </StackPane>
+                                                            <StackPane HBox.hgrow="ALWAYS">
+                                                               <HBox.margin>
+                                                                  <Insets right="10.0" />
+                                                               </HBox.margin>
+                                                               <children>
+                                                                  <Text onMouseClicked="#openNews" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-style" wrappingWidth="178.52772521972656" StackPane.alignment="TOP_LEFT">
+                                                                     <font>
+                                                                        <Font size="18.0" />
+                                                                     </font>
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                  </Text>
+                                                               </children>
+                                                            </StackPane>
+                                                         </children>
+                                                         <padding>
+                                                            <Insets left="10.0" />
+                                                         </padding>
+                                                         <cursor>
+                                                            <Cursor fx:constant="DEFAULT" />
+                                                         </cursor>
+                                                      </HBox>
+                                                      <HBox prefHeight="70.0" prefWidth="312.0" spacing="10.0">
+                                                         <children>
+                                                            <StackPane prefHeight="70.0" prefWidth="74.0" HBox.hgrow="ALWAYS">
+                                                               <children>
+                                                                  <ImageView fitHeight="70.0" fitWidth="100.0" onMouseClicked="#openNews" pickOnBounds="true" StackPane.alignment="CENTER">
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                     <image>
+                                                                        <Image url="@img/transparent.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                                  <StackPane prefHeight="150.0" prefWidth="200.0" />
+                                                               </children>
+                                                            </StackPane>
+                                                            <StackPane HBox.hgrow="ALWAYS">
+                                                               <HBox.margin>
+                                                                  <Insets right="10.0" />
+                                                               </HBox.margin>
+                                                               <children>
+                                                                  <Text onMouseClicked="#openNews" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-style" wrappingWidth="178.52772521972656" StackPane.alignment="TOP_LEFT">
+                                                                     <font>
+                                                                        <Font size="18.0" />
+                                                                     </font>
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                  </Text>
+                                                               </children>
+                                                            </StackPane>
+                                                         </children>
+                                                         <padding>
+                                                            <Insets left="10.0" />
+                                                         </padding>
+                                                         <cursor>
+                                                            <Cursor fx:constant="DEFAULT" />
+                                                         </cursor>
+                                                      </HBox>
+                                                      <HBox prefHeight="70.0" prefWidth="312.0" spacing="10.0">
+                                                         <children>
+                                                            <StackPane prefHeight="70.0" prefWidth="74.0" HBox.hgrow="ALWAYS">
+                                                               <children>
+                                                                  <ImageView fitHeight="70.0" fitWidth="100.0" onMouseClicked="#openNews" pickOnBounds="true" StackPane.alignment="CENTER">
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                     <image>
+                                                                        <Image url="@img/transparent.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                                  <StackPane prefHeight="150.0" prefWidth="200.0" />
+                                                               </children>
+                                                            </StackPane>
+                                                            <StackPane HBox.hgrow="ALWAYS">
+                                                               <HBox.margin>
+                                                                  <Insets right="10.0" />
+                                                               </HBox.margin>
+                                                               <children>
+                                                                  <Text onMouseClicked="#openNews" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-style" wrappingWidth="178.52772521972656" StackPane.alignment="TOP_LEFT">
+                                                                     <font>
+                                                                        <Font size="18.0" />
+                                                                     </font>
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                  </Text>
+                                                               </children>
+                                                            </StackPane>
+                                                         </children>
+                                                         <padding>
+                                                            <Insets left="10.0" />
+                                                         </padding>
+                                                         <cursor>
+                                                            <Cursor fx:constant="DEFAULT" />
+                                                         </cursor>
+                                                      </HBox>
+                                                      <HBox prefHeight="70.0" prefWidth="312.0" spacing="10.0">
+                                                         <children>
+                                                            <StackPane prefHeight="70.0" prefWidth="74.0" HBox.hgrow="ALWAYS">
+                                                               <children>
+                                                                  <ImageView fitHeight="70.0" fitWidth="100.0" onMouseClicked="#openNews" pickOnBounds="true" StackPane.alignment="CENTER">
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                     <image>
+                                                                        <Image url="@img/transparent.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                                  <StackPane prefHeight="150.0" prefWidth="200.0" />
+                                                               </children>
+                                                            </StackPane>
+                                                            <StackPane HBox.hgrow="ALWAYS">
+                                                               <HBox.margin>
+                                                                  <Insets right="10.0" />
+                                                               </HBox.margin>
+                                                               <children>
+                                                                  <Text onMouseClicked="#openNews" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-style" wrappingWidth="178.52772521972656" StackPane.alignment="TOP_LEFT">
+                                                                     <font>
+                                                                        <Font size="18.0" />
+                                                                     </font>
+                                                                     <cursor>
+                                                                        <Cursor fx:constant="HAND" />
+                                                                     </cursor>
+                                                                  </Text>
+                                                               </children>
+                                                            </StackPane>
+                                                         </children>
+                                                         <padding>
+                                                            <Insets left="10.0" />
+                                                         </padding>
+                                                         <cursor>
+                                                            <Cursor fx:constant="DEFAULT" />
+                                                         </cursor>
+                                                      </HBox>
+                                                   </children>
+                                                   <padding>
+                                                      <Insets top="20.0" />
+                                                   </padding>
+                                                </VBox>
+                                             </children>
+                                          </StackPane>
+                                       </items>
+                                    </SplitPane>
+                                 </children>
+                              </StackPane>
+                           </content>
+                        </Tab>
                         <Tab fx:id="createOrderTab" closable="false" text="Create Order">
                            <content>
                               <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-border-width: 0;">
@@ -360,12 +819,13 @@
                                     <JFXButton fx:id="removeProductButton" layoutX="1134.0" layoutY="57.0" text="Remove" />
                                     <TableView fx:id="productsTable" layoutX="255.0" layoutY="95.0" prefHeight="675.0" prefWidth="950.0" stylesheets="@table.css">
                                        <columns>
-                                          <TableColumn fx:id="productCodeProd" prefWidth="210.32733154296875" text="Product Code" />
-                                          <TableColumn fx:id="productNameProd" prefWidth="374.4000244140625" text="Name" />
-                                          <TableColumn fx:id="productLineProd" prefWidth="363.05456909179804" text="Product Line" />
+                                          <TableColumn fx:id="productCodeProd" prefWidth="163.199951171875" text="Product Code" />
+                                          <TableColumn fx:id="productNameProd" prefWidth="330.76373291015625" text="Name" />
+                                          <TableColumn fx:id="productLineProd" prefWidth="205.0909423828125" text="Product Line" />
+                                          <TableColumn fx:id="productVendorProd" prefWidth="254.8363037109375" text="Product Vendor" />
                                        </columns>
                                     </TableView>
-                                    <Pane fx:id="bgPane" opacity="0.5" prefHeight="900.0" prefWidth="1500.0" style="-fx-background-color: black;" visible="false" />
+                                    <Pane fx:id="bgPaneProducts" opacity="0.5" prefHeight="900.0" prefWidth="1500.0" style="-fx-background-color: black;" visible="false" />
                                     <AnchorPane fx:id="productDetailsPane" focusTraversable="true" layoutX="385.0" layoutY="199.0" prefHeight="466.0" prefWidth="677.0" style="-fx-background-color: white;" visible="false">
                                        <children>
                                           <JFXTextField fx:id="productCodePDetails" layoutX="54.0" layoutY="72.0" prefHeight="26.0" prefWidth="195.0" />
@@ -427,6 +887,49 @@
                                           <ListView fx:id="plSuggestionList" layoutX="53.0" layoutY="274.0" prefHeight="117.0" prefWidth="195.0" visible="false" />
                                        </children>
                                     </AnchorPane>
+                                    <JFXButton fx:id="editProductButton" layoutX="1018.0" layoutY="57.0" prefHeight="26.0" prefWidth="52.0" text="Edit" />
+                                    <AnchorPane fx:id="productFilterPane" focusTraversable="true" layoutX="400.0" layoutY="188.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="281.0" prefWidth="628.0" style="-fx-background-color: white;">
+                                       <children>
+                                          <Text layoutX="336.0" layoutY="144.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Vendor">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Text>
+                                          <Text layoutX="54.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="175.5630645751953">
+                                             <font>
+                                                <Font name="System Bold Italic" size="17.0" />
+                                             </font>
+                                          </Text>
+                                          <Text layoutX="90.0" layoutY="144.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Line">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Text>
+                                          <JFXButton fx:id="closeProductFilterButton" buttonType="RAISED" layoutX="553.0" layoutY="18.0" prefHeight="24.0" prefWidth="15.0" text="X">
+                                             <font>
+                                                <Font name="System Bold" size="14.0" />
+                                             </font>
+                                          </JFXButton>
+                                          <JFXTextField fx:id="productCodeFilter" layoutX="90.0" layoutY="75.0" prefWidth="195.0" />
+                                          <Text layoutX="90.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Code">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Text>
+                                          <JFXTextField fx:id="productNameFilter" layoutX="336.0" layoutY="75.0" prefWidth="195.0" />
+                                          <Text layoutX="336.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Name">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Text>
+                                          <JFXButton fx:id="applyProductFilterButton" layoutX="230.0" layoutY="219.0" text="Apply Filter" />
+                                          <ListView fx:id="plSuggestionList11" layoutX="53.0" layoutY="274.0" prefHeight="117.0" prefWidth="195.0" visible="false" />
+                                          <JFXButton fx:id="clearProductFilterButton" layoutX="319.0" layoutY="219.0" text="Clear Filters" />
+                                          <JFXTextField fx:id="productLineFilter" layoutX="90.0" layoutY="158.0" prefWidth="195.0" />
+                                          <JFXTextField fx:id="productVendorFilter" layoutX="336.0" layoutY="158.0" prefWidth="195.0" />
+                                       </children>
+                                    </AnchorPane>
+                                    <JFXButton fx:id="addProductFilterButton" layoutX="255.0" layoutY="58.0" text="Filter..." />
                                  </children>
                               </AnchorPane>
 
@@ -969,13 +1472,62 @@
                                           <TableColumn fx:id="typeOrd" prefWidth="100.0" text="Type" />
                                           <TableColumn fx:id="commentsOrd" prefWidth="241.7454833984375" text="Comments" />
                                           <TableColumn fx:id="valueOrd" prefWidth="105.60003662109375" text="Value" />
-                                          <TableColumn fx:id="customerNameOrd" prefWidth="144.872802734375" text="Customer Name" />
+                                          <TableColumn fx:id="customerNameOrd" prefWidth="144.872802734375" text="Customer" />
                                           <TableColumn fx:id="contactOrd" prefWidth="128.2908935546875" text="Contact" />
                                        </columns>
                                     </TableView>
                                     <JFXButton fx:id="removeOrderButton" layoutX="988.0" layoutY="63.0" prefHeight="26.0" prefWidth="79.0" text="Remove" />
                                     <JFXButton fx:id="createOrderButton" layoutX="874.0" layoutY="63.0" text="Create New Order" />
                                     <JFXButton fx:id="editOrderButton" layoutX="837.0" layoutY="63.0" text="Edit" />
+                                    <JFXButton fx:id="addOrderFilterButton" layoutX="164.0" layoutY="64.0" prefHeight="26.0" prefWidth="73.0" text="Filter..." />
+                                    <Pane fx:id="bgPaneOrders" opacity="0.5" prefHeight="900.0" prefWidth="1500.0" style="-fx-background-color: black;" visible="false" />
+                                    <AnchorPane fx:id="orderFilterPane" focusTraversable="true" layoutX="326.0" layoutY="199.0" prefHeight="393.0" prefWidth="628.0" style="-fx-background-color: white;" visible="false">
+                                       <children>
+                                          <Text layoutX="91.0" layoutY="186.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Order Date">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Text>
+                                          <Text layoutX="54.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="175.5630645751953">
+                                             <font>
+                                                <Font name="System Bold Italic" size="17.0" />
+                                             </font>
+                                          </Text>
+                                          <Text layoutX="91.0" layoutY="125.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Order type">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Text>
+                                          <JFXButton fx:id="closeOrderFilterButton" buttonType="RAISED" layoutX="553.0" layoutY="18.0" prefHeight="24.0" prefWidth="15.0" text="X">
+                                             <font>
+                                                <Font name="System Bold" size="14.0" />
+                                             </font>
+                                          </JFXButton>
+                                          <JFXTextField fx:id="customerNameFilter" layoutX="90.0" layoutY="75.0" prefWidth="195.0" />
+                                          <Text layoutX="90.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Customer">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Text>
+                                          <JFXTextField fx:id="contactFilter" layoutX="336.0" layoutY="75.0" prefWidth="195.0" />
+                                          <Text layoutX="336.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Contact">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Text>
+                                          <JFXButton fx:id="applyOrderFilterButton" layoutX="230.0" layoutY="333.0" text="Apply Filter" />
+                                          <ListView fx:id="plSuggestionList1" layoutX="53.0" layoutY="274.0" prefHeight="117.0" prefWidth="195.0" visible="false" />
+                                          <DatePicker fx:id="orderDateFilter" layoutX="90.0" layoutY="197.0" />
+                                          <ComboBox fx:id="typeFilter" layoutX="90.0" layoutY="137.0" prefWidth="150.0" />
+                                          <Text layoutX="91.0" layoutY="249.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Comments">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Text>
+                                          <JFXTextField fx:id="commentsFilter" layoutX="89.0" layoutY="265.0" prefHeight="38.0" prefWidth="449.0" />
+                                          <JFXButton fx:id="clearOrderFilterButton" layoutX="319.0" layoutY="333.0" text="Clear Filters" />
+                                       </children>
+                                    </AnchorPane>
                                  </children>
                               </AnchorPane>
                            </content>
