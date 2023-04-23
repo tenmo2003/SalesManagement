@@ -12,10 +12,8 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -40,7 +38,6 @@ import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.util.Duration;
-import javafx.util.Pair;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -53,12 +50,8 @@ import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesComponent.Order;
 import salesmanagement.salesmanagement.SalesComponent.OrderItem;
 import salesmanagement.salesmanagement.SalesComponent.Product;
-import salesmanagement.salesmanagement.Utils;
 
-import javax.imageio.ImageIO;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.sql.PreparedStatement;
@@ -67,9 +60,9 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static salesmanagement.salesmanagement.Utils.getAllNodes;
-import static salesmanagement.salesmanagement.Utils.getFileNameAndExtension;
 
 public class MainSceneController extends SceneController implements Initializable {
     @FXML
@@ -94,8 +87,7 @@ public class MainSceneController extends SceneController implements Initializabl
 
     @FXML
     JFXButton ordersTabButton;
-    @FXML
-    JFXButton newsTabButton;
+
     @FXML
     JFXButton settingsTabButton;
     @FXML
@@ -400,8 +392,7 @@ public class MainSceneController extends SceneController implements Initializabl
     SplitPane firstSplitPane;
     @FXML
     SplitPane secondSplitPane;
-    @FXML
-    SplitPane thirdSplitPane;
+
     @FXML
     VBox employeeTableBox;
     @FXML
@@ -409,11 +400,7 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     ImageView smallAvatar;
 
-    @FXML
-    private void goToNewsTab() {
-        tabPane.getSelectionModel().select(homeTab);
-        newsTabButton.fire();
-    }
+
 
     @Override
     protected void maximumStage(MouseEvent mouseEvent) {
@@ -423,199 +410,8 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     StackPane menuPane;
 
-    //region News Tab: display news, post news.
     @FXML
-    WebView webPreview;
-    @FXML
-    HTMLEditor htmlEditor;
-    String htmlText;
-    MenuButton insertMenuButton;
-    @FXML
-    VBox newsPreviewBox;
-    @FXML
-    VBox newsCreatingBox;
-    @FXML
-    JFXTextField newsTitle;
-    @FXML
-    ImageView newsImageInserted;
-    @FXML
-    WebView newsDisplayedView;
-    @FXML
-    VBox newsPiecesBox;
-    String mainContent = "";
-
-    @FXML
-    void goToCreateNews() {
-        thirdSplitPane.setVisible(false);
-        thirdSplitPane.setDisable(true);
-        newsCreatingBox.setVisible(true);
-        newsCreatingBox.setDisable(false);
-    }
-
-    @FXML
-    public void previewNews() {
-        newsPreviewBox.setVisible(true);
-        newsPreviewBox.setDisable(false);
-        newsCreatingBox.setVisible(false);
-        htmlText = htmlEditor.getHtmlText();
-        htmlText = htmlText.replace("<body contenteditable=\"true\">", "<body style='background : rgba(0,0,0,0);' contenteditable=\"false\";> " + "<h1 style=\"text-align:center; font-size:30px; font-weight:bold;\">" + newsTitle.getText() + "</h1>\n");
-        webPreview.setPageFill(Color.TRANSPARENT);
-        webPreview.getEngine().loadContent(htmlText);
-    }
-
-    @FXML
-    public void backToNewsCreatingBox() {
-        newsPreviewBox.setVisible(false);
-        newsPreviewBox.setDisable(true);
-        newsCreatingBox.setVisible(true);
-    }
-
-    @FXML
-    public void postNews() throws SQLException {
-        String postNewsQuery = "insert into notifications(employeeNumber, title, content) values (?,?,?)";
-        PreparedStatement statement = sqlConnection.getConnection().prepareStatement(postNewsQuery);
-        statement.setInt(1, user.getEmployeeNumber());
-        statement.setString(2, newsTitle.getText());
-        statement.setString(3, htmlText);
-        statement.executeUpdate();
-        String getLatestIDQuery = "SELECT notificationID from notifications ORDER BY notificationID LIMIT 1";
-        ResultSet resultSet = sqlConnection.getDataQuery(getLatestIDQuery);
-        if (resultSet.next())
-            ImageController.uploadImage(newsImageInserted.getImage().getUrl(), "newsImage_" + resultSet.getInt("notificationID") + ".jpg");
-        thirdSplitPane.setVisible(true);
-        thirdSplitPane.setDisable(false);
-        newsCreatingBox.setVisible(false);
-        newsCreatingBox.setDisable(true);
-    }
-
-    @FXML
-    public void openNews(MouseEvent event) {
-        Node newsPiece = (Node) event.getSource();
-        while (!(newsPiece instanceof HBox)) {
-            newsPiece = newsPiece.getParent();
-        }
-        int newsID = Utils.findPairWithKey(newsIDs, newsPiecesBox.getChildren().indexOf(newsPiece));
-        displayNewsTab(newsID);
-    }
-
-    ArrayList<Pair<Integer, Integer>> newsIDs = new ArrayList<>();
-
-    private void loadNewsPiece(int newsPieceIndex) {
-        HBox newsPiece = ((HBox) newsPiecesBox.getChildren().get(newsPieceIndex));
-        ((ImageView) ((StackPane) newsPiece.getChildren().get(0)).getChildren().get(0)).setImage(null);
-        ((Text) ((StackPane) newsPiece.getChildren().get(1)).getChildren().get(0)).setText("");
-        imageLoadingAnimation[newsPieceIndex].set(true);
-        titleLoadingAnimation[newsPieceIndex].set(true);
-        final int newsID = newsIDs.get(newsPieceIndex).getValue();
-        runTask(() -> {
-                    Image image = ImageController.getImage("newsImage_" + newsID + ".jpg", true);
-                    ((ImageView) ((StackPane) newsPiece.getChildren().get(0)).getChildren().get(0)).setImage(image);
-                    Platform.runLater(() -> imageLoadingAnimation[newsPieceIndex].set(false));
-
-        }, null, null, null);
-        runTask(() -> {
-            String query = "SELECT title FROM notifications WHERE notificationID = " + newsID;
-            ResultSet resultSet = sqlConnection.getDataQuery(query);
-            try {
-                if (resultSet.next()) {
-                    ((Text) ((StackPane) newsPiece.getChildren().get(1)).getChildren().get(0)).setText(resultSet.getString("title"));
-                    titleLoadingAnimation[newsPieceIndex].set(false);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }, null, null, null);
-    }
-
-    private void displayNewsTab(int newsID) {
-        //region Left pane to display main content.
-        runTask(() -> {
-            String query;
-            if (newsID == -1) {
-                query = "SELECT content FROM notifications ORDER BY notifications.notificationID DESC LIMIT 1;";
-            } else {
-                query = "SELECT content FROM notifications WHERE notificationID = " + newsID;
-            }
-            ResultSet resultSet = sqlConnection.getDataQuery(query);
-            try {
-                {
-                    if (resultSet.next()) {
-                        mainContent = resultSet.getString("content");
-                    }
-                    Platform.runLater(() -> {
-                        newsDisplayedView.getEngine().loadContent(mainContent);
-                    });
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }, null, (Pane) thirdSplitPane.getItems().get(0));
-        //endregion
-
-        //region Right pane to display news pieces box.
-        //Get news ID list task.
-        runTask(() -> {
-            String query = "SELECT notificationID FROM notifications ORDER BY notifications.notificationID DESC LIMIT 9;";
-            ResultSet resultSet = sqlConnection.getDataQuery(query);
-            newsIDs.clear();
-            try {
-                if (newsID == -1) resultSet.next();
-                int newsPieceCount = 0;
-                while (resultSet.next()) {
-                    if (resultSet.getInt("notificationID") == newsID) continue;
-                    newsIDs.add(new Pair<>(newsPieceCount, resultSet.getInt("notificationID")));
-                    if (++newsPieceCount >= 8) {
-                        break;
-                    }
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }, () -> {
-            for (int i = 0; i < 8; i++) {
-                loadNewsPiece(i);
-            }
-        }, null, null);
-
-//        runTask(() -> {
-//            String query = "SELECT notificationID, title, newsImage FROM notifications ORDER BY notifications.notificationID DESC LIMIT 6;";
-//            ResultSet resultSet = sqlConnection.getDataQuery(query);
-//            try {
-//                if (newsID == -1) resultSet.next();
-//                int newsPieceCount = 0;
-//                while (resultSet.next()) {
-//                    if (resultSet.getInt("notificationID") == newsID) continue;
-//                    HBox newsPiece = ((HBox) newsPiecesBox.getChildren().get(newsPieceCount));
-//                    ((Text) newsPiece.getChildren().get(1)).setText(resultSet.getString("title"));
-//                    InputStream is = resultSet.getBinaryStream("newsImage");
-//                    Image image = new Image(is);
-//                    ((ImageView) newsPiece.getChildren().get(0)).setImage(image);
-//                    newsIDs.add(new Pair<>(newsPiecesBox.getChildren().indexOf(newsPiece), resultSet.getInt("notificationID")));
-//                    newsPieceCount++;
-//                }
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//        }, null, (Pane) thirdSplitPane.getItems().get(1));
-        //endregion
-    }
-
-    @FXML
-    void uploadImageNews(MouseEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choose News Image");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Image", "*.png", "*.jpg", "*.gif")
-        );
-        File selectedFile = fileChooser.showOpenDialog(stage);
-        if (selectedFile != null) {
-            ((ImageView) event.getSource()).setImage(new Image(selectedFile.toURI().toString()));
-        }
-    }
-
-    //endregion
-    private final BooleanProperty[] imageLoadingAnimation = new BooleanProperty[8];
-    private final BooleanProperty[] titleLoadingAnimation = new BooleanProperty[8];
+    JFXButton dashBoardTabButton;
 
     public void initialSetup() {
         // Load current UI.
@@ -629,9 +425,6 @@ public class MainSceneController extends SceneController implements Initializabl
         ((AnchorPane) secondSplitPane.getItems().get(0)).setMinWidth(0.1667 * Screen.getPrimary().getVisualBounds().getWidth());
         ((TabPane) secondSplitPane.getItems().get(1)).setMinWidth(0.8333 * Screen.getPrimary().getVisualBounds().getWidth());
 
-        thirdSplitPane.setMaxWidth(0.8333 * Screen.getPrimary().getVisualBounds().getWidth());
-        ((Pane) thirdSplitPane.getItems().get(0)).setMinWidth(0.75 * thirdSplitPane.getMaxWidth());
-        ((Pane) thirdSplitPane.getItems().get(1)).setMinWidth(0.25 * thirdSplitPane.getMaxWidth());
         Insets hboxMargin = new Insets(0, 0.8333 * Screen.getPrimary().getVisualBounds().getWidth(), 0, 0);
         StackPane.setMargin(appName, hboxMargin);
 
@@ -650,74 +443,7 @@ public class MainSceneController extends SceneController implements Initializabl
         clip.setCenterY(35);
         smallAvatar.setClip(clip);
 
-        currentTabButton = newsTabButton;
-        goToNewsTab();
-
-        insertMenuButton = new MenuButton("Insert...");
-        ToolBar bar = null;
-        Node topToolbar = htmlEditor.lookup(".top-toolbar");
-        if (topToolbar instanceof ToolBar) {
-            bar = (ToolBar) topToolbar;
-        }
-        if (bar != null) {
-            bar.getItems().add(insertMenuButton);
-        }
-
-        webPreview.setPageFill(Color.TRANSPARENT);
-        newsDisplayedView.setPageFill(Color.TRANSPARENT);
-
-        //TODO: test area
-
-        for (int i = 0; i < 8; i++) {
-            imageLoadingAnimation[i] = new javafx.beans.property.SimpleBooleanProperty(true);
-            titleLoadingAnimation[i] = new javafx.beans.property.SimpleBooleanProperty(true);
-
-            HBox hBox = (HBox) newsPiecesBox.getChildren().get(i);
-
-            StackPane newsImagePane = (StackPane) ((StackPane) hBox.getChildren().get(0)).getChildren().get(1);
-            newsImagePane.setStyle("-fx-background-color: grey;-fx-background-radius: 30;");
-            FadeTransition imageFadeTransition = new FadeTransition(Duration.seconds(2), newsImagePane);
-            imageFadeTransition.setFromValue(0.2);
-            imageFadeTransition.setToValue(0.6);
-            imageFadeTransition.setCycleCount(Timeline.INDEFINITE);
-            imageFadeTransition.setAutoReverse(true);
-            imageFadeTransition.play();
-
-            StackPane newsTitlePane = (StackPane) hBox.getChildren().get(1);
-            newsTitlePane.setStyle("-fx-background-color: grey;-fx-background-radius: 30;");
-            FadeTransition titleFadeTransition = new FadeTransition(Duration.seconds(2), newsTitlePane);
-            titleFadeTransition.setFromValue(0.2);
-            titleFadeTransition.setToValue(0.6);
-            titleFadeTransition.setCycleCount(Timeline.INDEFINITE);
-            titleFadeTransition.setAutoReverse(true);
-            titleFadeTransition.play();
-
-            ChangeListener<Boolean> imageLoadingListener = (observable, oldValue, newValue) -> {
-                if (newValue) {
-                    newsImagePane.setStyle("-fx-background-color: grey;-fx-background-radius: 30;");
-                    imageFadeTransition.play();
-                    newsImagePane.setDisable(false);
-                } else {
-                    imageFadeTransition.pause();
-                    newsImagePane.setStyle("-fx-background-color: transparent");
-                    Platform.runLater(() -> newsImagePane.setDisable(true));
-                }
-            };
-            imageLoadingAnimation[i].addListener(imageLoadingListener);
-
-            ChangeListener<Boolean> titleLoadingListener = (observable, oldValue, newValue) -> {
-                if (newValue) {
-                    newsTitlePane.setStyle("-fx-background-color: grey;-fx-background-radius: 30;");
-                    titleFadeTransition.play();
-                } else {
-                    titleFadeTransition.pause();
-                    newsTitlePane.setStyle("-fx-background-color: transparent");
-                    newsTitlePane.setOpacity(1);
-                }
-            };
-            titleLoadingAnimation[i].addListener(titleLoadingListener);
-        }
-
+        currentTabButton = dashBoardTabButton;
 
         // Load UI for others.
         runTask(() -> {
@@ -791,7 +517,7 @@ public class MainSceneController extends SceneController implements Initializabl
                         stage.setX(0);
                         stage.setY(0);
                         stage.show();
-                        displayNewsTab(-1);
+                        displayDashBoardTab();
                     });
 
                 }, null, null, null);
@@ -1551,7 +1277,7 @@ public class MainSceneController extends SceneController implements Initializabl
         Label label = (Label) hbox.getChildren().get(1);
         label.setTextFill(Color.valueOf("#7c8db5"));
         ImageView buttonIcon = (ImageView) hbox.getChildren().get(0);
-        if (currentTabButton.equals(newsTabButton)) buttonIcon.setImage(ImageController.newsIcon);
+        if (currentTabButton.equals(dashBoardTabButton)) buttonIcon.setImage(ImageController.newsIcon);
         else if (currentTabButton.equals(ordersTabButton)) buttonIcon.setImage(ImageController.orderIcon);
         else if (currentTabButton.equals(productsTabButton)) buttonIcon.setImage(ImageController.productIcon);
         else if (currentTabButton.equals(employeesTabButton)) buttonIcon.setImage(ImageController.employeeIcon);
@@ -1563,7 +1289,7 @@ public class MainSceneController extends SceneController implements Initializabl
         label = (Label) hbox.getChildren().get(1);
         label.setTextFill(Color.valueOf("#329cfe"));
         buttonIcon = (ImageView) hbox.getChildren().get(0);
-        if (currentTabButton.equals(newsTabButton)) buttonIcon.setImage(ImageController.blueNewsIcon);
+        if (currentTabButton.equals(dashBoardTabButton)) buttonIcon.setImage(ImageController.blueNewsIcon);
         else if (currentTabButton.equals(ordersTabButton)) buttonIcon.setImage(ImageController.blueOrderIcon);
         else if (currentTabButton.equals(productsTabButton)) buttonIcon.setImage(ImageController.blueProductIcon);
         else if (currentTabButton.equals(employeesTabButton)) buttonIcon.setImage(ImageController.blueEmployeeIcon);
