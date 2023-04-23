@@ -48,15 +48,14 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
-import salesmanagement.salesmanagement.Form;
-import salesmanagement.salesmanagement.ImageController;
+import salesmanagement.salesmanagement.*;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesComponent.Order;
 import salesmanagement.salesmanagement.SalesComponent.OrderItem;
 import salesmanagement.salesmanagement.SalesComponent.Product;
-import salesmanagement.salesmanagement.Utils;
 
 import javax.imageio.ImageIO;
+import java.beans.JavaBean;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -199,21 +198,17 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     private TableColumn<?, ?> nameColumn;
     @FXML
-    private TableColumn<?, ?> actionColumn;
-    @FXML
     private TableColumn<?, ?> phoneColumn;
     @FXML
     private TableColumn<?, ?> employeeStatusColumn;
     @FXML
-    AnchorPane employeeOperationPane;
+    private TableColumn<?, ?> accessibilityColumn;
     ArrayList<Employee> employees;
-
 
     @FXML
     void displayEmployeesTab() {
         tabPane.getSelectionModel().select(employeesOperationTab);
 
-        employeeTable.setSelectionModel(null);
         ArrayList<Employee> employees = new ArrayList<>();
         runTask(() -> {
             ResultSet resultSet = null;
@@ -234,7 +229,7 @@ public class MainSceneController extends SceneController implements Initializabl
             ObservableList<Employee> employeeList = FXCollections.observableArrayList(employees);
             employeeTable.setItems(employeeList);
             this.employees = employees;
-        }, progressIndicator, employeeOperationPane);
+        }, (StackPane) employeesOperationTab.getGraphic());
     }
 
     @FXML
@@ -245,6 +240,56 @@ public class MainSceneController extends SceneController implements Initializabl
     JFXButton editInfoButton;
     @FXML
     JFXButton saveInfoButton;
+    @FXML
+    JFXButton saveNewEmployeeButton;
+
+    @FXML
+    public void addNewEmployee() {
+        employeeInfoBox.toFront();
+        employeeInfoBox.setVisible(true);
+        saveNewEmployeeButton.setVisible(true);
+
+        employeeTableBox.toBack();
+        employeeTableBox.setVisible(false);
+
+        for (Node node : getAllNodes(detailsInfoBox)) {
+            node.setDisable(false);
+        }
+        fullNameLabel.setText("");
+        avatar.setImage(null);
+        lastNameTextField.setText("");
+        firstNameTextField.setText("");
+        usernameTextField.setText("");
+        passwordField.setText("");
+        birthDatePicker.setValue(null);
+        emailTextField.setText("");
+        employeeCodeTextField.setText("");
+        officeCodeTextField.setText("");
+        phoneCodeBox.setValue("+84 (VN)");
+        joiningDatePicker.setValue(null);
+        lastWorkingDatePicker.setValue(null);
+        phoneNumberTextField.setText("");
+        supervisorTextField.setText("");
+        statusBox.setValue(null);
+        accessibilityBox.setValue("Employee");
+        maleRadioButton.setSelected(false);
+        femaleRadioButton.setSelected(false);
+    }
+
+    @FXML
+    public void saveNewEmployee() {
+        runTask(() -> {
+            String query = "INSERT INTO `employees` (`employeeNumber`, `lastName`, `firstName`, `birthDate`, `gender`, `email`, `mailVerified`, " +
+                    "`officeCode`, `reportsTo`, `jobTitle`, `username`, `password`, `avatar`, `phoneCode`, `phone`, `status`, `joiningDate`, `lastWorkingDate`) " +
+                    "VALUES (NULL,'" + lastNameTextField.getText() + "', '" + firstNameTextField.getText() + "', '" + birthDatePicker.getValue() + "', NULL, '" + emailTextField.getText() + "', '0', " +
+                    "'" + officeCodeTextField.getText() + "'," + supervisorTextField.getText() + ", '" + accessibilityBox.getValue() + "', '" + usernameTextField.getText() + "', '" + passwordField.getText() + "', '', '" + phoneCodeBox.getValue() + "', '" + phoneNumberTextField.getText() + "', 'ACTIVE', '" + joiningDatePicker.getValue() + "', '" + lastWorkingDatePicker.getValue() + "')";
+            sqlConnection.updateQuery(query);
+            }, () -> {
+            saveNewEmployeeButton.setVisible(false);
+            displayEmployeesTab();
+            NotificationSystem.throwNotification(NotificationCode.SUCCEED_ADD_NEW_EMPLOYEE, stage);
+        }, null, null);
+    }
 
     /**
      * When click on Name Text in Employee table, this function will be called to
@@ -257,6 +302,9 @@ public class MainSceneController extends SceneController implements Initializabl
 
         employeeTableBox.toBack();
         employeeTableBox.setVisible(false);
+
+        editInfoButton.setVisible(true);
+        saveInfoButton.setVisible(true);
 
         for (Node node : getAllNodes(detailsInfoBox)) {
             node.setDisable(false);
@@ -272,9 +320,11 @@ public class MainSceneController extends SceneController implements Initializabl
         emailTextField.setText(employee.getEmail());
         phoneCodeBox.setValue(employee.getPhoneCode());
         joiningDatePicker.setValue(employee.getJoiningDate());
+        officeCodeTextField.setText(employee.getOfficeCode());
+        supervisorTextField.setText(Integer.toString(employee.getReportsTo()));
         lastWorkingDatePicker.setValue(employee.getLastWorkingDate());
         phoneNumberTextField.setText(employee.getPhone());
-        statusBox.setValue(employee.getStatus().getText());
+        statusBox.setValue(employee.getStatus());
         accessibilityBox.setValue(employee.getJobTitle());
         if (Objects.equals(employee.getGender(), "male")) maleRadioButton.setSelected(true);
         else if (Objects.equals(employee.getGender(), "female")) femaleRadioButton.setSelected(true);
@@ -294,8 +344,9 @@ public class MainSceneController extends SceneController implements Initializabl
         // UNLOCK ALL
         for (Node node : getAllNodes(detailsInfoBox)) {
             node.setDisable(false);
-
         }
+        editInfoButton.setDisable(true);
+        saveInfoButton.setDisable(false);
         employeeCodeTextField.setDisable(true);
     }
 
@@ -308,6 +359,7 @@ public class MainSceneController extends SceneController implements Initializabl
             }
         }
         editInfoButton.setDisable(false);
+        saveInfoButton.setDisable(true);
         // Save DATA To DB
 
     }
@@ -329,15 +381,19 @@ public class MainSceneController extends SceneController implements Initializabl
      * It relates to {@link  #displayEmployeeInfoBox(Employee)};
      */
     @FXML
-    void goBackToEmployeeTableBox() {
+    void backToEmployeeTableBox() {
         employeeInfoBox.toBack();
         employeeInfoBox.setVisible(false);
 
         employeeTableBox.toFront();
-        employeeInfoBox.setVisible(true);
+        employeeTableBox.setVisible(true);
 
         maleRadioButton.setSelected(false);
         femaleRadioButton.setSelected(false);
+
+        editInfoButton.setVisible(false);
+        saveInfoButton.setVisible(false);
+        saveNewEmployeeButton.setVisible(false);
     }
 
     @FXML
@@ -389,6 +445,8 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     JFXTextField employeeCodeTextField;
     @FXML
+    JFXTextField officeCodeTextField;
+    @FXML
     JFXComboBox<String> accessibilityBox;
     @FXML
     JFXTextField supervisorTextField;
@@ -434,14 +492,14 @@ public class MainSceneController extends SceneController implements Initializabl
         Insets hboxMargin = new Insets(0, 0.8333 * Screen.getPrimary().getVisualBounds().getWidth(), 0, 0);
         StackPane.setMargin(appName, hboxMargin);
 
-        double tableWidth = employeeTableBox.getWidth() * 0.95;
+        double tableWidth = employeeTableBox.getWidth() * 0.85;
         employeeTable.setMaxWidth(tableWidth);
-        employeeNumberColumn.setMinWidth(0.1 * tableWidth);
+        employeeNumberColumn.setMinWidth(0.15 * tableWidth);
         nameColumn.setMinWidth(0.25 * tableWidth);
-        phoneColumn.setMinWidth(0.15 * tableWidth);
+        phoneColumn.setMinWidth(0.2 * tableWidth);
         emailColumn.setMinWidth(0.2 * tableWidth);
+        accessibilityColumn.setMinWidth(0.1 * tableWidth);
         employeeStatusColumn.setMinWidth(0.1 * tableWidth);
-        actionColumn.setMinWidth(0.2 * tableWidth);
 
         Circle clip = new Circle();
         clip.setRadius(35);
@@ -476,8 +534,15 @@ public class MainSceneController extends SceneController implements Initializabl
             nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
             phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
             emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
-            employeeStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
-            actionColumn.setCellValueFactory(new PropertyValueFactory<>("action"));
+            employeeStatusColumn.setCellValueFactory(new PropertyValueFactory<>("statusBox"));
+            accessibilityColumn.setCellValueFactory(new PropertyValueFactory<>("jobTitle"));
+
+            employeeTable.setOnMouseClicked((MouseEvent event) -> {
+                if (event.getClickCount() == 2) {
+                    Employee selected = employeeTable.getSelectionModel().getSelectedItem();
+                    displayEmployeeInfoBox(selected);
+                }
+            });
 
             // Employees Tab Preparation.
             List<String> phoneCodes = new ArrayList<>();
@@ -500,7 +565,6 @@ public class MainSceneController extends SceneController implements Initializabl
 
 
     }
-
 
     private Employee user;
 
@@ -550,9 +614,9 @@ public class MainSceneController extends SceneController implements Initializabl
         statusInput.getItems().add("Resolved");
         statusInput.getItems().add("Shipped");
 
-        productCodeOD.setCellValueFactory(new PropertyValueFactory<OrderItem, String>("productCode"));
-        quantityOD.setCellValueFactory(new PropertyValueFactory<OrderItem, Integer>("quantityOrdered"));
-        priceEachOD.setCellValueFactory(new PropertyValueFactory<OrderItem, Double>("priceEach"));
+        productCodeOD.setCellValueFactory(new PropertyValueFactory<>("productCode"));
+        quantityOD.setCellValueFactory(new PropertyValueFactory<>("quantityOrdered"));
+        priceEachOD.setCellValueFactory(new PropertyValueFactory<>("priceEach"));
         totalOD.setCellValueFactory(param -> {
             OrderItem orderItem = param.getValue();
             int quantity = orderItem.getQuantityOrdered();

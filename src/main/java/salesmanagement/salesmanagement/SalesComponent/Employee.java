@@ -2,14 +2,17 @@ package salesmanagement.salesmanagement.SalesComponent;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import salesmanagement.salesmanagement.ImageController;
 import salesmanagement.salesmanagement.SQLConnection;
 import salesmanagement.salesmanagement.scenecontrollers.MainSceneController;
@@ -30,9 +33,9 @@ public class Employee {
     private int employeeNumber;
     private String lastName;
     private String firstName;
-    private Text status;
+    private StackPane statusBox;
     private String phone;
-    private Text name;
+    private String name;
     private String email;
     private String officeCode;
     private int reportsTo;
@@ -41,14 +44,13 @@ public class Employee {
     private String password;
     private ImageView avatar = new ImageView();
     private static SQLConnection sqlConnection;
-    private MainSceneController mainSceneController;
-    private HBox action = new HBox();
     private String gender;
     private LocalDate birthDate;
     private boolean mailVerified;
-private String phoneCode;
-private LocalDate lastWorkingDate;
-private LocalDate joiningDate;
+    private String phoneCode;
+    private LocalDate lastWorkingDate;
+    private LocalDate joiningDate;
+
     /**
      * This constructor is used to create an employee object
      * for content storage purposes only,
@@ -56,8 +58,6 @@ private LocalDate joiningDate;
      */
     public Employee(ResultSet employeeRecord, MainSceneController mainSceneController) {
         try {
-            this.mainSceneController = mainSceneController;
-
             employeeNumber = employeeRecord.getInt("employeeNumber");
             lastName = employeeRecord.getString("lastName");
             firstName = employeeRecord.getString("firstName");
@@ -65,8 +65,8 @@ private LocalDate joiningDate;
             officeCode = employeeRecord.getString("officeCode");
             reportsTo = employeeRecord.getInt("reportsTo");
             jobTitle = employeeRecord.getString("jobTitle");
-            name = new Text(lastName + " " + firstName);
-            status = new Text(employeeRecord.getString("status"));
+            name = lastName + " " + firstName;
+            statusBox = new StackPane(new Text(employeeRecord.getString("status")));
             phone = employeeRecord.getString("phone");
             username = employeeRecord.getString("username");
             password = employeeRecord.getString("password");
@@ -75,20 +75,10 @@ private LocalDate joiningDate;
             phoneCode = employeeRecord.getString("phoneCode");
             joiningDate = employeeRecord.getDate("joiningDate").toLocalDate();
             lastWorkingDate = employeeRecord.getDate("lastWorkingDate").toLocalDate();
-            try {
                 birthDate = employeeRecord.getDate("birthDate").toLocalDate();
-            }
-            catch (SQLException e) {
 
-            }
-            status.setStyle("-fx-background-color: GREEN;");
-            status.setFill(Color.WHITE);
-
-            name.setOnMouseClicked(event -> {
-                mainSceneController.displayEmployeeInfoBox(this);
-            });
-            name.setFill(Color.web("#329cfe"));
-            name.setCursor(Cursor.HAND);
+            statusBox.setStyle("-fx-background-color: #43fc5c;-fx-font-weight: bold;-fx-pref-width: 100; -fx-pref-height: 20;");
+            statusBox.getChildren().get(0).setStyle("-fx-text-fill: white;-fx-text-alignment: center");
 
             try {
                 ResultSet rs = sqlConnection.getDataQuery("SELECT avatar FROM employees WHERE employeeNumber = " + employeeNumber);
@@ -105,76 +95,9 @@ private LocalDate joiningDate;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        // Operation is a hbox include
-        JFXButton removeButton = new JFXButton();
-        ImageView removeImg = new ImageView(ImageController.getImage("remove.png"));
-        removeImg.setFitWidth(20);
-        removeImg.setFitHeight(20);
-        removeButton.setGraphic(removeImg);
-
-        JFXButton editButton = new JFXButton();
-        ImageView editImg = new ImageView(ImageController.getImage("edit.png"));
-        editImg.setFitWidth(20);
-        editImg.setFitHeight(20);
-        editButton.setGraphic(editImg);
-
-        action.getChildren().add(editButton);
-        action.getChildren().add(removeButton);
-
-        removeButton.setOnMouseClicked(event -> removeEmployee());
-
-        //editButton.setOnMouseClicked(event -> mainSceneController.editEmployees(this));
     }
 
-    public void editEmployeeInfo() {
-
-    }
-
-    /**
-     * This function appears to be removing an employee from a database,
-     * and it does so by showing a confirmation dialog box to the user.
-     * The dialog box contains a label, a text field, and a message
-     * asking the user if they are sure they want to delete the employee.
-     * If the user confirms that they want to delete the employee,
-     * the function will remove the employee from a list and then
-     * execute a SQL command to delete the employee from the database.
-     * <p>
-     * Overall, the code appears to be well-written and organized.
-     * The use of a dialog box to confirm the deletion of the employee
-     * adds an extra layer of safety, ensuring that the user does not
-     * accidentally delete an employee. However, without knowing the
-     * context in which this code is being used, it is difficult
-     * to fully assess the quality of the code.
-     */
-    private void removeEmployee() {
-
-        Dialog dialog = new Dialog<>();
-        //  dialog.getDialogPane(mainSceneController.getEmployeeOperationPane());
-
-        VBox vBox = new VBox();
-        Label a = new Label("abc");
-        JFXTextField b = new JFXTextField("abc");
-        vBox.getChildren().addAll(Arrays.asList(a, b));
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setGraphic(vBox);
-        alert.setTitle("Modifying Confirmation!");
-        alert.setContentText(this.toString());
-        alert.setHeaderText("You are deleting this employee permanently: ");
-        alert.initOwner(mainSceneController.getStage());
-        ButtonType okButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
-        ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
-        alert.getButtonTypes().setAll(okButton, noButton);
-
-        alert.showAndWait().ifPresent(type -> {
-            if (type == okButton) {
-                mainSceneController.getEmployees().remove(this);
-                MainSceneController.haveChangeInEmployeesTab = true;
-                sqlConnection.updateQuery("DELETE FROM employees WHERE employeeNumber = " + employeeNumber);
-            }
-        });
-    }
-
+    /*
     /**
      * This Employee's initializer allows initialization when the user logs into the application.
      * This also means that when entering the main screen of the application, this class is only
@@ -282,13 +205,6 @@ private LocalDate joiningDate;
         this.jobTitle = jobTitle;
     }
 
-    public HBox getAction() {
-        return action;
-    }
-
-    public void setAction(HBox action) {
-        this.action = action;
-    }
 
     public ImageView getAvatar() {
         return avatar;
@@ -298,12 +214,15 @@ private LocalDate joiningDate;
         this.avatar = avatar;
     }
 
-    public Text getStatus() {
-        return status;
+    public StackPane getStatusBox() {
+        return statusBox;
+    }
+    public String getStatus() {
+        return ((Text)statusBox.getChildren().get(0)).getText();
     }
 
-    public void setStatus(Text status) {
-        this.status = status;
+    public void setStatus(StackPane status) {
+        this.statusBox = status;
     }
 
     public String getPhone() {
@@ -314,11 +233,11 @@ private LocalDate joiningDate;
         this.phone = phone;
     }
 
-    public Text getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(Text name) {
+    public void setName(String name) {
         this.name = name;
     }
 

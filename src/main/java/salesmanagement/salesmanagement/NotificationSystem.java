@@ -39,6 +39,9 @@ public class NotificationSystem {
                 title = "Login notification";
                 content = "Reset Password Successfully!";
                 break;
+            case SUCCEED_ADD_NEW_EMPLOYEE:
+                title = "";
+                content = "Added New Employee Successfully!";
 
         }
         Notifications notificationBuilder = Notifications.create()

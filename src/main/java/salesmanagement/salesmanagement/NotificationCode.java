@@ -13,7 +13,8 @@ public enum NotificationCode {
     INVALID_LOGIN_INFO,
     INVALID_SECURITY_CODE,
     SUCCEED_VERIFY_MAIL,
-    SUCCEED_RESET_PASSWORD;
+    SUCCEED_RESET_PASSWORD,
+    SUCCEED_ADD_NEW_EMPLOYEE;
 
     public static NotificationCode getErrorCode(int code) {
         return switch (code) {
@@ -30,6 +31,7 @@ public enum NotificationCode {
             case 10 -> INVALID_SECURITY_CODE;
             case 11 -> SUCCEED_VERIFY_MAIL;
             case 12 -> SUCCEED_RESET_PASSWORD;
+            case 13 -> SUCCEED_ADD_NEW_EMPLOYEE;
             default -> throw new IllegalArgumentException("Invalid error code: " + code);
         };
     }
