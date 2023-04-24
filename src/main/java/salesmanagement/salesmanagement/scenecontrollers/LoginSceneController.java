@@ -1,16 +1,20 @@
 package salesmanagement.salesmanagement.scenecontrollers;
 
 import com.jfoenix.controls.JFXCheckBox;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.controlsfx.control.textfield.CustomPasswordField;
 import org.controlsfx.control.textfield.CustomTextField;
@@ -216,6 +220,17 @@ public class LoginSceneController extends SceneController implements Initializab
                 }
             });
         }
-
+        FontAwesomeIconView userIcon = new FontAwesomeIconView(FontAwesomeIcon.USER);
+        userIcon.setFill(Color.WHITE);
+        FontAwesomeIconView keyIcon = new FontAwesomeIconView(FontAwesomeIcon.KEY);
+        keyIcon.setFill(Color.WHITE);
+        StackPane userIconContainer = new StackPane(userIcon);
+        userIconContainer.setAlignment(Pos.CENTER);
+        userIconContainer.setPrefSize(30, username.getPrefHeight());
+        StackPane keyIconContainer = new StackPane(keyIcon);
+        keyIconContainer.setAlignment(Pos.CENTER);
+        keyIconContainer.setPrefSize(30, password.getPrefHeight());
+        username.setLeft(userIconContainer);
+        password.setLeft(keyIconContainer);
     }
 }

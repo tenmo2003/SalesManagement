@@ -201,21 +201,20 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     VBox employeeFilterBox;
     @FXML
-    JFXTextField employeeNameFilterTextField;
+    TextField employeeNameFilterTextField;
     @FXML
-    JFXTextField phoneFilterTextField;
+    TextField phoneFilterTextField;
     @FXML
-    JFXTextField emailFilterTextField;
+    TextField emailFilterTextField;
     @FXML
-    JFXComboBox<String> employeeStatusFilterComboBox;
+    ComboBox<String> employeeStatusFilterComboBox;
     @FXML
-    JFXComboBox<String> accessibilityFilterComboBox;
+    ComboBox<String> accessibilityFilterComboBox;
     FilteredList<Employee> filteredEmployees;
 
     @FXML
     void addEmployeeFilter() {
         employeeFilterBox.getParent().setVisible(true);
-
     }
 
     @FXML
