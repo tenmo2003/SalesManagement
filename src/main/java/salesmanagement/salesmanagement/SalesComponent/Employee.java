@@ -75,7 +75,7 @@ public class Employee {
             phoneCode = employeeRecord.getString("phoneCode");
             joiningDate = employeeRecord.getDate("joiningDate").toLocalDate();
             lastWorkingDate = employeeRecord.getDate("lastWorkingDate").toLocalDate();
-                birthDate = employeeRecord.getDate("birthDate").toLocalDate();
+            birthDate = employeeRecord.getDate("birthDate").toLocalDate();
 
             statusBox.setStyle("-fx-background-color: #43fc5c;-fx-font-weight: bold;-fx-pref-width: 100; -fx-pref-height: 20;");
             statusBox.getChildren().get(0).setStyle("-fx-text-fill: white;-fx-text-alignment: center");
@@ -174,7 +174,7 @@ public class Employee {
     }
 
     public String getEmail() {
-        return email;
+        return (email == null) ? "" : email;
     }
 
     public void setEmail(String email) {
@@ -198,7 +198,7 @@ public class Employee {
     }
 
     public String getJobTitle() {
-        return jobTitle;
+        return (jobTitle == null) ? "" : jobTitle;
     }
 
     public void setJobTitle(String jobTitle) {
@@ -217,8 +217,9 @@ public class Employee {
     public StackPane getStatusBox() {
         return statusBox;
     }
+
     public String getStatus() {
-        return ((Text)statusBox.getChildren().get(0)).getText();
+        return ((Text) statusBox.getChildren().get(0)).getText();
     }
 
     public void setStatus(StackPane status) {
@@ -226,7 +227,7 @@ public class Employee {
     }
 
     public String getPhone() {
-        return phone;
+        return (phone == null) ? "" : phone;
     }
 
     public void setPhone(String phone) {

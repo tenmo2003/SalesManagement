@@ -7,6 +7,7 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
@@ -977,16 +978,21 @@
                                        <children>
                                           <StackPane>
                                              <children>
+                                                <HBox alignment="CENTER_LEFT" spacing="20.0">
+                                                   <children>
+                                                      <Label text="Employees List" textFill="#329efcaa">
+                                                         <font>
+                                                            <Font name="System Bold" size="22.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <ProgressIndicator fx:id="employeeLoadingIndicator" prefHeight="38.0" prefWidth="32.0" visible="false" />
+                                                   </children>
+                                                </HBox>
                                                 <JFXButton onMouseClicked="#addNewEmployee" text="ADD NEW" StackPane.alignment="CENTER_RIGHT">
                                                    <StackPane.margin>
                                                       <Insets />
                                                    </StackPane.margin>
                                                 </JFXButton>
-                                                <Label text="Employees List" textFill="#329efcaa" StackPane.alignment="CENTER_LEFT">
-                                                   <font>
-                                                      <Font name="System Bold" size="22.0" />
-                                                   </font>
-                                                </Label>
                                              </children>
                                              <VBox.margin>
                                                 <Insets top="10.0" />
@@ -997,7 +1003,22 @@
                                           </StackPane>
                                           <StackPane>
                                              <children>
-                                                <TableView fx:id="employeeTable" maxWidth="1510.0" minWidth="552.0" pickOnBounds="false" prefHeight="660.0" prefWidth="1510.0" stylesheets="@table.css">
+                                                <JFXButton onMouseClicked="#addEmployeeFilter" prefHeight="30.0" prefWidth="146.0" text="Employee Filter..." StackPane.alignment="CENTER_LEFT">
+                                                   <graphic>
+                                                      <FontAwesomeIconView glyphName="SEARCH" wrappingWidth="20.349998474121094" />
+                                                   </graphic>
+                                                </JFXButton>
+                                             </children>
+                                             <padding>
+                                                <Insets left="50.0" right="50.0" />
+                                             </padding>
+                                          </StackPane>
+                                          <StackPane>
+                                             <children>
+                                                <TableView fx:id="employeeTable" maxWidth="1510.0" minWidth="552.0" onMouseClicked="#addEmployeeFilter" pickOnBounds="false" prefHeight="660.0" prefWidth="1510.0" stylesheets="@table.css">
+                                                   <placeholder>
+                                                      <Label text="" />
+                                                   </placeholder>
                                                    <columns>
                                                       <TableColumn fx:id="employeeNumberColumn" prefWidth="98.4000244140625" text="S.No" />
                                                       <TableColumn fx:id="nameColumn" prefWidth="136.8000030517578" text="Employee Name" />
@@ -1014,6 +1035,83 @@
                                           </StackPane>
                                        </children>
                                     </VBox>
+                                    <AnchorPane prefHeight="816.0" prefWidth="1421.0" StackPane.alignment="CENTER">
+                                       <children>
+                                          <AnchorPane opacity="0.54" prefHeight="1012.0" prefWidth="1598.4" style="-fx-background-color: grey;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                          <VBox fx:id="employeeFilterBox" alignment="TOP_CENTER" layoutX="354.0" layoutY="225.0" prefHeight="330.0" prefWidth="412.0" style="-fx-background-color: white;">
+                                             <children>
+                                                <StackPane>
+                                                   <children>
+                                                      <Label text="Employee Filter" />
+                                                      <JFXButton alignment="CENTER" contentDisplay="CENTER" minWidth="46.0" onMouseClicked="#closeEmployeeFilterBox" prefHeight="30.0" prefWidth="46.0" textAlignment="CENTER" StackPane.alignment="CENTER_RIGHT">
+                                                         <graphic>
+                                                            <FontAwesomeIconView glyphName="CLOSE" size="25" />
+                                                         </graphic>
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                      </JFXButton>
+                                                   </children>
+                                                </StackPane>
+                                                <VBox fillWidth="false" prefHeight="58.0" prefWidth="699.0">
+                                                   <children>
+                                                      <Label text="Employee Name" />
+                                                      <JFXTextField fx:id="employeeNameFilterTextField" prefHeight="26.0" prefWidth="470.0" />
+                                                   </children>
+                                                </VBox>
+                                                <HBox spacing="25.0">
+                                                   <children>
+                                                      <VBox fillWidth="false" prefHeight="58.0" prefWidth="523.0">
+                                                         <children>
+                                                            <Label text="Phone" />
+                                                            <JFXTextField fx:id="phoneFilterTextField" prefHeight="26.0" prefWidth="246.0" />
+                                                         </children>
+                                                      </VBox>
+                                                      <VBox fillWidth="false" prefHeight="58.0" prefWidth="523.0">
+                                                         <children>
+                                                            <Label text="Email" />
+                                                            <JFXTextField fx:id="emailFilterTextField" prefHeight="26.0" prefWidth="212.0" />
+                                                         </children>
+                                                      </VBox>
+                                                   </children>
+                                                </HBox>
+                                                <HBox spacing="25.0">
+                                                   <children>
+                                                      <VBox fillWidth="false" prefHeight="58.0" prefWidth="523.0">
+                                                         <children>
+                                                            <Label prefHeight="18.0" prefWidth="369.0" text="Status" />
+                                                            <JFXComboBox fx:id="employeeStatusFilterComboBox" prefHeight="28.0" prefWidth="180.0" />
+                                                         </children>
+                                                      </VBox>
+                                                      <VBox fillWidth="false" prefHeight="58.0" prefWidth="523.0">
+                                                         <children>
+                                                            <Label prefHeight="18.0" prefWidth="315.0" text="Accessibility" />
+                                                            <JFXComboBox fx:id="accessibilityFilterComboBox" prefHeight="28.0" prefWidth="197.0" />
+                                                         </children>
+                                                      </VBox>
+                                                   </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                                                   <children>
+                                                      <JFXButton onMouseClicked="#applyEmployeeFilter" text="Apply Filter">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                      </JFXButton>
+                                                      <JFXButton onMouseClicked="#clearEmployeeFilter" text="Clear All">
+                                                         <cursor>
+                                                            <Cursor fx:constant="HAND" />
+                                                         </cursor>
+                                                      </JFXButton>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                             <padding>
+                                                <Insets left="10.0" right="10.0" />
+                                             </padding>
+                                          </VBox>
+                                       </children>
+                                    </AnchorPane>
                                  </children>
                               </StackPane>
                            </content>

@@ -196,14 +196,67 @@ public class MainSceneController extends SceneController implements Initializabl
     ArrayList<Employee> employees;
     @FXML
     StackPane employeesTabPane;
+    @FXML
+    ProgressIndicator employeeLoadingIndicator;
+    @FXML
+    VBox employeeFilterBox;
+    @FXML
+    JFXTextField employeeNameFilterTextField;
+    @FXML
+    JFXTextField phoneFilterTextField;
+    @FXML
+    JFXTextField emailFilterTextField;
+    @FXML
+    JFXComboBox<String> employeeStatusFilterComboBox;
+    @FXML
+    JFXComboBox<String> accessibilityFilterComboBox;
+    FilteredList<Employee> filteredEmployees;
+
+    @FXML
+    void addEmployeeFilter() {
+        employeeFilterBox.getParent().setVisible(true);
+
+    }
+
+    @FXML
+    public void clearEmployeeFilter() {
+        employeeNameFilterTextField.setText("");
+        phoneFilterTextField.setText("");
+        emailFilterTextField.setText("");
+        employeeStatusFilterComboBox.setValue(null);
+        accessibilityFilterComboBox.setValue(null);
+    }
+
+    @FXML
+    public void applyEmployeeFilter() {
+        ObservableList<Employee> employeeList = FXCollections.observableArrayList(employees);
+        filteredEmployees = new FilteredList<>(employeeList, p -> true);
+        filteredEmployees.setPredicate(employee -> {
+            // Check if the order matches the filter criteria
+            boolean nameMatch = employee.getFullName().toLowerCase().contains(employeeNameFilterTextField.getText().toLowerCase());
+            boolean emailMatch = employee.getEmail().toLowerCase().contains(emailFilterTextField.getText().toLowerCase());
+            boolean phoneMatch = employee.getPhone().toLowerCase().contains(phoneFilterTextField.getText().toLowerCase());
+            boolean statusMatch = employee.getStatus().equals(employeeStatusFilterComboBox.getValue());
+            if (employeeStatusFilterComboBox.getValue() == null) statusMatch = true;
+            boolean accessibilityMatch = employee.getJobTitle().equals(accessibilityFilterComboBox.getValue());
+            if (accessibilityFilterComboBox.getValue() == null) accessibilityMatch = true;
+            return nameMatch && emailMatch && phoneMatch && statusMatch && accessibilityMatch;
+        });
+        closeEmployeeFilterBox();
+        employeeTable.setItems(filteredEmployees);
+    }
+
+    @FXML
+    public void closeEmployeeFilterBox() {
+        employeeFilterBox.getParent().setVisible(false);
+    }
 
     @FXML
     void displayEmployeesTab() {
         tabPane.getSelectionModel().select(employeesOperationTab);
-
+        employeeTable.setItems(null);
         ArrayList<Employee> employees = new ArrayList<>();
         runTask(() -> {
-            employeeTable.setVisible(false);
             ResultSet resultSet = null;
             String query = "SELECT * FROM employees";
             resultSet = sqlConnection.getDataQuery(query);
@@ -220,10 +273,10 @@ public class MainSceneController extends SceneController implements Initializabl
             }
         }, () -> {
             ObservableList<Employee> employeeList = FXCollections.observableArrayList(employees);
-            employeeTable.setVisible(true);
+            employeeTable.setItems(employeeList);
             employeeTable.setItems(employeeList);
             this.employees = employees;
-        }, (Pane)employeeTable.getParent());
+        }, employeeLoadingIndicator, employeeTable.getParent());
     }
 
     @FXML
@@ -239,11 +292,9 @@ public class MainSceneController extends SceneController implements Initializabl
 
     @FXML
     public void addNewEmployee() {
-        employeeInfoBox.toFront();
         employeeInfoBox.setVisible(true);
         saveNewEmployeeButton.setVisible(true);
 
-        employeeTableBox.toBack();
         employeeTableBox.setVisible(false);
 
         for (Node node : getAllNodes(detailsInfoBox)) {
@@ -293,10 +344,8 @@ public class MainSceneController extends SceneController implements Initializabl
      * It hides employees table box and shows employee information box.
      */
     public void displayEmployeeInfoBox(Employee employee) {
-        employeeInfoBox.toFront();
         employeeInfoBox.setVisible(true);
 
-        employeeTableBox.toBack();
         employeeTableBox.setVisible(false);
 
         editInfoButton.setVisible(true);
@@ -378,10 +427,8 @@ public class MainSceneController extends SceneController implements Initializabl
      */
     @FXML
     void backToEmployeeTableBox() {
-        employeeInfoBox.toBack();
         employeeInfoBox.setVisible(false);
 
-        employeeTableBox.toFront();
         employeeTableBox.setVisible(true);
 
         maleRadioButton.setSelected(false);
@@ -507,6 +554,9 @@ public class MainSceneController extends SceneController implements Initializabl
 
 
         //TODO: test area
+
+
+        //region Check regex for user's input.
         firstNameTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
                 VBox container = (VBox) firstNameTextField.getParent();
@@ -719,9 +769,10 @@ public class MainSceneController extends SceneController implements Initializabl
                 }
             }
         });
+        //endregion
 
         // Load UI for others.
-        runTask(() ->{
+        runTask(() -> {
             // Load small avatar.
             try {
                 PreparedStatement ps = sqlConnection.getConnection().prepareStatement("SELECT avatar FROM employees WHERE employeeNumber = ?");
@@ -765,9 +816,12 @@ public class MainSceneController extends SceneController implements Initializabl
 
             List<String> accessibilitiesList = new ArrayList<>(Arrays.asList("HR", "Manager", "Employee", "Admin"));
             accessibilityBox.getItems().addAll(accessibilitiesList);
+            accessibilityFilterComboBox.getItems().addAll(accessibilitiesList);
 
             List<String> statusList = new ArrayList<>(Arrays.asList("ACTIVE", "INACTIVE"));
             statusBox.getItems().addAll(statusList);
+            employeeStatusFilterComboBox.getItems().addAll(statusList);
+
         }, null, null, null);
     }
 
