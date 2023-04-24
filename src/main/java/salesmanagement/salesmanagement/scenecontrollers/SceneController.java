@@ -1,15 +1,21 @@
 package salesmanagement.salesmanagement.scenecontrollers;
 
 import com.jfoenix.controls.JFXButton;
+import javafx.beans.binding.Bindings;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import salesmanagement.salesmanagement.SQLConnection;
+import salesmanagement.salesmanagement.Utils;
+
+import java.util.List;
 
 public abstract class SceneController {
     SQLConnection sqlConnection;
@@ -122,13 +128,12 @@ public abstract class SceneController {
                 return null;
             }
         };
-        ProgressIndicator progressIndicator = new ProgressIndicator();
         if (bannedArea != null) {
+            if(Utils.getAllNodes(bannedArea).stream().anyMatch(node -> node instanceof ProgressIndicator)) return;
+            ProgressIndicator progressIndicator = new ProgressIndicator();
+            progressIndicator.visibleProperty().bind(task.runningProperty());
             bannedArea.getChildren().add(progressIndicator);
-            bannedArea.getChildren().get(0).disableProperty().bind(task.runningProperty());
         }
-        progressIndicator.visibleProperty().bind(task.runningProperty());
-
         if (finishFunction != null) {
             task.setOnSucceeded(workerStateEvent -> {
                 finishFunction.run();

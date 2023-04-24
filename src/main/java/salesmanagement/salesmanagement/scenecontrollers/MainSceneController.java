@@ -4,19 +4,13 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.jfoenix.controls.*;
 import javafx.animation.AnimationTimer;
-import javafx.animation.FadeTransition;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -36,29 +30,24 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-import javafx.scene.web.HTMLEditor;
-import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
-import javafx.util.Duration;
-import javafx.util.Pair;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
-import salesmanagement.salesmanagement.*;
+import salesmanagement.salesmanagement.Form;
+import salesmanagement.salesmanagement.ImageController;
+import salesmanagement.salesmanagement.NotificationCode;
+import salesmanagement.salesmanagement.NotificationSystem;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesComponent.Order;
 import salesmanagement.salesmanagement.SalesComponent.OrderItem;
 import salesmanagement.salesmanagement.SalesComponent.Product;
 
-import javax.imageio.ImageIO;
-import java.beans.JavaBean;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.sql.PreparedStatement;
@@ -68,8 +57,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static salesmanagement.salesmanagement.InputErrorCode.*;
 import static salesmanagement.salesmanagement.Utils.getAllNodes;
-import static salesmanagement.salesmanagement.Utils.getFileNameAndExtension;
+import static salesmanagement.salesmanagement.Utils.shake;
 
 public class MainSceneController extends SceneController implements Initializable {
     @FXML
@@ -204,6 +194,8 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     private TableColumn<?, ?> accessibilityColumn;
     ArrayList<Employee> employees;
+    @FXML
+    StackPane employeesTabPane;
 
     @FXML
     void displayEmployeesTab() {
@@ -211,6 +203,7 @@ public class MainSceneController extends SceneController implements Initializabl
 
         ArrayList<Employee> employees = new ArrayList<>();
         runTask(() -> {
+            employeeTable.setVisible(false);
             ResultSet resultSet = null;
             String query = "SELECT * FROM employees";
             resultSet = sqlConnection.getDataQuery(query);
@@ -227,9 +220,10 @@ public class MainSceneController extends SceneController implements Initializabl
             }
         }, () -> {
             ObservableList<Employee> employeeList = FXCollections.observableArrayList(employees);
+            employeeTable.setVisible(true);
             employeeTable.setItems(employeeList);
             this.employees = employees;
-        }, (StackPane) employeesOperationTab.getGraphic());
+        }, (Pane)employeeTable.getParent());
     }
 
     @FXML
@@ -255,6 +249,7 @@ public class MainSceneController extends SceneController implements Initializabl
         for (Node node : getAllNodes(detailsInfoBox)) {
             node.setDisable(false);
         }
+        employeeCodeTextField.setDisable(true);
         fullNameLabel.setText("");
         avatar.setImage(null);
         lastNameTextField.setText("");
@@ -283,8 +278,9 @@ public class MainSceneController extends SceneController implements Initializabl
                     "`officeCode`, `reportsTo`, `jobTitle`, `username`, `password`, `avatar`, `phoneCode`, `phone`, `status`, `joiningDate`, `lastWorkingDate`) " +
                     "VALUES (NULL,'" + lastNameTextField.getText() + "', '" + firstNameTextField.getText() + "', '" + birthDatePicker.getValue() + "', NULL, '" + emailTextField.getText() + "', '0', " +
                     "'" + officeCodeTextField.getText() + "'," + supervisorTextField.getText() + ", '" + accessibilityBox.getValue() + "', '" + usernameTextField.getText() + "', '" + passwordField.getText() + "', '', '" + phoneCodeBox.getValue() + "', '" + phoneNumberTextField.getText() + "', 'ACTIVE', '" + joiningDatePicker.getValue() + "', '" + lastWorkingDatePicker.getValue() + "')";
+
             sqlConnection.updateQuery(query);
-            }, () -> {
+        }, () -> {
             saveNewEmployeeButton.setVisible(false);
             displayEmployeesTab();
             NotificationSystem.throwNotification(NotificationCode.SUCCEED_ADD_NEW_EMPLOYEE, stage);
@@ -511,10 +507,221 @@ public class MainSceneController extends SceneController implements Initializabl
 
 
         //TODO: test area
-
+        firstNameTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                VBox container = (VBox) firstNameTextField.getParent();
+                if (firstNameTextField.getText().equals("")) {
+                    firstNameTextField.setStyle("-fx-border-color: #f35050");
+                    if (!(container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                        container.getChildren().add(getInputErrorLabel(EMPTY_FIRST_NAME));
+                    }
+                    shake(firstNameTextField);
+                } else {
+                    firstNameTextField.setStyle("-fx-border-color: #d1d1d1");
+                    if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                        container.getChildren().remove(container.getChildren().size() - 1);
+                    }
+                }
+            }
+        });
+        lastNameTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                VBox container = (VBox) lastNameTextField.getParent();
+                if (lastNameTextField.getText().equals("")) {
+                    lastNameTextField.setStyle("-fx-border-color: #f35050");
+                    if (!(container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                        container.getChildren().add(getInputErrorLabel(EMPTY_LAST_NAME));
+                    }
+                    shake(lastNameTextField);
+                } else {
+                    lastNameTextField.setStyle("-fx-border-color: #d1d1d1");
+                    if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                        container.getChildren().remove(container.getChildren().size() - 1);
+                    }
+                }
+            }
+        });
+        emailTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                VBox container = (VBox) emailTextField.getParent().getParent();
+                if (!emailTextField.getText().matches("^.+@.+$")) {
+                    emailTextField.setStyle("-fx-border-color: #f35050");
+                    if (!(container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                        container.getChildren().add(getInputErrorLabel(INVALID_EMAIL));
+                    }
+                    shake(emailTextField);
+                } else {
+                    emailTextField.setStyle("-fx-border-color: #d1d1d1");
+                    if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                        container.getChildren().remove(container.getChildren().size() - 1);
+                    }
+                }
+            }
+        });
+        birthDatePicker.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                VBox container = (VBox) birthDatePicker.getParent();
+                if (birthDatePicker.getValue() == null) {
+                    birthDatePicker.setStyle("-fx-border-color: #f35050");
+                    if (!(container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                        container.getChildren().add(getInputErrorLabel(EMPTY_DATE));
+                    }
+                    shake(birthDatePicker);
+                } else {
+                    birthDatePicker.setStyle("-fx-border-color: #d1d1d1");
+                    if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                        container.getChildren().remove(container.getChildren().size() - 1);
+                    }
+                }
+            }
+        });
+        joiningDatePicker.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                VBox container = (VBox) joiningDatePicker.getParent();
+                if (joiningDatePicker.getValue() == null) {
+                    joiningDatePicker.setStyle("-fx-border-color: #f35050");
+                    if (!(container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                        container.getChildren().add(getInputErrorLabel(EMPTY_DATE));
+                    }
+                    shake(joiningDatePicker);
+                } else {
+                    joiningDatePicker.setStyle("-fx-border-color: #d1d1d1");
+                    if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                        container.getChildren().remove(container.getChildren().size() - 1);
+                    }
+                }
+            }
+        });
+        lastWorkingDatePicker.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                VBox container = (VBox) lastWorkingDatePicker.getParent();
+                if (lastWorkingDatePicker.getValue() == null) {
+                    lastWorkingDatePicker.setStyle("-fx-border-color: #f35050");
+                    if (!(container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                        container.getChildren().add(getInputErrorLabel(EMPTY_DATE));
+                    }
+                    shake(lastWorkingDatePicker);
+                } else {
+                    lastWorkingDatePicker.setStyle("-fx-border-color: #d1d1d1");
+                    if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                        container.getChildren().remove(container.getChildren().size() - 1);
+                    }
+                }
+            }
+        });
+        officeCodeTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                VBox container = (VBox) officeCodeTextField.getParent();
+                String query = "SELECT officeCode FROM offices WHERE officeCode = '" + officeCodeTextField.getText() + "'";
+                ResultSet resultSet = sqlConnection.getDataQuery(query);
+                try {
+                    if (!resultSet.next()) {
+                        officeCodeTextField.setStyle("-fx-border-color: #f35050");
+                        if (!(container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                            container.getChildren().add(getInputErrorLabel(INVALID_OFFICE_CODE));
+                        }
+                        shake(officeCodeTextField);
+                    } else {
+                        officeCodeTextField.setStyle("-fx-border-color: #d1d1d1");
+                        if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                            container.getChildren().remove(container.getChildren().size() - 1);
+                        }
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        supervisorTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                VBox container = (VBox) supervisorTextField.getParent().getParent();
+                int employeeCode = 0;
+                try {
+                    employeeCode = Integer.parseInt(supervisorTextField.getText());
+                } catch (Exception e) {
+                    employeeCode = -1;
+                }
+                String query = "SELECT employeeNumber FROM employees WHERE employeeNumber = " + employeeCode;
+                ResultSet resultSet = sqlConnection.getDataQuery(query);
+                try {
+                    if (!resultSet.next()) {
+                        supervisorTextField.setStyle("-fx-border-color: #f35050");
+                        if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                            container.getChildren().remove(container.getChildren().size() - 1);
+                        }
+                        container.getChildren().add(getInputErrorLabel(INVALID_SUPERVISOR_CODE));
+                        shake(supervisorTextField);
+                    } else {
+                        supervisorTextField.setStyle("-fx-border-color: #d1d1d1");
+                        if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                            container.getChildren().remove(container.getChildren().size() - 1);
+                        }
+                    }
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        phoneNumberTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                VBox container = (VBox) phoneNumberTextField.getParent();
+                if (!phoneNumberTextField.getText().matches("^\\d+$")) {
+                    phoneNumberTextField.setStyle("-fx-border-color: #f35050");
+                    if (!(container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                        container.getChildren().add(getInputErrorLabel(INVALID_PHONE_NUMBER));
+                    }
+                    shake(phoneNumberTextField);
+                } else {
+                    phoneNumberTextField.setStyle("-fx-border-color: #d1d1d1");
+                    if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                        container.getChildren().remove(container.getChildren().size() - 1);
+                    }
+                }
+            }
+        });
+        usernameTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                VBox container = (VBox) usernameTextField.getParent();
+                if (usernameTextField.getText().length() > 30 || usernameTextField.getText().length() < 6) {
+                    usernameTextField.setStyle("-fx-border-color: #f35050");
+                    if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                        container.getChildren().remove(container.getChildren().size() - 1);
+                    }
+                    container.getChildren().add(getInputErrorLabel(INVALID_LENGTH_USERNAME));
+                    shake(usernameTextField);
+                } else if (!usernameTextField.getText().matches("^[a-zA-Z0-9.]*$")) {
+                    usernameTextField.setStyle("-fx-border-color: #f35050");
+                    if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                        container.getChildren().remove(container.getChildren().size() - 1);
+                    }
+                    container.getChildren().add(getInputErrorLabel(INVALID_USERNAME));
+                    shake(usernameTextField);
+                } else {
+                    String query = "SELECT username FROM employees WHERE username = '" + usernameTextField.getText() + "'";
+                    ResultSet resultSet = sqlConnection.getDataQuery(query);
+                    try {
+                        if (resultSet.next()) {
+                            usernameTextField.setStyle("-fx-border-color: #f35050");
+                            if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                                container.getChildren().remove(container.getChildren().size() - 1);
+                            }
+                            container.getChildren().add(getInputErrorLabel(EXISTED_USERNAME));
+                            shake(usernameTextField);
+                        } else {
+                            usernameTextField.setStyle("-fx-border-color: #d1d1d1");
+                            if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                                container.getChildren().remove(container.getChildren().size() - 1);
+                            }
+                        }
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        });
 
         // Load UI for others.
-        runTask(() -> {
+        runTask(() ->{
             // Load small avatar.
             try {
                 PreparedStatement ps = sqlConnection.getConnection().prepareStatement("SELECT avatar FROM employees WHERE employeeNumber = ?");
@@ -562,8 +769,6 @@ public class MainSceneController extends SceneController implements Initializabl
             List<String> statusList = new ArrayList<>(Arrays.asList("ACTIVE", "INACTIVE"));
             statusBox.getItems().addAll(statusList);
         }, null, null, null);
-
-
     }
 
     private Employee user;
@@ -1298,7 +1503,6 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     JFXTextField phoneNumberInput;
 
-
     public void createOrder(String type) {
         runTask(() -> {
             String orderDate;
@@ -1729,12 +1933,9 @@ public class MainSceneController extends SceneController implements Initializabl
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Product details saved successfully!", ButtonType.OK);
             alert.setTitle(null);
             alert.setHeaderText(null);
-
             alert.showAndWait();
 
             productsTable.refresh();
-
-
         });
     }
 

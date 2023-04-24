@@ -333,23 +333,6 @@
                                     <TextField fx:id="totalAmountForOrder" editable="false" focusTraversable="false" layoutX="712.0" layoutY="369.0" prefWidth="160.58178626194558" />
                                     <JFXComboBox fx:id="statusInput" layoutX="179.0" layoutY="500.0" prefHeight="31.0" prefWidth="150.0" promptText="Status" />
                                     <JFXComboBox fx:id="paymentMethodInput" layoutX="179.0" layoutY="658.0" prefHeight="31.0" prefWidth="150.0" promptText="Payment Method" />
-                                    <HBox fx:id="boxInEmployeesTabButton" alignment="CENTER_LEFT" layoutX="-68.0" layoutY="348.0" prefHeight="38.0" prefWidth="270.0" spacing="10.0">
-                                       <children>
-                                          <ImageView fitHeight="22.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@img/employee_icon.png" />
-                                             </image>
-                                             <HBox.margin>
-                                                <Insets left="10.0" />
-                                             </HBox.margin>
-                                          </ImageView>
-                                          <Label style="-fx-font-family: SVN-Poppins; -fx-font-weight: 800;" text="Employees" textFill="#7c8db5">
-                                             <font>
-                                                <Font size="15.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </HBox>
                                  </children>
                               </AnchorPane>
                            </content>
@@ -480,7 +463,7 @@
                         </Tab>
                         <Tab fx:id="employeesOperationTab" closable="false" text="Employees Operation">
                            <content>
-                              <StackPane>
+                              <StackPane fx:id="employeesTabPane">
                                  <children>
                                     <VBox fx:id="employeeInfoBox" prefHeight="992.8" prefWidth="1596.8" visible="false">
                                        <children>
@@ -536,130 +519,124 @@
                                                                      <children>
                                                                         <TitledPane animated="false" prefHeight="98.0" prefWidth="733.0" text="Basic Info" HBox.hgrow="ALWAYS">
                                                                           <content>
-                                                                              <VBox prefHeight="474.0" prefWidth="646.0">
+                                                                              <VBox prefHeight="474.0" prefWidth="646.0" spacing="15.0">
                                                                                  <children>
-                                                                                    <Label prefHeight="28.0" prefWidth="146.0" text="Last Name*">
-                                                                                       <font>
-                                                                                          <Font name="System Bold" size="15.0" />
-                                                                                       </font>
-                                                                                    </Label>
-                                                                                    <JFXTextField fx:id="lastNameTextField" focusColor="#4d4d4d" prefHeight="34.0" prefWidth="562.0" styleClass="text-field-box" unFocusColor="GREY" VBox.vgrow="ALWAYS">
-                                                                                       <font>
-                                                                                          <Font size="15.0" />
-                                                                                       </font>
-                                                                                       <VBox.margin>
-                                                                                          <Insets />
-                                                                                       </VBox.margin>
-                                                                                       <opaqueInsets>
-                                                                                          <Insets />
-                                                                                       </opaqueInsets>
-                                                                                    </JFXTextField>
-                                                                                    <Label prefHeight="28.0" prefWidth="146.0" text="First Name*">
-                                                                                       <font>
-                                                                                          <Font name="System Bold" size="15.0" />
-                                                                                       </font>
-                                                                                       <VBox.margin>
-                                                                                          <Insets top="10.0" />
-                                                                                       </VBox.margin>
-                                                                                    </Label>
-                                                                                    <JFXTextField fx:id="firstNameTextField" focusColor="#4d4d4d" prefHeight="33.0" prefWidth="621.0" styleClass="text-field-box" stylesheets="@date_picker.css" VBox.vgrow="ALWAYS">
-                                                                                       <font>
-                                                                                          <Font size="15.0" />
-                                                                                       </font>
-                                                                                       <VBox.margin>
-                                                                                          <Insets />
-                                                                                       </VBox.margin>
-                                                                                    </JFXTextField>
-                                                                                    <Label prefHeight="28.0" prefWidth="146.0" text="Birth Date">
-                                                                                       <font>
-                                                                                          <Font name="System Bold" size="15.0" />
-                                                                                       </font>
-                                                                                       <VBox.margin>
-                                                                                          <Insets top="10.0" />
-                                                                                       </VBox.margin>
-                                                                                    </Label>
-                                                                                    <DatePicker fx:id="birthDatePicker" prefHeight="26.0" prefWidth="745.0" stylesheets="@date_picker.css" VBox.vgrow="ALWAYS" />
-                                                                                    <Label prefHeight="28.0" prefWidth="146.0" text="Gender">
-                                                                                       <font>
-                                                                                          <Font name="System Bold" size="15.0" />
-                                                                                       </font>
-                                                                                       <VBox.margin>
-                                                                                          <Insets top="10.0" />
-                                                                                       </VBox.margin>
-                                                                                    </Label>
-                                                                                    <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                                                                                    <VBox>
                                                                                        <children>
-                                                                                          <JFXRadioButton fx:id="maleRadioButton" text="Male">
+                                                                                          <Label prefHeight="28.0" prefWidth="146.0" text="Last Name*">
                                                                                              <font>
                                                                                                 <Font name="System Bold" size="15.0" />
                                                                                              </font>
-                                                                                             <selectedColor>
-                                                                                                <Color red="0.19607843458652496" green="0.6117647290229797" blue="0.9960784316062927" />
-                                                                                             </selectedColor>
-                                                                                          </JFXRadioButton>
-                                                                                          <JFXRadioButton fx:id="femaleRadioButton" contentDisplay="CENTER" text="Female">
-                                                                                             <font>
-                                                                                                <Font name="System Bold" size="15.0" />
-                                                                                             </font>
-                                                                                             <selectedColor>
-                                                                                                <Color red="0.19607843458652496" green="0.6117647290229797" blue="0.9960784316062927" />
-                                                                                             </selectedColor>
-                                                                                          </JFXRadioButton>
-                                                                                       </children>
-                                                                                       <VBox.margin>
-                                                                                          <Insets top="5.0" />
-                                                                                       </VBox.margin>
-                                                                                    </HBox>
-                                                                                    <Label prefHeight="28.0" prefWidth="146.0" text="Photo">
-                                                                                       <font>
-                                                                                          <Font name="System Bold" size="15.0" />
-                                                                                       </font>
-                                                                                       <VBox.margin>
-                                                                                          <Insets top="10.0" />
-                                                                                       </VBox.margin>
-                                                                                    </Label>
-                                                                                    <HBox alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="711.0">
-                                                                                       <children>
-                                                                                          <JFXButton alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#uploadAvatar" prefHeight="94.0" prefWidth="102.0" style="-fx-border-color: #d1d1d1; -fx-border-radius: 3 0 0 3; -fx-border-width: 1.5 0.75 1.5 1.5; -fx-background-radius: 3 0 0 3;" text="Browse..." HBox.hgrow="ALWAYS">
+                                                                                          </Label>
+                                                                                          <JFXTextField fx:id="lastNameTextField" focusColor="#4d4d4d" prefHeight="34.0" prefWidth="562.0" styleClass="text-field-box" unFocusColor="GREY">
                                                                                              <font>
                                                                                                 <Font size="15.0" />
                                                                                              </font>
-                                                                                          </JFXButton>
-                                                                                          <JFXTextField fx:id="avatarAddress" prefHeight="26.0" prefWidth="439.0" style="-fx-border-width: 1.5 1.5 1.5 1; -fx-border-color: #d1d1d1; -jfx-focus-color: transparent; -jfx-unfocus-color: transparent; -fx-border-radius: 0 3 3 0; -fx-background-radius: 0 3 3 0;" HBox.hgrow="ALWAYS">
-                                                                                             <font>
-                                                                                                <Font size="15.0" />
-                                                                                             </font>
-                                                                                             <HBox.margin>
+                                                                                             <opaqueInsets>
                                                                                                 <Insets />
-                                                                                             </HBox.margin>
-                                                                                             <padding>
-                                                                                                <Insets bottom="5.0" left="10.0" top="5.0" />
-                                                                                             </padding>
+                                                                                             </opaqueInsets>
                                                                                           </JFXTextField>
                                                                                        </children>
-                                                                                       <VBox.margin>
-                                                                                          <Insets />
-                                                                                       </VBox.margin>
-                                                                                    </HBox>
-                                                                                    <Label prefHeight="28.0" prefWidth="146.0" text="Status">
-                                                                                       <font>
-                                                                                          <Font name="System Bold" size="15.0" />
-                                                                                       </font>
-                                                                                       <VBox.margin>
-                                                                                          <Insets top="10.0" />
-                                                                                       </VBox.margin>
-                                                                                    </Label>
-                                                                                    <JFXComboBox fx:id="statusBox" focusColor="#4d4d4d" prefHeight="29.0" prefWidth="145.0" promptText="ACTIVE" styleClass="combo-box-style" VBox.vgrow="ALWAYS">
-                                                                                       <opaqueInsets>
-                                                                                          <Insets />
-                                                                                       </opaqueInsets>
-                                                                                       <VBox.margin>
-                                                                                          <Insets />
-                                                                                       </VBox.margin>
-                                                                                       <padding>
-                                                                                          <Insets left="10.0" />
-                                                                                       </padding>
-                                                                                    </JFXComboBox>
+                                                                                    </VBox>
+                                                                                    <VBox>
+                                                                                       <children>
+                                                                                          <Label prefHeight="28.0" prefWidth="146.0" text="First Name*">
+                                                                                             <font>
+                                                                                                <Font name="System Bold" size="15.0" />
+                                                                                             </font>
+                                                                                          </Label>
+                                                                                          <JFXTextField fx:id="firstNameTextField" focusColor="#4d4d4d" prefHeight="33.0" prefWidth="621.0" styleClass="text-field-box" stylesheets="@date_picker.css">
+                                                                                             <font>
+                                                                                                <Font size="15.0" />
+                                                                                             </font>
+                                                                                          </JFXTextField>
+                                                                                       </children>
+                                                                                    </VBox>
+                                                                                    <VBox>
+                                                                                       <children>
+                                                                                          <Label prefHeight="28.0" prefWidth="146.0" text="Birth Date">
+                                                                                             <font>
+                                                                                                <Font name="System Bold" size="15.0" />
+                                                                                             </font>
+                                                                                          </Label>
+                                                                                          <DatePicker fx:id="birthDatePicker" prefHeight="26.0" prefWidth="745.0" stylesheets="@date_picker.css" />
+                                                                                       </children>
+                                                                                    </VBox>
+                                                                                    <VBox>
+                                                                                       <children>
+                                                                                          <Label prefHeight="28.0" prefWidth="146.0" text="Gender">
+                                                                                             <font>
+                                                                                                <Font name="System Bold" size="15.0" />
+                                                                                             </font>
+                                                                                          </Label>
+                                                                                          <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                                                                                             <children>
+                                                                                                <JFXRadioButton fx:id="maleRadioButton" text="Male">
+                                                                                                   <font>
+                                                                                                      <Font name="System Bold" size="15.0" />
+                                                                                                   </font>
+                                                                                                   <selectedColor>
+                                                                                                      <Color red="0.19607843458652496" green="0.6117647290229797" blue="0.9960784316062927" />
+                                                                                                   </selectedColor>
+                                                                                                </JFXRadioButton>
+                                                                                                <JFXRadioButton fx:id="femaleRadioButton" contentDisplay="CENTER" text="Female">
+                                                                                                   <font>
+                                                                                                      <Font name="System Bold" size="15.0" />
+                                                                                                   </font>
+                                                                                                   <selectedColor>
+                                                                                                      <Color red="0.19607843458652496" green="0.6117647290229797" blue="0.9960784316062927" />
+                                                                                                   </selectedColor>
+                                                                                                </JFXRadioButton>
+                                                                                             </children>
+                                                                                          </HBox>
+                                                                                       </children>
+                                                                                    </VBox>
+                                                                                    <VBox>
+                                                                                       <children>
+                                                                                          <Label prefHeight="28.0" prefWidth="146.0" text="Photo">
+                                                                                             <font>
+                                                                                                <Font name="System Bold" size="15.0" />
+                                                                                             </font>
+                                                                                          </Label>
+                                                                                          <HBox alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="711.0">
+                                                                                             <children>
+                                                                                                <JFXButton alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#uploadAvatar" prefHeight="94.0" prefWidth="102.0" style="-fx-border-color: #d1d1d1; -fx-border-radius: 3 0 0 3; -fx-border-width: 1.5 0.75 1.5 1.5; -fx-background-radius: 3 0 0 3;" text="Browse..." HBox.hgrow="ALWAYS">
+                                                                                                   <font>
+                                                                                                      <Font size="15.0" />
+                                                                                                   </font>
+                                                                                                </JFXButton>
+                                                                                                <JFXTextField fx:id="avatarAddress" prefHeight="26.0" prefWidth="439.0" style="-fx-border-width: 1.5 1.5 1.5 1; -fx-border-color: #d1d1d1; -jfx-focus-color: transparent; -jfx-unfocus-color: transparent; -fx-border-radius: 0 3 3 0; -fx-background-radius: 0 3 3 0;" HBox.hgrow="ALWAYS">
+                                                                                                   <font>
+                                                                                                      <Font size="15.0" />
+                                                                                                   </font>
+                                                                                                   <HBox.margin>
+                                                                                                      <Insets />
+                                                                                                   </HBox.margin>
+                                                                                                   <padding>
+                                                                                                      <Insets bottom="5.0" left="10.0" top="5.0" />
+                                                                                                   </padding>
+                                                                                                </JFXTextField>
+                                                                                             </children>
+                                                                                          </HBox>
+                                                                                       </children>
+                                                                                    </VBox>
+                                                                                    <VBox>
+                                                                                       <children>
+                                                                                          <Label prefHeight="28.0" prefWidth="146.0" text="Status">
+                                                                                             <font>
+                                                                                                <Font name="System Bold" size="15.0" />
+                                                                                             </font>
+                                                                                          </Label>
+                                                                                          <JFXComboBox fx:id="statusBox" focusColor="#4d4d4d" prefHeight="29.0" prefWidth="145.0" promptText="ACTIVE" styleClass="combo-box-style">
+                                                                                             <opaqueInsets>
+                                                                                                <Insets />
+                                                                                             </opaqueInsets>
+                                                                                             <padding>
+                                                                                                <Insets left="10.0" />
+                                                                                             </padding>
+                                                                                          </JFXComboBox>
+                                                                                       </children>
+                                                                                    </VBox>
                                                                                  </children>
                                                                               </VBox>
                                                                           </content>
@@ -669,29 +646,30 @@
                                                                         </TitledPane>
                                                                         <TitledPane animated="false" prefHeight="98.0" prefWidth="733.0" text="Account Login" HBox.hgrow="ALWAYS">
                                                                            <content>
-                                                                              <VBox prefHeight="400.0" prefWidth="746.0">
+                                                                              <VBox prefHeight="400.0" prefWidth="746.0" spacing="15.0">
                                                                                  <children>
-                                                                                    <Label prefHeight="28.0" prefWidth="146.0" text="Email">
-                                                                                       <font>
-                                                                                          <Font name="System Bold" size="15.0" />
-                                                                                       </font>
-                                                                                    </Label>
-                                                                                    <HBox alignment="CENTER" prefHeight="30.0" prefWidth="628.0" spacing="20.0" VBox.vgrow="ALWAYS">
-                                                                                       <VBox.margin>
-                                                                                          <Insets />
-                                                                                       </VBox.margin>
+                                                                                    <VBox>
                                                                                        <children>
-                                                                                          <JFXTextField fx:id="emailTextField" focusColor="BLACK" prefHeight="30.0" prefWidth="784.0" styleClass="text-field-box" unFocusColor="BLACK">
+                                                                                          <Label prefHeight="28.0" prefWidth="146.0" text="Email">
                                                                                              <font>
-                                                                                                <Font size="15.0" />
+                                                                                                <Font name="System Bold" size="15.0" />
                                                                                              </font>
-                                                                                             <opaqueInsets>
-                                                                                                <Insets />
-                                                                                             </opaqueInsets>
-                                                                                          </JFXTextField>
-                                                                                          <JFXButton fx:id="verifyButton" alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="472.0" styleClass="text-field-box" text="VERIFY NOW" HBox.hgrow="ALWAYS" />
+                                                                                          </Label>
+                                                                                          <HBox alignment="CENTER" prefHeight="30.0" prefWidth="628.0" spacing="20.0">
+                                                                                             <children>
+                                                                                                <JFXTextField fx:id="emailTextField" focusColor="BLACK" prefHeight="33.0" prefWidth="602.0" styleClass="text-field-box" unFocusColor="BLACK">
+                                                                                                   <font>
+                                                                                                      <Font size="15.0" />
+                                                                                                   </font>
+                                                                                                   <opaqueInsets>
+                                                                                                      <Insets />
+                                                                                                   </opaqueInsets>
+                                                                                                </JFXTextField>
+                                                                                                <JFXButton fx:id="verifyButton" alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="94.0" styleClass="text-field-box" text="VERIFY NOW" HBox.hgrow="ALWAYS" />
+                                                                                             </children>
+                                                                                          </HBox>
                                                                                        </children>
-                                                                                    </HBox>
+                                                                                    </VBox>
                                                                                     <HBox spacing="20.0">
                                                                                        <children>
                                                                                           <VBox prefHeight="58.0" prefWidth="158.0">
@@ -736,34 +714,36 @@
                                                                                           </VBox>
                                                                                        </children>
                                                                                        <VBox.margin>
-                                                                                          <Insets top="10.0" />
+                                                                                          <Insets />
                                                                                        </VBox.margin>
                                                                                     </HBox>
-                                                                                    <Label prefHeight="28.0" prefWidth="146.0" text="Username" VBox.vgrow="ALWAYS">
-                                                                                       <font>
-                                                                                          <Font name="System Bold" size="15.0" />
-                                                                                       </font>
-                                                                                       <VBox.margin>
-                                                                                          <Insets top="10.0" />
-                                                                                       </VBox.margin>
-                                                                                    </Label>
-                                                                                    <JFXTextField fx:id="usernameTextField" focusColor="#4d4d4d" prefHeight="34.0" prefWidth="562.0" styleClass="text-field-box">
-                                                                                       <font>
-                                                                                          <Font size="15.0" />
-                                                                                       </font>
-                                                                                       <opaqueInsets>
-                                                                                          <Insets />
-                                                                                       </opaqueInsets>
-                                                                                    </JFXTextField>
-                                                                                    <Label prefHeight="28.0" prefWidth="146.0" text="PASSWORD">
-                                                                                       <font>
-                                                                                          <Font name="System Bold" size="15.0" />
-                                                                                       </font>
-                                                                                       <VBox.margin>
-                                                                                          <Insets top="10.0" />
-                                                                                       </VBox.margin>
-                                                                                    </Label>
-                                                                                    <JFXPasswordField fx:id="passwordField" styleClass="text-field-box" />
+                                                                                    <VBox>
+                                                                                       <children>
+                                                                                          <Label prefHeight="28.0" prefWidth="146.0" text="Username">
+                                                                                             <font>
+                                                                                                <Font name="System Bold" size="15.0" />
+                                                                                             </font>
+                                                                                          </Label>
+                                                                                          <JFXTextField fx:id="usernameTextField" focusColor="#4d4d4d" prefHeight="34.0" prefWidth="562.0" styleClass="text-field-box">
+                                                                                             <font>
+                                                                                                <Font size="15.0" />
+                                                                                             </font>
+                                                                                             <opaqueInsets>
+                                                                                                <Insets />
+                                                                                             </opaqueInsets>
+                                                                                          </JFXTextField>
+                                                                                       </children>
+                                                                                    </VBox>
+                                                                                    <VBox>
+                                                                                       <children>
+                                                                                          <Label prefHeight="28.0" prefWidth="146.0" text="PASSWORD">
+                                                                                             <font>
+                                                                                                <Font name="System Bold" size="15.0" />
+                                                                                             </font>
+                                                                                          </Label>
+                                                                                          <JFXPasswordField fx:id="passwordField" styleClass="text-field-box" />
+                                                                                       </children>
+                                                                                    </VBox>
                                                                                  </children>
                                                                               </VBox>
                                                                            </content>
@@ -777,67 +757,16 @@
                                                                      <children>
                                                                         <TitledPane animated="false" prefHeight="354.0" prefWidth="764.0" text="Company Details" HBox.hgrow="ALWAYS">
                                                                            <content>
-                                                                              <VBox prefHeight="326.0" prefWidth="639.0">
+                                                                              <VBox prefHeight="326.0" prefWidth="639.0" spacing="15.0">
                                                                                  <children>
-                                                                                    <Label prefHeight="28.0" prefWidth="146.0" text="Employee Code">
-                                                                                       <font>
-                                                                                          <Font name="System Bold" size="15.0" />
-                                                                                       </font>
-                                                                                    </Label>
-                                                                                    <JFXTextField fx:id="employeeCodeTextField" focusColor="#4d4d4d" prefHeight="34.0" prefWidth="562.0" styleClass="text-field-box" text="Peter" unFocusColor="GREY" VBox.vgrow="ALWAYS">
-                                                                                       <font>
-                                                                                          <Font size="15.0" />
-                                                                                       </font>
-                                                                                       <VBox.margin>
-                                                                                          <Insets />
-                                                                                       </VBox.margin>
-                                                                                       <opaqueInsets>
-                                                                                          <Insets />
-                                                                                       </opaqueInsets>
-                                                                                    </JFXTextField>
-                                                                                    <Label prefHeight="28.0" prefWidth="146.0" text="Office Code">
-                                                                                       <font>
-                                                                                          <Font name="System Bold" size="15.0" />
-                                                                                       </font>
-                                                                                       <VBox.margin>
-                                                                                          <Insets top="10.0" />
-                                                                                       </VBox.margin>
-                                                                                    </Label>
-                                                                                    <JFXTextField fx:id="officeCodeTextField" focusColor="#4d4d4d" prefHeight="34.0" prefWidth="562.0" styleClass="text-field-box" unFocusColor="GREY">
-                                                                                       <font>
-                                                                                          <Font size="15.0" />
-                                                                                       </font>
-                                                                                       <opaqueInsets>
-                                                                                          <Insets />
-                                                                                       </opaqueInsets>
-                                                                                    </JFXTextField>
-                                                                                    <Label prefHeight="28.0" prefWidth="146.0" text="Acccessibility">
-                                                                                       <font>
-                                                                                          <Font name="System Bold" size="15.0" />
-                                                                                       </font>
-                                                                                       <VBox.margin>
-                                                                                          <Insets top="10.0" />
-                                                                                       </VBox.margin>
-                                                                                    </Label>
-                                                                                    <JFXComboBox fx:id="accessibilityBox" focusColor="#4d4d4d" prefHeight="35.0" prefWidth="150.0" promptText="Employee" styleClass="combo-box-style">
-                                                                                       <opaqueInsets>
-                                                                                          <Insets />
-                                                                                       </opaqueInsets>
-                                                                                       <padding>
-                                                                                          <Insets left="10.0" />
-                                                                                       </padding>
-                                                                                    </JFXComboBox>
-                                                                                    <Label prefHeight="28.0" prefWidth="146.0" text="Supervisor">
-                                                                                       <font>
-                                                                                          <Font name="System Bold" size="15.0" />
-                                                                                       </font>
-                                                                                       <VBox.margin>
-                                                                                          <Insets top="10.0" />
-                                                                                       </VBox.margin>
-                                                                                    </Label>
-                                                                                    <HBox>
+                                                                                    <VBox>
                                                                                        <children>
-                                                                                          <JFXTextField fx:id="supervisorTextField" focusColor="#4d4d4d" prefHeight="30.0" prefWidth="758.0" styleClass="text-field-box" unFocusColor="GREY">
+                                                                                          <Label prefHeight="28.0" prefWidth="146.0" text="Employee Code">
+                                                                                             <font>
+                                                                                                <Font name="System Bold" size="15.0" />
+                                                                                             </font>
+                                                                                          </Label>
+                                                                                          <JFXTextField fx:id="employeeCodeTextField" focusColor="#4d4d4d" prefHeight="34.0" prefWidth="562.0" styleClass="text-field-box" text="Peter" unFocusColor="GREY">
                                                                                              <font>
                                                                                                 <Font size="15.0" />
                                                                                              </font>
@@ -845,35 +774,88 @@
                                                                                                 <Insets />
                                                                                              </opaqueInsets>
                                                                                           </JFXTextField>
-                                                                                          <JFXButton alignment="CENTER" contentDisplay="CENTER" HBox.hgrow="ALWAYS">
-                                                                                             <graphic>
-                                                                                                <ImageView fitHeight="23.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
-                                                                                                   <image>
-                                                                                                      <Image url="@img/search_icon.png" />
-                                                                                                   </image>
-                                                                                                </ImageView>
-                                                                                             </graphic>
-                                                                                          </JFXButton>
                                                                                        </children>
-                                                                                    </HBox>
-                                                                                    <Label prefHeight="28.0" prefWidth="146.0" text="Joining Date">
-                                                                                       <font>
-                                                                                          <Font name="System Bold" size="15.0" />
-                                                                                       </font>
-                                                                                       <VBox.margin>
-                                                                                          <Insets top="10.0" />
-                                                                                       </VBox.margin>
-                                                                                    </Label>
-                                                                                    <DatePicker fx:id="joiningDatePicker" prefHeight="26.0" prefWidth="745.0" stylesheets="@date_picker.css" />
-                                                                                    <Label prefHeight="28.0" prefWidth="146.0" text="Last Working Date">
-                                                                                       <font>
-                                                                                          <Font name="System Bold" size="15.0" />
-                                                                                       </font>
-                                                                                       <VBox.margin>
-                                                                                          <Insets top="10.0" />
-                                                                                       </VBox.margin>
-                                                                                    </Label>
-                                                                                    <DatePicker fx:id="lastWorkingDatePicker" prefHeight="26.0" prefWidth="745.0" stylesheets="@date_picker.css" />
+                                                                                    </VBox>
+                                                                                    <VBox>
+                                                                                       <children>
+                                                                                          <Label prefHeight="28.0" prefWidth="146.0" text="Office Code">
+                                                                                             <font>
+                                                                                                <Font name="System Bold" size="15.0" />
+                                                                                             </font>
+                                                                                          </Label>
+                                                                                          <JFXTextField fx:id="officeCodeTextField" focusColor="#4d4d4d" prefHeight="34.0" prefWidth="562.0" styleClass="text-field-box" unFocusColor="GREY">
+                                                                                             <font>
+                                                                                                <Font size="15.0" />
+                                                                                             </font>
+                                                                                             <opaqueInsets>
+                                                                                                <Insets />
+                                                                                             </opaqueInsets>
+                                                                                          </JFXTextField>
+                                                                                       </children>
+                                                                                    </VBox>
+                                                                                    <VBox>
+                                                                                       <children>
+                                                                                          <Label prefHeight="28.0" prefWidth="146.0" text="Acccessibility">
+                                                                                             <font>
+                                                                                                <Font name="System Bold" size="15.0" />
+                                                                                             </font>
+                                                                                          </Label>
+                                                                                          <JFXComboBox fx:id="accessibilityBox" focusColor="#4d4d4d" prefHeight="35.0" prefWidth="150.0" promptText="Employee" styleClass="combo-box-style">
+                                                                                             <opaqueInsets>
+                                                                                                <Insets />
+                                                                                             </opaqueInsets>
+                                                                                             <padding>
+                                                                                                <Insets left="10.0" />
+                                                                                             </padding>
+                                                                                          </JFXComboBox>
+                                                                                       </children>
+                                                                                    </VBox>
+                                                                                    <VBox>
+                                                                                       <children>
+                                                                                          <Label prefHeight="28.0" prefWidth="146.0" text="Supervisor">
+                                                                                             <font>
+                                                                                                <Font name="System Bold" size="15.0" />
+                                                                                             </font>
+                                                                                          </Label>
+                                                                                          <HBox>
+                                                                                             <children>
+                                                                                                <JFXTextField fx:id="supervisorTextField" focusColor="#4d4d4d" prefHeight="30.0" prefWidth="758.0" styleClass="text-field-box" unFocusColor="GREY">
+                                                                                                   <font>
+                                                                                                      <Font size="15.0" />
+                                                                                                   </font>
+                                                                                                   <opaqueInsets>
+                                                                                                      <Insets />
+                                                                                                   </opaqueInsets>
+                                                                                                </JFXTextField>
+                                                                                                <JFXButton alignment="CENTER" contentDisplay="CENTER" HBox.hgrow="ALWAYS">
+                                                                                                   <graphic>
+                                                                                                      <FontAwesomeIconView glyphName="SEARCH" size="20" />
+                                                                                                   </graphic>
+                                                                                                </JFXButton>
+                                                                                             </children>
+                                                                                          </HBox>
+                                                                                       </children>
+                                                                                    </VBox>
+                                                                                    <VBox>
+                                                                                       <children>
+                                                                                          <Label prefHeight="28.0" prefWidth="146.0" text="Joining Date">
+                                                                                             <font>
+                                                                                                <Font name="System Bold" size="15.0" />
+                                                                                             </font>
+                                                                                          </Label>
+                                                                                          <DatePicker fx:id="joiningDatePicker" prefHeight="26.0" prefWidth="745.0" stylesheets="@date_picker.css" />
+                                                                                       </children>
+                                                                                    </VBox>
+                                                                                    <VBox>
+                                                                                       <children>
+                                                                                          <Label prefHeight="28.0" prefWidth="146.0" text="Last Working Date">
+                                                                                             <font>
+                                                                                                <Font name="System Bold" size="15.0" />
+                                                                                             </font>
+                                                                                          </Label>
+                                                                                          <DatePicker fx:id="lastWorkingDatePicker" prefHeight="26.0" prefWidth="745.0" stylesheets="@date_picker.css" />
+                                                                                       </children>
+                                                                                    </VBox>
                                                                                  </children>
                                                                               </VBox>
                                                                            </content>
@@ -948,6 +930,9 @@
                                                                      </children>
                                                                   </HBox>
                                                                </children>
+                                                               <padding>
+                                                                  <Insets bottom="20.0" />
+                                                               </padding>
                                                             </VBox>
                                                          </content>
                                                       </ScrollPane>
@@ -983,7 +968,7 @@
                                                 </Tab>
                                             </tabs>
                                              <VBox.margin>
-                                                <Insets left="10.0" right="10.0" />
+                                                <Insets bottom="20.0" left="10.0" right="10.0" />
                                              </VBox.margin>
                                           </TabPane>
                                        </children>
@@ -1010,19 +995,23 @@
                                                 <Insets left="50.0" right="50.0" />
                                              </padding>
                                           </StackPane>
-                                          <TableView fx:id="employeeTable" maxWidth="1510.0" minWidth="552.0" pickOnBounds="false" prefHeight="660.0" prefWidth="1510.0" stylesheets="@table.css">
-                                             <columns>
-                                                <TableColumn fx:id="employeeNumberColumn" prefWidth="98.4000244140625" text="S.No" />
-                                                <TableColumn fx:id="nameColumn" prefWidth="136.8000030517578" text="Employee Name" />
-                                                <TableColumn fx:id="phoneColumn" prefWidth="152.80001831054688" text="Phone" />
-                                                <TableColumn fx:id="emailColumn" prefWidth="185.5999755859375" sortable="false" text="Email" />
-                                                <TableColumn fx:id="employeeStatusColumn" minWidth="0.0" prefWidth="90.39996337890625" sortable="false" text="Status" />
-                                                <TableColumn fx:id="accessibilityColumn" prefWidth="185.5999755859375" sortable="false" text="Accessibility" />
-                                             </columns>
-                                             <columnResizePolicy>
-                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                             </columnResizePolicy>
-                                          </TableView>
+                                          <StackPane>
+                                             <children>
+                                                <TableView fx:id="employeeTable" maxWidth="1510.0" minWidth="552.0" pickOnBounds="false" prefHeight="660.0" prefWidth="1510.0" stylesheets="@table.css">
+                                                   <columns>
+                                                      <TableColumn fx:id="employeeNumberColumn" prefWidth="98.4000244140625" text="S.No" />
+                                                      <TableColumn fx:id="nameColumn" prefWidth="136.8000030517578" text="Employee Name" />
+                                                      <TableColumn fx:id="phoneColumn" prefWidth="152.80001831054688" text="Phone" />
+                                                      <TableColumn fx:id="emailColumn" prefWidth="185.5999755859375" sortable="false" text="Email" />
+                                                      <TableColumn fx:id="employeeStatusColumn" minWidth="0.0" prefWidth="90.39996337890625" sortable="false" text="Status" />
+                                                      <TableColumn fx:id="accessibilityColumn" prefWidth="185.5999755859375" sortable="false" text="Accessibility" />
+                                                   </columns>
+                                                   <columnResizePolicy>
+                                                      <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                   </columnResizePolicy>
+                                                </TableView>
+                                             </children>
+                                          </StackPane>
                                        </children>
                                     </VBox>
                                  </children>

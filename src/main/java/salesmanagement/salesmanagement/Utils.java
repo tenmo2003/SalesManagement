@@ -1,7 +1,11 @@
 package salesmanagement.salesmanagement;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.util.Duration;
 import javafx.util.Pair;
 
 import javax.imageio.ImageIO;
@@ -106,4 +110,26 @@ public class Utils {
         return fileName + "." + extension;
     }
 
+    /**
+     * This method shakes a given JavaFX Node horizontally for a short duration.
+     * It creates a Timeline object that animates the translateX property of the given node
+     * with a set of KeyFrames that define the movement of the node.
+     * After the animation is finished, it sets the translateX property back to 0.
+     *
+     * @param node the JavaFX Node to shake
+     */
+    public static void shake(Node node) {
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.ZERO, new KeyValue(node.translateXProperty(), 0)),
+                new KeyFrame(Duration.millis(100), new KeyValue(node.translateXProperty(), -5)),
+                new KeyFrame(Duration.millis(200), new KeyValue(node.translateXProperty(), 5)),
+                new KeyFrame(Duration.millis(300), new KeyValue(node.translateXProperty(), -5)),
+                new KeyFrame(Duration.millis(400), new KeyValue(node.translateXProperty(), 5)),
+                new KeyFrame(Duration.millis(500), new KeyValue(node.translateXProperty(), 0))
+        );
+        timeline.setOnFinished(event -> {
+            node.setTranslateX(0);
+        });
+        timeline.play();
+    }
 }
