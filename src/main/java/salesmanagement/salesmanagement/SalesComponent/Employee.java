@@ -56,7 +56,7 @@ public class Employee {
      * for content storage purposes only,
      * without affecting database connection variables.
      */
-    public Employee(ResultSet employeeRecord, MainSceneController mainSceneController) {
+    public Employee(ResultSet employeeRecord) {
         try {
             employeeNumber = employeeRecord.getInt("employeeNumber");
             lastName = employeeRecord.getString("lastName");

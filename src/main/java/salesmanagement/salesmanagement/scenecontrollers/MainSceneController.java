@@ -11,6 +11,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -210,6 +211,7 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     ComboBox<String> accessibilityFilterComboBox;
     FilteredList<Employee> filteredEmployees;
+    SortedList<Employee> sortedAndFilteredEmployees;
 
     @FXML
     void addEmployeeFilter() {
@@ -227,8 +229,7 @@ public class MainSceneController extends SceneController implements Initializabl
 
     @FXML
     public void applyEmployeeFilter() {
-        ObservableList<Employee> employeeList = FXCollections.observableArrayList(employees);
-        filteredEmployees = new FilteredList<>(employeeList, p -> true);
+
         filteredEmployees.setPredicate(employee -> {
             // Check if the order matches the filter criteria
             boolean nameMatch = employee.getFullName().toLowerCase().contains(employeeNameFilterTextField.getText().toLowerCase());
@@ -241,7 +242,6 @@ public class MainSceneController extends SceneController implements Initializabl
             return nameMatch && emailMatch && phoneMatch && statusMatch && accessibilityMatch;
         });
         closeEmployeeFilterBox();
-        employeeTable.setItems(filteredEmployees);
     }
 
     @FXML
@@ -265,14 +265,16 @@ public class MainSceneController extends SceneController implements Initializabl
 //            }
             try {
                 while (resultSet.next()) {
-                    employees.add(new Employee(resultSet, MainSceneController.this));
+                    employees.add(new Employee(resultSet));
                 }
             } catch (SQLException ignored) {
             }
         }, () -> {
             ObservableList<Employee> employeeList = FXCollections.observableArrayList(employees);
-            employeeTable.setItems(employeeList);
-            employeeTable.setItems(employeeList);
+            filteredEmployees = new FilteredList<>(employeeList, p -> true);
+            sortedAndFilteredEmployees = new SortedList<>(filteredEmployees);
+            employeeTable.setItems(sortedAndFilteredEmployees);
+            sortedAndFilteredEmployees.comparatorProperty().bind(employeeTable.comparatorProperty());
             this.employees = employees;
         }, employeeLoadingIndicator, employeeTable.getParent());
     }
@@ -1298,6 +1300,7 @@ public class MainSceneController extends SceneController implements Initializabl
         clearOrderFilterButton.setOnAction(event -> {
             customerNameFilter.clear();
             contactFilter.clear();
+            createdFilter.clear();
             typeFilter.setValue(null);
             commentsFilter.clear();
             orderDateFilter.setValue(null);
@@ -1312,6 +1315,7 @@ public class MainSceneController extends SceneController implements Initializabl
 
         // Initialize columns
         orderNumberOrd.setCellValueFactory(new PropertyValueFactory<>("orderNumber"));
+        createdOrd.setCellValueFactory(new PropertyValueFactory<>("employeeName"));
         orderDateOrd.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
         typeOrd.setCellValueFactory(new PropertyValueFactory<>("type"));
         commentsOrd.setCellValueFactory(new PropertyValueFactory<>("comments"));
@@ -1322,8 +1326,10 @@ public class MainSceneController extends SceneController implements Initializabl
         ordersTable.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) { // check for double-click event
                 Order selectedOrderRow = ordersTable.getSelectionModel().getSelectedItem();
-                initEditOrder(selectedOrderRow);
-                goToEditOrderTab();
+                if (selectedOrderRow != null) {
+                    initEditOrder(selectedOrderRow);
+                    goToEditOrderTab();
+                }
             }
         });
 
@@ -1337,18 +1343,22 @@ public class MainSceneController extends SceneController implements Initializabl
 
         editProductButton.setOnAction(e -> {
             Product selected = productsTable.getSelectionModel().getSelectedItem();
-            initEditProductDetails(selected);
-            bgPaneProducts.setVisible(true);
-            productDetailsPane.setVisible(true);
+            if (selected != null) {
+                initEditProductDetails(selected);
+                bgPaneProducts.setVisible(true);
+                productDetailsPane.setVisible(true);
+            }
         });
 
 
         productsTable.setOnMouseClicked((MouseEvent event) -> {
             if (event.getClickCount() == 2) {
                 Product selected = productsTable.getSelectionModel().getSelectedItem();
-                initEditProductDetails(selected);
-                bgPaneProducts.setVisible(true);
-                productDetailsPane.setVisible(true);
+                if (selected != null) {
+                    initEditProductDetails(selected);
+                    bgPaneProducts.setVisible(true);
+                    productDetailsPane.setVisible(true);
+                }
             }
         });
 
@@ -1776,7 +1786,7 @@ public class MainSceneController extends SceneController implements Initializabl
                 value += item.getAmount();
             }
 
-            String order = "insert into orders(orderDate, requiredDate, shippedDate, status, comments, customerNumber, type, value, payment_method) values ('"
+            String order = "insert into orders(orderDate, requiredDate, shippedDate, status, comments, customerNumber, type, value, payment_method, created_by) values ('"
                     + orderDate + "',"
                     + requiredDate + ","
                     + shippedDate + ",'"
@@ -1785,7 +1795,8 @@ public class MainSceneController extends SceneController implements Initializabl
                     + customerNumber + ", '"
                     + type + "', "
                     + value + ", '"
-                    + paymentMethodInput.getValue() + "');";
+                    + paymentMethodInput.getValue() + "'," +
+                    loggerID + ");";
             sqlConnection.updateQuery(order);
             result = sqlConnection.getDataQuery("SELECT LAST_INSERT_ID() FROM orders;");
 
@@ -1871,6 +1882,8 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     TableColumn<Order, Integer> orderNumberOrd;
     @FXML
+    TableColumn<Order, String> createdOrd;
+    @FXML
     TableColumn<Order, LocalDate> orderDateOrd;
     @FXML
     TableColumn<Order, String> typeOrd;
@@ -1901,6 +1914,8 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     ComboBox<String> typeFilter;
     @FXML
+    JFXTextField createdFilter;
+    @FXML
     DatePicker orderDateFilter;
     @FXML
     JFXTextField commentsFilter;
@@ -1911,6 +1926,7 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     JFXButton closeOrderFilterButton;
     FilteredList<Order> filteredOrders;
+    SortedList<Order> sortedAndFilteredOrders;
     private boolean removeOrderButtonClicked = false;
 
     void initOrders() {
@@ -1919,11 +1935,13 @@ public class MainSceneController extends SceneController implements Initializabl
             ordersTable.setItems(orders);
 
             try {
-                String query = "SELECT orderNumber, orderDate, requiredDate, shippedDate, status, type, comments, value, payment_method, customerName, phone FROM orders INNER JOIN customers ON orders.customerNumber = customers.customerNumber";
+                String query = "SELECT orderNumber, CONCAT(lastName, ' ', firstName)  AS name, created_by, orderDate, requiredDate, shippedDate, orders.status, type, comments, value, payment_method, customerName, customers.phone FROM orders INNER JOIN customers ON orders.customerNumber = customers.customerNumber INNER JOIN employees ON orders.created_by = employees.employeeNumber";
                 ResultSet resultSet = sqlConnection.getDataQuery(query);
                 while (resultSet.next()) {
                     Order order = new Order(
                             resultSet.getInt("orderNumber"),
+                            resultSet.getInt("created_by"),
+                            resultSet.getString("name"),
                             resultSet.getDate("orderDate").toLocalDate(),
                             resultSet.getDate("requiredDate") != null ? resultSet.getDate("requiredDate").toLocalDate() : null,
                             resultSet.getDate("shippedDate") != null ? resultSet.getDate("shippedDate").toLocalDate() : null,
@@ -1940,7 +1958,9 @@ public class MainSceneController extends SceneController implements Initializabl
                 ordersTable.refresh();
 
                 filteredOrders = new FilteredList<>(FXCollections.observableArrayList(ordersTable.getItems()), p -> true);
-                ordersTable.setItems(filteredOrders);
+                sortedAndFilteredOrders = new SortedList<>(filteredOrders);
+                ordersTable.setItems(sortedAndFilteredOrders);
+                sortedAndFilteredOrders.comparatorProperty().bind(ordersTable.comparatorProperty());
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
@@ -2005,6 +2025,7 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     JFXButton addProductFilterButton;
     FilteredList<Product> filteredProducts;
+    SortedList<Product> sortedAndFilteredProducts;
 
     private boolean removeProductButtonClicked = false;
     @FXML
@@ -2041,7 +2062,9 @@ public class MainSceneController extends SceneController implements Initializabl
                 productsTable.refresh();
 
                 filteredProducts = new FilteredList<>(FXCollections.observableArrayList(productsTable.getItems()), p -> true);
-                productsTable.setItems(filteredProducts);
+                sortedAndFilteredProducts = new SortedList<>(filteredProducts);
+                productsTable.setItems(sortedAndFilteredProducts);
+                sortedAndFilteredProducts.comparatorProperty().bind(productsTable.comparatorProperty());
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
@@ -2123,7 +2146,6 @@ public class MainSceneController extends SceneController implements Initializabl
 
     void initEditProductDetails(Product selected) {
         productDetailsButton.setText("Save");
-
         productCodePDetails.setText(selected.getProductCode());
         productNamePDetails.setText(selected.getProductName());
         productLinePDetails.setText(selected.getProductLine());
@@ -2214,16 +2236,18 @@ public class MainSceneController extends SceneController implements Initializabl
             // Get the filter text from the text fields
             String customerNameFilterText = customerNameFilter.getText().toLowerCase();
             String contactFilterText = contactFilter.getText().toLowerCase();
+            String createdFilterText = createdFilter.getText().toLowerCase();
             LocalDate orderDateFilterValue = orderDateFilter.getValue();
             String typeFilterText = typeFilter.getValue() != null ? typeFilter.getValue().toLowerCase() : "";
             String commentsFilterText = commentsFilter.getText().toLowerCase();
             // Check if the order matches the filter criteria
             boolean customerNameMatch = customerNameFilterText.isEmpty() || order.getCustomerName().toLowerCase().contains(customerNameFilterText);
             boolean contactMatch = contactFilterText.isEmpty() || order.getContact().toLowerCase().contains(contactFilterText);
+            boolean createdMatch = createdFilterText.isEmpty() || order.getEmployeeName().toLowerCase().contains(createdFilterText);
             boolean orderDateMatch = orderDateFilterValue == null || order.getOrderDate().equals(orderDateFilterValue);
             boolean typeMatch = typeFilterText.isEmpty() || order.getType().toLowerCase().contains(typeFilterText);
             boolean commentsMatch = commentsFilterText.isEmpty() || order.getComments().toLowerCase().contains(commentsFilterText);
-            return customerNameMatch && contactMatch && orderDateMatch && typeMatch && commentsMatch;
+            return customerNameMatch && contactMatch && createdMatch && orderDateMatch && typeMatch && commentsMatch;
         });
     }
 
