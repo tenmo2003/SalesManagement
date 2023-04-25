@@ -11,38 +11,42 @@ public class NotificationSystem {
 
     public static void throwNotification(NotificationCode code, Stage stage) {
         switch (code) {
-            case INVALID_LOGIN:
+            case INVALID_INPUTS -> {
+                title = "Error notification";
+                content = "Please check all input fields again.";
+            }
+            case INVALID_LOGIN -> {
                 title = "Login notification";
                 content = "Invalid username or password!";
-                break;
-            case INVALID_EMAIL:
+            }
+            case INVALID_EMAIL -> {
                 title = "Signup notification";
                 content = "Invalid email!";
-                break;
-            case NETWORK_ERROR:
+            }
+            case NETWORK_ERROR -> {
                 title = "Network notification";
                 content = "Please check your network connection again!";
-                break;
-            case INVALID_LOGIN_INFO:
+            }
+            case INVALID_LOGIN_INFO -> {
                 title = "Login notification";
                 content = "Invalid username or email!";
-                break;
-            case INVALID_SECURITY_CODE:
+            }
+            case INVALID_SECURITY_CODE -> {
                 title = "Login notification";
                 content = "Invalid security code!";
-                break;
-            case SUCCEED_VERIFY_MAIL:
+            }
+            case SUCCEED_VERIFY_MAIL -> {
                 title = "Login notification";
                 content = "Verify Mail Successfully!";
-                break;
-            case SUCCEED_RESET_PASSWORD:
+            }
+            case SUCCEED_RESET_PASSWORD -> {
                 title = "Login notification";
                 content = "Reset Password Successfully!";
-                break;
-            case SUCCEED_ADD_NEW_EMPLOYEE:
+            }
+            case SUCCEED_ADD_NEW_EMPLOYEE -> {
                 title = "";
                 content = "Added New Employee Successfully!";
-
+            }
         }
         Notifications notificationBuilder = Notifications.create()
                 .title(title)

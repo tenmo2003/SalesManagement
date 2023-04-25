@@ -56,6 +56,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static salesmanagement.salesmanagement.InputErrorCode.*;
 import static salesmanagement.salesmanagement.Utils.getAllNodes;
@@ -321,29 +322,37 @@ public class MainSceneController extends SceneController implements Initializabl
 
     @FXML
     public void saveNewEmployee() {
+        AtomicBoolean allValid = new AtomicBoolean(false);
         runTask(() -> {
-            String query = "INSERT INTO `employees` (`employeeNumber`, `lastName`, `firstName`, `birthDate`, `gender`, `email`, `mailVerified`, " +
-                    "`officeCode`, `reportsTo`, `jobTitle`, `username`, `password`, `phoneCode`, `phone`, `status`, `joiningDate`, `lastWorkingDate`) " +
-                    "VALUES (NULL,'" + lastNameTextField.getText() + "', '" + firstNameTextField.getText() + "', '" + birthDatePicker.getValue()
-                    + "','" + (maleRadioButton.isSelected() ? "male" : "female") + "', '" + emailTextField.getText() + "', '0', " +
-                    "'" + officeCodeTextField.getText() + "'," + supervisorTextField.getText() + ", '" + accessibilityBox.getValue() + "', '"
-                    + usernameTextField.getText() + "', '" + passwordField.getText() + "', '" + phoneCodeBox.getValue()
-                    + "', '" + phoneNumberTextField.getText() + "', 'ACTIVE', '" + joiningDatePicker.getValue() + "', '"
-                    + lastWorkingDatePicker.getValue() + "')";
-            sqlConnection.updateQuery(query);
-            query = "SELECT employeeNumber FROM employees WHERE username = '" + usernameTextField.getText() + "'";
-            ResultSet resultSet = sqlConnection.getDataQuery(query);
-            try {
-                if (resultSet.next()) {
-                    ImageController.uploadImage(avatarAddress.getText(), "avatar_employee_" + resultSet.getInt("employeeNumber") + ".png");
+            allValid.set(checkValidEmployeeInput());
+            if (!allValid.get()) {
+                Platform.runLater(() -> NotificationSystem.throwNotification(NotificationCode.INVALID_INPUTS, stage));
+            } else {
+                String query = "INSERT INTO `employees` (`employeeNumber`, `lastName`, `firstName`, `birthDate`, `gender`, `email`, `mailVerified`, " +
+                        "`officeCode`, `reportsTo`, `jobTitle`, `username`, `password`, `phoneCode`, `phone`, `status`, `joiningDate`, `lastWorkingDate`) " +
+                        "VALUES (NULL,'" + lastNameTextField.getText() + "', '" + firstNameTextField.getText() + "', '" + birthDatePicker.getValue()
+                        + "','" + (maleRadioButton.isSelected() ? "male" : "female") + "', '" + emailTextField.getText() + "', '0', " +
+                        "'" + officeCodeTextField.getText() + "'," + supervisorTextField.getText() + ", '" + accessibilityBox.getValue() + "', '"
+                        + usernameTextField.getText() + "', '" + passwordField.getText() + "', '" + phoneCodeBox.getValue()
+                        + "', '" + phoneNumberTextField.getText() + "', 'ACTIVE', '" + joiningDatePicker.getValue() + "', '"
+                        + lastWorkingDatePicker.getValue() + "')";
+                sqlConnection.updateQuery(query);
+                query = "SELECT employeeNumber FROM employees WHERE username = '" + usernameTextField.getText() + "'";
+                ResultSet resultSet = sqlConnection.getDataQuery(query);
+                try {
+                    if (resultSet.next()) {
+                        ImageController.uploadImage(avatarAddress.getText(), "avatar_employee_" + resultSet.getInt("employeeNumber") + ".png");
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
         }, () -> {
-            saveNewEmployeeButton.setVisible(false);
-            displayEmployeesTab();
-            NotificationSystem.throwNotification(NotificationCode.SUCCEED_ADD_NEW_EMPLOYEE, stage);
+            if (allValid.get()) {
+                saveNewEmployeeButton.setVisible(false);
+                displayEmployeesTab();
+                NotificationSystem.throwNotification(NotificationCode.SUCCEED_ADD_NEW_EMPLOYEE, stage);
+            }
         }, employeeDetailLoading, employeeDetailTabPane);
     }
 
@@ -398,7 +407,64 @@ public class MainSceneController extends SceneController implements Initializabl
         editInfoButton.setDisable(false);
     }
 
-    private void checkValidEmployeeInput() {
+    private boolean checkValidEmployeeInput() {
+        if (firstNameTextField.getText().equals("")) return false;
+
+        if (lastNameTextField.getText().equals("")) return false;
+
+        if (!emailTextField.getText().matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) return false;
+
+        if (birthDatePicker.getValue() == null) return false;
+
+        if (joiningDatePicker.getValue() == null) return false;
+
+        if (lastWorkingDatePicker.getValue() == null) return false;
+
+
+        String query = "SELECT officeCode FROM offices WHERE officeCode = '" + officeCodeTextField.getText() + "'";
+        ResultSet resultSet = sqlConnection.getDataQuery(query);
+        try {
+            if (!resultSet.next()) {
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            int employeeCode = Integer.parseInt(supervisorTextField.getText());
+            query = "SELECT employeeNumber FROM employees WHERE employeeNumber = " + employeeCode;
+            resultSet = sqlConnection.getDataQuery(query);
+            try {
+                if (!resultSet.next())
+                    return false;
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } catch (Exception e) {
+            return false;
+        }
+
+
+        if (!phoneNumberTextField.getText().matches("/\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})\\2([0-9]{4})/")) return false;
+
+        if (usernameTextField.getText().length() > 30 || usernameTextField.getText().length() < 6) {
+            return false;
+        } else if (!usernameTextField.getText().matches("^[a-zA-Z0-9.]*$")) {
+            return false;
+        } else {
+            query = "SELECT username FROM employees WHERE username = '" + usernameTextField.getText() + "'";
+            resultSet = sqlConnection.getDataQuery(query);
+            try {
+                if (resultSet.next()) {
+                    return false;
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return passwordField.getCharacters().toString().length() >= 8;
 
     }
 
@@ -803,7 +869,7 @@ public class MainSceneController extends SceneController implements Initializabl
         phoneNumberTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
                 VBox container = (VBox) phoneNumberTextField.getParent();
-                if (!phoneNumberTextField.getText().matches("^\\d+$")) {
+                if (!phoneNumberTextField.getText().matches("/\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})\\2([0-9]{4})/")) {
                     phoneNumberTextField.setStyle("-fx-border-color: #f35050");
                     if (!(container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
                         container.getChildren().add(getInputErrorLabel(INVALID_PHONE_NUMBER));
