@@ -466,41 +466,37 @@
                            <content>
                               <StackPane fx:id="employeesTabPane">
                                  <children>
-                                    <VBox fx:id="employeeInfoBox" prefHeight="992.8" prefWidth="1596.8" visible="false">
+                                    <VBox fx:id="employeeInfoBox" alignment="CENTER" prefHeight="992.8" prefWidth="1596.8" visible="false">
                                        <children>
                                           <StackPane prefHeight="48.0" prefWidth="1597.0">
                                              <children>
                                                 <HBox alignment="CENTER_LEFT" prefHeight="54.0" prefWidth="1559.0" spacing="10.0">
                                                    <children>
-                                                      <ImageView fx:id="avatar" fitHeight="54.0" fitWidth="73.0" pickOnBounds="true" preserveRatio="true">
-                                                         <image>
-                                                            <Image url="@img/sample_avatar.jpg" />
-                                                         </image>
-                                                      </ImageView>
-                                                      <Label fx:id="fullNameLabel" alignment="CENTER" text="Ngũ Thành An">
+                                                      <Label fx:id="topDetailBoxLabel" alignment="CENTER" textFill="#329efc">
                                                          <font>
-                                                            <Font size="20.0" />
+                                                            <Font name="System Bold" size="22.0" />
                                                          </font>
                                                       </Label>
+                                                      <ProgressIndicator fx:id="employeeDetailLoading" prefHeight="38.0" prefWidth="36.0" visible="false" />
                                                    </children>
                                                    <padding>
                                                       <Insets left="30.0" />
                                                    </padding>
                                                 </HBox>
-                                                <JFXButton buttonType="RAISED" onMouseClicked="#backToEmployeeTableBox" style="-fx-background-color: #329cfe; -fx-border-radius: 10; -fx-background-radius: 10; -fx-border-color: #329cfe; -fx-background-size: 20 20 20 20;" text="BACK" StackPane.alignment="CENTER_RIGHT">
+                                                <JFXButton buttonType="RAISED" onMouseClicked="#backToEmployeeTableBox" text="BACK" StackPane.alignment="CENTER_RIGHT">
                                                    <StackPane.margin>
                                                       <Insets right="30.0" />
                                                    </StackPane.margin>
                                                 </JFXButton>
                                              </children>
                                           </StackPane>
-                                          <TabPane id="tabPane" prefHeight="606.0" prefWidth="966.0" stylesheets="@innerTabPane.css" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+                                          <TabPane id="tabPane" fx:id="employeeDetailTabPane" prefHeight="606.0" prefWidth="966.0" stylesheets="@innerTabPane.css" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
                                             <tabs>
                                               <Tab closable="false" text="DETAILS">
                                                    <content>
                                                       <ScrollPane fitToHeight="true" fitToWidth="true">
                                                          <content>
-                                                            <VBox fx:id="detailsInfoBox" prefHeight="556.0" prefWidth="1101.0" spacing="10.0">
+                                                            <VBox fx:id="detailsInfoBox" alignment="TOP_CENTER" prefHeight="556.0" prefWidth="1101.0" spacing="10.0">
                                                                <children>
                                                                   <StackPane alignment="CENTER_RIGHT" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                                                                      <children>
@@ -510,13 +506,12 @@
                                                                               <JFXButton fx:id="editInfoButton" onMouseClicked="#editEmployeeInfo" text="EDIT" visible="false" />
                                                                            </children>
                                                                         </HBox>
-                                                                        <JFXButton fx:id="saveNewEmployeeButton" onMouseClicked="#saveNewEmployee" text="ADD NEW" visible="false" />
                                                                      </children>
                                                                      <VBox.margin>
                                                                         <Insets right="20.0" />
                                                                      </VBox.margin>
                                                                   </StackPane>
-                                                                  <HBox prefHeight="517.0" prefWidth="1576.0" VBox.vgrow="ALWAYS">
+                                                                  <HBox prefHeight="517.0" prefWidth="1576.0" spacing="30.0" VBox.vgrow="ALWAYS">
                                                                      <children>
                                                                         <TitledPane animated="false" prefHeight="98.0" prefWidth="733.0" text="Basic Info" HBox.hgrow="ALWAYS">
                                                                           <content>
@@ -599,6 +594,14 @@
                                                                                                 <Font name="System Bold" size="15.0" />
                                                                                              </font>
                                                                                           </Label>
+                                                                                          <ImageView fx:id="avatar" fitHeight="110.0" fitWidth="93.0" pickOnBounds="true" preserveRatio="true">
+                                                                                             <image>
+                                                                                                <Image url="@img/sample_avatar.jpg" />
+                                                                                             </image>
+                                                                                             <VBox.margin>
+                                                                                                <Insets bottom="15.0" top="5.0" />
+                                                                                             </VBox.margin>
+                                                                                          </ImageView>
                                                                                           <HBox alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="711.0">
                                                                                              <children>
                                                                                                 <JFXButton alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#uploadAvatar" prefHeight="94.0" prefWidth="102.0" style="-fx-border-color: #d1d1d1; -fx-border-radius: 3 0 0 3; -fx-border-width: 1.5 0.75 1.5 1.5; -fx-background-radius: 3 0 0 3;" text="Browse..." HBox.hgrow="ALWAYS">
@@ -642,10 +645,10 @@
                                                                               </VBox>
                                                                           </content>
                                                                            <HBox.margin>
-                                                                              <Insets bottom="5.0" left="30.0" right="15.0" top="20.0" />
+                                                                              <Insets />
                                                                            </HBox.margin>
                                                                         </TitledPane>
-                                                                        <TitledPane animated="false" prefHeight="98.0" prefWidth="733.0" text="Account Login" HBox.hgrow="ALWAYS">
+                                                                        <TitledPane animated="false" prefHeight="300.0" prefWidth="734.0" text="Account Login" HBox.hgrow="ALWAYS">
                                                                            <content>
                                                                               <VBox prefHeight="400.0" prefWidth="746.0" spacing="15.0">
                                                                                  <children>
@@ -749,14 +752,17 @@
                                                                               </VBox>
                                                                            </content>
                                                                            <HBox.margin>
-                                                                              <Insets left="15.0" right="20.0" top="20.0" />
+                                                                              <Insets />
                                                                            </HBox.margin>
                                                                         </TitledPane>
                                                                      </children>
+                                                                     <VBox.margin>
+                                                                        <Insets left="30.0" right="30.0" />
+                                                                     </VBox.margin>
                                                                   </HBox>
-                                                                  <HBox prefHeight="517.0" prefWidth="1576.0">
+                                                                  <HBox prefHeight="517.0" prefWidth="1576.0" spacing="30.0">
                                                                      <children>
-                                                                        <TitledPane animated="false" prefHeight="354.0" prefWidth="764.0" text="Company Details" HBox.hgrow="ALWAYS">
+                                                                        <TitledPane animated="false" prefHeight="434.0" prefWidth="681.0" text="Company Details" HBox.hgrow="ALWAYS">
                                                                            <content>
                                                                               <VBox prefHeight="326.0" prefWidth="639.0" spacing="15.0">
                                                                                  <children>
@@ -861,10 +867,10 @@
                                                                               </VBox>
                                                                            </content>
                                                                            <HBox.margin>
-                                                                              <Insets left="30.0" right="15.0" />
+                                                                              <Insets />
                                                                            </HBox.margin>
                                                                         </TitledPane>
-                                                                        <TitledPane animated="false" prefHeight="354.0" prefWidth="785.0" text="Document" HBox.hgrow="ALWAYS">
+                                                                        <TitledPane animated="false" prefHeight="354.0" prefWidth="704.0" text="Document" HBox.hgrow="ALWAYS">
                                                                            <content>
                                                                               <VBox prefHeight="474.0" prefWidth="646.0">
                                                                                  <children>
@@ -929,7 +935,11 @@
                                                                            </HBox.margin>
                                                                         </TitledPane>
                                                                      </children>
+                                                                     <VBox.margin>
+                                                                        <Insets left="30.0" right="30.0" />
+                                                                     </VBox.margin>
                                                                   </HBox>
+                                                                  <JFXButton fx:id="saveNewEmployeeButton" onMouseClicked="#saveNewEmployee" text="ADD NEW" visible="false" />
                                                                </children>
                                                                <padding>
                                                                   <Insets bottom="20.0" />
@@ -941,9 +951,9 @@
                                               </Tab>
                                               <Tab onSelectionChanged="#chooseOrders_employeeTab" text="ORDERS">
                                                 <content>
-                                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="635.0" prefWidth="1576.0">
+                                                      <StackPane>
                                                          <children>
-                                                            <TableView fx:id="orders_employeeTable" layoutX="-185.0" layoutY="-6.0" maxWidth="1536.0" minWidth="552.0" pickOnBounds="false" prefHeight="548.0" prefWidth="1576.0" stylesheets="@table.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+                                                            <TableView fx:id="orders_employeeTable" maxWidth="1536.0" minWidth="552.0" pickOnBounds="false" prefHeight="548.0" prefWidth="1576.0" stylesheets="@table.css">
                                                                <columns>
                                                                   <TableColumn fx:id="orderNumberColumn" prefWidth="100.0" text="Order Number" />
                                                                   <TableColumn fx:id="orderDateColumn" prefWidth="155.9999542236328" text="Order Date" />
@@ -959,7 +969,7 @@
                                                                </columnResizePolicy>
                                                             </TableView>
                                                          </children>
-                                                      </AnchorPane>
+                                                      </StackPane>
                                                 </content>
                                               </Tab>
                                                 <Tab text="ACTIVITIES">
@@ -969,7 +979,7 @@
                                                 </Tab>
                                             </tabs>
                                              <VBox.margin>
-                                                <Insets bottom="20.0" left="10.0" right="10.0" />
+                                                <Insets bottom="20.0" left="10.0" />
                                              </VBox.margin>
                                           </TabPane>
                                        </children>
@@ -980,7 +990,7 @@
                                              <children>
                                                 <HBox alignment="CENTER_LEFT" spacing="20.0">
                                                    <children>
-                                                      <Label text="Employees List" textFill="#329efcaa">
+                                                      <Label text="Employees List" textFill="#329efcab">
                                                          <font>
                                                             <Font name="System Bold" size="22.0" />
                                                          </font>

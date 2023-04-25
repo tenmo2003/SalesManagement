@@ -72,8 +72,6 @@ public class MainSceneController extends SceneController implements Initializabl
     private Tab createOrderTab;
     boolean createOrderInit = false;
     @FXML
-    private Tab homeTab;
-    @FXML
     private Tab settingTab;
     @FXML
     private Tab productsOperationTab;
@@ -300,7 +298,7 @@ public class MainSceneController extends SceneController implements Initializabl
             node.setDisable(false);
         }
         employeeCodeTextField.setDisable(true);
-        fullNameLabel.setText("");
+        topDetailBoxLabel.setText("Add New Employee");
         avatar.setImage(null);
         lastNameTextField.setText("");
         firstNameTextField.setText("");
@@ -325,17 +323,36 @@ public class MainSceneController extends SceneController implements Initializabl
     public void saveNewEmployee() {
         runTask(() -> {
             String query = "INSERT INTO `employees` (`employeeNumber`, `lastName`, `firstName`, `birthDate`, `gender`, `email`, `mailVerified`, " +
-                    "`officeCode`, `reportsTo`, `jobTitle`, `username`, `password`, `avatar`, `phoneCode`, `phone`, `status`, `joiningDate`, `lastWorkingDate`) " +
-                    "VALUES (NULL,'" + lastNameTextField.getText() + "', '" + firstNameTextField.getText() + "', '" + birthDatePicker.getValue() + "', NULL, '" + emailTextField.getText() + "', '0', " +
-                    "'" + officeCodeTextField.getText() + "'," + supervisorTextField.getText() + ", '" + accessibilityBox.getValue() + "', '" + usernameTextField.getText() + "', '" + passwordField.getText() + "', '', '" + phoneCodeBox.getValue() + "', '" + phoneNumberTextField.getText() + "', 'ACTIVE', '" + joiningDatePicker.getValue() + "', '" + lastWorkingDatePicker.getValue() + "')";
-
+                    "`officeCode`, `reportsTo`, `jobTitle`, `username`, `password`, `phoneCode`, `phone`, `status`, `joiningDate`, `lastWorkingDate`) " +
+                    "VALUES (NULL,'" + lastNameTextField.getText() + "', '" + firstNameTextField.getText() + "', '" + birthDatePicker.getValue()
+                    + "','" + (maleRadioButton.isSelected() ? "male" : "female") + "', '" + emailTextField.getText() + "', '0', " +
+                    "'" + officeCodeTextField.getText() + "'," + supervisorTextField.getText() + ", '" + accessibilityBox.getValue() + "', '"
+                    + usernameTextField.getText() + "', '" + passwordField.getText() + "', '" + phoneCodeBox.getValue()
+                    + "', '" + phoneNumberTextField.getText() + "', 'ACTIVE', '" + joiningDatePicker.getValue() + "', '"
+                    + lastWorkingDatePicker.getValue() + "')";
             sqlConnection.updateQuery(query);
+            query = "SELECT employeeNumber FROM employees WHERE username = '" + usernameTextField.getText() + "'";
+            ResultSet resultSet = sqlConnection.getDataQuery(query);
+            try {
+                if (resultSet.next()) {
+                    ImageController.uploadImage(avatarAddress.getText(), "avatar_employee_" + resultSet.getInt("employeeNumber") + ".png");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }, () -> {
             saveNewEmployeeButton.setVisible(false);
             displayEmployeesTab();
             NotificationSystem.throwNotification(NotificationCode.SUCCEED_ADD_NEW_EMPLOYEE, stage);
-        }, null, null);
+        }, employeeDetailLoading, employeeDetailTabPane);
     }
+
+    @FXML
+    ProgressIndicator employeeDetailLoading;
+    @FXML
+    TabPane employeeDetailTabPane;
+    @FXML
+    Label topDetailBoxLabel;
 
     /**
      * When click on Name Text in Employee table, this function will be called to
@@ -353,9 +370,8 @@ public class MainSceneController extends SceneController implements Initializabl
         for (Node node : getAllNodes(detailsInfoBox)) {
             node.setDisable(false);
         }
-
-        fullNameLabel.setText(employee.getFullName());
-        avatar.setImage(employee.getAvatar().getImage());
+        avatar.setImage(ImageController.getImage("avatar_employee_" + employee.getEmployeeNumber() + ".png", true));
+        topDetailBoxLabel.setText(employee.getFullName());
         lastNameTextField.setText(employee.getLastName());
         firstNameTextField.setText(employee.getFirstName());
         usernameTextField.setText(employee.getUsername());
@@ -382,6 +398,9 @@ public class MainSceneController extends SceneController implements Initializabl
         editInfoButton.setDisable(false);
     }
 
+    private void checkValidEmployeeInput() {
+
+    }
 
     @FXML
     public void editEmployeeInfo() {
@@ -436,6 +455,76 @@ public class MainSceneController extends SceneController implements Initializabl
         editInfoButton.setVisible(false);
         saveInfoButton.setVisible(false);
         saveNewEmployeeButton.setVisible(false);
+
+        refreshEmployeeInfoTab();
+    }
+
+    private void refreshEmployeeInfoTab() {
+        VBox container = (VBox) firstNameTextField.getParent();
+        if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+            container.getChildren().remove(container.getChildren().size() - 1);
+        }
+        firstNameTextField.setStyle("-fx-border-color: #d1d1d1");
+
+        container = (VBox) lastNameTextField.getParent();
+        if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+            container.getChildren().remove(container.getChildren().size() - 1);
+        }
+        lastNameTextField.setStyle("-fx-border-color: #d1d1d1");
+
+        container = (VBox) emailTextField.getParent().getParent();
+        if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+            container.getChildren().remove(container.getChildren().size() - 1);
+        }
+        emailTextField.setStyle("-fx-border-color: #d1d1d1");
+
+        container = (VBox) supervisorTextField.getParent().getParent();
+        if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+            container.getChildren().remove(container.getChildren().size() - 1);
+        }
+        supervisorTextField.setStyle("-fx-border-color: #d1d1d1");
+
+        container = (VBox) officeCodeTextField.getParent();
+        if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+            container.getChildren().remove(container.getChildren().size() - 1);
+        }
+        officeCodeTextField.setStyle("-fx-border-color: #d1d1d1");
+
+        container = (VBox) phoneNumberTextField.getParent();
+        if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+            container.getChildren().remove(container.getChildren().size() - 1);
+        }
+        phoneNumberTextField.setStyle("-fx-border-color: #d1d1d1");
+
+        container = (VBox) lastWorkingDatePicker.getParent();
+        if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+            container.getChildren().remove(container.getChildren().size() - 1);
+        }
+        lastWorkingDatePicker.setStyle("-fx-border-color: #d1d1d1");
+
+        container = (VBox) birthDatePicker.getParent();
+        if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+            container.getChildren().remove(container.getChildren().size() - 1);
+        }
+        birthDatePicker.setStyle("-fx-border-color: #d1d1d1");
+
+        container = (VBox) joiningDatePicker.getParent();
+        if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+            container.getChildren().remove(container.getChildren().size() - 1);
+        }
+        joiningDatePicker.setStyle("-fx-border-color: #d1d1d1");
+
+        container = (VBox) usernameTextField.getParent();
+        if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+            container.getChildren().remove(container.getChildren().size() - 1);
+        }
+        usernameTextField.setStyle("-fx-border-color: #d1d1d1");
+
+        container = (VBox) passwordField.getParent();
+        if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+            container.getChildren().remove(container.getChildren().size() - 1);
+        }
+        passwordField.setStyle("-fx-border-color: #d1d1d1");
     }
 
     @FXML
@@ -768,6 +857,24 @@ public class MainSceneController extends SceneController implements Initializabl
                 }
             }
         });
+        passwordField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                VBox container = (VBox) passwordField.getParent();
+                if (passwordField.getCharacters().toString().length() < 8) {
+                    passwordField.setStyle("-fx-border-color: #f35050");
+                    if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                        container.getChildren().remove(container.getChildren().size() - 1);
+                    }
+                    container.getChildren().add(getInputErrorLabel(INVALID_LENGTH_PASSWORD));
+                    shake(passwordField);
+                } else {
+                    passwordField.setStyle("-fx-border-color: #d1d1d1");
+                    if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                        container.getChildren().remove(container.getChildren().size() - 1);
+                    }
+                }
+            }
+        });
         //endregion
 
         // Load UI for others.
@@ -797,7 +904,7 @@ public class MainSceneController extends SceneController implements Initializabl
             employeeTable.setOnMouseClicked((MouseEvent event) -> {
                 if (event.getClickCount() == 2) {
                     Employee selected = employeeTable.getSelectionModel().getSelectedItem();
-                    displayEmployeeInfoBox(selected);
+                    if (selected != null) displayEmployeeInfoBox(selected);
                 }
             });
 

@@ -18,7 +18,8 @@ public enum InputErrorCode {
     INVALID_EMAIL,
     INVALID_DATE,
     EMPTY_DATE,
-    INVALID_PHONE_NUMBER;
+    INVALID_PHONE_NUMBER,
+    INVALID_LENGTH_PASSWORD;
 
     public static String getInputErrorNotification(InputErrorCode code) {
         switch (code) {
@@ -55,12 +56,12 @@ public enum InputErrorCode {
             case EXISTED_USERNAME -> {
                 return "That username is taken. Try another.";
             }
+            case INVALID_LENGTH_PASSWORD -> {
+                return "Use 8 or more characters with a mix of letters, numbers & symbols";
+            }
         }
         return null;
     }
-
-    ;
-
     public static Label getInputErrorLabel(InputErrorCode code) {
         Label invalid_warning = new Label(getInputErrorNotification(code));
         invalid_warning.setStyle("-fx-text-fill: red");

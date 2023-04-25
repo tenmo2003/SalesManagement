@@ -16,6 +16,7 @@ import java.io.IOException;
 
 import static salesmanagement.salesmanagement.scenecontrollers.SceneController.runTask;
 
+
 /**
  * @since 1.0
  */
@@ -86,7 +87,7 @@ public class AppController {
         // Set up SQL Connection for scene controllers.
         runTask(() -> {
             sqlConnection.connectServer();
-        }, null, loginSceneController.getProgressIndicator(), loginSceneController.getLoginPane());
+        }, null,loginSceneController.getProgressIndicator(), loginSceneController.getLoginPane());
         mainSceneController.loginDataListener.start();
 
 //        AnimationTimer notifyInternetConnection = new AnimationTimer() {

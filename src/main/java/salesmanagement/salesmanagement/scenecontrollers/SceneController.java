@@ -1,21 +1,29 @@
 package salesmanagement.salesmanagement.scenecontrollers;
 
 import com.jfoenix.controls.JFXButton;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Control;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import salesmanagement.salesmanagement.SQLConnection;
 import salesmanagement.salesmanagement.Utils;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Stack;
 
 public abstract class SceneController {
     SQLConnection sqlConnection;
@@ -111,16 +119,8 @@ public abstract class SceneController {
         new Thread(task).start();
     }
 
-    /**
-     * Runs a task in a separate thread and shows a progress indicator during the task.
-     * Disables a specified pane or node during the task.
-     * Executes a specified finish function upon completion of the task.
-     *
-     * @param taskFunction   the runnable task to execute in the separate thread.
-     * @param finishFunction the optional runnable function to execute upon completion of the task.
-     * @param bannedArea     the pane or node to disable during the task.
-     */
-    public static void runTask(Runnable taskFunction, Runnable finishFunction, Pane bannedArea) {
+
+    static public void runTaskWithLayer(Runnable taskFunction, Runnable finishFunction, StackPane bannedArea) {
         Task<Void> task = new Task<>() {
             @Override
             protected Void call() {
@@ -128,15 +128,23 @@ public abstract class SceneController {
                 return null;
             }
         };
-        if (bannedArea != null) {
-            if(Utils.getAllNodes(bannedArea).stream().anyMatch(node -> node instanceof ProgressIndicator)) return;
-            ProgressIndicator progressIndicator = new ProgressIndicator();
-            progressIndicator.visibleProperty().bind(task.runningProperty());
-            bannedArea.getChildren().add(progressIndicator);
-        }
+
+        // Add layer for banned area.
+        AnchorPane layer = new AnchorPane();
+        layer.setStyle("-fx-background-color: grey");
+        layer.setOpacity(0.5);
+        bannedArea.getChildren().add(layer);
+
+        // Add progress indicator.
+        ProgressIndicator progressIndicator = new ProgressIndicator();
+        progressIndicator.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
+        progressIndicator.visibleProperty().bind(task.runningProperty());
+        bannedArea.getChildren().add(progressIndicator);
+
         if (finishFunction != null) {
             task.setOnSucceeded(workerStateEvent -> {
                 finishFunction.run();
+                bannedArea.getChildren().removeAll(progressIndicator, layer);
             });
         }
         task.setOnFailed(e -> task.getException().printStackTrace());
