@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 public class Order {
     private int orderNumber;
+    private int employeeNumber;
+    private String employeeName;
     private LocalDate orderDate;
     private LocalDate requiredDate;
     private LocalDate shippedDate;
@@ -15,8 +17,10 @@ public class Order {
     private double value;
     private String payment_method;
 
-    public Order(int orderNumber, LocalDate orderDate, LocalDate requiredDate, LocalDate shippedDate, String status, String comments, String customerName, String contact, String type, double value, String payment_method) {
+    public Order(int orderNumber, int employeeNumber, String employeeName, LocalDate orderDate, LocalDate requiredDate, LocalDate shippedDate, String status, String comments, String customerName, String contact, String type, double value, String payment_method) {
         this.orderNumber = orderNumber;
+        this.employeeNumber = employeeNumber;
+        this.employeeName = employeeName;
         this.orderDate = orderDate;
         this.requiredDate = requiredDate;
         this.shippedDate = shippedDate;
@@ -47,6 +51,22 @@ public class Order {
 
     public LocalDate getRequiredDate() {
         return requiredDate;
+    }
+
+    public int getEmployeeNumber() {
+        return employeeNumber;
+    }
+
+    public void setEmployeeNumber(int employeeNumber) {
+        this.employeeNumber = employeeNumber;
+    }
+
+    public String getEmployeeName() {
+        return employeeName;
+    }
+
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
     }
 
     public void setRequiredDate(LocalDate requiredDate) {
