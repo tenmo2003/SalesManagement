@@ -1,4 +1,4 @@
-package salesmanagement.salesmanagement.scenecontrollers;
+package salesmanagement.salesmanagement.SceneController;
 
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
@@ -43,15 +43,14 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
-import salesmanagement.salesmanagement.*;
-import salesmanagement.salesmanagement.SalesComponent.Employee;
-import salesmanagement.salesmanagement.SalesComponent.Order;
-import salesmanagement.salesmanagement.SalesComponent.OrderItem;
-import salesmanagement.salesmanagement.SalesComponent.Product;
+import salesmanagement.salesmanagement.ImageController;
+import salesmanagement.salesmanagement.NotificationCode;
+import salesmanagement.salesmanagement.NotificationSystem;
+import salesmanagement.salesmanagement.SalesComponent.*;
+import salesmanagement.salesmanagement.SalesManagement;
 import salesmanagement.salesmanagement.ViewController.EmployeesExportViewController;
 import salesmanagement.salesmanagement.ViewController.EmployeesFilterViewController;
 
-import javax.xml.transform.Result;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -63,7 +62,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static salesmanagement.salesmanagement.InputErrorCode.*;
-import static salesmanagement.salesmanagement.Utils.*;
+import static salesmanagement.salesmanagement.Utils.getAllNodes;
+import static salesmanagement.salesmanagement.Utils.shake;
 
 public class MainSceneController extends SceneController implements Initializable {
     @FXML
@@ -110,7 +110,6 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     void goToCreateOrderTab() {
         tabPane.getSelectionModel().select(createOrderTab);
-
     }
 
     @FXML
@@ -210,65 +209,22 @@ public class MainSceneController extends SceneController implements Initializabl
     private TableColumn<?, ?> employeeStatusColumn;
     @FXML
     private TableColumn<?, ?> accessibilityColumn;
-    ArrayList<Employee> employees;
     @FXML
     StackPane employeesTabPane;
     @FXML
     ProgressIndicator employeeLoadingIndicator;
-    @FXML
-    VBox employeeFilterBox;
-    @FXML
-    TextField employeeNameFilterTextField;
-    @FXML
-    TextField phoneFilterTextField;
-    @FXML
-    TextField emailFilterTextField;
-    @FXML
-    ComboBox<String> employeeStatusFilterComboBox;
-    @FXML
-    ComboBox<String> accessibilityFilterComboBox;
-    FilteredList<Employee> filteredEmployees;
     SortedList<Employee> sortedAndFilteredEmployees;
 
     @FXML
     void addEmployeeFilter() {
-        employeeFilterBox.getParent().setVisible(true);
-    }
-
-    @FXML
-    public void clearEmployeeFilter() {
-        employeeNameFilterTextField.setText("");
-        phoneFilterTextField.setText("");
-        emailFilterTextField.setText("");
-        employeeStatusFilterComboBox.setValue(null);
-        accessibilityFilterComboBox.setValue(null);
-    }
-
-    @FXML
-    public void applyEmployeeFilter() {
-        filteredEmployees.setPredicate(employee -> {
-            // Check if the order matches the filter criteria
-            boolean nameMatch = employee.getFullName().toLowerCase().contains(employeeNameFilterTextField.getText().toLowerCase());
-            boolean emailMatch = employee.getEmail().toLowerCase().contains(emailFilterTextField.getText().toLowerCase());
-            boolean phoneMatch = employee.getPhone().toLowerCase().contains(phoneFilterTextField.getText().toLowerCase());
-            boolean statusMatch = employee.getStatus().equals(employeeStatusFilterComboBox.getValue());
-            if (employeeStatusFilterComboBox.getValue() == null) statusMatch = true;
-            boolean accessibilityMatch = employee.getJobTitle().equals(accessibilityFilterComboBox.getValue());
-            if (accessibilityFilterComboBox.getValue() == null) accessibilityMatch = true;
-            return nameMatch && emailMatch && phoneMatch && statusMatch && accessibilityMatch;
-        });
-        employeeFilterBox.getParent().setVisible(false);
-    }
-
-    @FXML
-    public void closeLayerBox(MouseEvent event) {
-        ((Node) event.getSource()).getParent().getParent().getParent().setVisible(false);
+        employeesFilterViewController.show();
     }
 
     @FXML
     void displayEmployeesTab() {
         tabPane.getSelectionModel().select(employeesOperationTab);
         ArrayList<Employee> employees = new ArrayList<>();
+        employeesFilterViewController.setEmployees(employees);
         runTask(() -> {
             ResultSet resultSet = null;
             String query = "SELECT * FROM employees";
@@ -286,11 +242,10 @@ public class MainSceneController extends SceneController implements Initializabl
             }
         }, () -> {
             ObservableList<Employee> employeeList = FXCollections.observableArrayList(employees);
-            filteredEmployees = new FilteredList<>(employeeList, p -> true);
-            sortedAndFilteredEmployees = new SortedList<>(filteredEmployees);
+            employeesFilterViewController.setFilteredEmployees(new FilteredList<>(employeeList, p -> true));
+            sortedAndFilteredEmployees = new SortedList<>(employeesFilterViewController.getFilteredEmployees());
             employeeTable.setItems(sortedAndFilteredEmployees);
             sortedAndFilteredEmployees.comparatorProperty().bind(employeeTable.comparatorProperty());
-            this.employees = employees;
         }, employeeLoadingIndicator, employeeTable.getParent());
     }
 
@@ -697,6 +652,8 @@ public class MainSceneController extends SceneController implements Initializabl
 
     public void initialSetup() {
         employeesExportViewController.setSqlConnection(sqlConnection);
+        employeesFilterViewController.setSqlConnection(sqlConnection);
+
         // Load current UI.
         user = new Employee(sqlConnection, loggerID);
         usernameText.setText(user.getFullName());
@@ -1020,21 +977,13 @@ public class MainSceneController extends SceneController implements Initializabl
 
             List<String> accessibilitiesList = new ArrayList<>(Arrays.asList("HR", "Manager", "Employee", "Admin"));
             accessibilityBox.getItems().addAll(accessibilitiesList);
-            accessibilityFilterComboBox.getItems().addAll(accessibilitiesList);
 
             List<String> statusList = new ArrayList<>(Arrays.asList("ACTIVE", "INACTIVE"));
             statusBox.getItems().addAll(statusList);
-            employeeStatusFilterComboBox.getItems().addAll(statusList);
-
         }, null, null, null);
     }
 
     private Employee user;
-
-    public ArrayList<Employee> getEmployees() {
-        return employees;
-    }
-
     public static boolean haveJustOpened = false;
     public static int loggerID = -1;
     public static boolean haveChangeInEmployeesTab = false;
@@ -1068,12 +1017,12 @@ public class MainSceneController extends SceneController implements Initializabl
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            FXMLLoader loader = new FXMLLoader(SalesManagement.class.getResource("employees-export-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(SalesManagement.class.getResource("fxml-view/employees-export-view.fxml"));
             employeesExportView = (new Scene(loader.load())).getRoot();
             employeesExportViewController = loader.getController();
             employeesTabPane.getChildren().add(employeesExportView);
 
-            loader = new FXMLLoader(SalesManagement.class.getResource("employees-filter-view.fxml"));
+            loader = new FXMLLoader(SalesManagement.class.getResource("fxml-view/employees-filter-view.fxml"));
             employeesFilterView = (new Scene(loader.load())).getRoot();
             employeesFilterViewController = loader.getController();
             employeesTabPane.getChildren().add(employeesFilterView);

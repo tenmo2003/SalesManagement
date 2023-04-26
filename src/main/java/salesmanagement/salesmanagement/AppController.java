@@ -9,13 +9,12 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.burningwave.core.assembler.StaticComponentContainer;
-import salesmanagement.salesmanagement.scenecontrollers.LoginSceneController;
-import salesmanagement.salesmanagement.scenecontrollers.MainSceneController;
+import salesmanagement.salesmanagement.SceneController.LoginSceneController;
+import salesmanagement.salesmanagement.SceneController.MainSceneController;
 
 import java.io.IOException;
-import java.util.logging.Logger;
 
-import static salesmanagement.salesmanagement.scenecontrollers.SceneController.runTask;
+import static salesmanagement.salesmanagement.SceneController.SceneController.runTask;
 
 
 /**
@@ -44,7 +43,7 @@ public class AppController {
     public synchronized void run() {
         StaticComponentContainer.JVMInfo.getVersion();
         //Load login scene.
-        FXMLLoader loginFXMLLoader = new FXMLLoader(SalesManagement.class.getResource("login_scene.fxml"));
+        FXMLLoader loginFXMLLoader = new FXMLLoader(SalesManagement.class.getResource("fxml-scene/login-scene.fxml"));
         try {
             loginScene = new Scene(loginFXMLLoader.load());
         } catch (IOException e) {
@@ -54,7 +53,7 @@ public class AppController {
         LoginSceneController loginSceneController = loginFXMLLoader.getController();
 
         //Load main scene.
-        FXMLLoader mainFXMLLoader = new FXMLLoader(SalesManagement.class.getResource("main_scene.fxml"));
+        FXMLLoader mainFXMLLoader = new FXMLLoader(SalesManagement.class.getResource("fxml-scene/main-scene.fxml"));
         try {
             mainScene = new Scene(mainFXMLLoader.load());
         } catch (IOException e) {

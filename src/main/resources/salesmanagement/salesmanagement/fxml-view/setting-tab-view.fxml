@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
+<?import org.controlsfx.control.textfield.CustomPasswordField?>
+
+
+<StackPane prefHeight="421.0" prefWidth="536.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.SettingTabViewController">
+   <children>
+      <Label text="Username" />
+      <JFXTextField promptText="Username" />
+      <Label text="Password" />
+      <CustomPasswordField />
+   </children>
+</StackPane>

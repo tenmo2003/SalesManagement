@@ -1,30 +1,11 @@
 package salesmanagement.salesmanagement.SalesComponent;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTextField;
-import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
-import salesmanagement.salesmanagement.ImageController;
 import salesmanagement.salesmanagement.SQLConnection;
-import salesmanagement.salesmanagement.scenecontrollers.MainSceneController;
 
-import java.io.InputStream;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Objects;
 
 /**

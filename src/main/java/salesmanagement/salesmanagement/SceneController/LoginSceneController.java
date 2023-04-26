@@ -1,4 +1,4 @@
-package salesmanagement.salesmanagement.scenecontrollers;
+package salesmanagement.salesmanagement.SceneController;
 
 import com.jfoenix.controls.JFXCheckBox;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
@@ -9,6 +9,7 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
@@ -224,12 +225,15 @@ public class LoginSceneController extends SceneController implements Initializab
         userIcon.setFill(Color.WHITE);
         FontAwesomeIconView keyIcon = new FontAwesomeIconView(FontAwesomeIcon.KEY);
         keyIcon.setFill(Color.WHITE);
+
         StackPane userIconContainer = new StackPane(userIcon);
         userIconContainer.setAlignment(Pos.CENTER);
         userIconContainer.setPrefSize(30, username.getPrefHeight());
+
         StackPane keyIconContainer = new StackPane(keyIcon);
         keyIconContainer.setAlignment(Pos.CENTER);
         keyIconContainer.setPrefSize(30, password.getPrefHeight());
+
         username.setLeft(userIconContainer);
         password.setLeft(keyIconContainer);
     }

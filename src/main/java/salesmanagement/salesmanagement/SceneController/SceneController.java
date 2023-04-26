@@ -1,29 +1,16 @@
-package salesmanagement.salesmanagement.scenecontrollers;
+package salesmanagement.salesmanagement.SceneController;
 
 import com.jfoenix.controls.JFXButton;
-import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Control;
 import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Tab;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import salesmanagement.salesmanagement.SQLConnection;
-import salesmanagement.salesmanagement.Utils;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Stack;
 
 public abstract class SceneController {
     SQLConnection sqlConnection;

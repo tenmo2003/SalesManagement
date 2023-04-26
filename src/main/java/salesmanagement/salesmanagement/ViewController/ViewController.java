@@ -2,7 +2,7 @@ package salesmanagement.salesmanagement.ViewController;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import salesmanagement.salesmanagement.SQLConnection;
 
@@ -13,7 +13,7 @@ public abstract class ViewController implements Initializable {
     protected SQLConnection sqlConnection;
     protected Stage stage;
     @FXML
-    protected AnchorPane root;
+    protected StackPane root;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -33,6 +33,4 @@ public abstract class ViewController implements Initializable {
         if (stage == null) stage = (Stage) root.getScene().getWindow();
         root.setVisible(true);
     }
-
-
 }

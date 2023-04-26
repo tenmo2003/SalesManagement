@@ -3,28 +3,20 @@ package salesmanagement.salesmanagement.ViewController;
 import com.jfoenix.controls.JFXCheckBox;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import salesmanagement.salesmanagement.NotificationCode;
 import salesmanagement.salesmanagement.NotificationSystem;
-import salesmanagement.salesmanagement.SQLConnection;
 
 import java.io.File;
-import java.net.URL;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import static salesmanagement.salesmanagement.Utils.exportToExcel;
-import static salesmanagement.salesmanagement.scenecontrollers.SceneController.runTask;
+import static salesmanagement.salesmanagement.SceneController.SceneController.runTask;
 
 public class EmployeesExportViewController extends ViewController {
-
-
 
 
     @FXML
@@ -70,7 +62,6 @@ public class EmployeesExportViewController extends ViewController {
     private JFXCheckBox phoneNumber;
 
 
-
     @FXML
     private JFXCheckBox status;
 
@@ -108,6 +99,7 @@ public class EmployeesExportViewController extends ViewController {
                 if (birthDate.isSelected()) selectedColumns.add("birthDate");
                 if (joiningDate.isSelected()) selectedColumns.add("joiningDate");
                 if (lastWorkingDate.isSelected()) selectedColumns.add("lastWorkingDate");
+                if (gender.isSelected()) selectedColumns.add("gender");
 
                 String query = "SELECT * FROM employees";
                 ResultSet resultSet = sqlConnection.getDataQuery(query);
