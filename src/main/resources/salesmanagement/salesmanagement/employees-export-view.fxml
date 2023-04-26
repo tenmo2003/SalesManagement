@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="root" prefHeight="816.0" prefWidth="1421.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.EmployeesExportViewController">
+   <children>
+      <AnchorPane layoutX="8.0" opacity="0.54" prefHeight="816.0" prefWidth="1421.0" style="-fx-background-color: grey;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <VBox fx:id="exportEmployeesBox" alignment="TOP_CENTER" layoutX="460.0" layoutY="260.0" prefHeight="318.0" prefWidth="414.0" style="-fx-background-color: white;">
+         <children>
+            <StackPane>
+               <children>
+                  <Label text="Export Employees List">
+                     <font>
+                        <Font size="21.0" />
+                     </font>
+                  </Label>
+                  <JFXButton alignment="CENTER" contentDisplay="CENTER" minWidth="46.0" onMouseClicked="#close" prefHeight="30.0" prefWidth="46.0" textAlignment="CENTER" StackPane.alignment="CENTER_RIGHT">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="CLOSE" size="25" />
+                     </graphic>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </JFXButton>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="10.0" top="10.0" />
+               </VBox.margin>
+            </StackPane>
+            <HBox spacing="30.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox prefHeight="192.0" prefWidth="82.0" spacing="10.0">
+                     <children>
+                        <JFXCheckBox fx:id="employeeNumber" selected="true" text="Employee Number" />
+                        <JFXCheckBox fx:id="lastWorkingDate" selected="true" text="Last working Date" />
+                        <JFXCheckBox fx:id="supervisorCode" selected="true" text="Supervisor Code" />
+                        <JFXCheckBox fx:id="status" selected="true" text="Status" />
+                        <JFXCheckBox fx:id="accessibility" selected="true" text="Accessibility" />
+                        <JFXCheckBox fx:id="joiningDate" selected="true" text="Joining Date" />
+                        <JFXCheckBox fx:id="officeCode" selected="true" text="Office Code" />
+                        <JFXCheckBox fx:id="phoneCode" selected="true" text="Phone Code" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="192.0" prefWidth="78.0" spacing="10.0">
+                     <children>
+                        <JFXCheckBox fx:id="lastName" selected="true" text="Last Name" />
+                        <JFXCheckBox fx:id="firstName" selected="true" text="First Name" />
+                        <JFXCheckBox fx:id="gender" selected="true" text="Gender" />
+                        <JFXCheckBox fx:id="birthDate" selected="true" text="Birth Date" />
+                        <JFXCheckBox fx:id="email" selected="true" text="Email" />
+                        <JFXCheckBox fx:id="username" selected="true" text="Username" />
+                        <JFXCheckBox fx:id="password" selected="true" text="Password" />
+                        <JFXCheckBox fx:id="phoneNumber" selected="true" text="Phone Number" />
+                     </children>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets left="50.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="51.0" prefWidth="394.0" spacing="20.0">
+               <children>
+                  <JFXButton onMouseClicked="#exportEmployeesList" text="EXPORT">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </JFXButton>
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets left="10.0" right="10.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>

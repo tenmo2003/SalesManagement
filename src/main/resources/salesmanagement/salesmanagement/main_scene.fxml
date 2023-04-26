@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXRadioButton?>
@@ -1154,76 +1153,6 @@
                                                          </cursor>
                                                       </JFXButton>
                                                       <JFXButton onMouseClicked="#clearEmployeeFilter" text="Clear All">
-                                                         <cursor>
-                                                            <Cursor fx:constant="HAND" />
-                                                         </cursor>
-                                                      </JFXButton>
-                                                   </children>
-                                                </HBox>
-                                             </children>
-                                             <padding>
-                                                <Insets left="10.0" right="10.0" />
-                                             </padding>
-                                          </VBox>
-                                       </children>
-                                    </AnchorPane>
-                                    <AnchorPane prefHeight="816.0" prefWidth="1421.0" visible="false">
-                                       <children>
-                                          <AnchorPane layoutX="8.0" opacity="0.54" prefHeight="1012.0" prefWidth="1598.4" style="-fx-background-color: grey;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                          <VBox fx:id="exportEmployeesBox" alignment="TOP_CENTER" layoutX="460.0" layoutY="260.0" prefHeight="300.0" prefWidth="414.0" style="-fx-background-color: white;">
-                                             <children>
-                                                <StackPane>
-                                                   <children>
-                                                      <Label text="Export Employees List">
-                                                         <font>
-                                                            <Font size="21.0" />
-                                                         </font>
-                                                      </Label>
-                                                      <JFXButton alignment="CENTER" contentDisplay="CENTER" minWidth="46.0" onMouseClicked="#closeLayerBox" prefHeight="30.0" prefWidth="46.0" textAlignment="CENTER" StackPane.alignment="CENTER_RIGHT">
-                                                         <graphic>
-                                                            <FontAwesomeIconView glyphName="CLOSE" size="25" />
-                                                         </graphic>
-                                                         <cursor>
-                                                            <Cursor fx:constant="HAND" />
-                                                         </cursor>
-                                                      </JFXButton>
-                                                   </children>
-                                                   <VBox.margin>
-                                                      <Insets bottom="10.0" top="10.0" />
-                                                   </VBox.margin>
-                                                </StackPane>
-                                                <HBox spacing="30.0" VBox.vgrow="ALWAYS">
-                                                   <children>
-                                                      <VBox prefHeight="192.0" prefWidth="82.0" spacing="10.0">
-                                                         <children>
-                                                            <JFXCheckBox selected="true" text="Employee Number" />
-                                                            <JFXCheckBox selected="true" text="Last working Date" />
-                                                            <JFXCheckBox selected="true" text="Supervisor Code" />
-                                                            <JFXCheckBox selected="true" text="Status" />
-                                                            <JFXCheckBox selected="true" text="Accessibility" />
-                                                            <JFXCheckBox selected="true" text="Joining Date" />
-                                                            <JFXCheckBox selected="true" text="Office Code" />
-                                                         </children>
-                                                      </VBox>
-                                                      <VBox prefHeight="192.0" prefWidth="78.0" spacing="10.0">
-                                                         <children>
-                                                            <JFXCheckBox selected="true" text="Last Name" />
-                                                            <JFXCheckBox selected="true" text="First Name" />
-                                                            <JFXCheckBox selected="true" text="Gender" />
-                                                            <JFXCheckBox selected="true" text="Email" />
-                                                            <JFXCheckBox selected="true" text="Password" />
-                                                            <JFXCheckBox selected="true" text="Phone Code" />
-                                                            <JFXCheckBox selected="true" text="Phone Number" />
-                                                         </children>
-                                                      </VBox>
-                                                   </children>
-                                                   <padding>
-                                                      <Insets left="50.0" />
-                                                   </padding>
-                                                </HBox>
-                                                <HBox alignment="CENTER" prefHeight="46.0" prefWidth="392.0" spacing="20.0">
-                                                   <children>
-                                                      <JFXButton onMouseClicked="#exportEmployeesList" text="EXPORT">
                                                          <cursor>
                                                             <Cursor fx:constant="HAND" />
                                                          </cursor>

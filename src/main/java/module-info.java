@@ -20,4 +20,6 @@ module salesmanagement.salesmanagement {
     opens salesmanagement.salesmanagement.SalesComponent to javafx.fxml;
     exports salesmanagement.salesmanagement.scenecontrollers;
     opens salesmanagement.salesmanagement.scenecontrollers to javafx.fxml;
+    exports salesmanagement.salesmanagement.ViewController;
+    opens salesmanagement.salesmanagement.ViewController to javafx.fxml;
 }
