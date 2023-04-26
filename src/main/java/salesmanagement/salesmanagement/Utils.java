@@ -7,11 +7,25 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.util.Duration;
 import javafx.util.Pair;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import salesmanagement.salesmanagement.SalesComponent.Customer;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -132,4 +146,44 @@ public class Utils {
         });
         timeline.play();
     }
+
+    public static void exportToExcel(ResultSet resultSet, File outputFile) throws Exception {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Result");
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        int columnCount = metaData.getColumnCount();
+
+        Row headerRow = sheet.createRow(0);
+        for (int i = 1; i <= columnCount; i++) {
+            String columnName = metaData.getColumnName(i);
+            Cell cell = headerRow.createCell(i - 1);
+            cell.setCellValue(columnName);
+        }
+        int rowIndex = 1;
+        while (resultSet.next()) {
+            Row dataRow = sheet.createRow(rowIndex++);
+            for (int i = 1; i <= columnCount; i++) {
+                Object value = resultSet.getObject(i);
+                Cell cell = dataRow.createCell(i - 1);
+                if (value != null) {
+                    if (value instanceof String) {
+                        cell.setCellValue((String) value);
+                    } else if (value instanceof Integer) {
+                        cell.setCellValue((Integer) value);
+                    } else if (value instanceof Double) {
+                        cell.setCellValue((Double) value);
+                    } else if (value instanceof Date) {
+                        cell.setCellValue((Date) value);
+                    } else {
+                        cell.setCellValue(value.toString());
+                    }
+                }
+            }
+        }
+        FileOutputStream outputStream = new FileOutputStream(outputFile);
+        workbook.write(outputStream);
+        workbook.close();
+        outputStream.close();
+    }
 }
+

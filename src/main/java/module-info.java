@@ -12,6 +12,8 @@ module salesmanagement.salesmanagement {
     requires java.sql;
     requires org.burningwave.core;
     requires org.apache.commons.net;
+    requires org.apache.poi.poi;
+    requires org.apache.poi.ooxml;
     opens salesmanagement.salesmanagement to javafx.fxml;
     exports salesmanagement.salesmanagement;
     exports salesmanagement.salesmanagement.SalesComponent;

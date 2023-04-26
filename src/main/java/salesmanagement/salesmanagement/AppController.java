@@ -13,6 +13,7 @@ import salesmanagement.salesmanagement.scenecontrollers.LoginSceneController;
 import salesmanagement.salesmanagement.scenecontrollers.MainSceneController;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import static salesmanagement.salesmanagement.scenecontrollers.SceneController.runTask;
 

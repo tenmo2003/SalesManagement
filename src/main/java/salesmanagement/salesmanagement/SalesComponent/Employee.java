@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * @since 1.3
@@ -33,7 +34,7 @@ public class Employee {
     private int employeeNumber;
     private String lastName;
     private String firstName;
-    private StackPane statusBox;
+    private Label statusLabel;
     private String phone;
     private String name;
     private String email;
@@ -42,7 +43,6 @@ public class Employee {
     private String jobTitle;
     private String username;
     private String password;
-    private ImageView avatar = new ImageView();
     private static SQLConnection sqlConnection;
     private String gender;
     private LocalDate birthDate;
@@ -66,7 +66,7 @@ public class Employee {
             reportsTo = employeeRecord.getInt("reportsTo");
             jobTitle = employeeRecord.getString("jobTitle");
             name = lastName + " " + firstName;
-            statusBox = new StackPane(new Text(employeeRecord.getString("status")));
+            statusLabel = new Label(employeeRecord.getString("status"));
             phone = employeeRecord.getString("phone");
             username = employeeRecord.getString("username");
             password = employeeRecord.getString("password");
@@ -77,21 +77,11 @@ public class Employee {
             lastWorkingDate = employeeRecord.getDate("lastWorkingDate").toLocalDate();
             birthDate = employeeRecord.getDate("birthDate").toLocalDate();
 
-            statusBox.setStyle("-fx-background-color: #43fc5c;-fx-font-weight: bold;-fx-pref-width: 100; -fx-pref-height: 20;");
-            statusBox.getChildren().get(0).setStyle("-fx-text-fill: white;-fx-text-alignment: center");
+            String statusBoxColor = "#E5E575FF";
+            if (Objects.equals(getStatus().toLowerCase(), "active")) statusBoxColor = "#19C37D";
+            else if (Objects.equals(getStatus().toLowerCase(), "inactive")) statusBoxColor = "#EF9589FF";
+            statusLabel.setStyle("-fx-background-color:" + statusBoxColor + ";-fx-pref-width: 100; -fx-pref-height: 20;-fx-text-fill: white;-fx-alignment: center;-fx-font-weight: bold;");
 
-            try {
-                ResultSet rs = sqlConnection.getDataQuery("SELECT avatar FROM employees WHERE employeeNumber = " + employeeNumber);
-                if (rs.next()) {
-                    InputStream is = rs.getBinaryStream("avatar");
-                    Image image;
-                    if (is == null) image = ImageController.getImage("sample_avatar.jpg");
-                    else image = new Image(is);
-                    avatar.setImage(image);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -145,8 +135,7 @@ public class Employee {
      */
     @Override
     public String toString() {
-        String employeeRecord = String.format("Employee: %d \nFull Name: %s \nEmail: %s \nOffice Code: %s", employeeNumber, getFullName(), email, officeCode);
-        return employeeRecord;
+        return String.format("Employee: %d \nFull Name: %s \nEmail: %s \nOffice Code: %s", employeeNumber, getFullName(), email, officeCode);
     }
 
     public int getEmployeeNumber() {
@@ -206,24 +195,17 @@ public class Employee {
     }
 
 
-    public ImageView getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(ImageView avatar) {
-        this.avatar = avatar;
-    }
-
-    public StackPane getStatusBox() {
-        return statusBox;
-    }
-
     public String getStatus() {
-        return ((Text) statusBox.getChildren().get(0)).getText();
+        if (statusLabel.getText() == null) return "";
+        return statusLabel.getText();
     }
 
-    public void setStatus(StackPane status) {
-        this.statusBox = status;
+    public Label getStatusLabel() {
+        return statusLabel;
+    }
+
+    public void setStatusLabel(Label statusLabel) {
+        this.statusLabel = statusLabel;
     }
 
     public String getPhone() {

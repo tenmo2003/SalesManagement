@@ -47,6 +47,14 @@ public class NotificationSystem {
                 title = "";
                 content = "Added New Employee Successfully!";
             }
+            case ERROR_EXPORTING -> {
+                title = "";
+                content = "Cannot export data!";
+            }
+            case SUCCEED_EXPORTING -> {
+                title = "";
+                content = "Export data successfully!";
+            }
         }
         Notifications notificationBuilder = Notifications.create()
                 .title(title)

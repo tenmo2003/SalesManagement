@@ -4,6 +4,7 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.jfoenix.controls.*;
 import javafx.animation.AnimationTimer;
+import javafx.animation.Transition;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -33,26 +34,32 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
+import javafx.util.Duration;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
-import salesmanagement.salesmanagement.Form;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import salesmanagement.salesmanagement.ImageController;
 import salesmanagement.salesmanagement.NotificationCode;
 import salesmanagement.salesmanagement.NotificationSystem;
-import salesmanagement.salesmanagement.SalesComponent.Employee;
-import salesmanagement.salesmanagement.SalesComponent.Order;
-import salesmanagement.salesmanagement.SalesComponent.OrderItem;
-import salesmanagement.salesmanagement.SalesComponent.Product;
+import salesmanagement.salesmanagement.SalesComponent.*;
+import salesmanagement.salesmanagement.Utils;
 
 import java.io.File;
-import java.io.InputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -60,8 +67,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static salesmanagement.salesmanagement.InputErrorCode.*;
-import static salesmanagement.salesmanagement.Utils.getAllNodes;
-import static salesmanagement.salesmanagement.Utils.shake;
+import static salesmanagement.salesmanagement.Utils.*;
 
 public class MainSceneController extends SceneController implements Initializable {
     @FXML
@@ -229,7 +235,6 @@ public class MainSceneController extends SceneController implements Initializabl
 
     @FXML
     public void applyEmployeeFilter() {
-
         filteredEmployees.setPredicate(employee -> {
             // Check if the order matches the filter criteria
             boolean nameMatch = employee.getFullName().toLowerCase().contains(employeeNameFilterTextField.getText().toLowerCase());
@@ -241,18 +246,17 @@ public class MainSceneController extends SceneController implements Initializabl
             if (accessibilityFilterComboBox.getValue() == null) accessibilityMatch = true;
             return nameMatch && emailMatch && phoneMatch && statusMatch && accessibilityMatch;
         });
-        closeEmployeeFilterBox();
+        employeeFilterBox.getParent().setVisible(false);
     }
 
     @FXML
-    public void closeEmployeeFilterBox() {
-        employeeFilterBox.getParent().setVisible(false);
+    public void closeLayerBox(MouseEvent event) {
+        ((Node) event.getSource()).getParent().getParent().getParent().setVisible(false);
     }
 
     @FXML
     void displayEmployeesTab() {
         tabPane.getSelectionModel().select(employeesOperationTab);
-        employeeTable.setItems(null);
         ArrayList<Employee> employees = new ArrayList<>();
         runTask(() -> {
             ResultSet resultSet = null;
@@ -289,6 +293,38 @@ public class MainSceneController extends SceneController implements Initializabl
     JFXButton saveInfoButton;
     @FXML
     JFXButton saveNewEmployeeButton;
+    @FXML
+    VBox exportEmployeesBox;
+
+    @FXML
+    public void openExportEmployeesBox() {
+        exportEmployeesBox.getParent().setVisible(true);
+    }
+
+    @FXML
+    public void exportEmployeesList() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save as");
+
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Excel Workbook", "*.xlsx"));
+        fileChooser.setInitialFileName("employees_list.xlsx");
+        File file = fileChooser.showSaveDialog(stage);
+        if (file != null)
+            runTask(() -> {
+                ResultSet resultSet = null;
+                String query = "SELECT * FROM employees";
+                resultSet = sqlConnection.getDataQuery(query);
+                try {
+                    exportToExcel(resultSet, file);
+                } catch (Exception e) {
+                    Platform.runLater(() -> NotificationSystem.throwNotification(NotificationCode.ERROR_EXPORTING, stage));
+                }
+            }, () -> {
+                exportEmployeesBox.getParent().setVisible(false);
+                NotificationSystem.throwNotification(NotificationCode.SUCCEED_EXPORTING, stage);
+            }, employeeLoadingIndicator, null);
+
+    }
 
     @FXML
     public void addNewEmployee() {
@@ -302,7 +338,7 @@ public class MainSceneController extends SceneController implements Initializabl
         }
         employeeCodeTextField.setDisable(true);
         topDetailBoxLabel.setText("Add New Employee");
-        avatar.setImage(null);
+        avatar.setImage(ImageController.getImage("sample_avatar.jpg"));
         lastNameTextField.setText("");
         firstNameTextField.setText("");
         usernameTextField.setText("");
@@ -352,6 +388,7 @@ public class MainSceneController extends SceneController implements Initializabl
         }, () -> {
             if (allValid.get()) {
                 saveNewEmployeeButton.setVisible(false);
+                backToEmployeeTableBox();
                 displayEmployeesTab();
                 NotificationSystem.throwNotification(NotificationCode.SUCCEED_ADD_NEW_EMPLOYEE, stage);
             }
@@ -422,7 +459,6 @@ public class MainSceneController extends SceneController implements Initializabl
 
         if (lastWorkingDatePicker.getValue() == null) return false;
 
-
         String query = "SELECT officeCode FROM offices WHERE officeCode = '" + officeCodeTextField.getText() + "'";
         ResultSet resultSet = sqlConnection.getDataQuery(query);
         try {
@@ -448,7 +484,7 @@ public class MainSceneController extends SceneController implements Initializabl
         }
 
 
-        if (!phoneNumberTextField.getText().matches("/\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})\\2([0-9]{4})/")) return false;
+        if (!phoneNumberTextField.getText().matches("\\d+")) return false;
 
         if (usernameTextField.getText().length() > 30 || usernameTextField.getText().length() < 6) {
             return false;
@@ -667,7 +703,6 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     ImageView smallAvatar;
 
-
     @Override
     protected void maximumStage(MouseEvent mouseEvent) {
 
@@ -710,6 +745,28 @@ public class MainSceneController extends SceneController implements Initializabl
 
 
         //TODO: test area
+        ScrollPane scroll = (ScrollPane) detailsInfoBox.getParent().getParent().getParent();
+        Transition down = new Transition() {
+            {
+                setCycleDuration(Duration.INDEFINITE);
+            }
+
+            @Override
+            protected void interpolate(double v) {
+                scroll.setVvalue(scroll.getVvalue() + 0.001);
+            }
+        };
+
+        Transition up = new Transition() {
+            {
+                setCycleDuration(Duration.INDEFINITE);
+            }
+
+            @Override
+            protected void interpolate(double v) {
+                scroll.setVvalue(scroll.getVvalue() - 0.001);
+            }
+        };
 
 
         //region Check regex for user's input.
@@ -750,7 +807,7 @@ public class MainSceneController extends SceneController implements Initializabl
         emailTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
                 VBox container = (VBox) emailTextField.getParent().getParent();
-                if (!emailTextField.getText().matches("^.+@.+$")) {
+                if (!emailTextField.getText().matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
                     emailTextField.setStyle("-fx-border-color: #f35050");
                     if (!(container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
                         container.getChildren().add(getInputErrorLabel(INVALID_EMAIL));
@@ -871,7 +928,7 @@ public class MainSceneController extends SceneController implements Initializabl
         phoneNumberTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
                 VBox container = (VBox) phoneNumberTextField.getParent();
-                if (!phoneNumberTextField.getText().matches("/\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})\\2([0-9]{4})/")) {
+                if (!phoneNumberTextField.getText().matches("\\d+")) {
                     phoneNumberTextField.setStyle("-fx-border-color: #f35050");
                     if (!(container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
                         container.getChildren().add(getInputErrorLabel(INVALID_PHONE_NUMBER));
@@ -948,25 +1005,14 @@ public class MainSceneController extends SceneController implements Initializabl
         // Load UI for others.
         runTask(() -> {
             // Load small avatar.
-            try {
-                PreparedStatement ps = sqlConnection.getConnection().prepareStatement("SELECT avatar FROM employees WHERE employeeNumber = ?");
-                ps.setInt(1, loggerID);
-                ResultSet rs = ps.executeQuery();
-                if (rs.next()) {
-                    InputStream is = rs.getBinaryStream("avatar");
-                    Image image = new Image(is);
-                    smallAvatar.setImage(image);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            smallAvatar.setImage(ImageController.getImage("avatar_employee_" + user.getEmployeeNumber() + ".png", true));
 
             // Prepare for employee table structure.
             employeeNumberColumn.setCellValueFactory(new PropertyValueFactory<>("employeeNumber"));
             nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
             phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
             emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
-            employeeStatusColumn.setCellValueFactory(new PropertyValueFactory<>("statusBox"));
+            employeeStatusColumn.setCellValueFactory(new PropertyValueFactory<>("statusLabel"));
             accessibilityColumn.setCellValueFactory(new PropertyValueFactory<>("jobTitle"));
 
             employeeTable.setOnMouseClicked((MouseEvent event) -> {
@@ -1032,9 +1078,6 @@ public class MainSceneController extends SceneController implements Initializabl
             }
         }
     };
-    @FXML
-    StackPane employeeInfoBoxContainer;
-    Form employeeForm;
     @FXML
     ComboBox<String> statusInput;
 
@@ -1841,11 +1884,6 @@ public class MainSceneController extends SceneController implements Initializabl
         goToOrdersTab();
     }
 
-    public void editEmployees(Employee employee) {
-        employeeInfoBoxContainer.setMouseTransparent(false);
-        employeeForm.fillInForm(employee);
-        employeeForm.show();
-    }
 
     @FXML
     void tabSelectingEffect(Event event) {
@@ -2277,4 +2315,3 @@ public class MainSceneController extends SceneController implements Initializabl
         commentsInput.clear();
     }
 }
-
