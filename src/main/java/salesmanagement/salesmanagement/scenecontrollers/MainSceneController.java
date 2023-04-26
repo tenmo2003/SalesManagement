@@ -53,6 +53,7 @@ import salesmanagement.salesmanagement.NotificationSystem;
 import salesmanagement.salesmanagement.SalesComponent.*;
 import salesmanagement.salesmanagement.Utils;
 
+import javax.xml.transform.Result;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -88,6 +89,8 @@ public class MainSceneController extends SceneController implements Initializabl
     private Tab ordersTab;
     boolean ordersInit = false;
     @FXML
+    private Tab customersTab;
+    @FXML
     JFXButton dashBoardTabButton;
     @FXML
     JFXButton ordersTabButton;
@@ -97,6 +100,8 @@ public class MainSceneController extends SceneController implements Initializabl
     JFXButton settingsTabButton;
     @FXML
     JFXButton productsTabButton;
+    @FXML
+    JFXButton customersTabButton;
     @FXML
     JFXButton employeesTabButton;
     JFXButton currentTabButton;
@@ -126,6 +131,12 @@ public class MainSceneController extends SceneController implements Initializabl
             initProducts();
         }
         tabPane.getSelectionModel().select(productsOperationTab);
+    }
+    @FXML
+    void goToCustomersTab() {
+        initCustomers();
+
+        tabPane.getSelectionModel().select(customersTab);
     }
 
     @FXML
@@ -323,7 +334,6 @@ public class MainSceneController extends SceneController implements Initializabl
                 exportEmployeesBox.getParent().setVisible(false);
                 NotificationSystem.throwNotification(NotificationCode.SUCCEED_EXPORTING, stage);
             }, employeeLoadingIndicator, null);
-
     }
 
     @FXML
@@ -1462,7 +1472,7 @@ public class MainSceneController extends SceneController implements Initializabl
                     // User clicked OK, so delete the item
                     String query = String.format("DELETE FROM products WHERE productCode = '%s'", selected.getProductCode());
                     sqlConnection.updateQuery(query);
-                    productsTable.getItems().remove(selected);
+                    initProducts();
                 } else {
                     // User clicked Cancel or closed the dialog box, so do nothing
                     // ...
@@ -1489,6 +1499,7 @@ public class MainSceneController extends SceneController implements Initializabl
         removeOrderButton.setOnAction(event -> {
             removeOrderButtonClicked = true;
             Order selected = ordersTable.getSelectionModel().getSelectedItem();
+            int selectedIndex = ordersTable.getSelectionModel().getSelectedIndex();
             if (selected != null) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Confirm Delete");
@@ -1505,6 +1516,81 @@ public class MainSceneController extends SceneController implements Initializabl
                 }
             }
         });
+
+
+        nameCustomer.setCellValueFactory(new PropertyValueFactory<>("name"));
+        contactCustomer.setCellValueFactory(new PropertyValueFactory<>("contact"));
+        addressCustomer.setCellValueFactory(new PropertyValueFactory<>("address"));
+        rankCustomer.setCellValueFactory(new PropertyValueFactory<>("rank"));
+
+        editCustomerButton.setOnAction(e -> {
+            Customer selected = customersTable.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                initEditCustomerDetails(selected);
+                bgPaneCustomers.setVisible(true);
+                customerDetailsPane.setVisible(true);
+            }
+        });
+
+        customersTable.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) {
+                Customer selected = customersTable.getSelectionModel().getSelectedItem();
+                if (selected != null) {
+                    initEditCustomerDetails(selected);
+                    bgPaneCustomers.setVisible(true);
+                    customerDetailsPane.setVisible(true);
+                }
+            }
+        });
+
+        closeCustomerDetailsButton.setOnAction(e -> {
+            bgPaneCustomers.setVisible(false);
+            customerDetailsPane.setVisible(false);
+        });
+
+        removeCustomerButton.setOnAction(event -> {
+            Customer selected = customersTable.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirm Delete");
+                alert.setHeaderText("Are you sure you want to delete this customer?");
+                alert.setContentText("This action cannot be undone.");
+
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    // User clicked OK, so delete the item
+                    String query = String.format("DELETE FROM customers WHERE customerNumber = %d", selected.getCustomerNumber());
+                    sqlConnection.updateQuery(query);
+                    initCustomers();
+                } else {
+                    // User clicked Cancel or closed the dialog box, so do nothing
+                    // ...
+                }
+            }
+        });
+
+        addCustomerFilterButton.setOnAction(event -> {
+            bgPaneCustomers.setVisible(true);
+            customerFilterPane.setVisible(true);
+        });
+
+        applyCustomerFilterButton.setOnAction(event -> {
+            updateCustomerFilteredData();
+        });
+
+        clearCustomerFilterButton.setOnAction(event -> {
+            nameCustomerFilter.clear();
+            contactCustomerFilter.clear();
+            addressCustomerFilter.clear();
+            rankCustomerFilter.clear();
+            updateCustomerFilteredData();
+        });
+
+        closeCustomerFilterButton.setOnAction(event -> {
+            bgPaneCustomers.setVisible(false);
+            customerFilterPane.setVisible(false);
+        });
+
     }
 
     private void initCreateOrder(String type) {
@@ -1873,6 +1959,40 @@ public class MainSceneController extends SceneController implements Initializabl
             printInvoiceButton.setOnAction(event -> {
                 printInvoice(finalOrderNumber);
             });
+
+            int countOrd = -1;
+            double totalValue = -1;
+            String customerRankCheck = "SELECT COUNT(*) AS num, SUM(value) AS totalValue" +
+                    "  FROM orders" +
+                    "  WHERE customerNumber = " + customerNumber +
+                    "    AND orderDate >= DATE_SUB(NOW(), INTERVAL 3 MONTH);";
+            result = sqlConnection.getDataQuery(customerRankCheck);
+
+            try {
+                if (result.next()) {
+                    countOrd = result.getInt(1);
+                    totalValue = result.getDouble(2);
+                    String updateRank;
+                    if (countOrd >= 100 || totalValue >= 10000) {
+                        updateRank = String.format("UPDATE customers SET `rank` = 'Emerald' WHERE customerNumber = %d;", customerNumber);
+                        sqlConnection.updateQuery(updateRank);
+                    } else if (countOrd >= 40 || totalValue >= 5000) {
+                        updateRank = String.format("UPDATE customers SET `rank` = 'Diamond' WHERE customerNumber = %d;", customerNumber);
+                        sqlConnection.updateQuery(updateRank);
+                    } else if (countOrd >= 20 || totalValue >= 1500) {
+                        updateRank = String.format("UPDATE customers SET `rank` = 'Platinum' WHERE customerNumber = %d;", customerNumber);
+                        sqlConnection.updateQuery(updateRank);
+                    } else if (countOrd >= 10 || totalValue >= 1000) {
+                        updateRank = String.format("UPDATE customers SET `rank` = 'Gold' WHERE customerNumber = %d;", customerNumber);
+                        sqlConnection.updateQuery(updateRank);
+                    } else if (countOrd >= 3 || totalValue >= 300) {
+                        updateRank = String.format("UPDATE customers SET `rank` = 'Silver' WHERE customerNumber = %d;", customerNumber);
+                        sqlConnection.updateQuery(updateRank);
+                    }
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }, null, progressIndicator, createOrderTab.getTabPane());
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION, "Order created successfully!", ButtonType.OK);
@@ -2009,6 +2129,7 @@ public class MainSceneController extends SceneController implements Initializabl
     public void handleRemoveOrder() {
         // Get the selected row in the TableView
         Order selectedRow = ordersTable.getSelectionModel().getSelectedItem();
+        int selectedIndex = ordersTable.getSelectionModel().getSelectedIndex();
 
         // If a row is selected, delete the corresponding order from the database and TableView
         if (selectedRow != null) {
@@ -2022,9 +2143,7 @@ public class MainSceneController extends SceneController implements Initializabl
             // Delete the order from the database
             sqlConnection.updateQuery(deleteQuery);
 
-            // Delete the order from the TableView
-            ordersTable.getItems().remove(selectedRow);
-
+            initOrders();
         }
     }
 
@@ -2225,6 +2344,154 @@ public class MainSceneController extends SceneController implements Initializabl
         });
     }
 
+    @FXML
+    TableView<Customer> customersTable;
+    @FXML
+    TableColumn<Customer, String> nameCustomer;
+    @FXML
+    TableColumn<Customer, String> contactCustomer;
+    @FXML
+    TableColumn<Customer, String> addressCustomer;
+    @FXML
+    TableColumn<Customer, String> rankCustomer;
+    FilteredList<Customer> filteredCustomers;
+    SortedList<Customer> sortedAndFilteredCustomers;
+
+    @FXML
+    JFXButton removeCustomerButton;
+    @FXML
+    JFXButton addCustomerButton;
+    @FXML
+    JFXButton editCustomerButton;
+    @FXML
+    JFXButton addCustomerFilterButton;
+    @FXML
+    AnchorPane customerDetailsPane;
+    @FXML
+    Pane bgPaneCustomers;
+    @FXML
+    JFXTextField nameCDetails;
+    @FXML
+    JFXTextField contactCDetails;
+    @FXML
+    JFXTextField addressCDetails;
+    @FXML
+    JFXButton customerDetailsButton;
+    @FXML
+    JFXButton closeCustomerDetailsButton;
+    @FXML
+    AnchorPane customerFilterPane;
+    @FXML
+    JFXTextField nameCustomerFilter;
+    @FXML
+    JFXTextField contactCustomerFilter;
+    @FXML
+    JFXTextField addressCustomerFilter;
+    @FXML
+    JFXTextField rankCustomerFilter;
+    @FXML
+    JFXButton closeCustomerFilterButton;
+    @FXML
+    JFXButton applyCustomerFilterButton;
+    @FXML
+    JFXButton clearCustomerFilterButton;
+
+    void initCustomers() {
+        runTask(() -> {
+            ObservableList<Customer> customers = FXCollections.observableArrayList();
+            customersTable.setItems(customers);
+
+            try {
+                String query = "SELECT * FROM customers WHERE customerNumber != 6";
+                ResultSet resultSet = sqlConnection.getDataQuery(query);
+                while (resultSet.next()) {
+                    Customer customer = new Customer(
+                            resultSet.getInt(1),
+                            resultSet.getString(2),
+                            resultSet.getString(3),
+                            resultSet.getString(4),
+                            resultSet.getString(5)
+                    );
+                    customersTable.getItems().add(customer);
+                }
+                customersTable.refresh();
+
+                filteredCustomers = new FilteredList<>(FXCollections.observableArrayList(customersTable.getItems()), p -> true);
+                sortedAndFilteredCustomers = new SortedList<>(filteredCustomers);
+                customersTable.setItems(sortedAndFilteredCustomers);
+                sortedAndFilteredCustomers.comparatorProperty().bind(customersTable.comparatorProperty());
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }, null, progressIndicator, customersTab.getTabPane());
+    }
+
+    public void initAddCustomer() {
+        customerDetailsButton.setText("Add");
+        nameCDetails.clear();
+        contactCDetails.clear();
+        addressCDetails.clear();
+
+        bgPaneCustomers.setVisible(true);
+        customerDetailsPane.setVisible(true);
+
+        customerDetailsButton.setOnAction(event -> {
+            String query = String.format("insert into customers(customerName, phone, addressLine) values ('%s', '%s', '%s')",
+                    nameCDetails.getText(), contactCDetails.getText(), addressCDetails.getText());
+            sqlConnection.updateQuery(query);
+
+            query = "SELECT LAST_INSERT_ID() FROM customers";
+            ResultSet rs = sqlConnection.getDataQuery(query);
+            try {
+                int customerNumber = -1;
+                if (rs.next())
+                    customerNumber = rs.getInt(1);
+                Customer customer = new Customer(customerNumber, nameCDetails.getText(), contactCDetails.getText(), addressCDetails.getText(), "Membership");
+                customersTable.getItems().add(customer);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+            NotificationSystem.throwNotification(NotificationCode.SUCCEED_ADD_CUSTOMER, stage);
+
+            bgPaneCustomers.setVisible(false);
+            customerDetailsPane.setVisible(false);
+
+            initCustomers();
+        });
+
+    }
+
+    public void initEditCustomerDetails(Customer selected) {
+        customerDetailsButton.setText("Save");
+        nameCDetails.setText(selected.getName());
+        contactCDetails.setText(selected.getContact());
+        addressCDetails.setText(selected.getAddress());
+
+        bgPaneCustomers.setVisible(true);
+        customerDetailsPane.setVisible(true);
+
+        customerDetailsButton.setOnAction(event -> {
+            String query = String.format("UPDATE customers SET customerName = '%s', phone = '%s', addressLine = '%s' WHERE customerNumber = %d",
+                    nameCDetails.getText(), contactCDetails.getText(), addressCDetails.getText(), selected.getCustomerNumber());
+            sqlConnection.updateQuery(query);
+
+            selected.setAddress(addressCDetails.getText());
+            selected.setContact(contactCDetails.getText());
+            selected.setName(nameCDetails.getText());
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Customer details saved successfully!", ButtonType.OK);
+            alert.setTitle(null);
+            alert.setHeaderText(null);
+            alert.showAndWait();
+
+            bgPaneCustomers.setVisible(false);
+            customerDetailsPane.setVisible(false);
+
+            customersTable.refresh();
+        });
+    }
+
     public void printInvoice(int orderNumber) {
         String sourceFile = "src/main/resources/salesmanagement/salesmanagement/invoice.jrxml";
         try {
@@ -2297,6 +2564,16 @@ public class MainSceneController extends SceneController implements Initializabl
             boolean productNameMatch = product.getProductName().toLowerCase().contains(productNameFilter.getText().toLowerCase());
             boolean productVendorMatch = product.getProductVendor().toLowerCase().contains(productVendorFilter.getText().toLowerCase());
             return productCodeMatch && productLineMatch && productNameMatch && productVendorMatch;
+        });
+    }
+
+    private void updateCustomerFilteredData() {
+        filteredCustomers.setPredicate(customer -> {
+            boolean nameMatch = customer.getName().toLowerCase().contains(nameCustomerFilter.getText().toLowerCase());
+            boolean contactMatch = customer.getContact().toLowerCase().contains(contactCustomerFilter.getText().toLowerCase());
+            boolean addressMatch = customer.getAddress() == null || customer.getAddress().toLowerCase().contains(addressCustomerFilter.getText().toLowerCase());
+            boolean rankMatch = customer.getRank().toLowerCase().contains(rankCustomerFilter.getText().toLowerCase());
+            return nameMatch && contactMatch && addressMatch && rankMatch;
         });
     }
 

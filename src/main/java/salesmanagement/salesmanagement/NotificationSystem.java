@@ -55,6 +55,10 @@ public class NotificationSystem {
                 title = "";
                 content = "Export data successfully!";
             }
+            case SUCCEED_ADD_CUSTOMER -> {
+                title = "";
+                content = "Added New Customer Successfully!";
+            }
         }
         Notifications notificationBuilder = Notifications.create()
                 .title(title)
