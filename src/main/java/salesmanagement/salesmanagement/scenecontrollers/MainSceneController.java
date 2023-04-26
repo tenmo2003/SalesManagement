@@ -15,9 +15,11 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -41,26 +43,19 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import salesmanagement.salesmanagement.ImageController;
-import salesmanagement.salesmanagement.NotificationCode;
-import salesmanagement.salesmanagement.NotificationSystem;
-import salesmanagement.salesmanagement.SalesComponent.*;
-import salesmanagement.salesmanagement.Utils;
+import salesmanagement.salesmanagement.*;
+import salesmanagement.salesmanagement.SalesComponent.Employee;
+import salesmanagement.salesmanagement.SalesComponent.Order;
+import salesmanagement.salesmanagement.SalesComponent.OrderItem;
+import salesmanagement.salesmanagement.SalesComponent.Product;
+import salesmanagement.salesmanagement.ViewController.EmployeesExportViewController;
+import salesmanagement.salesmanagement.ViewController.EmployeesFilterViewController;
 
 import javax.xml.transform.Result;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -106,6 +101,11 @@ public class MainSceneController extends SceneController implements Initializabl
     JFXButton employeesTabButton;
     JFXButton currentTabButton;
 
+
+    Node employeesExportView;
+    Node employeesFilterView;
+    EmployeesExportViewController employeesExportViewController;
+    EmployeesFilterViewController employeesFilterViewController;
 
     @FXML
     void goToCreateOrderTab() {
@@ -304,36 +304,10 @@ public class MainSceneController extends SceneController implements Initializabl
     JFXButton saveInfoButton;
     @FXML
     JFXButton saveNewEmployeeButton;
-    @FXML
-    VBox exportEmployeesBox;
 
     @FXML
     public void openExportEmployeesBox() {
-        exportEmployeesBox.getParent().setVisible(true);
-    }
-
-    @FXML
-    public void exportEmployeesList() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save as");
-
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Excel Workbook", "*.xlsx"));
-        fileChooser.setInitialFileName("employees_list.xlsx");
-        File file = fileChooser.showSaveDialog(stage);
-        if (file != null)
-            runTask(() -> {
-                ResultSet resultSet = null;
-                String query = "SELECT * FROM employees";
-                resultSet = sqlConnection.getDataQuery(query);
-                try {
-                    exportToExcel(resultSet, file);
-                } catch (Exception e) {
-                    Platform.runLater(() -> NotificationSystem.throwNotification(NotificationCode.ERROR_EXPORTING, stage));
-                }
-            }, () -> {
-                exportEmployeesBox.getParent().setVisible(false);
-                NotificationSystem.throwNotification(NotificationCode.SUCCEED_EXPORTING, stage);
-            }, employeeLoadingIndicator, null);
+        employeesExportViewController.show();    
     }
 
     @FXML
@@ -722,6 +696,7 @@ public class MainSceneController extends SceneController implements Initializabl
     StackPane menuPane;
 
     public void initialSetup() {
+        employeesExportViewController.setSqlConnection(sqlConnection);
         // Load current UI.
         user = new Employee(sqlConnection, loggerID);
         usernameText.setText(user.getFullName());
@@ -777,7 +752,6 @@ public class MainSceneController extends SceneController implements Initializabl
                 scroll.setVvalue(scroll.getVvalue() - 0.001);
             }
         };
-
 
         //region Check regex for user's input.
         firstNameTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
@@ -1093,6 +1067,21 @@ public class MainSceneController extends SceneController implements Initializabl
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            FXMLLoader loader = new FXMLLoader(SalesManagement.class.getResource("employees-export-view.fxml"));
+            employeesExportView = (new Scene(loader.load())).getRoot();
+            employeesExportViewController = loader.getController();
+            employeesTabPane.getChildren().add(employeesExportView);
+
+            loader = new FXMLLoader(SalesManagement.class.getResource("employees-filter-view.fxml"));
+            employeesFilterView = (new Scene(loader.load())).getRoot();
+            employeesFilterViewController = loader.getController();
+            employeesTabPane.getChildren().add(employeesFilterView);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
+
         statusInput.getItems().add("Cancelled");
         statusInput.getItems().add("Disputed");
         statusInput.getItems().add("In Process");

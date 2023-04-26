@@ -7,10 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.util.Duration;
 import javafx.util.Pair;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import salesmanagement.salesmanagement.SalesComponent.Customer;
@@ -147,35 +144,46 @@ public class Utils {
         timeline.play();
     }
 
-    public static void exportToExcel(ResultSet resultSet, File outputFile) throws Exception {
+    public static void exportToExcel(ResultSet resultSet, File outputFile, List<String> selectedColumns) throws Exception {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Result");
         ResultSetMetaData metaData = resultSet.getMetaData();
         int columnCount = metaData.getColumnCount();
 
         Row headerRow = sheet.createRow(0);
+        int columnIndex = 0;
         for (int i = 1; i <= columnCount; i++) {
             String columnName = metaData.getColumnName(i);
-            Cell cell = headerRow.createCell(i - 1);
-            cell.setCellValue(columnName);
+            if (selectedColumns.contains(columnName)) {
+                Cell cell = headerRow.createCell(columnIndex++);
+                cell.setCellValue(columnName);
+            }
         }
+
         int rowIndex = 1;
         while (resultSet.next()) {
             Row dataRow = sheet.createRow(rowIndex++);
+            columnIndex = 0;
             for (int i = 1; i <= columnCount; i++) {
-                Object value = resultSet.getObject(i);
-                Cell cell = dataRow.createCell(i - 1);
-                if (value != null) {
-                    if (value instanceof String) {
-                        cell.setCellValue((String) value);
-                    } else if (value instanceof Integer) {
-                        cell.setCellValue((Integer) value);
-                    } else if (value instanceof Double) {
-                        cell.setCellValue((Double) value);
-                    } else if (value instanceof Date) {
-                        cell.setCellValue((Date) value);
-                    } else {
-                        cell.setCellValue(value.toString());
+                String columnName = metaData.getColumnName(i);
+                if (selectedColumns.contains(columnName)) {
+                    Object value = resultSet.getObject(i);
+                    Cell cell = dataRow.createCell(columnIndex++);
+                    if (value != null) {
+                        if (value instanceof String) {
+                            cell.setCellValue((String) value);
+                        } else if (value instanceof Integer) {
+                            cell.setCellValue((Integer) value);
+                        } else if (value instanceof Double) {
+                            cell.setCellValue((Double) value);
+                        } else if (value instanceof Date dateValue) {
+                            CellStyle dateStyle = workbook.createCellStyle();
+                            dateStyle.setDataFormat(workbook.getCreationHelper().createDataFormat().getFormat("dd/MM/yyyy"));
+                            cell.setCellValue(dateValue);
+                            cell.setCellStyle(dateStyle);
+                        } else {
+                            cell.setCellValue(value.toString());
+                        }
                     }
                 }
             }
