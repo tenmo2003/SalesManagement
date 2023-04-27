@@ -1899,6 +1899,53 @@ public class MainSceneController extends SceneController implements Initializabl
                 value += item.getAmount();
             }
 
+            String customerRank = String.format("SELECT `rank` FROM customers WHERE customerNumber = %d", customerNumber);
+            result = sqlConnection.getDataQuery(customerRank);
+            try {
+                if (result.next()) {
+                    String rank = result.getString(1);
+                    switch (rank) {
+                        case "Emerald":
+                            double discount_by = value * 0.25;
+                            if (discount_by >= 200) {
+                                discount_by = 200;
+                            }
+                            value -= discount_by;
+                            break;
+                        case "Diamond":
+                            discount_by = value * 0.20;
+                            if (discount_by >= 150) {
+                                discount_by = 150;
+                            }
+                            value -= discount_by;
+                            break;
+                        case "Platinum":
+                            discount_by = value * 0.15;
+                            if (discount_by >= 100) {
+                                discount_by = 100;
+                            }
+                            value -= discount_by;
+                            break;
+                        case "Gold":
+                            discount_by = value * 0.1;
+                            if (discount_by >= 50) {
+                                discount_by = 50;
+                            }
+                            value -= discount_by;
+                            break;
+                        case "Silver":
+                            discount_by = value * 0.05;
+                            if (discount_by >= 20) {
+                                discount_by = 20;
+                            }
+                            value -= discount_by;
+                            break;
+                    }
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
             String order = "insert into orders(orderDate, requiredDate, shippedDate, status, comments, customerNumber, type, value, payment_method, created_by) values ('"
                     + orderDate + "',"
                     + requiredDate + ","
@@ -1972,11 +2019,15 @@ public class MainSceneController extends SceneController implements Initializabl
                     } else if (countOrd >= 3 || totalValue >= 300) {
                         updateRank = String.format("UPDATE customers SET `rank` = 'Silver' WHERE customerNumber = %d;", customerNumber);
                         sqlConnection.updateQuery(updateRank);
+                    } else {
+                        updateRank = String.format("UPDATE customers SET `rank` = 'Membership' WHERE customerNumber = %d", customerNumber);
+                        sqlConnection.updateQuery(updateRank);
                     }
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+
         }, null, progressIndicator, createOrderTab.getTabPane());
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION, "Order created successfully!", ButtonType.OK);
@@ -2092,7 +2143,6 @@ public class MainSceneController extends SceneController implements Initializabl
                             resultSet.getString("customerName"),
                             resultSet.getString("phone"),
                             resultSet.getString("type"),
-                            resultSet.getString("addressLine"),
                             resultSet.getDouble("value"),
                             resultSet.getString("payment_method"),
                             resultSet.getString("deliver_to")
@@ -2500,11 +2550,41 @@ public class MainSceneController extends SceneController implements Initializabl
             para.put("orderMonth", orderDate.getMonthValue() - 1);
             para.put("orderDay", orderDate.getDayOfMonth());
             para.put("paymentMethod", paymentMethodInput.getValue());
-            String query = String.format("SELECT value, type FROM orders WHERE orderNumber = %d", orderNumber);
+            String query = String.format("SELECT value, type, CONCAT(lastName, ' ', firstName) AS name, `rank` FROM orders INNER JOIN employees ON orders.created_by = employees.employeeNumber INNER JOIN customers ON orders.customerNumber = customers.customerNumber WHERE orderNumber = %d", orderNumber);
             ResultSet rs = sqlConnection.getDataQuery(query);
             if (rs.next()) {
-                para.put("totalAmount", rs.getDouble(1));
+                String rank = rs.getString(4);
+                double left = 1;
+                switch (rank) {
+                    case "Emerald":
+                        para.put("discount", "25%");
+                        left = 0.75;
+                        break;
+                    case "Diamond":
+                        para.put("discount", "20%");
+                        left = 0.8;
+                        break;
+                    case "Platinum":
+                        para.put("discount", "15%");
+                        left = 0.85;
+                        break;
+                    case "Gold":
+                        para.put("discount", "10%");
+                        left = 0.9;
+                        break;
+                    case "Silver":
+                        para.put("discount", "5%");
+                        left = 0.95;
+                        break;
+                    case "Membership":
+                        para.put("discount", "0%");
+                        left = 1;
+                        break;
+                }
+                para.put("totalAmount", rs.getDouble(1) / left);
+                para.put("leftAmount", rs.getDouble(1));
                 para.put("type", rs.getString(2).substring(0, 1).toUpperCase() + rs.getString(2).substring(1));
+                para.put("employee", rs.getString(3));
             }
 
             ArrayList<OrderItem> plist = new ArrayList<>();
