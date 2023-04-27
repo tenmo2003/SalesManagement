@@ -60,8 +60,8 @@
     <parameter name="customerName" class="java.lang.String"/>
     <parameter name="contact" class="java.lang.String"/>
     <parameter name="invoiceNo" class="java.lang.String"/>
-    <parameter name="otherAmount" class="java.lang.String"/>
-    <parameter name="paybleAmount" class="java.lang.String"/>
+    <parameter name="discount" class="java.lang.String"/>
+    <parameter name="leftAmount" class="java.lang.Double"/>
     <parameter name="paidAmount" class="java.lang.String"/>
     <parameter name="dueAmount" class="java.lang.String"/>
     <parameter name="comments" class="java.lang.String"/>
@@ -74,6 +74,7 @@
     <parameter name="orderMonth" class="java.lang.Integer"/>
     <parameter name="orderDay" class="java.lang.Integer"/>
     <parameter name="totalAmount" class="java.lang.Double"/>
+    <parameter name="employee" class="java.lang.String"/>
     <queryString>
         <![CDATA[select * from dual]]>
     </queryString>
@@ -82,33 +83,7 @@
     <field name="priceEach" class="java.lang.Double"/>
     <field name="amount" class="java.lang.Double"/>
     <title>
-        <band height="128" splitType="Stretch">
-            <line>
-                <reportElement x="-4" y="122" width="180" height="1" uuid="806ce5df-1219-4876-ae0c-ca7405b1f246">
-                    <property name="local_mesure_unitheight" value="pixel"/>
-                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
-                </reportElement>
-            </line>
-            <staticText>
-                <reportElement x="-5" y="25" width="60" height="15" uuid="0f86baff-6386-4f3f-b3fe-2388707babe8"/>
-                <box rightPadding="4"/>
-                <textElement textAlignment="Left">
-                    <font size="9" isBold="true"/>
-                </textElement>
-                <text><![CDATA[Invoice No.]]></text>
-            </staticText>
-            <textField pattern="EEEEE dd MMMMM yyyy">
-                <reportElement x="85" y="40" width="90" height="15" uuid="bb10dbe1-0a4f-4722-9953-c163b63cf979"/>
-                <textElement textAlignment="Left" verticalAlignment="Top"/>
-                <textFieldExpression><![CDATA[new java.util.Date($P{orderYear}, $P{orderMonth}, $P{orderDay})]]></textFieldExpression>
-            </textField>
-            <textField pattern="EEEEE dd MMMMM yyyy">
-                <reportElement x="85" y="25" width="90" height="15" uuid="3836ce65-eca3-4cad-a6de-b1818def0a2b">
-                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
-                </reportElement>
-                <textElement textAlignment="Left" verticalAlignment="Top"/>
-                <textFieldExpression><![CDATA[$P{invoiceNo}]]></textFieldExpression>
-            </textField>
+        <band height="150" splitType="Stretch">
             <staticText>
                 <reportElement x="50" y="5" width="61" height="20" uuid="e622555d-198b-4ccd-a4a1-c59c53304058">
                     <property name="local_mesure_unitheight" value="pixel"/>
@@ -119,23 +94,20 @@
                 </textElement>
                 <text><![CDATA[Invoice]]></text>
             </staticText>
-            <textField>
-                <reportElement x="85" y="55" width="90" height="15" uuid="91f58548-ce2d-465b-a607-51056e1caa82">
-                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
-                </reportElement>
-                <textElement>
-                    <font size="9"/>
-                </textElement>
-                <textFieldExpression><![CDATA[$P{customerName}]]></textFieldExpression>
-            </textField>
-            <textField>
-                <reportElement x="85" y="69" width="90" height="15" uuid="c226bed9-7e93-429a-98bb-4aa6b7d0a172">
-                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
-                </reportElement>
+            <staticText>
+                <reportElement x="-5" y="25" width="60" height="15" uuid="0f86baff-6386-4f3f-b3fe-2388707babe8"/>
+                <box rightPadding="4"/>
                 <textElement textAlignment="Left">
-                    <font size="9"/>
+                    <font size="9" isBold="true"/>
                 </textElement>
-                <textFieldExpression><![CDATA[$P{contact}]]></textFieldExpression>
+                <text><![CDATA[Invoice No.]]></text>
+            </staticText>
+            <textField pattern="EEEEE dd MMMMM yyyy">
+                <reportElement x="85" y="25" width="90" height="15" uuid="3836ce65-eca3-4cad-a6de-b1818def0a2b">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                </reportElement>
+                <textElement textAlignment="Left" verticalAlignment="Top"/>
+                <textFieldExpression><![CDATA[$P{invoiceNo}]]></textFieldExpression>
             </textField>
             <staticText>
                 <reportElement x="-5" y="40" width="60" height="15" uuid="fda96e35-684d-4b2e-97c9-f91b76668f6b"/>
@@ -145,40 +117,74 @@
                 </textElement>
                 <text><![CDATA[Date]]></text>
             </staticText>
+            <textField pattern="EEEEE dd MMMMM yyyy">
+                <reportElement x="85" y="40" width="90" height="15" uuid="bb10dbe1-0a4f-4722-9953-c163b63cf979"/>
+                <textElement textAlignment="Left" verticalAlignment="Top">
+                    <font size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA[new java.util.Date($P{orderYear}, $P{orderMonth}, $P{orderDay})]]></textFieldExpression>
+            </textField>
             <staticText>
-                <reportElement x="-5" y="55" width="60" height="15" uuid="9e063b78-77df-4106-bb2e-a386ad94bc19"/>
+                <reportElement x="-5" y="55" width="60" height="15" uuid="7248ae1b-4d00-4a60-b6c5-584b5fbe72d7"/>
+                <box rightPadding="4"/>
+                <textElement textAlignment="Left">
+                    <font size="9" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Employee]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="85" y="55" width="90" height="15" uuid="91f58548-ce2d-465b-a607-51056e1caa82">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                </reportElement>
+                <textElement>
+                    <font size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{employee}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="-5" y="70" width="60" height="15" uuid="9e063b78-77df-4106-bb2e-a386ad94bc19"/>
                 <box rightPadding="4"/>
                 <textElement textAlignment="Left">
                     <font size="9" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Customer]]></text>
             </staticText>
+            <textField>
+                <reportElement x="85" y="70" width="90" height="15" uuid="91f58548-ce2d-465b-a607-51056e1caa82">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                </reportElement>
+                <textElement>
+                    <font size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{customerName}]]></textFieldExpression>
+            </textField>
             <staticText>
-                <reportElement x="-5" y="70" width="60" height="15" uuid="1d24bf62-4f78-4a83-83b7-994537bef554"/>
+                <reportElement x="-5" y="86" width="60" height="15" uuid="1d24bf62-4f78-4a83-83b7-994537bef554"/>
                 <box rightPadding="4"/>
                 <textElement textAlignment="Left">
                     <font size="9" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Contact No.]]></text>
             </staticText>
+            <textField>
+                <reportElement x="85" y="86" width="90" height="15" uuid="c226bed9-7e93-429a-98bb-4aa6b7d0a172">
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                </reportElement>
+                <textElement textAlignment="Left">
+                    <font size="9"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{contact}]]></textFieldExpression>
+            </textField>
             <staticText>
-                <reportElement x="-5" y="86" width="60" height="15" uuid="c5a497d6-f9f7-4c6a-9d72-d5f9416ac6a8"/>
+                <reportElement x="-5" y="102" width="60" height="15" uuid="c5a497d6-f9f7-4c6a-9d72-d5f9416ac6a8"/>
                 <box rightPadding="4"/>
                 <textElement textAlignment="Left">
                     <font size="9" isBold="true"/>
                 </textElement>
                 <text><![CDATA[Order Type]]></text>
             </staticText>
-            <staticText>
-                <reportElement x="-5" y="102" width="60" height="15" uuid="7248ae1b-4d00-4a60-b6c5-584b5fbe72d7"/>
-                <box rightPadding="4"/>
-                <textElement textAlignment="Left">
-                    <font size="9" isBold="true"/>
-                </textElement>
-                <text><![CDATA[Payment Method]]></text>
-            </staticText>
             <textField>
-                <reportElement x="85" y="84" width="90" height="15" uuid="803bc527-a631-4733-a335-6c7d03071bea">
+                <reportElement x="85" y="102" width="90" height="15" uuid="803bc527-a631-4733-a335-6c7d03071bea">
                     <property name="com.jaspersoft.studio.unit.height" value="px"/>
                 </reportElement>
                 <textElement>
@@ -186,8 +192,16 @@
                 </textElement>
                 <textFieldExpression><![CDATA[$P{type}]]></textFieldExpression>
             </textField>
+            <staticText>
+                <reportElement x="-5" y="118" width="90" height="15" uuid="7248ae1b-4d00-4a60-b6c5-584b5fbe72d7"/>
+                <box rightPadding="4"/>
+                <textElement textAlignment="Left">
+                    <font size="9" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Payment Method]]></text>
+            </staticText>
             <textField>
-                <reportElement x="85" y="100" width="90" height="15" uuid="a2abf847-d814-475c-9845-2b0cb6742a34">
+                <reportElement x="85" y="118" width="90" height="15" uuid="a2abf847-d814-475c-9845-2b0cb6742a34">
                     <property name="com.jaspersoft.studio.unit.height" value="px"/>
                 </reportElement>
                 <textElement>
@@ -195,6 +209,15 @@
                 </textElement>
                 <textFieldExpression><![CDATA[$P{paymentMethod}]]></textFieldExpression>
             </textField>
+
+
+
+            <line>
+                <reportElement x="-4" y="138" width="180" height="1" uuid="806ce5df-1219-4876-ae0c-ca7405b1f246">
+                    <property name="local_mesure_unitheight" value="pixel"/>
+                    <property name="com.jaspersoft.studio.unit.height" value="px"/>
+                </reportElement>
+            </line>
         </band>
     </title>
     <columnHeader>
@@ -422,14 +445,14 @@
                 <textElement>
                     <font isBold="true"/>
                 </textElement>
-                <text><![CDATA[Total Amount]]></text>
+                <text><![CDATA[Sub Total]]></text>
             </staticText>
             <staticText>
                 <reportElement x="-3" y="39" width="90" height="15" uuid="9d0d733f-19bf-4885-b828-6b2df2ea187c"/>
                 <textElement>
                     <font isBold="true"/>
                 </textElement>
-                <text><![CDATA[Other Amount]]></text>
+                <text><![CDATA[Discount]]></text>
             </staticText>
             <staticText>
                 <reportElement x="-3" y="69" width="90" height="15" uuid="cf1de42a-ace6-47bb-ac04-cd5464bdf2f4"/>
@@ -443,7 +466,7 @@
                 <textElement>
                     <font isBold="true"/>
                 </textElement>
-                <text><![CDATA[Payble Amount]]></text>
+                <text><![CDATA[Total]]></text>
             </staticText>
             <staticText>
                 <reportElement x="-3" y="84" width="90" height="15" uuid="1afb983b-2726-43e4-9e3b-2961fe310bbc"/>
@@ -460,12 +483,12 @@
             <textField>
                 <reportElement x="106" y="39" width="71" height="15" uuid="d61d596d-2081-4e40-9b96-8405bb8b8a87"/>
                 <textElement textAlignment="Right"/>
-                <textFieldExpression><![CDATA[$P{otherAmount}]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$P{discount}]]></textFieldExpression>
             </textField>
             <textField>
                 <reportElement x="107" y="54" width="71" height="15" uuid="be37a322-4207-4813-8089-942d486ac91d"/>
                 <textElement textAlignment="Right"/>
-                <textFieldExpression><![CDATA[$P{paybleAmount}]]></textFieldExpression>
+                <textFieldExpression><![CDATA[$P{leftAmount}]]></textFieldExpression>
             </textField>
             <textField>
                 <reportElement x="106" y="69" width="72" height="15" uuid="ff0a53e7-55a7-4aff-a3d6-8c03afd2bc56"/>
