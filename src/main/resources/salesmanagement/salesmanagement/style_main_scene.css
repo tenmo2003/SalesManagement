@@ -75,3 +75,7 @@
 .text-style:hover {
     -fx-fill: #329cfe;
 }
+
+#background_color {
+    -fx-background-color: #f4f4f4;
+}

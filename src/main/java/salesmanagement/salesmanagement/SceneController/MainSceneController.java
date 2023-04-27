@@ -43,6 +43,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
+import org.controlsfx.control.tableview2.FilteredTableView;
 import salesmanagement.salesmanagement.ImageController;
 import salesmanagement.salesmanagement.NotificationCode;
 import salesmanagement.salesmanagement.NotificationSystem;
@@ -50,6 +51,8 @@ import salesmanagement.salesmanagement.SalesComponent.*;
 import salesmanagement.salesmanagement.SalesManagement;
 import salesmanagement.salesmanagement.ViewController.EmployeesExportViewController;
 import salesmanagement.salesmanagement.ViewController.EmployeesFilterViewController;
+import salesmanagement.salesmanagement.ViewController.SettingTabViewController;
+import salesmanagement.salesmanagement.ViewController.ViewController;
 
 import java.io.File;
 import java.io.IOException;
@@ -102,10 +105,9 @@ public class MainSceneController extends SceneController implements Initializabl
     JFXButton currentTabButton;
 
 
-    Node employeesExportView;
-    Node employeesFilterView;
     EmployeesExportViewController employeesExportViewController;
     EmployeesFilterViewController employeesFilterViewController;
+    SettingTabViewController settingTabViewController;
 
     @FXML
     void goToCreateOrderTab() {
@@ -131,6 +133,7 @@ public class MainSceneController extends SceneController implements Initializabl
         }
         tabPane.getSelectionModel().select(productsOperationTab);
     }
+
     @FXML
     void goToCustomersTab() {
         initCustomers();
@@ -141,6 +144,7 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     void goToSettingTab() {
         tabPane.getSelectionModel().select(settingTab);
+        settingTabViewController.show();
     }
 
     public Node getMainScenePane() {
@@ -262,7 +266,7 @@ public class MainSceneController extends SceneController implements Initializabl
 
     @FXML
     public void openExportEmployeesBox() {
-        employeesExportViewController.show();    
+        employeesExportViewController.show();
     }
 
     @FXML
@@ -651,11 +655,12 @@ public class MainSceneController extends SceneController implements Initializabl
     StackPane menuPane;
 
     public void initialSetup() {
-        employeesExportViewController.setSqlConnection(sqlConnection);
-        employeesFilterViewController.setSqlConnection(sqlConnection);
+        user = new Employee(sqlConnection, loggerID);
+        settingTabViewController.setUser(user);
+        ViewController.setSqlConnection(sqlConnection);
 
         // Load current UI.
-        user = new Employee(sqlConnection, loggerID);
+
         usernameText.setText(user.getFullName());
 
         firstSplitPane.setMaxHeight(Screen.getPrimary().getVisualBounds().getHeight());
@@ -1018,17 +1023,21 @@ public class MainSceneController extends SceneController implements Initializabl
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
             FXMLLoader loader = new FXMLLoader(SalesManagement.class.getResource("fxml-view/employees-export-view.fxml"));
-            employeesExportView = (new Scene(loader.load())).getRoot();
+            loader.load();
             employeesExportViewController = loader.getController();
-            employeesTabPane.getChildren().add(employeesExportView);
+            employeesTabPane.getChildren().add(employeesExportViewController.getRoot());
 
             loader = new FXMLLoader(SalesManagement.class.getResource("fxml-view/employees-filter-view.fxml"));
-            employeesFilterView = (new Scene(loader.load())).getRoot();
+            loader.load();
             employeesFilterViewController = loader.getController();
-            employeesTabPane.getChildren().add(employeesFilterView);
+            employeesTabPane.getChildren().add(employeesFilterViewController.getRoot());
+
+            loader = new FXMLLoader(SalesManagement.class.getResource("fxml-view/setting-tab-view.fxml"));
+            loader.load();
+            settingTabViewController = loader.getController();
+            settingTab.setContent(settingTabViewController.getRoot());
         } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(0);
+            throw new RuntimeException(e);
         }
 
         statusInput.getItems().add("Cancelled");

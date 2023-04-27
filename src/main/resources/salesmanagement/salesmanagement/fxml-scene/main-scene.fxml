@@ -35,7 +35,7 @@
    <children>
       <SplitPane fx:id="firstSplitPane" dividerPositions="0.06" focusTraversable="false" orientation="VERTICAL" prefHeight="1080.0" prefWidth="1920.0" styleClass="split-pane-1" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
-            <StackPane fx:id="menuPane" prefHeight="293.0" prefWidth="1918.0">
+            <StackPane id="background_color" fx:id="menuPane" prefHeight="293.0" prefWidth="1918.0">
                <children>
                   <Text fx:id="companyName" fill="#329cfe" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: Bold;" text="Alpha Trading Corporation Joint Stock Company" textAlignment="CENTER" wrappingWidth="874.7435298442833">
                      <font>
@@ -264,7 +264,7 @@
                         </SplitPane>
                      </children>
                   </AnchorPane>
-                  <TabPane fx:id="tabPane" prefHeight="758.4" prefWidth="997.6" styleClass="main-tab-pane" stylesheets="@../tabpane_style.css" tabClosingPolicy="UNAVAILABLE">
+                  <TabPane id="background_color" fx:id="tabPane" prefHeight="758.4" prefWidth="997.6" styleClass="main-tab-pane" stylesheets="@../tabpane_style.css" tabClosingPolicy="UNAVAILABLE">
                      <tabs>
                         <Tab fx:id="createOrderTab" closable="false" text="Create Order">
                            <content>
@@ -284,7 +284,7 @@
                                     <JFXButton fx:id="removeItemButton" layoutX="749.0" layoutY="88.0" text="Remove" />
                                     <JFXTextField fx:id="priceEachInput" editable="false" focusTraversable="false" layoutX="424.0" layoutY="88.0" prefHeight="26.0" prefWidth="86.0" />
                                     <DatePicker fx:id="orderDateInput" layoutX="179.0" layoutY="419.0" prefHeight="34.0" prefWidth="154.0" promptText="Order Date" />
-                                    <TableView fx:id="orderDetailsTable" layoutX="176.0" layoutY="130.0" prefHeight="232.0" prefWidth="696.0">
+                                    <TableView fx:id="orderDetailsTable" layoutX="176.0" layoutY="130.0" prefHeight="232.0" prefWidth="696.0" stylesheets="@../table.css">
                                        <columns>
                                           <TableColumn fx:id="productCodeOD" prefWidth="246.98178100585938" text="Item" />
                                           <TableColumn fx:id="quantityOD" prefWidth="143.12725830078125" text="Quantity" />

@@ -10,7 +10,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public abstract class ViewController implements Initializable {
-    protected SQLConnection sqlConnection;
+    protected static SQLConnection sqlConnection;
     protected Stage stage;
     @FXML
     protected StackPane root;
@@ -20,8 +20,9 @@ public abstract class ViewController implements Initializable {
         root.setVisible(false);
     }
 
-    public void setSqlConnection(SQLConnection sqlConnection) {
-        this.sqlConnection = sqlConnection;
+    public static void setSqlConnection(SQLConnection sqlConnection) {
+        if (ViewController.sqlConnection == null)
+            ViewController.sqlConnection = sqlConnection;
     }
 
     @FXML
@@ -29,8 +30,13 @@ public abstract class ViewController implements Initializable {
         root.setVisible(false);
     }
 
+    @FXML
     public void show() {
         if (stage == null) stage = (Stage) root.getScene().getWindow();
         root.setVisible(true);
+    }
+
+    public StackPane getRoot() {
+        return root;
     }
 }
