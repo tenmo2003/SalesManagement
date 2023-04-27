@@ -1177,6 +1177,34 @@ public class MainSceneController extends SceneController implements Initializabl
             }
         });
 
+        customerNameInput.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue && deliverInput.isEditable() && !phoneNumberInput.getText().equals("")) {
+                String query = String.format("SELECT addressLine FROM customers WHERE customerName = '%s' AND phone = '%s'", customerNameInput.getText(), phoneNumberInput.getText());
+                ResultSet rs = sqlConnection.getDataQuery(query);
+                try {
+                    if (rs.next()) {
+                        deliverInput.setText(rs.getString(1));
+                    }
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
+        phoneNumberInput.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue && deliverInput.isEditable() && !customerNameInput.getText().equals("")) {
+                String query = String.format("SELECT addressLine FROM customers WHERE customerName = '%s' AND phone = '%s'", customerNameInput.getText(), phoneNumberInput.getText());
+                ResultSet rs = sqlConnection.getDataQuery(query);
+                try {
+                    if (rs.next()) {
+                        deliverInput.setText(rs.getString(1));
+                    }
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
 
         productLinePDetails.focusedProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal) {
@@ -1537,6 +1565,9 @@ public class MainSceneController extends SceneController implements Initializabl
             requiredDateText.setVisible(true);
             shippedDateInput.setVisible(true);
             shippedDateText.setVisible(true);
+            deliverInput.setVisible(true);
+            deliverText.setVisible(true);
+            deliverInput.setEditable(true);
             statusInput.setVisible(true);
             paymentMethodInput.getItems().clear();
             paymentMethodInput.getItems().addAll("Cash On Delivery", "Credit Card", "Debit Card", "E-Wallet", "Bank Transfer");
@@ -1546,6 +1577,9 @@ public class MainSceneController extends SceneController implements Initializabl
             requiredDateText.setVisible(false);
             shippedDateInput.setVisible(false);
             shippedDateText.setVisible(false);
+            deliverInput.setVisible(false);
+            deliverText.setVisible(false);
+            deliverInput.setEditable(false);
             statusInput.setVisible(false);
             paymentMethodInput.getItems().clear();
             paymentMethodInput.getItems().addAll("Cash", "Credit Card", "Debit Card", "E-Wallet", "Bank Transfer");
@@ -1600,12 +1634,17 @@ public class MainSceneController extends SceneController implements Initializabl
                 requiredDateText.setVisible(true);
                 shippedDateInput.setVisible(true);
                 shippedDateText.setVisible(true);
+                deliverInput.setVisible(true);
+                deliverText.setVisible(true);
+                deliverInput.setEditable(true);
                 statusInput.setVisible(true);
                 paymentMethodInput.getItems().clear();
                 paymentMethodInput.getItems().addAll("Cash On Delivery", "Credit Card", "Debit Card", "E-Wallet", "Bank Transfer");
 
                 requiredDateInput.setValue(selectedOrderRow.getRequiredDate());
                 shippedDateInput.setValue(selectedOrderRow.getShippedDate());
+
+                deliverInput.setText(selectedOrderRow.getDestination());
 
                 // Set the status combo box to the value from the selected ord
                 statusInput.setValue(selectedOrderRow.getStatus());
@@ -1615,6 +1654,9 @@ public class MainSceneController extends SceneController implements Initializabl
                 requiredDateText.setVisible(false);
                 shippedDateInput.setVisible(false);
                 shippedDateText.setVisible(false);
+                deliverInput.setVisible(false);
+                deliverText.setVisible(false);
+                deliverInput.setEditable(false);
                 statusInput.setVisible(false);
                 paymentMethodInput.getItems().clear();
                 paymentMethodInput.getItems().addAll("Cash", "Credit Card", "Debit Card", "E-Wallet", "Bank Transfer");
@@ -1668,7 +1710,7 @@ public class MainSceneController extends SceneController implements Initializabl
             String status = (String) statusInput.getValue();
             String comments = commentsInput.getText();
 
-            query = String.format("UPDATE orders SET orderDate = '%s', requiredDate = %s, shippedDate = %s, status = '%s', comments = '%s', payment_method = '%s' WHERE orderNumber = %d", orderDate.toString(), requiredDate, shippedDate, status, comments, paymentMethodInput.getValue(), orderNumber);
+            query = String.format("UPDATE orders SET orderDate = '%s', requiredDate = %s, shippedDate = %s, status = '%s', comments = '%s', payment_method = '%s', deliver_to = '%s' WHERE orderNumber = %d", orderDate.toString(), requiredDate, shippedDate, status, comments, paymentMethodInput.getValue(), deliverInput.getText(), orderNumber);
             sqlConnection.updateQuery(query);
 
         }, null, progressIndicator, createOrderTab.getTabPane());
@@ -1793,6 +1835,10 @@ public class MainSceneController extends SceneController implements Initializabl
     DatePicker shippedDateInput;
     @FXML
     Text shippedDateText;
+    @FXML
+    JFXTextField deliverInput;
+    @FXML
+    Text deliverText;
     @FXML
     JFXTextField commentsInput;
     @FXML
@@ -2031,7 +2077,7 @@ public class MainSceneController extends SceneController implements Initializabl
             ordersTable.setItems(orders);
 
             try {
-                String query = "SELECT orderNumber, CONCAT(lastName, ' ', firstName)  AS name, created_by, orderDate, requiredDate, shippedDate, orders.status, type, comments, value, payment_method, customerName, customers.phone FROM orders INNER JOIN customers ON orders.customerNumber = customers.customerNumber INNER JOIN employees ON orders.created_by = employees.employeeNumber";
+                String query = "SELECT orderNumber, CONCAT(lastName, ' ', firstName)  AS name, created_by, orderDate, requiredDate, shippedDate, orders.status, type, comments, value, payment_method, customerName, customers.phone, addressLine, deliver_to FROM orders INNER JOIN customers ON orders.customerNumber = customers.customerNumber INNER JOIN employees ON orders.created_by = employees.employeeNumber";
                 ResultSet resultSet = sqlConnection.getDataQuery(query);
                 while (resultSet.next()) {
                     Order order = new Order(
@@ -2046,8 +2092,10 @@ public class MainSceneController extends SceneController implements Initializabl
                             resultSet.getString("customerName"),
                             resultSet.getString("phone"),
                             resultSet.getString("type"),
+                            resultSet.getString("addressLine"),
                             resultSet.getDouble("value"),
-                            resultSet.getString("payment_method")
+                            resultSet.getString("payment_method"),
+                            resultSet.getString("deliver_to")
                     );
                     ordersTable.getItems().add(order);
                 }
@@ -2523,6 +2571,7 @@ public class MainSceneController extends SceneController implements Initializabl
         totalInput.clear();
         customerNameInput.clear();
         phoneNumberInput.clear();
+        deliverInput.clear();
         orderDateInput.setValue(null);
         requiredDateInput.setValue(null);
         shippedDateInput.setValue(null);

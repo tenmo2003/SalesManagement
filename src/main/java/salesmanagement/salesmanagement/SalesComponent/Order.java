@@ -13,11 +13,13 @@ public class Order {
     private String comments;
     private String customerName;
     private String contact;
+    private String customerAddress;
     private String type;
     private double value;
     private String payment_method;
+    private String deliver_to;
 
-    public Order(int orderNumber, int employeeNumber, String employeeName, LocalDate orderDate, LocalDate requiredDate, LocalDate shippedDate, String status, String comments, String customerName, String contact, String type, double value, String payment_method) {
+    public Order(int orderNumber, int employeeNumber, String employeeName, LocalDate orderDate, LocalDate requiredDate, LocalDate shippedDate, String status, String comments, String customerName, String contact, String customerAddress, String type, double value, String payment_method, String deliver_to) {
         this.orderNumber = orderNumber;
         this.employeeNumber = employeeNumber;
         this.employeeName = employeeName;
@@ -28,9 +30,27 @@ public class Order {
         this.comments = comments;
         this.customerName = customerName;
         this.contact = contact;
+        this.customerAddress = customerAddress;
         this.type = type;
         this.value = value;
         this.payment_method = payment_method;
+        this.deliver_to = deliver_to;
+    }
+
+    public String getCustomerAddress() {
+        return customerAddress;
+    }
+
+    public void setCustomerAddress(String customerAddress) {
+        this.customerAddress = customerAddress;
+    }
+
+    public String getDestination() {
+        return deliver_to;
+    }
+
+    public void setDestination(String deliver_to) {
+        this.deliver_to = deliver_to;
     }
 
     public int getOrderNumber() {
