@@ -90,7 +90,8 @@ public class EmployeesTabViewController extends ViewController {
                 Employee selected = employeesTable.getSelectionModel().getSelectedItem();
                 if (selected != null) {
                     employeeInfoViewController.show(selected);
-                };
+                }
+                ;
             }
         });
     }
@@ -100,10 +101,10 @@ public class EmployeesTabViewController extends ViewController {
     @Override
     public void show() {
         super.show();
-
+        employeeInfoViewController.close();
         if (!employeesTableConfigured) {
             employeesTableConfigured = true;
-            double tableWidth = employeesTable.getWidth()-2;
+            double tableWidth = employeesTable.getWidth() - 2;
             employeeNumberColumn.setMinWidth(0.15 * tableWidth);
             nameColumn.setMinWidth(0.25 * tableWidth);
             phoneColumn.setMinWidth(0.2 * tableWidth);

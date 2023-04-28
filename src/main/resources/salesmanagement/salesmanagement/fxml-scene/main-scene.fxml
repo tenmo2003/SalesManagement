@@ -28,11 +28,11 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.SceneController.MainSceneController">
    <children>
-      <SplitPane fx:id="firstSplitPane" dividerPositions="0.06" focusTraversable="false" orientation="VERTICAL" prefHeight="1080.0" prefWidth="1920.0" styleClass="split-pane-1" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <SplitPane id="split-pane-border-color" fx:id="firstSplitPane" dividerPositions="0.06" focusTraversable="false" orientation="VERTICAL" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
             <StackPane id="background_color" fx:id="menuPane" prefHeight="293.0" prefWidth="1918.0">
                <children>
-                  <Text fx:id="companyName" fill="#329cfe" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: Bold;" text="Alpha Trading Corporation Joint Stock Company" textAlignment="CENTER" wrappingWidth="874.7435298442833">
+                  <Text fx:id="companyName" fill="#32a2fcac" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: Bold;" text="Alpha Trading Corporation Joint Stock Company" textAlignment="CENTER" wrappingWidth="874.7435298442833">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -63,7 +63,7 @@
                               <Image url="@../img/app_icon.png" />
                            </image>
                         </ImageView>
-                        <Label style="-fx-font-family: SVN-Poppins; -fx-font-size: 25; -fx-font-weight: 800;" text="SAMA" textFill="#329cfe" />
+                        <Label style="-fx-font-family: SVN-Poppins; -fx-font-size: 25; -fx-font-weight: 800;" text="SAMA" textFill="#329efcb7" />
                      </children>
                      <StackPane.margin>
                         <Insets right="1600.0" />
@@ -71,11 +71,11 @@
                   </HBox>
                </children>
             </StackPane>
-            <SplitPane fx:id="secondSplitPane" dividerPositions="0.1667" focusTraversable="false" prefHeight="947.0" prefWidth="1918.0">
+            <SplitPane id="split-pane-border-color" fx:id="secondSplitPane" dividerPositions="0.1667" focusTraversable="false" prefHeight="947.0" prefWidth="1918.0">
                <items>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                      <children>
-                        <SplitPane fx:id="forthSplitPane" dividerPositions="0.5" layoutY="187.0" maxWidth="319.0" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="838.0" prefWidth="319.0" style="-fx-background-color: white;" styleClass="split-pane-divider" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <SplitPane id="split-pane-no-border-color" fx:id="forthSplitPane" dividerPositions="0.15981012658227847" layoutY="187.0" maxWidth="319.0" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="838.0" prefWidth="319.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <items>
                               <VBox alignment="CENTER" fillWidth="false" maxHeight="158.0" maxWidth="194.0" minHeight="140.0" minWidth="180.0" prefHeight="158.0" prefWidth="193.0" spacing="5.0">
                                  <children>
@@ -263,7 +263,7 @@
                      <tabs>
                         <Tab fx:id="createOrderTab" closable="false" text="Create Order">
                            <content>
-                              <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-border-width: 0;">
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
                                  <children>
                                     <JFXButton fx:id="submitOrderButton" layoutX="445.0" layoutY="696.0" prefHeight="53.0" prefWidth="216.0" stylesheets="@../button_style.css" text="Create Order" />
                                     <JFXTextField fx:id="commentsInput" layoutX="176.0" layoutY="637.0" prefHeight="31.0" prefWidth="685.0" />

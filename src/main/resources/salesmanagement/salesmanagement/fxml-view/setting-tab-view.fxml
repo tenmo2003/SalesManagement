@@ -21,10 +21,10 @@
          <children>
             <HBox>
                <children>
-                  <HBox alignment="CENTER_LEFT" prefHeight="32.0" prefWidth="339.0" HBox.hgrow="ALWAYS">
+                  <HBox alignment="CENTER_LEFT" prefHeight="32.0" prefWidth="339.0">
                      <children>
-                        <Label id="top_label" prefHeight="32.0" prefWidth="214.0" text="Account Setting" />
-                        <ProgressIndicator fx:id="loadingIndicator" prefHeight="182.0" prefWidth="306.0" />
+                        <Label id="top_label" prefHeight="32.0" prefWidth="174.0" text="Account Setting" />
+                        <ProgressIndicator fx:id="loadingIndicator" prefHeight="32.0" prefWidth="37.0" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="26.0" prefWidth="750.0" HBox.hgrow="ALWAYS">

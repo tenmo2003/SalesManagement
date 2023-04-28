@@ -5,17 +5,19 @@
     -fx-background-position: center center;
 }
 
-.split-pane:horizontal > .split-pane-divider {
+#split-pane-border-color.split-pane:horizontal > .split-pane-divider {
     -fx-padding: 0 0.75 0 0.75;
 }
 
-.split-pane:vertical > .split-pane-divider {
+#split-pane-border-color.split-pane:vertical > .split-pane-divider {
+    -fx-border-color: #d0cccc;
     -fx-background-color: transparent;
     -fx-padding: 0 0 0 0;
 }
-
-.split-pane-1:vertical > .split-pane-divider {
-    -fx-padding: 0 0.75 0 0.75;
+#split-pane-no-border-color.split-pane:vertical > .split-pane-divider {
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 0;
 }
 
 .button {

@@ -3,14 +3,10 @@ package salesmanagement.salesmanagement.ViewController;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXRadioButton;
-import com.jfoenix.controls.JFXTextField;
 import javafx.animation.FadeTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
@@ -32,18 +28,14 @@ import salesmanagement.salesmanagement.SalesComponent.Employee;
 
 import java.io.File;
 import java.net.URL;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static salesmanagement.salesmanagement.ImageController.isImageLoaded;
-import static salesmanagement.salesmanagement.InputErrorCode.EMPTY_FIRST_NAME;
 import static salesmanagement.salesmanagement.InputErrorCode.getInputErrorLabel;
 import static salesmanagement.salesmanagement.SceneController.SceneController.runTask;
-import static salesmanagement.salesmanagement.Utils.getAllNodes;
 import static salesmanagement.salesmanagement.Utils.shake;
 
 public class EmployeeInfoViewController extends ViewController {
@@ -56,9 +48,6 @@ public class EmployeeInfoViewController extends ViewController {
 
     @FXML
     private DatePicker birthDatePicker;
-
-    @FXML
-    private VBox detailsInfoBox;
 
     @FXML
     private JFXButton editButton;
@@ -460,7 +449,7 @@ public class EmployeeInfoViewController extends ViewController {
             String query = "UPDATE employees SET lastName='" + lastNameTextField.getText() + "', firstName='" + firstNameTextField.getText()
                     + "', birthDate='" + birthDatePicker.getValue() + "', gender='" + (maleRadioButton.isSelected() ? "male" : "female")
                     + "', email='" + emailTextField.getText() + "', mailVerified='0', officeCode='" + officeCodeTextField.getText()
-                    + "', reportsTo='" + supervisorTextField.getText() + "', jobTitle='" + accessibilityBox.getValue()
+                    + "', reportsTo='" + ((supervisorTextField.getText().equals("")) ? "null" : supervisorTextField.getText()) + "', jobTitle='" + accessibilityBox.getValue()
                     + "', username='" + usernameTextField.getText() + "', password='" + passwordField.getText() + "', phoneCode='"
                     + phoneCodeBox.getValue() + "', phone='" + phoneNumberTextField.getText() + "', status='" + statusBox.getValue() + "', joiningDate='"
                     + joiningDatePicker.getValue() + "' WHERE employeeNumber=" + user.getEmployeeNumber();
@@ -604,6 +593,7 @@ public class EmployeeInfoViewController extends ViewController {
     }
 
     protected void show(Employee employee) {
+        employeeInfoBox.setVvalue(0.0);
         if (disabledNodes == null)
             disabledNodes = new Node[]{lastNameTextField, firstNameTextField, birthDatePicker, maleRadioButton, femaleRadioButton, emailTextField,
                     officeCodeTextField, supervisorTextField, accessibilityBox, usernameTextField, passwordField, phoneCodeBox,

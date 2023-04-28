@@ -57,7 +57,7 @@
                   <Insets left="30.0" right="30.0" />
                </VBox.margin>
             </HBox>
-            <ScrollPane fx:id="employeeInfoBox" fitToHeight="true" fitToWidth="true" focusTraversable="false" VBox.vgrow="ALWAYS">
+            <ScrollPane fx:id="employeeInfoBox" fitToHeight="true" fitToWidth="true" focusTraversable="false" stylesheets="@../scroll-pane.css" VBox.vgrow="ALWAYS">
                <content>
                   <VBox fx:id="detailsInfoBox" alignment="TOP_CENTER" prefHeight="556.0" prefWidth="1101.0">
                      <children>
@@ -73,7 +73,7 @@
                         </StackPane>
                         <HBox prefHeight="517.0" prefWidth="1576.0" spacing="30.0" VBox.vgrow="ALWAYS">
                            <children>
-                              <TitledPane animated="false" collapsible="false" prefHeight="98.0" prefWidth="733.0" text="Basic Info" HBox.hgrow="ALWAYS">
+                              <TitledPane animated="false" collapsible="false" prefHeight="98.0" prefWidth="733.0" stylesheets="@../titled-pane.css" text="Basic Info" textFill="WHITE" HBox.hgrow="ALWAYS">
                                  <content>
                                     <VBox prefHeight="474.0" prefWidth="646.0" spacing="15.0">
                                        <children>
@@ -180,8 +180,11 @@
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
                               </TitledPane>
-                              <TitledPane animated="false" collapsible="false" prefHeight="300.0" prefWidth="734.0" text="Account Login" HBox.hgrow="ALWAYS">
+                              <TitledPane animated="false" collapsible="false" prefHeight="300.0" prefWidth="734.0" stylesheets="@../titled-pane.css" text="Account Login" textFill="WHITE" HBox.hgrow="ALWAYS">
                                  <content>
                                     <VBox prefHeight="400.0" prefWidth="746.0" spacing="15.0">
                                        <children>
@@ -274,6 +277,9 @@
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
                               </TitledPane>
                            </children>
                            <VBox.margin>
@@ -282,7 +288,7 @@
                         </HBox>
                         <HBox prefHeight="517.0" prefWidth="1576.0" spacing="30.0">
                            <children>
-                              <TitledPane animated="false" collapsible="false" prefHeight="440.0" prefWidth="722.0" text="Company Details" HBox.hgrow="ALWAYS">
+                              <TitledPane animated="false" collapsible="false" prefHeight="440.0" prefWidth="722.0" stylesheets="@../titled-pane.css" text="Company Details" textFill="WHITE" HBox.hgrow="ALWAYS">
                                  <content>
                                     <VBox prefHeight="326.0" prefWidth="639.0" spacing="15.0">
                                        <children>
@@ -382,8 +388,11 @@
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
                               </TitledPane>
-                              <TitledPane animated="false" collapsible="false" prefHeight="354.0" prefWidth="718.0" text="Document" HBox.hgrow="ALWAYS">
+                              <TitledPane animated="false" collapsible="false" prefHeight="354.0" prefWidth="718.0" stylesheets="@../titled-pane.css" text="Document" textFill="WHITE" HBox.hgrow="ALWAYS">
                                  <content>
                                     <VBox prefHeight="474.0" prefWidth="646.0">
                                        <children>
@@ -425,6 +434,9 @@
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
                               </TitledPane>
                            </children>
                            <VBox.margin>
