@@ -71,7 +71,8 @@ public class Employee {
             mailVerified = employeeRecord.getBoolean("mailVerified");
             phoneCode = employeeRecord.getString("phoneCode");
             joiningDate = employeeRecord.getDate("joiningDate").toLocalDate();
-            lastWorkingDate = employeeRecord.getDate("lastWorkingDate").toLocalDate();
+            if (employeeRecord.getDate("lastWorkingDate") != null)
+                lastWorkingDate = employeeRecord.getDate("lastWorkingDate").toLocalDate();
             birthDate = employeeRecord.getDate("birthDate").toLocalDate();
 
             String statusBoxColor = "#E5E575FF";
@@ -117,7 +118,7 @@ public class Employee {
     }
 
     public String getFullName() {
-        if(isNewUser) return "";
+        if (isNewUser) return "";
         return lastName + " " + firstName;
     }
 
@@ -145,7 +146,7 @@ public class Employee {
     }
 
     public String getLastName() {
-        return (lastName==null)?"":lastName;
+        return (lastName == null) ? "" : lastName;
     }
 
     public void setLastName(String lastName) {
@@ -153,7 +154,7 @@ public class Employee {
     }
 
     public String getFirstName() {
-        return (firstName==null)?"":firstName;
+        return (firstName == null) ? "" : firstName;
     }
 
     public void setFirstName(String firstName) {
@@ -169,7 +170,7 @@ public class Employee {
     }
 
     public String getOfficeCode() {
-        return (officeCode==null)?"":officeCode;
+        return (officeCode == null) ? "" : officeCode;
     }
 
     public void setOfficeCode(String officeCode) {
@@ -215,7 +216,7 @@ public class Employee {
     }
 
     public String getName() {
-        return (name==null)?"":name;
+        return (name == null) ? "" : name;
     }
 
     public void setName(String name) {
@@ -223,7 +224,7 @@ public class Employee {
     }
 
     public String getUsername() {
-        return (username==null)?"":username;
+        return (username == null) ? "" : username;
     }
 
     public void setUsername(String username) {
@@ -243,7 +244,7 @@ public class Employee {
     }
 
     public String getGender() {
-        return (gender==null)?"":gender;
+        return (gender == null) ? "" : gender;
     }
 
     public void setGender(String gender) {
@@ -263,7 +264,7 @@ public class Employee {
     }
 
     public String getPhoneCode() {
-        return (phoneCode==null)?"":phoneCode;
+        return (phoneCode == null) ? "" : phoneCode;
     }
 
     public void setPhoneCode(String phoneCode) {

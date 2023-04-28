@@ -45,7 +45,7 @@ public class Utils {
      * a depth-first order.
      */
     public static ArrayList<Node> getAllNodes(Parent root) {
-        ArrayList<Node> nodes = new ArrayList<Node>();
+        ArrayList<Node> nodes = new ArrayList<>();
         addAllDescendents(root, nodes);
         return nodes;
     }

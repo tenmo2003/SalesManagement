@@ -25,14 +25,14 @@
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="26.0" prefWidth="750.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <JFXButton contentDisplay="GRAPHIC_ONLY" onMouseClicked="#show" prefHeight="26.0" prefWidth="26.0">
-                           <graphic>
-                              <FontAwesomeIconView fill="#329efc" glyphName="UNDO" size="22" />
-                           </graphic>
-                        </JFXButton>
                         <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" onMouseClicked="#close">
                            <graphic>
                               <FontAwesomeIconView fill="#329efc" glyphName="ARROW_LEFT" size="22" />
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton contentDisplay="GRAPHIC_ONLY" onMouseClicked="#show" prefHeight="26.0" prefWidth="26.0">
+                           <graphic>
+                              <FontAwesomeIconView fill="#329efc" glyphName="UNDO" size="22" />
                            </graphic>
                         </JFXButton>
                      </children>

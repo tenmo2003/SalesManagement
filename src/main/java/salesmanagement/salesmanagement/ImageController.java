@@ -20,19 +20,21 @@ public class ImageController {
     public static Image newsIcon = getImage("news_icon.png");
     public static Image blueNewsIcon = getImage("blue_news_icon.png");
     public static Image settingsIcon = getImage("settings_icon.png");
-    public static Image blueSettingsIcon =getImage("blue_settings_icon.png");
+    public static Image blueSettingsIcon = getImage("blue_settings_icon.png");
     public static Image productIcon = getImage("product_icon.png");
-    public static Image blueProductIcon =getImage("blue_product_icon.png");
+    public static Image blueProductIcon = getImage("blue_product_icon.png");
     public static Image customerIcon = getImage("customer_icon.png");
     public static Image blueCustomerIcon = getImage("blue_customer_icon.png");
 
     public static Image getImage(String imageName) {
         return new Image(Objects.requireNonNull(SalesManagement.class.getResourceAsStream("/salesmanagement/salesmanagement/img/" + imageName)));
     }
+
     private final static String server = "files.000webhost.com";
     private final static int port = 21;
     private final static String user = "sama-support";
     private final static String pass = "sama-support";
+
     public static void uploadImage(String url, String remoteName) {
         FTPClient ftpClient = new FTPClient();
         try {
@@ -67,12 +69,18 @@ public class ImageController {
             }
         }
     }
+
     public static Image getImage(String remote_name, boolean fromFTP) {
-        if(fromFTP) {
+        if (fromFTP) {
             return new Image("https://sama-support.000webhostapp.com/" + remote_name);
         }
         return null;
     }
+
+    public static String getURL(String remote_name) {
+        return "https://sama-support.000webhostapp.com/" + remote_name;
+    }
+
     public static boolean isImageLoaded(String imageUrl) {
         try {
             URL url = new URL(imageUrl);
@@ -81,7 +89,6 @@ public class ImageController {
             int responseCode = connection.getResponseCode();
             return responseCode == HttpURLConnection.HTTP_OK;
         } catch (IOException e) {
-            e.printStackTrace();
             return false;
         }
     }

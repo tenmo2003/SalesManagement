@@ -34,38 +34,41 @@
                         </Label>
                         <ProgressIndicator fx:id="loadingIndicator" prefHeight="38.0" prefWidth="32.0" />
                      </children>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
                   </HBox>
                   <HBox>
                      <children>
-                        <JFXButton contentDisplay="GRAPHIC_ONLY" onMouseClicked="#show" prefHeight="26.0" prefWidth="26.0">
-                           <graphic>
-                              <FontAwesomeIconView fill="#329efc" glyphName="UNDO" size="22" />
-                           </graphic>
-                        </JFXButton>
                         <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" onMouseClicked="#close">
                            <graphic>
                               <FontAwesomeIconView fill="#329efc" glyphName="ARROW_LEFT" size="22" />
                            </graphic>
                         </JFXButton>
+                        <JFXButton contentDisplay="GRAPHIC_ONLY" onMouseClicked="#show" prefHeight="26.0" prefWidth="26.0">
+                           <graphic>
+                              <FontAwesomeIconView fill="#329efc" glyphName="UNDO" size="22" />
+                           </graphic>
+                        </JFXButton>
                      </children>
                   </HBox>
                </children>
+               <VBox.margin>
+                  <Insets left="30.0" right="30.0" />
+               </VBox.margin>
             </HBox>
-            <ScrollPane fitToHeight="true" fitToWidth="true" focusTraversable="false" VBox.vgrow="ALWAYS">
+            <ScrollPane fx:id="employeeInfoBox" fitToHeight="true" fitToWidth="true" focusTraversable="false" VBox.vgrow="ALWAYS">
                <content>
-                  <VBox fx:id="detailsInfoBox" alignment="TOP_CENTER" prefHeight="556.0" prefWidth="1101.0" spacing="20.0">
+                  <VBox fx:id="detailsInfoBox" alignment="TOP_CENTER" prefHeight="556.0" prefWidth="1101.0">
                      <children>
                         <StackPane alignment="CENTER_RIGHT" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                            <children>
-                              <HBox alignment="CENTER_RIGHT">
-                                 <children>
-                                    <JFXButton fx:id="saveInfoButton" onMouseClicked="#saveEmployeeInfo" text="SAVE" visible="false" />
-                                    <JFXButton fx:id="editInfoButton" onMouseClicked="#editEmployeeInfo" text="EDIT" visible="false" />
-                                 </children>
-                              </HBox>
+                              <JFXButton fx:id="editButton" onMouseClicked="#editEmployeeInfo" text="EDIT" visible="false" StackPane.alignment="CENTER_RIGHT" />
+                              <JFXButton fx:id="saveButton" onMouseClicked="#saveEmployeeInfo" text="SAVE" visible="false" StackPane.alignment="CENTER_RIGHT" />
+                              <JFXButton fx:id="addButton" onMouseClicked="#addNewEmployee" text="ADD" visible="false" StackPane.alignment="CENTER_RIGHT" />
                            </children>
                            <VBox.margin>
-                              <Insets right="30.0" />
+                              <Insets bottom="10.0" right="30.0" />
                            </VBox.margin>
                         </StackPane>
                         <HBox prefHeight="517.0" prefWidth="1576.0" spacing="30.0" VBox.vgrow="ALWAYS">
@@ -74,45 +77,45 @@
                                  <content>
                                     <VBox prefHeight="474.0" prefWidth="646.0" spacing="15.0">
                                        <children>
-                                          <VBox>
+                                          <VBox VBox.vgrow="ALWAYS">
                                              <children>
                                                 <Label prefHeight="28.0" prefWidth="146.0" text="Last Name*">
                                                    <font>
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
                                                 </Label>
-                                                <TextField fx:id="lastNameTextField">
+                                                <TextField fx:id="lastNameTextField" style="-fx-border-color: transparent;" VBox.vgrow="NEVER">
                                                    <font>
                                                       <Font size="15.0" />
                                                    </font>
                                                 </TextField>
                                              </children>
                                           </VBox>
-                                          <VBox>
+                                          <VBox VBox.vgrow="ALWAYS">
                                              <children>
                                                 <Label prefHeight="28.0" prefWidth="146.0" text="First Name*">
                                                    <font>
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
                                                 </Label>
-                                                <TextField fx:id="firstNameTextField">
+                                                <TextField fx:id="firstNameTextField" style="-fx-border-color: transparent;" VBox.vgrow="NEVER">
                                                    <font>
                                                       <Font size="15.0" />
                                                    </font>
                                                 </TextField>
                                              </children>
                                           </VBox>
-                                          <VBox>
+                                          <VBox prefHeight="86.0" prefWidth="725.0" VBox.vgrow="ALWAYS">
                                              <children>
                                                 <Label prefHeight="28.0" prefWidth="146.0" text="Birth Date">
                                                    <font>
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
                                                 </Label>
-                                                <DatePicker fx:id="birthDatePicker" prefHeight="26.0" prefWidth="745.0" stylesheets="@../date_picker.css" />
+                                                <DatePicker fx:id="birthDatePicker" prefHeight="47.0" prefWidth="725.0" style="-fx-border-color: transparent;" stylesheets="@../date_picker.css" />
                                              </children>
                                           </VBox>
-                                          <VBox>
+                                          <VBox VBox.vgrow="ALWAYS">
                                              <children>
                                                 <Label prefHeight="28.0" prefWidth="146.0" text="Gender">
                                                    <font>
@@ -141,7 +144,7 @@
                                                 </HBox>
                                              </children>
                                           </VBox>
-                                          <VBox>
+                                          <VBox VBox.vgrow="ALWAYS">
                                              <children>
                                                 <Label prefHeight="28.0" prefWidth="146.0" text="Photo">
                                                    <font>
@@ -150,10 +153,10 @@
                                                 </Label>
                                                 <HBox alignment="CENTER_LEFT" spacing="10.0">
                                                    <children>
-                                                      <JFXButton onMouseClicked="#uploadAvatar" text="UPLOAD" />
-                                                      <StackPane prefHeight="110.0" prefWidth="24.0">
+                                                      <JFXButton fx:id="uploadAvatarButton" onMouseClicked="#uploadAvatar" text="UPLOAD" />
+                                                      <StackPane prefHeight="110.0" prefWidth="30.0">
                                                          <children>
-                                                            <ImageView fx:id="avatar" fitHeight="110.0" fitWidth="93.0" pickOnBounds="true" style="-fx-background-color: black;" />
+                                                            <ImageView fx:id="avatar" fitHeight="110.0" fitWidth="104.0" pickOnBounds="true" />
                                                             <StackPane fx:id="loadingAvatar" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: transparent;" StackPane.alignment="CENTER" />
                                                          </children>
                                                       </StackPane>
@@ -161,14 +164,14 @@
                                                 </HBox>
                                              </children>
                                           </VBox>
-                                          <VBox>
+                                          <VBox VBox.vgrow="ALWAYS">
                                              <children>
                                                 <Label prefHeight="28.0" prefWidth="146.0" text="Status">
                                                    <font>
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
                                                 </Label>
-                                                <ComboBox fx:id="statusBox" prefWidth="150.0" promptText="ACTIVE" style="-fx-font-size: 15;" />
+                                                <ComboBox fx:id="statusBox" prefWidth="150.0" promptText="ACTIVE" style="-fx-font-size: 15; -fx-padding: 1 1 1 1;" />
                                              </children>
                                           </VBox>
                                        </children>
@@ -182,7 +185,7 @@
                                  <content>
                                     <VBox prefHeight="400.0" prefWidth="746.0" spacing="15.0">
                                        <children>
-                                          <VBox>
+                                          <VBox VBox.vgrow="ALWAYS">
                                              <children>
                                                 <Label prefHeight="28.0" prefWidth="146.0" text="Email">
                                                    <font>
@@ -191,32 +194,31 @@
                                                 </Label>
                                                 <HBox alignment="CENTER" prefHeight="30.0" prefWidth="628.0" spacing="20.0">
                                                    <children>
-                                                      <TextField fx:id="emailTextField" HBox.hgrow="ALWAYS">
+                                                      <TextField fx:id="emailTextField" style="-fx-border-color: transparent;" HBox.hgrow="ALWAYS">
                                                          <font>
                                                             <Font size="15.0" />
                                                          </font>
                                                       </TextField>
-                                                      <JFXButton fx:id="verifyButton" alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="94.0" styleClass="text-field-box" text="VERIFY NOW" HBox.hgrow="ALWAYS" />
                                                    </children>
                                                 </HBox>
                                              </children>
                                           </VBox>
-                                          <HBox spacing="20.0">
+                                          <VBox prefHeight="58.0" prefWidth="158.0">
                                              <children>
-                                                <VBox prefHeight="58.0" prefWidth="158.0">
-                                                   <children>
-                                                      <Label prefHeight="28.0" prefWidth="122.0" text="Phone Code" VBox.vgrow="ALWAYS">
-                                                         <font>
-                                                            <Font name="System Bold" size="15.0" />
-                                                         </font>
-                                                         <VBox.margin>
-                                                            <Insets />
-                                                         </VBox.margin>
-                                                      </Label>
-                                                      <ComboBox fx:id="phoneCodeBox" prefWidth="150.0" promptText="+84 (VN)" style="-fx-font-size: 15;" />
-                                                   </children>
-                                                </VBox>
-                                                <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+                                                <Label prefHeight="28.0" prefWidth="122.0" text="Phone Code" VBox.vgrow="ALWAYS">
+                                                   <font>
+                                                      <Font name="System Bold" size="15.0" />
+                                                   </font>
+                                                   <VBox.margin>
+                                                      <Insets />
+                                                   </VBox.margin>
+                                                </Label>
+                                                <ComboBox fx:id="phoneCodeBox" prefWidth="150.0" promptText="+84 (VN)" style="-fx-font-size: 15; -fx-padding: 1 1 1 1;" />
+                                             </children>
+                                          </VBox>
+                                          <HBox prefHeight="36.0" prefWidth="725.0" spacing="20.0" VBox.vgrow="ALWAYS">
+                                             <children>
+                                                <VBox prefHeight="98.0" prefWidth="546.0" HBox.hgrow="ALWAYS">
                                                    <children>
                                                       <Label prefHeight="28.0" prefWidth="146.0" text="Phone No." VBox.vgrow="ALWAYS">
                                                          <font>
@@ -226,7 +228,7 @@
                                                             <Insets />
                                                          </VBox.margin>
                                                       </Label>
-                                                      <TextField fx:id="phoneNumberTextField">
+                                                      <TextField fx:id="phoneNumberTextField" prefHeight="0.0" prefWidth="546.0" style="-fx-border-color: transparent;">
                                                          <font>
                                                             <Font size="15.0" />
                                                          </font>
@@ -238,28 +240,28 @@
                                                 <Insets />
                                              </VBox.margin>
                                           </HBox>
-                                          <VBox>
+                                          <VBox VBox.vgrow="ALWAYS">
                                              <children>
                                                 <Label prefHeight="28.0" prefWidth="146.0" text="Username">
                                                    <font>
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
                                                 </Label>
-                                                <TextField fx:id="usernameTextField">
+                                                <TextField fx:id="usernameTextField" style="-fx-border-color: transparent;">
                                                    <font>
                                                       <Font size="15.0" />
                                                    </font>
                                                 </TextField>
                                              </children>
                                           </VBox>
-                                          <VBox>
+                                          <VBox VBox.vgrow="ALWAYS">
                                              <children>
-                                                <Label prefHeight="28.0" prefWidth="146.0" text="PASSWORD">
+                                                <Label prefHeight="28.0" prefWidth="146.0" text="Password">
                                                    <font>
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
                                                 </Label>
-                                                <PasswordField fx:id="passwordField">
+                                                <PasswordField fx:id="passwordField" style="-fx-border-color: transparent;">
                                                    <font>
                                                       <Font size="15.0" />
                                                    </font>
@@ -275,12 +277,12 @@
                               </TitledPane>
                            </children>
                            <VBox.margin>
-                              <Insets left="30.0" right="30.0" />
+                              <Insets bottom="20.0" left="30.0" right="30.0" />
                            </VBox.margin>
                         </HBox>
                         <HBox prefHeight="517.0" prefWidth="1576.0" spacing="30.0">
                            <children>
-                              <TitledPane animated="false" collapsible="false" prefHeight="434.0" prefWidth="721.0" text="Company Details" HBox.hgrow="ALWAYS">
+                              <TitledPane animated="false" collapsible="false" prefHeight="440.0" prefWidth="722.0" text="Company Details" HBox.hgrow="ALWAYS">
                                  <content>
                                     <VBox prefHeight="326.0" prefWidth="639.0" spacing="15.0">
                                        <children>
@@ -291,7 +293,7 @@
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
                                                 </Label>
-                                                <TextField fx:id="employeeCodeTextField" disable="true">
+                                                <TextField fx:id="employeeCodeTextField" disable="true" style="-fx-border-color: transparent;">
                                                    <font>
                                                       <Font size="15.0" />
                                                    </font>
@@ -305,11 +307,20 @@
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
                                                 </Label>
-                                                <TextField fx:id="officeCodeTextField">
-                                                   <font>
-                                                      <Font size="15.0" />
-                                                   </font>
-                                                </TextField>
+                                                <HBox>
+                                                   <children>
+                                                      <TextField fx:id="officeCodeTextField" style="-fx-border-color: transparent;" HBox.hgrow="ALWAYS">
+                                                         <font>
+                                                            <Font size="15.0" />
+                                                         </font>
+                                                      </TextField>
+                                                      <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY">
+                                                         <graphic>
+                                                            <FontAwesomeIconView glyphName="SEARCH" size="20" />
+                                                         </graphic>
+                                                      </JFXButton>
+                                                   </children>
+                                                </HBox>
                                              </children>
                                           </VBox>
                                           <VBox>
@@ -319,7 +330,7 @@
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
                                                 </Label>
-                                                <ComboBox fx:id="accessibilityBox" prefWidth="150.0" promptText="Employee" style="-fx-font-size: 15;" />
+                                                <ComboBox fx:id="accessibilityBox" prefWidth="150.0" promptText="Employee" style="-fx-font-size: 15; -fx-padding: 1 1 1 1;" />
                                              </children>
                                           </VBox>
                                           <VBox>
@@ -331,7 +342,7 @@
                                                 </Label>
                                                 <HBox>
                                                    <children>
-                                                      <TextField fx:id="supervisorTextField" HBox.hgrow="ALWAYS">
+                                                      <TextField fx:id="supervisorTextField" style="-fx-border-color: transparent;" HBox.hgrow="ALWAYS">
                                                          <font>
                                                             <Font size="15.0" />
                                                          </font>
@@ -352,7 +363,7 @@
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
                                                 </Label>
-                                                <DatePicker fx:id="joiningDatePicker" prefHeight="26.0" prefWidth="745.0" stylesheets="@../date_picker.css" />
+                                                <DatePicker fx:id="joiningDatePicker" prefHeight="26.0" prefWidth="745.0" style="-fx-border-color: transparent;" stylesheets="@../date_picker.css" />
                                              </children>
                                           </VBox>
                                           <VBox>
@@ -362,7 +373,7 @@
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
                                                 </Label>
-                                                <DatePicker fx:id="lastWorkingDatePicker" prefHeight="26.0" prefWidth="745.0" stylesheets="@../date_picker.css" />
+                                                <DatePicker fx:id="lastWorkingDatePicker" disable="true" prefHeight="26.0" prefWidth="745.0" style="-fx-border-color: transparent;" stylesheets="@../date_picker.css" />
                                              </children>
                                           </VBox>
                                        </children>
@@ -412,7 +423,7 @@
                                     </VBox>
                                  </content>
                                  <HBox.margin>
-                                    <Insets left="15.0" />
+                                    <Insets />
                                  </HBox.margin>
                               </TitledPane>
                            </children>
@@ -420,7 +431,6 @@
                               <Insets left="30.0" right="30.0" />
                            </VBox.margin>
                         </HBox>
-                        <JFXButton fx:id="saveNewEmployeeButton" onMouseClicked="#saveNewEmployee" text="ADD NEW" visible="false" />
                      </children>
                      <padding>
                         <Insets bottom="20.0" />
@@ -428,12 +438,12 @@
                   </VBox>
                </content>
                <VBox.margin>
-                  <Insets bottom="-10.0" left="-30.0" right="-30.0" />
+                  <Insets bottom="-10.0" />
                </VBox.margin>
             </ScrollPane>
          </children>
          <StackPane.margin>
-            <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
+            <Insets bottom="10.0" top="10.0" />
          </StackPane.margin>
       </VBox>
    </children>
