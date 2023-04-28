@@ -45,6 +45,7 @@ public class AccountActivityLogController extends ViewController {
     Employee user;
     AccountActivityLogFilterViewController accountActivityLogFilterViewController;
     SortedList<Action> sortedAndFilteredActions;
+    private boolean isLoading = false;
 
     public void setUser(Employee user) {
         this.user = user;
@@ -71,33 +72,37 @@ public class AccountActivityLogController extends ViewController {
 
     @Override
     public void show() {
-        super.show();
-        if (!actionsTableConfigured) {
-            actionsTableConfigured = true;
-            double actionsTableWidth = actionsTable.getWidth();
-            descriptionColumn.setMinWidth(0.5 * actionsTableWidth);
-            timeColumn.setMinWidth(0.2 * actionsTableWidth);
-            actionIDColumn.setMinWidth(0.1 * actionsTableWidth);
-            resultColumn.setMinWidth(0.2 * actionsTableWidth);
-        }
-        List<Action> actions = new ArrayList<>();
-        runTask(() -> {
-            String query = "SELECT * FROM activityLog WHERE userID = " + user.getEmployeeNumber();
-            ResultSet actionsSet = sqlConnection.getDataQuery(query);
-            try {
-                while (actionsSet.next()) {
-                    actions.add(new Action(actionsSet));
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+        if (!isLoading) {
+            isLoading = true;
+            super.show();
+            if (!actionsTableConfigured) {
+                actionsTableConfigured = true;
+                double actionsTableWidth = actionsTable.getWidth();
+                descriptionColumn.setMinWidth(0.5 * actionsTableWidth);
+                timeColumn.setMinWidth(0.2 * actionsTableWidth);
+                actionIDColumn.setMinWidth(0.1 * actionsTableWidth);
+                resultColumn.setMinWidth(0.2 * actionsTableWidth);
             }
+            List<Action> actions = new ArrayList<>();
+            runTask(() -> {
+                String query = "SELECT * FROM activityLog WHERE userID = " + user.getEmployeeNumber();
+                ResultSet actionsSet = sqlConnection.getDataQuery(query);
+                try {
+                    while (actionsSet.next()) {
+                        actions.add(new Action(actionsSet));
+                    }
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
 
-            ObservableList<Action> actionObservableList = FXCollections.observableArrayList(actions);
-            accountActivityLogFilterViewController.setActionFilteredList(new FilteredList<>(actionObservableList));
-            sortedAndFilteredActions = new SortedList<>(accountActivityLogFilterViewController.getActionFilteredList());
-        }, () -> {
-            actionsTable.setItems(sortedAndFilteredActions);
-        }, loadingIndicator, null);
+                ObservableList<Action> actionObservableList = FXCollections.observableArrayList(actions);
+                accountActivityLogFilterViewController.setActionFilteredList(new FilteredList<>(actionObservableList));
+                sortedAndFilteredActions = new SortedList<>(accountActivityLogFilterViewController.getActionFilteredList());
+            }, () -> {
+                actionsTable.setItems(sortedAndFilteredActions);
+                isLoading = false;
+            }, loadingIndicator, null);
+        }
     }
 
     @FXML

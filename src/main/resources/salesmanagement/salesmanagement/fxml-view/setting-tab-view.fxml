@@ -9,30 +9,38 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="root" prefHeight="743.0" prefWidth="912.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.SettingTabViewController">
+<StackPane fx:id="root" prefHeight="743.0" prefWidth="912.0" style="-fx-background-color: transparent;" stylesheets="@../style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.SettingTabViewController">
    <children>
       <VBox prefHeight="683.0" prefWidth="912.0">
          <children>
-            <StackPane prefHeight="40.0" prefWidth="726.0">
+            <HBox>
                <children>
-                  <HBox alignment="CENTER_LEFT">
+                  <HBox alignment="CENTER_LEFT" prefHeight="32.0" prefWidth="339.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <Label text="Account Setting" />
-                        <ProgressIndicator fx:id="loadingIndicator" />
+                        <Label id="top_label" prefHeight="32.0" prefWidth="214.0" text="Account Setting" />
+                        <ProgressIndicator fx:id="loadingIndicator" prefHeight="182.0" prefWidth="306.0" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="26.0" prefWidth="750.0" HBox.hgrow="ALWAYS">
+                     <children>
+                        <JFXButton contentDisplay="GRAPHIC_ONLY" onMouseClicked="#show" prefHeight="26.0" prefWidth="26.0">
+                           <graphic>
+                              <FontAwesomeIconView fill="#329efc" glyphName="UNDO" size="22" />
+                           </graphic>
+                        </JFXButton>
                      </children>
                   </HBox>
                </children>
-            </StackPane>
+            </HBox>
             <StackPane prefHeight="50.0" prefWidth="912.0">
                <children>
-                  <JFXButton onMouseClicked="#showAccountActivityLog" text="SHOW ACCOUNT ACTIVITY LOG" StackPane.alignment="CENTER_LEFT" />
+                  <JFXButton onMouseClicked="#showAccountActivityLog" text="SHOW ACCOUNT ACTIVITY LOG" StackPane.alignment="CENTER_RIGHT" />
                </children>
             </StackPane>
             <HBox alignment="TOP_CENTER" prefHeight="495.0" prefWidth="912.0" spacing="200.0">
@@ -47,7 +55,7 @@
                               <Label text="Full Name" />
                               <HBox alignment="CENTER_LEFT" prefWidth="450.0" spacing="10.0">
                                  <children>
-                                    <TextField fx:id="fullNameTextField" prefHeight="26.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="fullNameTextField" disable="true" prefHeight="26.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
                                        <font>
                                           <Font size="15.0" />
                                        </font>
@@ -59,7 +67,7 @@
                         <VBox prefHeight="43.0" prefWidth="255.0">
                            <children>
                               <Label text="Birth Date" />
-                              <DatePicker fx:id="birthDatePicker" prefHeight="26.0" prefWidth="490.0" stylesheets="@../date_picker.css" VBox.vgrow="ALWAYS" />
+                              <DatePicker fx:id="birthDatePicker" disable="true" prefHeight="26.0" prefWidth="490.0" stylesheets="@../date_picker.css" VBox.vgrow="ALWAYS" />
                               <HBox alignment="CENTER_LEFT" prefWidth="450.0" spacing="10.0" />
                            </children>
                         </VBox>
@@ -68,7 +76,7 @@
                               <Label text="Office Code" />
                               <HBox alignment="CENTER_LEFT" prefWidth="450.0" spacing="10.0">
                                  <children>
-                                    <TextField fx:id="officeCodeTextField" prefHeight="26.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="officeCodeTextField" disable="true" prefHeight="26.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
                                        <font>
                                           <Font size="15.0" />
                                        </font>
@@ -82,7 +90,7 @@
                               <Label text="Supervisor Code" />
                               <HBox alignment="CENTER_LEFT" prefWidth="450.0" spacing="10.0">
                                  <children>
-                                    <TextField fx:id="supervisorCode" prefHeight="26.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="supervisorCode" disable="true" prefHeight="26.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
                                        <font>
                                           <Font size="15.0" />
                                        </font>
@@ -94,14 +102,14 @@
                         <VBox>
                            <children>
                               <Label text="Accessibility" />
-                              <ComboBox fx:id="accessibilityComboBox" prefHeight="53.0" prefWidth="150.0" />
+                              <ComboBox fx:id="accessibilityComboBox" disable="true" prefHeight="53.0" prefWidth="150.0" style="-fx-font-size: 15;" />
                               <HBox alignment="CENTER_LEFT" prefWidth="450.0" spacing="10.0" />
                            </children>
                         </VBox>
                         <VBox>
                            <children>
                               <Label text="Phone Code" />
-                              <ComboBox fx:id="phoneCodeComboBox" prefWidth="150.0" />
+                              <ComboBox fx:id="phoneCodeComboBox" disable="true" prefWidth="150.0" style="-fx-font-size: 15;" />
                            </children>
                         </VBox>
                         <VBox>
@@ -109,7 +117,7 @@
                               <Label text="Phone Number" />
                               <HBox alignment="CENTER_LEFT" prefWidth="450.0" spacing="10.0">
                                  <children>
-                                    <TextField fx:id="phoneNumberTextField" prefHeight="26.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
+                                    <TextField fx:id="phoneNumberTextField" disable="true" prefHeight="26.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
                                        <font>
                                           <Font size="15.0" />
                                        </font>
@@ -121,14 +129,14 @@
                         <VBox>
                            <children>
                               <Label text="Joining Date" />
-                              <DatePicker fx:id="joinngDatePicker" prefHeight="26.0" prefWidth="415.0" stylesheets="@../date_picker.css" />
+                              <DatePicker fx:id="joinngDatePicker" disable="true" prefHeight="26.0" prefWidth="415.0" stylesheets="@../date_picker.css" />
                               <HBox alignment="CENTER_LEFT" prefWidth="450.0" spacing="10.0" />
                            </children>
                         </VBox>
                         <VBox>
                            <children>
                               <Label text="Last Working Date" />
-                              <DatePicker fx:id="lastWorkingDatePicker" prefHeight="26.0" prefWidth="423.0" stylesheets="@../date_picker.css" />
+                              <DatePicker fx:id="lastWorkingDatePicker" disable="true" prefHeight="26.0" prefWidth="423.0" stylesheets="@../date_picker.css" />
                               <HBox alignment="CENTER_LEFT" prefWidth="450.0" spacing="10.0" />
                            </children>
                         </VBox>
@@ -182,11 +190,7 @@
                            </children>
                         </VBox>
                         <Label text="Verify your email" />
-                        <ImageView fx:id="avatarImageView" fitHeight="109.0" fitWidth="97.0" onMouseClicked="#changeAvatar" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../img/sample_avatar.jpg" />
-                           </image>
-                        </ImageView>
+                        <ImageView fx:id="avatarImageView" fitHeight="109.0" fitWidth="97.0" onMouseClicked="#changeAvatar" pickOnBounds="true" preserveRatio="true" />
                      </children>
                   </VBox>
                </children>

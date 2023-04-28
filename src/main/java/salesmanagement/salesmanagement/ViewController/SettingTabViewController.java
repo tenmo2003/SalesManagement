@@ -3,23 +3,17 @@ package salesmanagement.salesmanagement.ViewController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
 import salesmanagement.salesmanagement.ImageController;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesManagement;
-import salesmanagement.salesmanagement.Utils;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import static salesmanagement.salesmanagement.SceneController.SceneController.runTask;
@@ -38,9 +32,6 @@ public class SettingTabViewController extends ViewController {
 
     @FXML
     private TextField emailTextField;
-
-    @FXML
-    private VBox fixedInfoBox;
 
     @FXML
     private TextField fullNameTextField;
@@ -83,16 +74,6 @@ public class SettingTabViewController extends ViewController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        // Lock all nodes editable in fixed info box.
-        List<Class> disableNodeClasses = new ArrayList<>(Arrays.asList(TextField.class, PasswordField.class, DatePicker.class, ComboBox.class));
-        for (Node node : Utils.getAllNodes(fixedInfoBox)) {
-            for (Class disableNodeClass : disableNodeClasses) {
-                if (disableNodeClass.isInstance(node)) {
-                    node.setDisable(true);
-                }
-            }
-        }
     }
 
     @FXML
@@ -113,8 +94,10 @@ public class SettingTabViewController extends ViewController {
 
     @Override
     public void show() {
-        super.show();
+        if (isShowing) return;
+        isShowing = true;
 
+        super.show();
         runTask(() -> {
             String query = "SELECT * FROM employees WHERE employeeNumber = " + user.getEmployeeNumber();
             ResultSet employeeInfo = sqlConnection.getDataQuery(query);
@@ -141,9 +124,9 @@ public class SettingTabViewController extends ViewController {
                     throw new RuntimeException(e);
                 }
             });
-            avatarImageView.setImage(ImageController.getImage("avatar_employee_" + user.getEmployeeNumber() + ".png", true));
-        }, null, loadingIndicator, null);
-
-
+        }, () -> {
+            isShowing = false;
+        }, loadingIndicator, null);
+        runTask(() -> avatarImageView.setImage(ImageController.getImage("avatar_employee_" + user.getEmployeeNumber() + ".png", true)), null, null, null);
     }
 }

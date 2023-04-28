@@ -14,6 +14,7 @@ public abstract class ViewController implements Initializable {
     protected Stage stage;
     @FXML
     protected StackPane root;
+    protected boolean isShowing = false;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

@@ -6,31 +6,46 @@ import salesmanagement.salesmanagement.SQLConnection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
  * @since 1.3
  */
 public class Employee {
-    private int employeeNumber;
-    private String lastName;
-    private String firstName;
-    private Label statusLabel;
-    private String phone;
-    private String name;
-    private String email;
-    private String officeCode;
-    private int reportsTo;
-    private String jobTitle;
-    private String username;
-    private String password;
+    private boolean isNewUser = true;
+
+    public boolean isNewUser() {
+        return isNewUser;
+    }
+
+    public void setNewUser(boolean newUser) {
+        isNewUser = newUser;
+    }
+
+    private int employeeNumber = -1;
+    private String lastName = "";
+    private String firstName = "";
+    private Label statusLabel = new Label("ACTIVE");
+    private String phone = "";
+    private String name = "";
+    private String email = "";
+    private String officeCode = "";
+    private int reportsTo = -1;
+    private String jobTitle = "Employee";
+    private String username = "";
+    private String password = "";
     private static SQLConnection sqlConnection;
-    private String gender;
-    private LocalDate birthDate;
-    private boolean mailVerified;
-    private String phoneCode;
-    private LocalDate lastWorkingDate;
-    private LocalDate joiningDate;
+    private String gender = "";
+    private LocalDate birthDate = null;
+    private boolean mailVerified = false;
+    private String phoneCode = "+84 (VN)";
+    private LocalDate lastWorkingDate = null;
+    private LocalDate joiningDate = null;
+
+    public Employee() {
+
+    }
 
     /**
      * This constructor is used to create an employee object
@@ -38,6 +53,7 @@ public class Employee {
      * without affecting database connection variables.
      */
     public Employee(ResultSet employeeRecord) {
+        isNewUser = false;
         try {
             employeeNumber = employeeRecord.getInt("employeeNumber");
             lastName = employeeRecord.getString("lastName");
@@ -101,6 +117,7 @@ public class Employee {
     }
 
     public String getFullName() {
+        if(isNewUser) return "";
         return lastName + " " + firstName;
     }
 
@@ -128,7 +145,7 @@ public class Employee {
     }
 
     public String getLastName() {
-        return lastName;
+        return (lastName==null)?"":lastName;
     }
 
     public void setLastName(String lastName) {
@@ -136,7 +153,7 @@ public class Employee {
     }
 
     public String getFirstName() {
-        return firstName;
+        return (firstName==null)?"":firstName;
     }
 
     public void setFirstName(String firstName) {
@@ -152,7 +169,7 @@ public class Employee {
     }
 
     public String getOfficeCode() {
-        return officeCode;
+        return (officeCode==null)?"":officeCode;
     }
 
     public void setOfficeCode(String officeCode) {
@@ -177,7 +194,7 @@ public class Employee {
 
 
     public String getStatus() {
-        if (statusLabel.getText() == null) return "";
+        if (statusLabel == null) return "ACTIVE";
         return statusLabel.getText();
     }
 
@@ -198,7 +215,7 @@ public class Employee {
     }
 
     public String getName() {
-        return name;
+        return (name==null)?"":name;
     }
 
     public void setName(String name) {
@@ -206,7 +223,7 @@ public class Employee {
     }
 
     public String getUsername() {
-        return username;
+        return (username==null)?"":username;
     }
 
     public void setUsername(String username) {
@@ -214,7 +231,7 @@ public class Employee {
     }
 
     public String getPassword() {
-        return password;
+        return (password == null) ? "" : password;
     }
 
     public void setPassword(String password) {
@@ -226,7 +243,7 @@ public class Employee {
     }
 
     public String getGender() {
-        return gender;
+        return (gender==null)?"":gender;
     }
 
     public void setGender(String gender) {
@@ -246,7 +263,7 @@ public class Employee {
     }
 
     public String getPhoneCode() {
-        return phoneCode;
+        return (phoneCode==null)?"":phoneCode;
     }
 
     public void setPhoneCode(String phoneCode) {

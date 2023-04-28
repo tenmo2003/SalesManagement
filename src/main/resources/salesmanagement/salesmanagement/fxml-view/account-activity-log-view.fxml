@@ -11,16 +11,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.control.tableview2.FilteredTableView?>
 
-
-<StackPane id="background_color" fx:id="root" prefHeight="618.0" prefWidth="855.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.AccountActivityLogController">
+<StackPane id="background_color" fx:id="root" prefHeight="618.0" prefWidth="855.0" stylesheets="@../style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.AccountActivityLogController">
    <children>
       <VBox>
          <children>
             <HBox>
                <children>
-                  <HBox alignment="CENTER_LEFT" prefHeight="26.0" prefWidth="345.0" HBox.hgrow="ALWAYS">
+                  <HBox alignment="CENTER_LEFT" prefHeight="32.0" prefWidth="646.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <Label prefHeight="12.0" prefWidth="109.0" text="Account Activity Log" />
+                        <Label id="top_label" prefHeight="32.0" prefWidth="228.0" text="Account Activity Log" HBox.hgrow="ALWAYS" />
                         <ProgressIndicator fx:id="loadingIndicator" prefHeight="26.0" prefWidth="41.0" />
                      </children>
                   </HBox>
