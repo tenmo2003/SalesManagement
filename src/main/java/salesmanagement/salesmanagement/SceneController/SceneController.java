@@ -10,7 +10,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import salesmanagement.salesmanagement.SQLConnection;
+import salesmanagement.salesmanagement.Utils.SQLConnection;
 
 public abstract class SceneController {
     SQLConnection sqlConnection;

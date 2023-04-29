@@ -1,10 +1,7 @@
 package salesmanagement.salesmanagement.SceneController;
 
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
-import com.google.i18n.phonenumbers.Phonenumber;
 import com.jfoenix.controls.*;
 import javafx.animation.AnimationTimer;
-import javafx.animation.Transition;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -19,14 +16,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -34,24 +29,24 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
 import javafx.stage.Screen;
-import javafx.util.Duration;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
-import org.controlsfx.control.tableview2.FilteredTableView;
-import salesmanagement.salesmanagement.ImageController;
-import salesmanagement.salesmanagement.NotificationCode;
-import salesmanagement.salesmanagement.NotificationSystem;
+
 import salesmanagement.salesmanagement.SalesComponent.*;
 import salesmanagement.salesmanagement.SalesManagement;
+import salesmanagement.salesmanagement.Utils.ImageController;
+import salesmanagement.salesmanagement.Utils.NotificationCode;
+import salesmanagement.salesmanagement.Utils.NotificationSystem;
 import salesmanagement.salesmanagement.ViewController.*;
+import salesmanagement.salesmanagement.ViewController.CustomersTab.CustomersTabViewController;
+import salesmanagement.salesmanagement.ViewController.EmployeesTab.EmployeesTabViewController;
+import salesmanagement.salesmanagement.ViewController.SettingsTab.SettingTabViewController;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
@@ -59,11 +54,6 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import static salesmanagement.salesmanagement.InputErrorCode.*;
-import static salesmanagement.salesmanagement.Utils.getAllNodes;
-import static salesmanagement.salesmanagement.Utils.shake;
 
 public class MainSceneController extends SceneController implements Initializable {
     @FXML
@@ -104,6 +94,7 @@ public class MainSceneController extends SceneController implements Initializabl
 
     SettingTabViewController settingTabViewController;
     EmployeesTabViewController employeesTabViewController;
+    CustomersTabViewController customersTabViewController;
     @FXML
     void goToCreateOrderTab() {
         tabPane.getSelectionModel().select(createOrderTab);
@@ -131,9 +122,8 @@ public class MainSceneController extends SceneController implements Initializabl
 
     @FXML
     void goToCustomersTab() {
-        initCustomers();
-
         tabPane.getSelectionModel().select(customersTab);
+        customersTabViewController.show();
     }
 
     @FXML
@@ -387,15 +377,20 @@ public class MainSceneController extends SceneController implements Initializabl
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            FXMLLoader loader = new FXMLLoader(SalesManagement.class.getResource("fxml-view/employees-tab-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(SalesManagement.class.getResource("fxml-view/employees-tab/employees-tab-view.fxml"));
             loader.load();
             employeesTabViewController = loader.getController();
             employeesOperationTab.setContent(employeesTabViewController.getRoot());
 
-            loader = new FXMLLoader(SalesManagement.class.getResource("fxml-view/setting-tab-view.fxml"));
+            loader = new FXMLLoader(SalesManagement.class.getResource("fxml-view/settings-tab/setting-tab-view.fxml"));
             loader.load();
             settingTabViewController = loader.getController();
             settingTab.setContent(settingTabViewController.getRoot());
+
+            loader = new FXMLLoader(SalesManagement.class.getResource("fxml-view/customers-tab/customers-tab-view.fxml"));
+            loader.load();
+            customersTabViewController = loader.getController();
+            customersTab.setContent(customersTabViewController.getRoot());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

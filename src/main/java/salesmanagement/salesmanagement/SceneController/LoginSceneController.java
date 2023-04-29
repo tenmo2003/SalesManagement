@@ -9,7 +9,6 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
@@ -19,9 +18,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.controlsfx.control.textfield.CustomPasswordField;
 import org.controlsfx.control.textfield.CustomTextField;
-import salesmanagement.salesmanagement.MailSender;
-import salesmanagement.salesmanagement.NotificationCode;
-import salesmanagement.salesmanagement.NotificationSystem;
+import salesmanagement.salesmanagement.Utils.MailSender;
+import salesmanagement.salesmanagement.Utils.NotificationCode;
+import salesmanagement.salesmanagement.Utils.NotificationSystem;
+
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

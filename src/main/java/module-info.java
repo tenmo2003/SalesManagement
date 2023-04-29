@@ -22,4 +22,12 @@ module salesmanagement.salesmanagement {
     opens salesmanagement.salesmanagement.SceneController to javafx.fxml;
     exports salesmanagement.salesmanagement.ViewController;
     opens salesmanagement.salesmanagement.ViewController to javafx.fxml;
+    exports salesmanagement.salesmanagement.ViewController.CustomersTab;
+    opens salesmanagement.salesmanagement.ViewController.CustomersTab to javafx.fxml;
+    exports salesmanagement.salesmanagement.ViewController.EmployeesTab;
+    opens salesmanagement.salesmanagement.ViewController.EmployeesTab to javafx.fxml;
+    exports salesmanagement.salesmanagement.ViewController.SettingsTab;
+    opens salesmanagement.salesmanagement.ViewController.SettingsTab to javafx.fxml;
+    exports salesmanagement.salesmanagement.Utils;
+    opens salesmanagement.salesmanagement.Utils to javafx.fxml;
 }

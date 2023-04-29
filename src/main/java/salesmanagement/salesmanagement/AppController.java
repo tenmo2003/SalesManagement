@@ -11,6 +11,8 @@ import javafx.stage.StageStyle;
 import org.burningwave.core.assembler.StaticComponentContainer;
 import salesmanagement.salesmanagement.SceneController.LoginSceneController;
 import salesmanagement.salesmanagement.SceneController.MainSceneController;
+import salesmanagement.salesmanagement.Utils.ImageController;
+import salesmanagement.salesmanagement.Utils.SQLConnection;
 
 import java.io.IOException;
 

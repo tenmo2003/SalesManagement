@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import salesmanagement.salesmanagement.SQLConnection;
+import salesmanagement.salesmanagement.Utils.SQLConnection;
 
 import java.net.URL;
 import java.util.ResourceBundle;

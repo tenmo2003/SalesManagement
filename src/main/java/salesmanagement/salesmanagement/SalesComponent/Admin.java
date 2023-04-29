@@ -1,6 +1,6 @@
 package salesmanagement.salesmanagement.SalesComponent;
 
-import salesmanagement.salesmanagement.SQLConnection;
+import salesmanagement.salesmanagement.Utils.SQLConnection;
 
 public class Admin extends Employee {
 
