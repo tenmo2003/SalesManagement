@@ -47,6 +47,7 @@ import salesmanagement.salesmanagement.ViewController.CustomersTab.CustomersTabV
 import salesmanagement.salesmanagement.ViewController.EmployeesTab.EmployeesTabViewController;
 import salesmanagement.salesmanagement.ViewController.SettingsTab.SettingTabViewController;
 
+import javax.xml.transform.Result;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
@@ -151,35 +152,56 @@ public class MainSceneController extends SceneController implements Initializabl
         final BarChart<String, Number> bc =
                 new BarChart<>(xAxis, yAxis);
         chartPane.getChildren().add(bc);
-        bc.setTitle("Country Summary");
-        xAxis.setLabel("Country");
-        yAxis.setLabel("Value");
+        bc.setTitle("Revenue Summary");
+        xAxis.setLabel("Time");
+        yAxis.setLabel("Revenue");
 
-        XYChart.Series series1 = new XYChart.Series();
-        series1.setName("2003");
-        series1.getData().add(new XYChart.Data("austria", 25601.34));
-        series1.getData().add(new XYChart.Data("brazil", 20148.82));
-        series1.getData().add(new XYChart.Data("france", 10000));
-        series1.getData().add(new XYChart.Data("italy", 35407.15));
-        series1.getData().add(new XYChart.Data("usa", 12000));
+        String query = "SELECT YEAR(months.month) AS year, " +
+                "MONTH(months.month) AS month, " +
+                "COALESCE(SUM(value), 0) AS revenue " +
+                "FROM ( SELECT DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL n MONTH) AS month " +
+                "FROM (SELECT 0 AS n UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5) AS numbers ) AS months " +
+                "LEFT JOIN orders " +
+                "ON YEAR(orderDate) = YEAR(months.month) AND MONTH(orderDate) = MONTH(months.month) " +
+                "WHERE months.month >= DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL 5 MONTH) " +
+                "GROUP BY YEAR(months.month), MONTH(months.month) " +
+                "ORDER BY year ASC, month ASC";
+        ResultSet rs = sqlConnection.getDataQuery(query);
+        try {
+            XYChart.Series<String, Number> series = new XYChart.Series<>();
+            while (rs.next()) {
+                series.getData().add(new XYChart.Data<>(rs.getString(2) + "-" + rs.getString(1), rs.getDouble(3)));
+            }
+            bc.getData().add(series);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-
-        XYChart.Series series2 = new XYChart.Series();
-        series2.setName("2004");
-        series2.getData().add(new XYChart.Data("austria", 57401.85));
-        series2.getData().add(new XYChart.Data("brazil", 41941.19));
-        series2.getData().add(new XYChart.Data("france", 45263.37));
-        series2.getData().add(new XYChart.Data("italy", 117320.16));
-        series2.getData().add(new XYChart.Data("usa", 14845.27));
-
-        XYChart.Series series3 = new XYChart.Series();
-        series3.setName("2005");
-        series3.getData().add(new XYChart.Data("austria", 45000.65));
-        series3.getData().add(new XYChart.Data("brazil", 44835.76));
-        series3.getData().add(new XYChart.Data("france", 18722.18));
-        series3.getData().add(new XYChart.Data("italy", 17557.31));
-        series3.getData().add(new XYChart.Data("usa", 92633.68));
-        bc.getData().addAll(series1, series2, series3);
+//        XYChart.Series series1 = new XYChart.Series();
+//        series1.setName("2003");
+//        series1.getData().add(new XYChart.Data("austria", 25601.34));
+//        series1.getData().add(new XYChart.Data("brazil", 20148.82));
+//        series1.getData().add(new XYChart.Data("france", 10000));
+//        series1.getData().add(new XYChart.Data("italy", 35407.15));
+//        series1.getData().add(new XYChart.Data("usa", 12000));
+//
+//
+//        XYChart.Series series2 = new XYChart.Series();
+//        series2.setName("2004");
+//        series2.getData().add(new XYChart.Data("austria", 57401.85));
+//        series2.getData().add(new XYChart.Data("brazil", 41941.19));
+//        series2.getData().add(new XYChart.Data("france", 45263.37));
+//        series2.getData().add(new XYChart.Data("italy", 117320.16));
+//        series2.getData().add(new XYChart.Data("usa", 14845.27));
+//
+//        XYChart.Series series3 = new XYChart.Series();
+//        series3.setName("2005");
+//        series3.getData().add(new XYChart.Data("austria", 45000.65));
+//        series3.getData().add(new XYChart.Data("brazil", 44835.76));
+//        series3.getData().add(new XYChart.Data("france", 18722.18));
+//        series3.getData().add(new XYChart.Data("italy", 17557.31));
+//        series3.getData().add(new XYChart.Data("usa", 92633.68));
+//        bc.getData().addAll(series1, series2, series3);
     }
     //endregion
 
@@ -585,8 +607,24 @@ public class MainSceneController extends SceneController implements Initializabl
             }
         });
 
+        plSuggestionList.setCellFactory(param -> new ListCell<>() {
+            private final JFXButton removeButton = new JFXButton("X");
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    setText(item);
+                    setGraphic(removeButton);
+                    removeButton.setOnAction(event -> getListView().getItems().remove(item));
+                }
+            }
+        });
+
         productLinePDetails.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > oldValue.length() && plSuggestionList.getItems().isEmpty()) {
+            if (oldValue.length() > 0 && newValue.length() > oldValue.length() && plSuggestionList.getItems().isEmpty()) {
 
             } else {
                 // Update the suggestion list based on the current input
@@ -785,6 +823,7 @@ public class MainSceneController extends SceneController implements Initializabl
 
         removeItemButton.setOnAction(event -> {
             removeItemButtonClicked = true;
+            NotificationSystem.throwNotification(NotificationCode.SUCCEED_DELETE_PRODUCT, stage);
             removeItems();
         });
 
@@ -891,6 +930,7 @@ public class MainSceneController extends SceneController implements Initializabl
                     // User clicked OK, so delete the item
                     String query = String.format("DELETE FROM customers WHERE customerNumber = %d", selected.getCustomerNumber());
                     sqlConnection.updateQuery(query);
+                    NotificationSystem.throwNotification(NotificationCode.SUCCEED_DELETE_CUSTOMER, stage);
                     initCustomers();
                 } else {
                     // User clicked Cancel or closed the dialog box, so do nothing
@@ -1081,11 +1121,8 @@ public class MainSceneController extends SceneController implements Initializabl
         customerNameInput.setEditable(true);
         phoneNumberInput.setEditable(true);
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Order edited successfully!", ButtonType.OK);
-        alert.setTitle(null);
-        alert.setHeaderText(null);
+        NotificationSystem.throwNotification(NotificationCode.SUCCEED_EDIT_ORDER, stage);
 
-        alert.showAndWait();
         goToOrdersTab();
     }
 
@@ -1357,49 +1394,46 @@ public class MainSceneController extends SceneController implements Initializabl
 
             int countOrd = -1;
             double totalValue = -1;
-            String customerRankCheck = "SELECT COUNT(*) AS num, SUM(value) AS totalValue" +
-                    "  FROM orders" +
-                    "  WHERE customerNumber = " + customerNumber +
-                    "    AND orderDate >= DATE_SUB(NOW(), INTERVAL 3 MONTH);";
-            result = sqlConnection.getDataQuery(customerRankCheck);
+            if (customerNumber != 6) {
+                String customerRankCheck = "SELECT COUNT(*) AS num, SUM(value) AS totalValue" +
+                        "  FROM orders" +
+                        "  WHERE customerNumber = " + customerNumber +
+                        "    AND orderDate >= DATE_SUB(NOW(), INTERVAL 3 MONTH);";
+                result = sqlConnection.getDataQuery(customerRankCheck);
 
-            try {
-                if (result.next()) {
-                    countOrd = result.getInt(1);
-                    totalValue = result.getDouble(2);
-                    String updateRank;
-                    if (countOrd >= 100 || totalValue >= 10000) {
-                        updateRank = String.format("UPDATE customers SET `rank` = 'Emerald' WHERE customerNumber = %d;", customerNumber);
-                        sqlConnection.updateQuery(updateRank);
-                    } else if (countOrd >= 40 || totalValue >= 5000) {
-                        updateRank = String.format("UPDATE customers SET `rank` = 'Diamond' WHERE customerNumber = %d;", customerNumber);
-                        sqlConnection.updateQuery(updateRank);
-                    } else if (countOrd >= 20 || totalValue >= 1500) {
-                        updateRank = String.format("UPDATE customers SET `rank` = 'Platinum' WHERE customerNumber = %d;", customerNumber);
-                        sqlConnection.updateQuery(updateRank);
-                    } else if (countOrd >= 10 || totalValue >= 1000) {
-                        updateRank = String.format("UPDATE customers SET `rank` = 'Gold' WHERE customerNumber = %d;", customerNumber);
-                        sqlConnection.updateQuery(updateRank);
-                    } else if (countOrd >= 3 || totalValue >= 300) {
-                        updateRank = String.format("UPDATE customers SET `rank` = 'Silver' WHERE customerNumber = %d;", customerNumber);
-                        sqlConnection.updateQuery(updateRank);
-                    } else {
-                        updateRank = String.format("UPDATE customers SET `rank` = 'Membership' WHERE customerNumber = %d", customerNumber);
-                        sqlConnection.updateQuery(updateRank);
+                try {
+                    if (result.next()) {
+                        countOrd = result.getInt(1);
+                        totalValue = result.getDouble(2);
+                        String updateRank;
+                        if (countOrd >= 100 || totalValue >= 10000) {
+                            updateRank = String.format("UPDATE customers SET `rank` = 'Emerald' WHERE customerNumber = %d;", customerNumber);
+                            sqlConnection.updateQuery(updateRank);
+                        } else if (countOrd >= 40 || totalValue >= 5000) {
+                            updateRank = String.format("UPDATE customers SET `rank` = 'Diamond' WHERE customerNumber = %d;", customerNumber);
+                            sqlConnection.updateQuery(updateRank);
+                        } else if (countOrd >= 20 || totalValue >= 1500) {
+                            updateRank = String.format("UPDATE customers SET `rank` = 'Platinum' WHERE customerNumber = %d;", customerNumber);
+                            sqlConnection.updateQuery(updateRank);
+                        } else if (countOrd >= 10 || totalValue >= 1000) {
+                            updateRank = String.format("UPDATE customers SET `rank` = 'Gold' WHERE customerNumber = %d;", customerNumber);
+                            sqlConnection.updateQuery(updateRank);
+                        } else if (countOrd >= 3 || totalValue >= 300) {
+                            updateRank = String.format("UPDATE customers SET `rank` = 'Silver' WHERE customerNumber = %d;", customerNumber);
+                            sqlConnection.updateQuery(updateRank);
+                        } else {
+                            updateRank = String.format("UPDATE customers SET `rank` = 'Membership' WHERE customerNumber = %d", customerNumber);
+                            sqlConnection.updateQuery(updateRank);
+                        }
                     }
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
                 }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
             }
-
         }, null, progressIndicator, createOrderTab.getTabPane());
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Order created successfully!", ButtonType.OK);
-        alert.setTitle(null);
-        alert.setHeaderText(null);
-        alert.setGraphic(null);
+        NotificationSystem.throwNotification(NotificationCode.SUCCEED_CREATE_ORDER, stage);
 
-        alert.showAndWait();
         goToOrdersTab();
     }
 
@@ -1542,6 +1576,8 @@ public class MainSceneController extends SceneController implements Initializabl
             deleteQuery = "DELETE FROM orders WHERE orderNumber = " + orderNumber;
             // Delete the order from the database
             sqlConnection.updateQuery(deleteQuery);
+
+            NotificationSystem.throwNotification(NotificationCode.SUCCEED_DELETE_ORDER, stage);
 
             initOrders();
         }
@@ -1687,11 +1723,7 @@ public class MainSceneController extends SceneController implements Initializabl
                     Integer.parseInt(inStockPDetails.getText()), Double.parseDouble(buyPricePDetails.getText()), Double.parseDouble(sellPricePDetails.getText()));
             productsTable.getItems().add(0, product);
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Product added successfully!", ButtonType.OK);
-            alert.setTitle(null);
-            alert.setHeaderText(null);
-
-            alert.showAndWait();
+            NotificationSystem.throwNotification(NotificationCode.SUCCEED_CREATE_PRODUCT, stage);
 
             bgPaneProducts.setVisible(false);
             productDetailsPane.setVisible(false);
@@ -1735,10 +1767,7 @@ public class MainSceneController extends SceneController implements Initializabl
             selected.setProductName(productNamePDetails.getText());
             selected.setProductLine(productLinePDetails.getText());
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Product details saved successfully!", ButtonType.OK);
-            alert.setTitle(null);
-            alert.setHeaderText(null);
-            alert.showAndWait();
+            NotificationSystem.throwNotification(NotificationCode.SUCCEED_EDIT_PRODUCT, stage);
 
             productsTable.refresh();
         });
@@ -1839,18 +1868,6 @@ public class MainSceneController extends SceneController implements Initializabl
             String query = String.format("insert into customers(customerName, phone, addressLine) values ('%s', '%s', '%s')",
                     nameCDetails.getText(), contactCDetails.getText(), addressCDetails.getText());
             sqlConnection.updateQuery(query);
-
-            query = "SELECT LAST_INSERT_ID() FROM customers";
-            ResultSet rs = sqlConnection.getDataQuery(query);
-            try {
-                int customerNumber = -1;
-                if (rs.next())
-                    customerNumber = rs.getInt(1);
-                Customer customer = new Customer(customerNumber, nameCDetails.getText(), contactCDetails.getText(), addressCDetails.getText(), "Membership");
-                customersTable.getItems().add(customer);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
 
             NotificationSystem.throwNotification(NotificationCode.SUCCEED_ADD_CUSTOMER, stage);
 

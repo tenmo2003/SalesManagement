@@ -61,6 +61,34 @@ public class NotificationSystem {
                 title = "";
                 content = "Added New Customer Successfully!";
             }
+            case SUCCEED_CREATE_ORDER -> {
+                title = "";
+                content = "Order Created Successfully!";
+            }
+            case SUCCEED_EDIT_ORDER -> {
+                title = "";
+                content = "Order Saved Successfully!";
+            }
+            case SUCCEED_DELETE_ORDER -> {
+                title = "";
+                content = "Order Removed Successfully!";
+            }
+            case SUCCEED_CREATE_PRODUCT -> {
+                title = "";
+                content = "Product Added Successfully!";
+            }
+            case SUCCEED_EDIT_PRODUCT -> {
+                title = "";
+                content = "Product Saved Successfully!";
+            }
+            case SUCCEED_DELETE_PRODUCT -> {
+                title = "";
+                content = "Product Removed Successfully!";
+            }
+            case SUCCEED_DELETE_CUSTOMER -> {
+                title = "";
+                content = "Customer Removed Successfully";
+            }
         }
         Notifications notificationBuilder = Notifications.create()
                 .title(title)
