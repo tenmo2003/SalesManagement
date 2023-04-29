@@ -15,6 +15,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
@@ -47,11 +49,11 @@ import salesmanagement.salesmanagement.ViewController.CustomersTab.CustomersTabV
 import salesmanagement.salesmanagement.ViewController.EmployeesTab.EmployeesTabViewController;
 import salesmanagement.salesmanagement.ViewController.SettingsTab.SettingTabViewController;
 
-import javax.xml.transform.Result;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -142,17 +144,17 @@ public class MainSceneController extends SceneController implements Initializabl
     Tab dashBoardTab;
 
     @FXML
-    private StackPane chartPane;
+    private StackPane totalRevenueChartPane;
 
     public void displayDashBoardTab() {
-
+        totalRevenueChartPane.getChildren().clear();
         tabPane.getSelectionModel().select(dashBoardTab);
         final CategoryAxis xAxis = new CategoryAxis();
         final NumberAxis yAxis = new NumberAxis();
         final BarChart<String, Number> bc =
                 new BarChart<>(xAxis, yAxis);
-        chartPane.getChildren().add(bc);
-        bc.setTitle("Revenue Summary");
+        totalRevenueChartPane.getChildren().add(bc);
+        bc.setTitle("Total Revenue");
         xAxis.setLabel("Time");
         yAxis.setLabel("Revenue");
 
@@ -169,8 +171,16 @@ public class MainSceneController extends SceneController implements Initializabl
         ResultSet rs = sqlConnection.getDataQuery(query);
         try {
             XYChart.Series<String, Number> series = new XYChart.Series<>();
+            NumberFormat nf = NumberFormat.getNumberInstance(Locale.US); // create a NumberFormat instance for US locale
+            nf.setMaximumFractionDigits(2); // set the maximum number of fraction digits to 2
             while (rs.next()) {
-                series.getData().add(new XYChart.Data<>(rs.getString(2) + "-" + rs.getString(1), rs.getDouble(3)));
+                double value = rs.getDouble(3);
+                XYChart.Data<String, Number> data = new XYChart.Data<>(rs.getString(2) + "-" + rs.getString(1), value);
+                Label label = new Label(nf.format(value)); // create a Label with the formatted value
+                label.setGraphic(new Group()); // set an empty graphic to ensure the Label is shown
+                label.setAlignment(Pos.CENTER);
+                data.setNode(label); // set the Label as the node for the Data object
+                series.getData().add(data);
             }
             bc.getData().add(series);
         } catch (SQLException e) {
