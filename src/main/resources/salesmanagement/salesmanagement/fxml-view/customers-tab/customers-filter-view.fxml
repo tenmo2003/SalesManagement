@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<StackPane fx:id="root" prefHeight="400.0" prefWidth="600.0" stylesheets="@../../style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.CustomersTab.CustomersFilterViewController">
+    <children>
+        <StackPane opacity="0.5" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: grey;" />
+        <FlowPane alignment="CENTER">
+            <children>
+                <VBox fx:id="employeeFilterBox" alignment="TOP_CENTER" prefHeight="296.0" prefWidth="412.0" style="-fx-background-color: white; -fx-border-radius: white; -fx-background-radius: white;">
+                    <children>
+                        <StackPane>
+                            <children>
+                                <Label id="top_label" text="Customers Filter">
+                                    <font>
+                                        <Font size="21.0" />
+                                    </font>
+                                </Label>
+                                <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minWidth="46.0" onMouseClicked="#close" prefHeight="30.0" prefWidth="46.0" textAlignment="CENTER" StackPane.alignment="CENTER_RIGHT">
+                                    <graphic>
+                                        <FontAwesomeIconView id="close_color" fill="#0000008f" glyphName="CLOSE" size="25" text="" />
+                                    </graphic>
+                                    <cursor>
+                                        <Cursor fx:constant="HAND" />
+                                    </cursor>
+                                </JFXButton>
+                            </children>
+                            <VBox.margin>
+                                <Insets top="10.0" />
+                            </VBox.margin>
+                        </StackPane>
+                        <VBox fillWidth="false" prefHeight="174.0" prefWidth="392.0" spacing="10.0">
+                            <children>
+                                <VBox prefHeight="170.0" prefWidth="448.0">
+                                    <children>
+                                        <Label text="Customer ID">
+                                            <font>
+                                                <Font name="System Bold" size="15.0" />
+                                            </font>
+                                        </Label>
+                                        <TextField fx:id="customerNumberTextField">
+                                            <font>
+                                                <Font size="15.0" />
+                                            </font>
+                                        </TextField>
+                                    </children>
+                                </VBox>
+                                <VBox prefHeight="170.0" prefWidth="448.0">
+                                    <children>
+                                        <Label text="Name">
+                                            <font>
+                                                <Font name="System Bold" size="15.0" />
+                                            </font>
+                                        </Label>
+                                        <TextField fx:id="nameTextField">
+                                            <font>
+                                                <Font size="15.0" />
+                                            </font>
+                                        </TextField>
+                                    </children>
+                                </VBox>
+                                <VBox prefHeight="170.0" prefWidth="448.0">
+                                    <children>
+                                        <Label text="Contact">
+                                            <font>
+                                                <Font name="System Bold" size="15.0" />
+                                            </font>
+                                        </Label>
+                                        <TextField fx:id="contactTextField">
+                                            <font>
+                                                <Font size="15.0" />
+                                            </font>
+                                        </TextField>
+                                    </children>
+                                </VBox>
+                                <VBox prefHeight="170.0" prefWidth="448.0">
+                                    <children>
+                                        <Label text="Address">
+                                            <font>
+                                                <Font name="System Bold" size="15.0" />
+                                            </font>
+                                        </Label>
+                                        <TextField fx:id="addressTextField">
+                                            <font>
+                                                <Font size="15.0" />
+                                            </font>
+                                        </TextField>
+                                    </children>
+                                </VBox>
+                                <VBox prefHeight="170.0" prefWidth="448.0">
+                                    <children>
+                                        <Label text="Rank">
+                                            <font>
+                                                <Font name="System Bold" size="15.0" />
+                                            </font>
+                                        </Label>
+                                        <ComboBox fx:id="rankComboBox" prefHeight="26.0" prefWidth="169.0" style="-fx-font-size: 15;" />
+                                    </children>
+                                </VBox>
+                            </children>
+                            <VBox.margin>
+                                <Insets top="10.0" />
+                            </VBox.margin>
+                        </VBox>
+                  <HBox alignment="CENTER">
+                     <children>
+                                <JFXButton onMouseClicked="#applyFilter" text="Apply Filter" />
+                        <JFXButton onMouseClicked="#clearFilter" text="Clear All" />
+                     </children>
+                  </HBox>
+                    </children>
+                    <padding>
+                        <Insets left="10.0" right="10.0" />
+                    </padding>
+                </VBox>
+            </children>
+        </FlowPane>
+    </children>
+</StackPane>

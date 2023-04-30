@@ -96,6 +96,7 @@ public class MainSceneController extends SceneController implements Initializabl
     SettingTabViewController settingTabViewController;
     EmployeesTabViewController employeesTabViewController;
     CustomersTabViewController customersTabViewController;
+
     @FXML
     void goToCreateOrderTab() {
         tabPane.getSelectionModel().select(createOrderTab);
@@ -177,57 +178,11 @@ public class MainSceneController extends SceneController implements Initializabl
             e.printStackTrace();
         }
 
-//        XYChart.Series series1 = new XYChart.Series();
-//        series1.setName("2003");
-//        series1.getData().add(new XYChart.Data("austria", 25601.34));
-//        series1.getData().add(new XYChart.Data("brazil", 20148.82));
-//        series1.getData().add(new XYChart.Data("france", 10000));
-//        series1.getData().add(new XYChart.Data("italy", 35407.15));
-//        series1.getData().add(new XYChart.Data("usa", 12000));
-//
-//
-//        XYChart.Series series2 = new XYChart.Series();
-//        series2.setName("2004");
-//        series2.getData().add(new XYChart.Data("austria", 57401.85));
-//        series2.getData().add(new XYChart.Data("brazil", 41941.19));
-//        series2.getData().add(new XYChart.Data("france", 45263.37));
-//        series2.getData().add(new XYChart.Data("italy", 117320.16));
-//        series2.getData().add(new XYChart.Data("usa", 14845.27));
-//
-//        XYChart.Series series3 = new XYChart.Series();
-//        series3.setName("2005");
-//        series3.getData().add(new XYChart.Data("austria", 45000.65));
-//        series3.getData().add(new XYChart.Data("brazil", 44835.76));
-//        series3.getData().add(new XYChart.Data("france", 18722.18));
-//        series3.getData().add(new XYChart.Data("italy", 17557.31));
-//        series3.getData().add(new XYChart.Data("usa", 92633.68));
-//        bc.getData().addAll(series1, series2, series3);
+
     }
     //endregion
 
     //region Employees Tab: list employees, employee's info: details, order, operations.
-    @FXML
-    TableView<Employee> employeeTable;
-    @FXML
-    private TableColumn<?, ?> emailColumn;
-    @FXML
-    private TableColumn<Employee, Integer> employeeNumberColumn;
-    @FXML
-    private TableColumn<?, ?> nameColumn;
-    @FXML
-    private TableColumn<?, ?> phoneColumn;
-    @FXML
-    private TableColumn<?, ?> employeeStatusColumn;
-    @FXML
-    private TableColumn<?, ?> accessibilityColumn;
-    @FXML
-    StackPane employeesTabPane;
-    @FXML
-    ProgressIndicator employeeLoadingIndicator;
-    SortedList<Employee> sortedAndFilteredEmployees;
-
-
-
     @FXML
     void displayEmployeesTab() {
         tabPane.getSelectionModel().select(employeesOperationTab);
@@ -236,53 +191,12 @@ public class MainSceneController extends SceneController implements Initializabl
 
 
 
-    @FXML
-    JFXTextField lastNameTextField;
-    @FXML
-    JFXTextField firstNameTextField;
-    @FXML
-    DatePicker birthDatePicker;
-    @FXML
-    JFXRadioButton maleRadioButton;
-    @FXML
-    JFXRadioButton femaleRadioButton;
-    @FXML
-    JFXTextField avatarAddress;
-    @FXML
-    JFXComboBox<String> statusBox;
-    @FXML
-    JFXTextField emailTextField;
-    @FXML
-    JFXButton verifyButton;
-    @FXML
-    JFXComboBox<String> phoneCodeBox;
-    @FXML
-    JFXTextField phoneNumberTextField;
-    @FXML
-    JFXTextField usernameTextField;
-    @FXML
-    JFXPasswordField passwordField;
-    @FXML
-    JFXTextField employeeCodeTextField;
-    @FXML
-    JFXTextField officeCodeTextField;
-    @FXML
-    JFXComboBox<String> accessibilityBox;
-    @FXML
-    JFXTextField supervisorTextField;
-    @FXML
-    DatePicker joiningDatePicker;
-    @FXML
-    DatePicker lastWorkingDatePicker;
-
     //endregion
     @FXML
     SplitPane firstSplitPane;
     @FXML
     SplitPane secondSplitPane;
 
-    @FXML
-    VBox employeeTableBox;
     @FXML
     HBox appName;
     @FXML
@@ -314,7 +228,6 @@ public class MainSceneController extends SceneController implements Initializabl
 
         Insets hboxMargin = new Insets(0, 0.8333 * Screen.getPrimary().getVisualBounds().getWidth(), 0, 0);
         StackPane.setMargin(appName, hboxMargin);
-
 
 
         Circle clip = new Circle();
@@ -351,7 +264,6 @@ public class MainSceneController extends SceneController implements Initializabl
 //        };
 
 
-
         // Load UI for others.
         runTask(() -> {
             // Load small avatar.
@@ -359,7 +271,6 @@ public class MainSceneController extends SceneController implements Initializabl
 
 
             // Employees Tab Preparation.
-
 
 
         }, null, null, null);
@@ -609,6 +520,7 @@ public class MainSceneController extends SceneController implements Initializabl
 
         plSuggestionList.setCellFactory(param -> new ListCell<>() {
             private final JFXButton removeButton = new JFXButton("X");
+
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -887,79 +799,6 @@ public class MainSceneController extends SceneController implements Initializabl
         });
 
 
-        nameCustomer.setCellValueFactory(new PropertyValueFactory<>("name"));
-        contactCustomer.setCellValueFactory(new PropertyValueFactory<>("contact"));
-        addressCustomer.setCellValueFactory(new PropertyValueFactory<>("address"));
-        rankCustomer.setCellValueFactory(new PropertyValueFactory<>("rank"));
-
-        editCustomerButton.setOnAction(e -> {
-            Customer selected = customersTable.getSelectionModel().getSelectedItem();
-            if (selected != null) {
-                initEditCustomerDetails(selected);
-                bgPaneCustomers.setVisible(true);
-                customerDetailsPane.setVisible(true);
-            }
-        });
-
-        customersTable.setOnMouseClicked(e -> {
-            if (e.getClickCount() == 2) {
-                Customer selected = customersTable.getSelectionModel().getSelectedItem();
-                if (selected != null) {
-                    initEditCustomerDetails(selected);
-                    bgPaneCustomers.setVisible(true);
-                    customerDetailsPane.setVisible(true);
-                }
-            }
-        });
-
-        closeCustomerDetailsButton.setOnAction(e -> {
-            bgPaneCustomers.setVisible(false);
-            customerDetailsPane.setVisible(false);
-        });
-
-        removeCustomerButton.setOnAction(event -> {
-            Customer selected = customersTable.getSelectionModel().getSelectedItem();
-            if (selected != null) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Confirm Delete");
-                alert.setHeaderText("Are you sure you want to delete this customer?");
-                alert.setContentText("This action cannot be undone.");
-
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.isPresent() && result.get() == ButtonType.OK) {
-                    // User clicked OK, so delete the item
-                    String query = String.format("DELETE FROM customers WHERE customerNumber = %d", selected.getCustomerNumber());
-                    sqlConnection.updateQuery(query);
-                    NotificationSystem.throwNotification(NotificationCode.SUCCEED_DELETE_CUSTOMER, stage);
-                    initCustomers();
-                } else {
-                    // User clicked Cancel or closed the dialog box, so do nothing
-                    // ...
-                }
-            }
-        });
-
-        addCustomerFilterButton.setOnAction(event -> {
-            bgPaneCustomers.setVisible(true);
-            customerFilterPane.setVisible(true);
-        });
-
-        applyCustomerFilterButton.setOnAction(event -> {
-            updateCustomerFilteredData();
-        });
-
-        clearCustomerFilterButton.setOnAction(event -> {
-            nameCustomerFilter.clear();
-            contactCustomerFilter.clear();
-            addressCustomerFilter.clear();
-            rankCustomerFilter.clear();
-            updateCustomerFilteredData();
-        });
-
-        closeCustomerFilterButton.setOnAction(event -> {
-            bgPaneCustomers.setVisible(false);
-            customerFilterPane.setVisible(false);
-        });
 
     }
 
@@ -1824,90 +1663,6 @@ public class MainSceneController extends SceneController implements Initializabl
     JFXButton applyCustomerFilterButton;
     @FXML
     JFXButton clearCustomerFilterButton;
-
-    void initCustomers() {
-        runTask(() -> {
-            ObservableList<Customer> customers = FXCollections.observableArrayList();
-            customersTable.setItems(customers);
-
-            try {
-                String query = "SELECT * FROM customers WHERE customerNumber != 6";
-                ResultSet resultSet = sqlConnection.getDataQuery(query);
-                while (resultSet.next()) {
-                    Customer customer = new Customer(
-                            resultSet.getInt(1),
-                            resultSet.getString(2),
-                            resultSet.getString(3),
-                            resultSet.getString(4),
-                            resultSet.getString(5)
-                    );
-                    customersTable.getItems().add(customer);
-                }
-                customersTable.refresh();
-
-                filteredCustomers = new FilteredList<>(FXCollections.observableArrayList(customersTable.getItems()), p -> true);
-                sortedAndFilteredCustomers = new SortedList<>(filteredCustomers);
-                customersTable.setItems(sortedAndFilteredCustomers);
-                sortedAndFilteredCustomers.comparatorProperty().bind(customersTable.comparatorProperty());
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        }, null, progressIndicator, customersTab.getTabPane());
-    }
-
-    public void initAddCustomer() {
-        customerDetailsButton.setText("Add");
-        nameCDetails.clear();
-        contactCDetails.clear();
-        addressCDetails.clear();
-
-        bgPaneCustomers.setVisible(true);
-        customerDetailsPane.setVisible(true);
-
-        customerDetailsButton.setOnAction(event -> {
-            String query = String.format("insert into customers(customerName, phone, addressLine) values ('%s', '%s', '%s')",
-                    nameCDetails.getText(), contactCDetails.getText(), addressCDetails.getText());
-            sqlConnection.updateQuery(query);
-
-            NotificationSystem.throwNotification(NotificationCode.SUCCEED_ADD_CUSTOMER, stage);
-
-            bgPaneCustomers.setVisible(false);
-            customerDetailsPane.setVisible(false);
-
-            initCustomers();
-        });
-
-    }
-
-    public void initEditCustomerDetails(Customer selected) {
-        customerDetailsButton.setText("Save");
-        nameCDetails.setText(selected.getName());
-        contactCDetails.setText(selected.getContact());
-        addressCDetails.setText(selected.getAddress());
-
-        bgPaneCustomers.setVisible(true);
-        customerDetailsPane.setVisible(true);
-
-        customerDetailsButton.setOnAction(event -> {
-            String query = String.format("UPDATE customers SET customerName = '%s', phone = '%s', addressLine = '%s' WHERE customerNumber = %d",
-                    nameCDetails.getText(), contactCDetails.getText(), addressCDetails.getText(), selected.getCustomerNumber());
-            sqlConnection.updateQuery(query);
-
-            selected.setAddress(addressCDetails.getText());
-            selected.setContact(contactCDetails.getText());
-            selected.setName(nameCDetails.getText());
-
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Customer details saved successfully!", ButtonType.OK);
-            alert.setTitle(null);
-            alert.setHeaderText(null);
-            alert.showAndWait();
-
-            bgPaneCustomers.setVisible(false);
-            customerDetailsPane.setVisible(false);
-
-            customersTable.refresh();
-        });
-    }
 
     public void printInvoice(int orderNumber) {
         String sourceFile = "src/main/resources/salesmanagement/salesmanagement/invoice.jrxml";

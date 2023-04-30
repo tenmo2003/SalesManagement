@@ -27,9 +27,6 @@ public class EmployeesFilterViewController extends ViewController {
     private TextField emailTextField;
 
     @FXML
-    private VBox employeeFilterBox;
-
-    @FXML
     private TextField nameTextField;
 
     @FXML

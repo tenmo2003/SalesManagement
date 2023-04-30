@@ -457,8 +457,9 @@ public class EmployeeInfoViewController extends ViewController {
                     + joiningDatePicker.getValue() + "' WHERE employeeNumber=" + user.getEmployeeNumber();
             System.out.println(query);
             sqlConnection.updateQuery(query);
-            if (!avatar.getImage().getUrl().toLowerCase().equals(ImageController.getURL("avatar_employee_default.png")))
-                ImageController.uploadImage(avatarURI, "avatar_employee_" + user.getEmployeeNumber() + ".png");
+            if (avatar.getImage() != null)
+                if (!avatar.getImage().getUrl().toLowerCase().equals(ImageController.getURL("avatar_employee_default.png")))
+                    ImageController.uploadImage(avatarURI, "avatar_employee_" + user.getEmployeeNumber() + ".png");
         }, () -> {
             show(user);
         }, loadingIndicator, employeeInfoBox);

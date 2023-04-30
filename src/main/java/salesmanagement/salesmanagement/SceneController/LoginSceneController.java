@@ -1,6 +1,5 @@
 package salesmanagement.salesmanagement.SceneController;
 
-import com.jfoenix.controls.JFXCheckBox;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.application.Platform;
@@ -14,6 +13,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.controlsfx.control.textfield.CustomPasswordField;
@@ -22,10 +22,6 @@ import salesmanagement.salesmanagement.Utils.MailSender;
 import salesmanagement.salesmanagement.Utils.NotificationCode;
 import salesmanagement.salesmanagement.Utils.NotificationSystem;
 
-
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -47,8 +43,6 @@ public class LoginSceneController extends SceneController implements Initializab
     private VBox loginPane;
     @FXML
     private StackPane loginRoot;
-    @FXML
-    private JFXCheckBox rememberMeCheckBox;
     @FXML
     VBox forgotPasswordPane;
     @FXML
@@ -83,9 +77,6 @@ public class LoginSceneController extends SceneController implements Initializab
                 String query = "SELECT employeeNumber, username, password FROM employees WHERE username = '" + username + "' AND password = '" + password + "'";
                 ResultSet resultSet = sqlConnection.getDataQuery(query);
                 if (resultSet.next()) {
-                    if (rememberMeCheckBox.isSelected()) {
-                        saveLoginInfo();
-                    }
                     MainSceneController.loggerID = resultSet.getInt("employeeNumber");
                     MainSceneController.haveJustOpened = true;
                     return true;
@@ -104,15 +95,6 @@ public class LoginSceneController extends SceneController implements Initializab
         setProgressIndicatorStatus(checkAccountTask, loginPane);
     }
 
-    private void saveLoginInfo() {
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/resources/salesmanagement/salesmanagement/loginInfo.txt", true));
-            writer.write(username.getText() + " " + password.getCharacters().toString() + "\n");
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     @FXML
     public void forgotPassword() {
@@ -200,8 +182,12 @@ public class LoginSceneController extends SceneController implements Initializab
         super.hideProgressIndicator(loginPane);
     }
 
+    @FXML
+    MediaView mediaView;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        //mediaView.setMediaPlayer(new MediaPlayer(new Media("")));
         Rectangle rect = new Rectangle(loginRoot.getPrefWidth(), loginRoot.getPrefHeight());
         rect.setArcHeight(15.0);
         rect.setArcWidth(15.0);

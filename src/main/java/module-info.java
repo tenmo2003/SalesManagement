@@ -3,6 +3,7 @@ module salesmanagement.salesmanagement {
     requires javafx.fxml;
     requires com.jfoenix;
     requires org.controlsfx.controls;
+
     requires java.mail;
     requires javafx.swing;
     requires javafx.web;
@@ -14,6 +15,7 @@ module salesmanagement.salesmanagement {
     requires org.apache.commons.net;
     requires org.apache.poi.poi;
     requires org.apache.poi.ooxml;
+    requires javafx.media;
     opens salesmanagement.salesmanagement to javafx.fxml;
     exports salesmanagement.salesmanagement;
     exports salesmanagement.salesmanagement.SalesComponent;
