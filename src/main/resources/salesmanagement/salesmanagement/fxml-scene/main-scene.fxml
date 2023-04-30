@@ -487,11 +487,12 @@
                            </content>
                         </Tab>
                         <Tab fx:id="employeesOperationTab" closable="false" text="Employees Operation" />
-                        <Tab fx:id="dashBoardTab" text="Orders">
+                        <Tab fx:id="dashBoardTab" text="Dashboard">
                            <content>
                               <AnchorPane>
                                  <children>
-                                    <StackPane fx:id="totalRevenueChartPane" layoutX="58.0" layoutY="26.0" prefHeight="451.0" prefWidth="847.0" />
+                                    <StackPane fx:id="totalRevenueChartPane" layoutX="58.0" layoutY="26.0" prefHeight="360.0" prefWidth="1069.0" />
+                                    <StackPane fx:id="productRevenueChartPane" layoutX="58.0" layoutY="412.0" prefHeight="328.0" prefWidth="1069.0" />
                                  </children>
                               </AnchorPane>
                            </content>

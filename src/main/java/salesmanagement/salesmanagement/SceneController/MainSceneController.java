@@ -145,18 +145,21 @@ public class MainSceneController extends SceneController implements Initializabl
 
     @FXML
     private StackPane totalRevenueChartPane;
+    @FXML
+    private StackPane productRevenueChartPane;
 
     public void displayDashBoardTab() {
-        totalRevenueChartPane.getChildren().clear();
         tabPane.getSelectionModel().select(dashBoardTab);
-        final CategoryAxis xAxis = new CategoryAxis();
-        final NumberAxis yAxis = new NumberAxis();
-        final BarChart<String, Number> bc =
-                new BarChart<>(xAxis, yAxis);
-        totalRevenueChartPane.getChildren().add(bc);
-        bc.setTitle("Total Revenue");
-        xAxis.setLabel("Time");
-        yAxis.setLabel("Revenue");
+
+        totalRevenueChartPane.getChildren().clear();
+        productRevenueChartPane.getChildren().clear();
+
+        final CategoryAxis totalRevenueAxis = new CategoryAxis();
+        final NumberAxis timeAxis = new NumberAxis();
+        final BarChart<String, Number> totalRevenueChart =
+                new BarChart<>(totalRevenueAxis, timeAxis);
+        totalRevenueChartPane.getChildren().add(totalRevenueChart);
+        totalRevenueChart.setTitle("Total Revenue");
 
         String query = "SELECT YEAR(months.month) AS year, " +
                 "MONTH(months.month) AS month, " +
@@ -182,9 +185,44 @@ public class MainSceneController extends SceneController implements Initializabl
                 data.setNode(label); // set the Label as the node for the Data object
                 series.getData().add(data);
             }
-            bc.getData().add(series);
+            totalRevenueChart.getData().add(series);
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+
+
+
+        final NumberAxis productRevenueAxis = new NumberAxis();
+        final CategoryAxis productAxis = new CategoryAxis();
+        final BarChart<String, Number> productRevenueChart =
+                new BarChart<>(productAxis, productRevenueAxis);
+        productRevenueChartPane.getChildren().add(productRevenueChart);
+
+        productRevenueChart.setTitle("Product Revenue");
+
+        query = "SELECT SUM(quantityOrdered * priceEach) AS revenue, products.productCode FROM orderdetails " +
+                "RIGHT JOIN products ON orderdetails.productCode = products.productCode " +
+                "GROUP BY products.productCode " +
+                "ORDER BY revenue DESC " +
+                "LIMIT 6";
+        rs = sqlConnection.getDataQuery(query);
+
+        try {
+            XYChart.Series<String, Number> series = new XYChart.Series<>();
+            NumberFormat nf = NumberFormat.getNumberInstance(Locale.US); // create a NumberFormat instance for US locale
+            nf.setMaximumFractionDigits(2); // set the maximum number of fraction digits to 2
+            while (rs.next()) {
+                double value = rs.getDouble(1);
+                XYChart.Data<String, Number> data = new XYChart.Data<>(rs.getString(2), rs.getDouble(1));
+                Label label = new Label(nf.format(value)); // create a Label with the formatted value
+                label.setGraphic(new Group()); // set an empty graphic to ensure the Label is shown
+                label.setAlignment(Pos.CENTER);
+                data.setNode(label); // set the Label as the node for the Data object
+                series.getData().add(data);
+            }
+            productRevenueChart.getData().add(series);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
 
 //        XYChart.Series series1 = new XYChart.Series();
@@ -211,7 +249,7 @@ public class MainSceneController extends SceneController implements Initializabl
 //        series3.getData().add(new XYChart.Data("france", 18722.18));
 //        series3.getData().add(new XYChart.Data("italy", 17557.31));
 //        series3.getData().add(new XYChart.Data("usa", 92633.68));
-//        bc.getData().addAll(series1, series2, series3);
+//        productRevenueChart.getData().addAll(series1, series2, series3);
     }
     //endregion
 
