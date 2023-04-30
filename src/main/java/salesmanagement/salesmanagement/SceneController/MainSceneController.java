@@ -666,7 +666,24 @@ public class MainSceneController extends SceneController implements Initializabl
                 } else {
                     setText(item);
                     setGraphic(removeButton);
-                    removeButton.setOnAction(event -> getListView().getItems().remove(item));
+                    removeButton.setOnAction(event -> {
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Confirm Delete");
+                        alert.setHeaderText("Are you sure you want to delete this product line?");
+                        alert.setContentText("This action will delete all products that are of this product line and cannot be undone.");
+
+                        Optional<ButtonType> result = alert.showAndWait();
+                        if (result.isPresent() && result.get() == ButtonType.OK) {
+                            // User clicked OK, so delete the item
+                            String query = String.format("DELETE FROM productlines WHERE productLine = '%s'", item);
+                            sqlConnection.updateQuery(query);
+                            getListView().getItems().remove(item);
+                            initProducts();
+                        } else {
+                            // User clicked Cancel or closed the dialog box, so do nothing
+                            // ...
+                        }
+                    });
                 }
             }
         });
@@ -1766,17 +1783,12 @@ public class MainSceneController extends SceneController implements Initializabl
                     Integer.parseInt(inStockPDetails.getText()), Double.parseDouble(buyPricePDetails.getText()), Double.parseDouble(sellPricePDetails.getText()));
             sqlConnection.updateQuery(query);
 
-            Product product = new Product(productCodePDetails.getText(), productNamePDetails.getText(),
-                    productLinePDetails.getText(), productVendorPDetails.getText(), productDescriptionPDetails.getText(),
-                    Integer.parseInt(inStockPDetails.getText()), Double.parseDouble(buyPricePDetails.getText()), Double.parseDouble(sellPricePDetails.getText()));
-            productsTable.getItems().add(0, product);
-
             NotificationSystem.throwNotification(NotificationCode.SUCCEED_CREATE_PRODUCT, stage);
 
             bgPaneProducts.setVisible(false);
             productDetailsPane.setVisible(false);
 
-            productsTable.refresh();
+            initProducts();
 
         });
     }
