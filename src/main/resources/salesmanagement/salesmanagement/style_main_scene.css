@@ -87,3 +87,7 @@
     -fx-font-size: 22px;
     -fx-font-weight: bold;
 }
+
+#close_color {
+    -fx-fill: #329efcab;
+}

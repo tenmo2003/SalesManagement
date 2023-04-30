@@ -87,7 +87,6 @@ public class EmployeesTabViewController extends ViewController {
                 if (selected != null) {
                     employeeInfoViewController.show(selected);
                 }
-                ;
             }
         });
     }

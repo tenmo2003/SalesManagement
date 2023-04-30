@@ -1,18 +1,34 @@
 package salesmanagement.salesmanagement.SalesComponent;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Customer {
     private int customerNumber;
-    private String name;
-    private String contact;
+    private String name = "";
+    private String contact = "";
     private String address;
     private String rank;
 
-    public Customer(int customerNumber, String name, String contact, String address, String rank) {
-        this.customerNumber = customerNumber;
-        this.name = name;
-        this.contact = contact;
-        this.address = address;
-        this.rank = rank;
+    boolean isNewUser = true;
+
+    public Customer() {
+        name = "";
+        contact = "";
+        address = "";
+        rank = null;
+    }
+
+    public Customer(ResultSet customerInfo) throws SQLException {
+        isNewUser = false;
+        this.customerNumber = customerInfo.getInt("customerNumber");
+        this.name = customerInfo.getString("customerName");
+        if (name == null) name = "";
+        this.contact = customerInfo.getString("phone");
+        if (contact == null) contact = "";
+        this.address = customerInfo.getString("addressLine");
+        if (address == null) address = "";
+        this.rank = customerInfo.getString("rank");
     }
 
     public int getCustomerNumber() {
@@ -53,5 +69,9 @@ public class Customer {
 
     public void setRank(String rank) {
         this.rank = rank;
+    }
+
+    public boolean isNewUser() {
+        return isNewUser;
     }
 }
