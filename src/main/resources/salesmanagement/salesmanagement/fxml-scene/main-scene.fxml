@@ -516,6 +516,11 @@
                                                 <Font size="14.0" />
                                              </font>
                                           </JFXCheckBox>
+                                          <JFXCheckBox fx:id="topStoreCheck" prefHeight="18.0" prefWidth="131.0" text="Top Store">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </JFXCheckBox>
                                        </children>
                                     </VBox>
                                  </children>

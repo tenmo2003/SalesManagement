@@ -159,6 +159,8 @@ public class MainSceneController extends SceneController implements Initializabl
     JFXCheckBox topProductLineCheck;
     @FXML
     JFXCheckBox topCustomerCheck;
+    @FXML
+    JFXCheckBox topStoreCheck;
 
     public void displayDashBoardTab() {
 
@@ -302,6 +304,41 @@ public class MainSceneController extends SceneController implements Initializabl
             throw new RuntimeException(e);
         }
 
+        final NumberAxis storeRevenueAxis = new NumberAxis();
+        final CategoryAxis storeAxis = new CategoryAxis();
+        final BarChart<String, Number> storeRevenueChart =
+                new BarChart<>(storeAxis, storeRevenueAxis);
+
+        storeRevenueChart.setTitle("Top Stores");
+
+        query = "SELECT SUM(orderdetails.quantityOrdered * orderdetails.priceEach) AS revenue, offices.addressline " +
+                "FROM orderdetails " +
+                "INNER JOIN orders ON orders.orderNumber = orderdetails.orderNumber " +
+                "INNER JOIN employees ON orders.created_by = employees.employeeNumber " +
+                "RIGHT JOIN offices ON offices.officeCode = employees.officeCode " +
+                "GROUP BY offices.addressline " +
+                "ORDER BY revenue DESC " +
+                "LIMIT 10; ";
+        rs = sqlConnection.getDataQuery(query);
+
+        try {
+            XYChart.Series<String, Number> series = new XYChart.Series<>();
+            NumberFormat nf = NumberFormat.getNumberInstance(Locale.US); // create a NumberFormat instance for US locale
+            nf.setMaximumFractionDigits(2); // set the maximum number of fraction digits to 2
+            while (rs.next()) {
+                double value = rs.getDouble(1);
+                XYChart.Data<String, Number> data = new XYChart.Data<>(rs.getString(2), rs.getDouble(1));
+                Label label = new Label(nf.format(value)); // create a Label with the formatted value
+                label.setGraphic(new Group()); // set an empty graphic to ensure the Label is shown
+                label.setAlignment(Pos.CENTER);
+                data.setNode(label); // set the Label as the node for the Data object
+                series.getData().add(data);
+            }
+            storeRevenueChart.getData().add(series);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
         totalRevenueCheck.setSelected(true);
         totalRevenueCheck.setDisable(false);
         topProductCheck.setSelected(true);
@@ -310,6 +347,8 @@ public class MainSceneController extends SceneController implements Initializabl
         topProductLineCheck.setDisable(true);
         topCustomerCheck.setSelected(false);
         topCustomerCheck.setDisable(true);
+        topStoreCheck.setSelected(false);
+        topStoreCheck.setDisable(true);
 
         totalRevenueCheck.setOnMouseClicked(event -> {
             updateChecked(totalRevenueCheck);
@@ -366,12 +405,12 @@ public class MainSceneController extends SceneController implements Initializabl
             updateChecked(topCustomerCheck);
             if (topCustomerCheck.isSelected()) {
                 if (chartPane1.getChildren().isEmpty()) {
-                    chartPane1.getChildren().add(customerRevenueChart);
+                    chartPane1.getChildren().add(storeRevenueChart);
                 } else if (chartPane2.getChildren().isEmpty()) {
-                    chartPane2.getChildren().add(customerRevenueChart);
+                    chartPane2.getChildren().add(storeRevenueChart);
                 }
             } else {
-                if (chartPane1.getChildren().contains(customerRevenueChart)) {
+                if (chartPane1.getChildren().contains(storeRevenueChart)) {
                     chartPane1.getChildren().clear();
                 } else {
                     chartPane2.getChildren().clear();
@@ -379,6 +418,22 @@ public class MainSceneController extends SceneController implements Initializabl
             }
         });
 
+        topStoreCheck.setOnMouseClicked(event -> {
+            updateChecked(topStoreCheck);
+            if (topStoreCheck.isSelected()) {
+                if (chartPane1.getChildren().isEmpty()) {
+                    chartPane1.getChildren().add(storeRevenueChart);
+                } else if (chartPane2.getChildren().isEmpty()) {
+                    chartPane2.getChildren().add(storeRevenueChart);
+                }
+            } else {
+                if (chartPane1.getChildren().contains(storeRevenueChart)) {
+                    chartPane1.getChildren().clear();
+                } else {
+                    chartPane2.getChildren().clear();
+                }
+            }
+        });
 
 //        XYChart.Series series1 = new XYChart.Series();
 //        series1.setName("2003");
@@ -433,6 +488,9 @@ public class MainSceneController extends SceneController implements Initializabl
         if (!topCustomerCheck.isSelected()) {
             topCustomerCheck.setDisable(true);
         }
+        if (!topStoreCheck.isSelected()) {
+            topStoreCheck.setDisable(true);
+        }
     }
 
     private void enableAllCheckboxes() {
@@ -440,6 +498,7 @@ public class MainSceneController extends SceneController implements Initializabl
         topProductCheck.setDisable(false);
         topProductLineCheck.setDisable(false);
         topCustomerCheck.setDisable(false);
+        topStoreCheck.setDisable(false);
     }
 
     //region Employees Tab: list employees, employee's info: details, order, operations.
