@@ -1,13 +1,10 @@
 package salesmanagement.salesmanagement.ViewController.CustomersTab;
 
 import com.jfoenix.controls.JFXButton;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import salesmanagement.salesmanagement.SalesComponent.Customer;
 import salesmanagement.salesmanagement.Utils.NotificationCode;
@@ -15,7 +12,6 @@ import salesmanagement.salesmanagement.Utils.NotificationSystem;
 import salesmanagement.salesmanagement.ViewController.ViewController;
 
 import java.net.URL;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 
 import static salesmanagement.salesmanagement.SceneController.SceneController.runTask;
@@ -41,9 +37,6 @@ public class CustomerInfoViewController extends ViewController {
     @FXML
     private VBox customerInfoBox;
     private CustomersTabViewController tab;
-    public CustomerInfoViewController(CustomersTabViewController tab) {
-        this.tab = tab;
-    }
     protected void show(Customer customer) {
         super.show();
         this.customer = customer;
