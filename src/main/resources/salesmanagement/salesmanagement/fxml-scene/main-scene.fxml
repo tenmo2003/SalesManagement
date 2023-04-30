@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
@@ -491,8 +492,32 @@
                            <content>
                               <AnchorPane>
                                  <children>
-                                    <StackPane fx:id="totalRevenueChartPane" layoutX="58.0" layoutY="26.0" prefHeight="360.0" prefWidth="1069.0" />
-                                    <StackPane fx:id="productRevenueChartPane" layoutX="58.0" layoutY="412.0" prefHeight="328.0" prefWidth="1069.0" />
+                                    <StackPane fx:id="chartPane1" layoutX="58.0" layoutY="26.0" prefHeight="360.0" prefWidth="1000.0" />
+                                    <StackPane fx:id="chartPane2" layoutX="58.0" layoutY="434.0" prefHeight="328.0" prefWidth="1000.0" />
+                                    <VBox alignment="CENTER" layoutX="1110.0" layoutY="286.0" prefHeight="201.0" prefWidth="122.0" spacing="6.0">
+                                       <children>
+                                          <JFXCheckBox fx:id="totalRevenueCheck" prefHeight="18.0" prefWidth="131.0" selected="true" text="Total Revenue">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </JFXCheckBox>
+                                          <JFXCheckBox fx:id="topProductCheck" prefHeight="18.0" prefWidth="131.0" selected="true" text="Top Product">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </JFXCheckBox>
+                                          <JFXCheckBox fx:id="topProductLineCheck" prefHeight="18.0" prefWidth="131.0" text="Top Product Line">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </JFXCheckBox>
+                                          <JFXCheckBox fx:id="topCustomerCheck" prefHeight="18.0" prefWidth="131.0" text="Top Customer">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </JFXCheckBox>
+                                       </children>
+                                    </VBox>
                                  </children>
                               </AnchorPane>
                            </content>

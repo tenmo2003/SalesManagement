@@ -144,21 +144,34 @@ public class MainSceneController extends SceneController implements Initializabl
     Tab dashBoardTab;
 
     @FXML
-    private StackPane totalRevenueChartPane;
+    private StackPane chartPane1;
     @FXML
-    private StackPane productRevenueChartPane;
+    private StackPane chartPane2;
+
+    final int maximumChecked = 2;
+    int numChecked = 2;
+
+    @FXML
+    JFXCheckBox totalRevenueCheck;
+    @FXML
+    JFXCheckBox topProductCheck;
+    @FXML
+    JFXCheckBox topProductLineCheck;
+    @FXML
+    JFXCheckBox topCustomerCheck;
 
     public void displayDashBoardTab() {
+
         tabPane.getSelectionModel().select(dashBoardTab);
 
-        totalRevenueChartPane.getChildren().clear();
-        productRevenueChartPane.getChildren().clear();
+        chartPane1.getChildren().clear();
+        chartPane2.getChildren().clear();
 
         final CategoryAxis totalRevenueAxis = new CategoryAxis();
         final NumberAxis timeAxis = new NumberAxis();
         final BarChart<String, Number> totalRevenueChart =
                 new BarChart<>(totalRevenueAxis, timeAxis);
-        totalRevenueChartPane.getChildren().add(totalRevenueChart);
+        chartPane1.getChildren().add(totalRevenueChart);
         totalRevenueChart.setTitle("Total Revenue");
 
         String query = "SELECT YEAR(months.month) AS year, " +
@@ -190,15 +203,13 @@ public class MainSceneController extends SceneController implements Initializabl
             e.printStackTrace();
         }
 
-
-
         final NumberAxis productRevenueAxis = new NumberAxis();
         final CategoryAxis productAxis = new CategoryAxis();
         final BarChart<String, Number> productRevenueChart =
                 new BarChart<>(productAxis, productRevenueAxis);
-        productRevenueChartPane.getChildren().add(productRevenueChart);
+        chartPane2.getChildren().add(productRevenueChart);
 
-        productRevenueChart.setTitle("Product Revenue");
+        productRevenueChart.setTitle("Top Products");
 
         query = "SELECT SUM(quantityOrdered * priceEach) AS revenue, products.productCode FROM orderdetails " +
                 "RIGHT JOIN products ON orderdetails.productCode = products.productCode " +
@@ -224,6 +235,150 @@ public class MainSceneController extends SceneController implements Initializabl
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        final NumberAxis productLineRevenueAxis = new NumberAxis();
+        final CategoryAxis productLineAxis = new CategoryAxis();
+        final BarChart<String, Number> productLineRevenueChart =
+                new BarChart<>(productLineAxis, productLineRevenueAxis);
+
+        productLineRevenueChart.setTitle("Top Product Lines");
+
+        query = "SELECT SUM(quantityOrdered * priceEach) AS revenue, products.productLine FROM orderdetails " +
+                "RIGHT JOIN products ON orderdetails.productCode = products.productCode " +
+                "GROUP BY products.productLine " +
+                "ORDER BY revenue DESC " +
+                "LIMIT 6";
+        rs = sqlConnection.getDataQuery(query);
+
+        try {
+            XYChart.Series<String, Number> series = new XYChart.Series<>();
+            NumberFormat nf = NumberFormat.getNumberInstance(Locale.US); // create a NumberFormat instance for US locale
+            nf.setMaximumFractionDigits(2); // set the maximum number of fraction digits to 2
+            while (rs.next()) {
+                double value = rs.getDouble(1);
+                XYChart.Data<String, Number> data = new XYChart.Data<>(rs.getString(2), rs.getDouble(1));
+                Label label = new Label(nf.format(value)); // create a Label with the formatted value
+                label.setGraphic(new Group()); // set an empty graphic to ensure the Label is shown
+                label.setAlignment(Pos.CENTER);
+                data.setNode(label); // set the Label as the node for the Data object
+                series.getData().add(data);
+            }
+            productLineRevenueChart.getData().add(series);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        final NumberAxis customerRevenueAxis = new NumberAxis();
+        final CategoryAxis customerAxis = new CategoryAxis();
+        final BarChart<String, Number> customerRevenueChart =
+                new BarChart<>(customerAxis, customerRevenueAxis);
+
+        customerRevenueChart.setTitle("Top Customers");
+
+        query = "SELECT SUM(orderdetails.quantityOrdered * orderdetails.priceEach) AS revenue, customers.customerName " +
+                "FROM customers " +
+                "INNER JOIN orders ON customers.customerNumber = orders.customerNumber " +
+                "INNER JOIN orderdetails ON orders.orderNumber = orderdetails.orderNumber " +
+                "GROUP BY customers.customerNumber " +
+                "ORDER BY revenue DESC " +
+                "LIMIT 10; ";
+        rs = sqlConnection.getDataQuery(query);
+
+        try {
+            XYChart.Series<String, Number> series = new XYChart.Series<>();
+            NumberFormat nf = NumberFormat.getNumberInstance(Locale.US); // create a NumberFormat instance for US locale
+            nf.setMaximumFractionDigits(2); // set the maximum number of fraction digits to 2
+            while (rs.next()) {
+                double value = rs.getDouble(1);
+                XYChart.Data<String, Number> data = new XYChart.Data<>(rs.getString(2), rs.getDouble(1));
+                Label label = new Label(nf.format(value)); // create a Label with the formatted value
+                label.setGraphic(new Group()); // set an empty graphic to ensure the Label is shown
+                label.setAlignment(Pos.CENTER);
+                data.setNode(label); // set the Label as the node for the Data object
+                series.getData().add(data);
+            }
+            customerRevenueChart.getData().add(series);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        totalRevenueCheck.setSelected(true);
+        totalRevenueCheck.setDisable(false);
+        topProductCheck.setSelected(true);
+        topProductCheck.setDisable(false);
+        topProductLineCheck.setSelected(false);
+        topProductLineCheck.setDisable(true);
+        topCustomerCheck.setSelected(false);
+        topCustomerCheck.setDisable(true);
+
+        totalRevenueCheck.setOnMouseClicked(event -> {
+            updateChecked(totalRevenueCheck);
+            if (totalRevenueCheck.isSelected()) {
+                if (chartPane1.getChildren().isEmpty()) {
+                    chartPane1.getChildren().add(totalRevenueChart);
+                } else if (chartPane2.getChildren().isEmpty()) {
+                    chartPane2.getChildren().add(totalRevenueChart);
+                }
+            } else {
+                if (chartPane1.getChildren().contains(totalRevenueChart)) {
+                    chartPane1.getChildren().clear();
+                } else {
+                    chartPane2.getChildren().clear();
+                }
+            }
+        });
+
+        topProductCheck.setOnMouseClicked(event -> {
+            updateChecked(topProductCheck);
+            if (topProductCheck.isSelected()) {
+                if (chartPane1.getChildren().isEmpty()) {
+                    chartPane1.getChildren().add(productRevenueChart);
+                } else if (chartPane2.getChildren().isEmpty()) {
+                    chartPane2.getChildren().add(productRevenueChart);
+                }
+            } else {
+                if (chartPane1.getChildren().contains(productRevenueChart)) {
+                    chartPane1.getChildren().clear();
+                } else {
+                    chartPane2.getChildren().clear();
+                }
+            }
+        });
+
+        topProductLineCheck.setOnMouseClicked(event -> {
+            updateChecked(topProductLineCheck);
+            if (topProductLineCheck.isSelected()) {
+                if (chartPane1.getChildren().isEmpty()) {
+                    chartPane1.getChildren().add(productLineRevenueChart);
+                } else if (chartPane2.getChildren().isEmpty()) {
+                    chartPane2.getChildren().add(productLineRevenueChart);
+                }
+            } else {
+                if (chartPane1.getChildren().contains(productLineRevenueChart)) {
+                    chartPane1.getChildren().clear();
+                } else {
+                    chartPane2.getChildren().clear();
+                }
+            }
+        });
+
+        topCustomerCheck.setOnMouseClicked(event -> {
+            updateChecked(topCustomerCheck);
+            if (topCustomerCheck.isSelected()) {
+                if (chartPane1.getChildren().isEmpty()) {
+                    chartPane1.getChildren().add(customerRevenueChart);
+                } else if (chartPane2.getChildren().isEmpty()) {
+                    chartPane2.getChildren().add(customerRevenueChart);
+                }
+            } else {
+                if (chartPane1.getChildren().contains(customerRevenueChart)) {
+                    chartPane1.getChildren().clear();
+                } else {
+                    chartPane2.getChildren().clear();
+                }
+            }
+        });
+
 
 //        XYChart.Series series1 = new XYChart.Series();
 //        series1.setName("2003");
@@ -252,6 +407,40 @@ public class MainSceneController extends SceneController implements Initializabl
 //        productRevenueChart.getData().addAll(series1, series2, series3);
     }
     //endregion
+
+    private void updateChecked(JFXCheckBox checkbox) {
+        if (checkbox.isSelected()) {
+            numChecked++;
+            if (numChecked >= maximumChecked) {
+                disableUncheckedCheckboxes();
+            }
+        } else {
+            numChecked--;
+            enableAllCheckboxes();
+        }
+    }
+
+    private void disableUncheckedCheckboxes() {
+        if (!totalRevenueCheck.isSelected()) {
+            totalRevenueCheck.setDisable(true);
+        }
+        if (!topProductCheck.isSelected()) {
+            topProductCheck.setDisable(true);
+        }
+        if (!topProductLineCheck.isSelected()) {
+            topProductLineCheck.setDisable(true);
+        }
+        if (!topCustomerCheck.isSelected()) {
+            topCustomerCheck.setDisable(true);
+        }
+    }
+
+    private void enableAllCheckboxes() {
+        totalRevenueCheck.setDisable(false);
+        topProductCheck.setDisable(false);
+        topProductLineCheck.setDisable(false);
+        topCustomerCheck.setDisable(false);
+    }
 
     //region Employees Tab: list employees, employee's info: details, order, operations.
     @FXML
@@ -412,6 +601,7 @@ public class MainSceneController extends SceneController implements Initializabl
 
         }, null, null, null);
     }
+
 
     private Employee user;
     public static boolean haveJustOpened = false;
