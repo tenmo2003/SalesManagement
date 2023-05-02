@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import salesmanagement.salesmanagement.SalesComponent.Customer;
-import salesmanagement.salesmanagement.SalesComponent.SalesComponent;
 import salesmanagement.salesmanagement.Utils.NotificationCode;
 import salesmanagement.salesmanagement.Utils.NotificationSystem;
 import salesmanagement.salesmanagement.ViewController.InfoViewController;
@@ -49,7 +48,7 @@ public class CustomerInfoViewController extends InfoViewController<Customer> imp
                     parentController.show();
                     NotificationSystem.throwNotification(NotificationCode.SUCCEED_ADD_CUSTOMER, stage);
                 },
-                loadingIndicator, null);
+                parentController.getLoadingIndicator(), null);
     }
 
     @FXML
@@ -63,6 +62,6 @@ public class CustomerInfoViewController extends InfoViewController<Customer> imp
                     parentController.show();
                     NotificationSystem.throwNotification(NotificationCode.SUCCEED_ADD_CUSTOMER, stage);
                 },
-                loadingIndicator, null);
+                parentController.getLoadingIndicator(), null);
     }
 }

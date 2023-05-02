@@ -1,16 +1,23 @@
 package salesmanagement.salesmanagement.SalesComponent;
 
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 
-public class Order implements SalesComponent{
+public class Order implements SalesComponent {
     private int orderNumber;
     private int employeeNumber;
     private String employeeName;
-    private LocalDate orderDate;
-    private LocalDate requiredDate;
-    private LocalDate shippedDate;
+    private LocalDate orderDate = LocalDate.of(1970, 1, 1);
+    ;
+    private LocalDate requiredDate = LocalDate.of(1970, 1, 1);
+    ;
+    private LocalDate shippedDate = LocalDate.of(1970, 1, 1);
+    ;
     private String status;
     private String comments;
+    private int customerNumber;
     private String customerName;
     private String contact;
     private String type;
@@ -36,8 +43,37 @@ public class Order implements SalesComponent{
         this.deliver_to = deliver_to;
     }
 
+    public Order(ResultSet resultSet) throws SQLException {
+        this.orderNumber = resultSet.getInt("orderNumber");
+        this.customerNumber = resultSet.getInt("customerNumber");
+        this.employeeNumber = resultSet.getInt("orders.created_by");
+        this.customerName = resultSet.getString("customerName");
+        this.employeeName = resultSet.getString("lastName") + resultSet.getString("firstName");
+        this.contact = resultSet.getString("phone");
+        Date orderDate = resultSet.getDate("orderDate");
+        if (orderDate != null) this.orderDate = resultSet.getDate("orderDate").toLocalDate();
+
+        Date requiredDate = resultSet.getDate("requiredDate");
+        if (requiredDate != null) this.requiredDate = resultSet.getDate("requiredDate").toLocalDate();
+
+        Date shippedDate = resultSet.getDate("shippedDate");
+        if (shippedDate != null) this.shippedDate = shippedDate.toLocalDate();
+
+        this.status = resultSet.getString("status");
+        this.comments = resultSet.getString("comments");
+
+        this.type = resultSet.getString("type");
+        this.value = resultSet.getDouble("value");
+        this.payment_method = resultSet.getString("payment_method");
+        this.deliver_to = resultSet.getString("deliver_to");
+    }
+
+    public int getCustomerNumber() {
+        return customerNumber;
+    }
+
     public String getDestination() {
-        return deliver_to;
+        return deliver_to == null ? "" : deliver_to;
     }
 
     public void setDestination(String deliver_to) {
@@ -73,7 +109,7 @@ public class Order implements SalesComponent{
     }
 
     public String getEmployeeName() {
-        return employeeName;
+        return employeeName == null ? "" : employeeName;
     }
 
     public void setEmployeeName(String employeeName) {
@@ -101,7 +137,7 @@ public class Order implements SalesComponent{
     }
 
     public String getComments() {
-        return comments;
+        return comments == null ? "" : comments;
     }
 
     public void setComments(String comments) {
@@ -109,7 +145,7 @@ public class Order implements SalesComponent{
     }
 
     public String getCustomerName() {
-        return customerName;
+        return customerName == null ? "" : customerName;
     }
 
     public void setCustomerName(String customerName) {
@@ -117,7 +153,7 @@ public class Order implements SalesComponent{
     }
 
     public String getContact() {
-        return contact;
+        return contact == null ? "" : contact;
     }
 
     public void setContact(String contact) {

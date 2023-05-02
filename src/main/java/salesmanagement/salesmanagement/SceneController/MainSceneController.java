@@ -47,6 +47,7 @@ import salesmanagement.salesmanagement.Utils.NotificationSystem;
 import salesmanagement.salesmanagement.ViewController.*;
 import salesmanagement.salesmanagement.ViewController.CustomersTab.CustomersTabViewController;
 import salesmanagement.salesmanagement.ViewController.EmployeesTab.EmployeesTabViewController;
+import salesmanagement.salesmanagement.ViewController.OrdersTab.OrdersTabViewController;
 import salesmanagement.salesmanagement.ViewController.ProductsTab.ProductsTabViewController;
 import salesmanagement.salesmanagement.ViewController.SettingsTab.SettingTabViewController;
 
@@ -100,6 +101,7 @@ public class MainSceneController extends SceneController implements Initializabl
     EmployeesTabViewController employeesTabViewController;
     CustomersTabViewController customersTabViewController;
     ProductsTabViewController productsTabViewController;
+    OrdersTabViewController ordersTabViewController;
 
     @FXML
     void goToCreateOrderTab() {
@@ -108,10 +110,9 @@ public class MainSceneController extends SceneController implements Initializabl
 
     @FXML
     void goToOrdersTab() {
-        if (!ordersInit) {
-            initOrders();
-        }
         tabPane.getSelectionModel().select(ordersTab);
+        ordersTabViewController.show();
+
     }
 
     void goToEditOrderTab() {
@@ -621,6 +622,11 @@ public class MainSceneController extends SceneController implements Initializabl
             loader.load();
             productsTabViewController = loader.getController();
             productsOperationTab.setContent(productsTabViewController.getRoot());
+
+            loader = new FXMLLoader(SalesManagement.class.getResource("fxml-view/orders-tab/orders-tab-view.fxml"));
+            loader.load();
+            ordersTabViewController = loader.getController();
+            ordersTab.setContent(ordersTabViewController.getRoot());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

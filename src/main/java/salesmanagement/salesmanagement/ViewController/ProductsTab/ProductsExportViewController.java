@@ -66,7 +66,7 @@ public class ProductsExportViewController extends ExportViewController implement
                 }
             }, () -> {
                 NotificationSystem.throwNotification(NotificationCode.SUCCEED_EXPORTING, stage);
-            }, loadingIndicator, null);
+            }, parentController.getLoadingIndicator(), null);
         return file;
     }
 }

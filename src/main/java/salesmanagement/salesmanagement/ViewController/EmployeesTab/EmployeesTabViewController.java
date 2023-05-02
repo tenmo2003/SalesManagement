@@ -1,7 +1,6 @@
 package salesmanagement.salesmanagement.ViewController.EmployeesTab;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
@@ -14,18 +13,18 @@ import org.controlsfx.control.tableview2.FilteredTableView;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesComponent.SalesComponent;
 import salesmanagement.salesmanagement.SalesManagement;
-import salesmanagement.salesmanagement.ViewController.FilterViewController;
 import salesmanagement.salesmanagement.ViewController.ViewController;
 
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import static salesmanagement.salesmanagement.SceneController.SceneController.runTask;
 
-public class EmployeesTabViewController extends ViewController implements EmployeesTabController{
+public class EmployeesTabViewController extends ViewController implements EmployeesTabController {
     @FXML
     private TableColumn<?, ?> accessibilityColumn;
 
@@ -51,7 +50,7 @@ public class EmployeesTabViewController extends ViewController implements Employ
     private TableColumn<?, ?> phoneColumn;
 
     ViewController employeesExportViewController;
-    FilterViewController employeesFilterViewController;
+    EmployeesFilterViewController employeesFilterViewController;
     EmployeeInfoViewController employeeInfoViewController;
     SortedList<SalesComponent> sortedAndFilteredEmployees;
 
@@ -112,8 +111,9 @@ public class EmployeesTabViewController extends ViewController implements Employ
             employeeStatusColumn.setMinWidth(0.1 * tableWidth);
         }
 
-        ArrayList<Employee> employees = new ArrayList<>();
+
         runTask(() -> {
+            List<Employee> employees = new ArrayList<>();
             String query = "SELECT * FROM employees";
             ResultSet resultSet = sqlConnection.getDataQuery(query);
             try {
@@ -123,8 +123,7 @@ public class EmployeesTabViewController extends ViewController implements Employ
             } catch (SQLException ignored) {
 
             }
-            ObservableList<SalesComponent> employeeList = FXCollections.observableArrayList(employees);
-            employeesFilterViewController.setFilteredList(new FilteredList<>(employeeList, p -> true));
+            employeesFilterViewController.setFilteredList(new FilteredList<>(FXCollections.observableArrayList(employees)));
             sortedAndFilteredEmployees = new SortedList<>(employeesFilterViewController.getFilteredList());
         }, () -> {
             employeesTable.setItems(sortedAndFilteredEmployees);

@@ -2,10 +2,16 @@ package salesmanagement.salesmanagement.ViewController.ProductsTab;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import org.controlsfx.control.textfield.TextFields;
 import salesmanagement.salesmanagement.SalesComponent.Product;
 import salesmanagement.salesmanagement.Utils.NotificationCode;
 import salesmanagement.salesmanagement.Utils.NotificationSystem;
 import salesmanagement.salesmanagement.ViewController.InfoViewController;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static salesmanagement.salesmanagement.SceneController.SceneController.runTask;
 
@@ -40,7 +46,7 @@ public class ProductInfoViewController extends InfoViewController<Product> imple
                     close();
                     String query = String.format("UPDATE products SET productName = '%s', productLine = '%s', productVendor = '%s', productDescription = '%s', quantityInStock = %d, buyPrice = %s, sellPrice = %s WHERE productCode = '%s'",
                             productNameTextField.getText(), productLineTextField.getText(), productVendorTextField.getText(), descriptionTextField.getText(),
-                            Integer.parseInt(inStockTextField.getText()), buyPriceTextField.getText().replaceAll(",","."), sellPriceTextField.getText().replaceAll(",","."), productCodeTextField.getText());
+                            Integer.parseInt(inStockTextField.getText()), buyPriceTextField.getText().replaceAll(",", "."), sellPriceTextField.getText().replaceAll(",", "."), productCodeTextField.getText());
                     sqlConnection.updateQuery(query);
                 }, () -> {
                     parentController.show();
@@ -57,13 +63,27 @@ public class ProductInfoViewController extends InfoViewController<Product> imple
                                     "VALUES ('%s', '%s', '%s', '%s', '%s', %d, %s, %s);",
                             productCodeTextField.getText(), productNameTextField.getText(),
                             productLineTextField.getText(), productVendorTextField.getText(), descriptionTextField.getText(),
-                            Integer.parseInt(inStockTextField.getText()), buyPriceTextField.getText().replaceAll(",","."), sellPriceTextField.getText().replaceAll(",","."));
+                            Integer.parseInt(inStockTextField.getText()), buyPriceTextField.getText().replaceAll(",", "."), sellPriceTextField.getText().replaceAll(",", "."));
                     sqlConnection.updateQuery(query);
                 }, () -> {
                     parentController.show();
                     NotificationSystem.throwNotification(NotificationCode.SUCCEED_CREATE_PRODUCT, stage);
                 },
                 loadingIndicator, null);
+    }
+
+    public void loadProductLine() {
+        List<String> productLines = new ArrayList<>();
+        String query = "select distinct productLine from productlines";
+        ResultSet resultSet = sqlConnection.getDataQuery(query);
+        try {
+            while (resultSet.next()) {
+                productLines.add(resultSet.getString("productLine"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        TextFields.bindAutoCompletion(productLineTextField, productLines);
     }
 
     @Override

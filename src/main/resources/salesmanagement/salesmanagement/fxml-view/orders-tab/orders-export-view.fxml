@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<StackPane fx:id="root" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.OrdersTab.OrdersExportViewController">
+    <children>
+        <StackPane opacity="0.5" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: grey;" />
+        <FlowPane alignment="CENTER" StackPane.alignment="CENTER">
+            <children>
+                <VBox alignment="TOP_CENTER" prefHeight="259.0" prefWidth="414.0" style="-fx-background-color: white;">
+                    <children>
+                        <StackPane>
+                            <children>
+                                <Label text="Export Orders List">
+                                    <font>
+                                        <Font size="21.0" />
+                                    </font>
+                                </Label>
+                                <JFXButton alignment="CENTER" contentDisplay="CENTER" minWidth="46.0" onMouseClicked="#close" prefHeight="30.0" prefWidth="46.0" textAlignment="CENTER" StackPane.alignment="CENTER_RIGHT">
+                                    <graphic>
+                                        <FontAwesomeIconView glyphName="CLOSE" size="25" />
+                                    </graphic>
+                                    <cursor>
+                                        <Cursor fx:constant="HAND" />
+                                    </cursor>
+                                </JFXButton>
+                            </children>
+                            <VBox.margin>
+                                <Insets bottom="10.0" top="10.0" />
+                            </VBox.margin>
+                        </StackPane>
+                        <HBox prefHeight="123.0" prefWidth="394.0" spacing="30.0">
+                            <children>
+                                <VBox prefHeight="192.0" prefWidth="82.0" spacing="10.0">
+                                    <children>
+                                        <JFXCheckBox fx:id="orderNumber" selected="true" text="Order Number" />
+                                        <JFXCheckBox fx:id="orderedDate" selected="true" text="Ordered Date" />
+                                        <JFXCheckBox fx:id="requiredDate" selected="true" text="Required Date" />
+                                        <JFXCheckBox fx:id="shippedDate" selected="true" text="Shipped Date" />
+                              <JFXCheckBox fx:id="value" selected="true" text="Value" />
+                              <JFXCheckBox fx:id="paymentMethod" selected="true" text="Payment Method" />
+                                    </children>
+                                </VBox>
+                                <VBox prefHeight="192.0" prefWidth="78.0" spacing="10.0">
+                                    <children>
+                                        <JFXCheckBox fx:id="status" selected="true" text="Status" />
+                                        <JFXCheckBox fx:id="comments" selected="true" text="Comments" />
+                                        <JFXCheckBox fx:id="customerNumber" selected="true" text="Customer Number" />
+                                        <JFXCheckBox fx:id="type" selected="true" text="Type" />
+                              <JFXCheckBox fx:id="employeeNumber" selected="true" text="Employee Number" />
+                              <JFXCheckBox fx:id="destination" selected="true" text="Destination" />
+                                    </children>
+                                </VBox>
+                            </children>
+                            <padding>
+                                <Insets left="50.0" />
+                            </padding>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="51.0" prefWidth="394.0" spacing="20.0">
+                            <children>
+                                <JFXButton onMouseClicked="#export" text="EXPORT">
+                                    <cursor>
+                                        <Cursor fx:constant="HAND" />
+                                    </cursor>
+                                </JFXButton>
+                            </children>
+                        </HBox>
+                    </children>
+                    <padding>
+                        <Insets left="10.0" right="10.0" />
+                    </padding>
+                </VBox>
+            </children>
+        </FlowPane>
+    </children>
+</StackPane>

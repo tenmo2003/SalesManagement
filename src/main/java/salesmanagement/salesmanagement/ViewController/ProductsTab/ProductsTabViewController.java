@@ -113,6 +113,7 @@ public class ProductsTabViewController extends ViewController implements Product
     public void show() {
         super.show();
         runTask(() -> {
+            productInfoViewController.loadProductLine();
             List<Product> products = new ArrayList<>();
             try {
                 String query = "SELECT productCode, productName, productLine, productVendor, productDescription, quantityInStock, buyPrice, sellPrice FROM products";

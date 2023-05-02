@@ -35,6 +35,10 @@ public abstract class ViewController implements Initializable {
         this.parentController = parentController;
     }
 
+    public ProgressIndicator getLoadingIndicator() {
+        return loadingIndicator;
+    }
+
     @FXML
     public void close() {
         root.setVisible(false);
