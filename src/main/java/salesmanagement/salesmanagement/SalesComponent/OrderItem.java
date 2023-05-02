@@ -1,6 +1,6 @@
 package salesmanagement.salesmanagement.SalesComponent;
 
-public class OrderItem {
+public class OrderItem implements SalesComponent{
     //    int orderNumber;
 //    Date orderDate;
 //    Date requiredDate;

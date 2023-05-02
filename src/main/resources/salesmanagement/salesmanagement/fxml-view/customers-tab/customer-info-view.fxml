@@ -6,7 +6,6 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.StackPane?>
@@ -22,7 +21,7 @@
                <children>
                   <StackPane>
                      <children>
-                        <Label id="top_label" text="Customer Infomation">
+                        <Label id="top_label" fx:id="boxLabel" text="Customer Infomation">
                            <font>
                               <Font size="21.0" />
                            </font>
@@ -106,12 +105,12 @@
                   </VBox>
                   <StackPane VBox.vgrow="ALWAYS">
                      <children>
-                        <JFXButton fx:id="saveButton" onMouseClicked="#saveCustomerInfo" text="SAVE" visible="false">
+                        <JFXButton fx:id="saveButton" onMouseClicked="#save" text="SAVE" visible="false">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </JFXButton>
-                        <JFXButton fx:id="addButton" onMouseClicked="#addNewCustomer" text="ADD" visible="false">
+                        <JFXButton fx:id="addButton" onMouseClicked="#add" text="ADD" visible="false">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
@@ -128,6 +127,5 @@
             </VBox>
          </children>
       </FlowPane>
-      <ProgressIndicator fx:id="loadingIndicator" />
    </children>
 </StackPane>

@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
 
 import static salesmanagement.salesmanagement.SceneController.SceneController.runTask;
 
-public class AccountActivityLogController extends ViewController {
+public class AccountActivityLogController extends ViewController implements SettingsTabController{
     @FXML
     private FilteredTableView<Action> actionsTable;
     @FXML

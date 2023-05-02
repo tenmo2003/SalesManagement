@@ -1,24 +1,16 @@
 package salesmanagement.salesmanagement.ViewController.EmployeesTab;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
-import salesmanagement.salesmanagement.ViewController.ViewController;
+import salesmanagement.salesmanagement.ViewController.FilterViewController;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.ResourceBundle;
 
-public class EmployeesFilterViewController extends ViewController {
+public class EmployeesFilterViewController extends FilterViewController<Employee> implements EmployeesTabController {
 
     @FXML
     private ComboBox<String> accessibilityComboBox;
@@ -35,11 +27,6 @@ public class EmployeesFilterViewController extends ViewController {
     @FXML
     private ComboBox<String> statusComboBox;
 
-    private FilteredList<Employee> filteredEmployees;
-
-
-    List<Employee> employees;
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         super.initialize(url, resourceBundle);
@@ -47,21 +34,9 @@ public class EmployeesFilterViewController extends ViewController {
         statusComboBox.setItems(FXCollections.observableArrayList("ACTIVE", "INACTIVE"));
     }
 
-    public FilteredList<Employee> getFilteredEmployees() {
-        return filteredEmployees;
-    }
-
-    public void setFilteredEmployees(FilteredList<Employee> filteredEmployees) {
-        this.filteredEmployees = filteredEmployees;
-    }
-
-    public void setEmployees(List<Employee> employees) {
-        this.employees = employees;
-    }
-
     @FXML
     public void applyFilter() {
-        filteredEmployees.setPredicate(employee -> {
+        filteredList.setPredicate(employee -> {
             boolean nameMatch = employee.getFullName().toLowerCase().contains(nameTextField.getText().toLowerCase());
             boolean emailMatch = employee.getEmail().toLowerCase().contains(emailTextField.getText().toLowerCase());
             boolean phoneMatch = employee.getPhone().toLowerCase().contains(phoneTextField.getText().toLowerCase());
@@ -75,7 +50,7 @@ public class EmployeesFilterViewController extends ViewController {
     }
 
     @FXML
-    void clearFilter(MouseEvent event) {
+    public void clearFilter() {
         emailTextField.setText("");
         nameTextField.setText("");
         phoneTextField.setText("");

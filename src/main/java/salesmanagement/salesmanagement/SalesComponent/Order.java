@@ -2,7 +2,7 @@ package salesmanagement.salesmanagement.SalesComponent;
 
 import java.time.LocalDate;
 
-public class Order {
+public class Order implements SalesComponent{
     private int orderNumber;
     private int employeeNumber;
     private String employeeName;

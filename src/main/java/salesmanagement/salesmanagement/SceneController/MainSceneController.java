@@ -47,6 +47,7 @@ import salesmanagement.salesmanagement.Utils.NotificationSystem;
 import salesmanagement.salesmanagement.ViewController.*;
 import salesmanagement.salesmanagement.ViewController.CustomersTab.CustomersTabViewController;
 import salesmanagement.salesmanagement.ViewController.EmployeesTab.EmployeesTabViewController;
+import salesmanagement.salesmanagement.ViewController.ProductsTab.ProductsTabViewController;
 import salesmanagement.salesmanagement.ViewController.SettingsTab.SettingTabViewController;
 
 import java.io.IOException;
@@ -98,6 +99,7 @@ public class MainSceneController extends SceneController implements Initializabl
     SettingTabViewController settingTabViewController;
     EmployeesTabViewController employeesTabViewController;
     CustomersTabViewController customersTabViewController;
+    ProductsTabViewController productsTabViewController;
 
     @FXML
     void goToCreateOrderTab() {
@@ -118,10 +120,8 @@ public class MainSceneController extends SceneController implements Initializabl
 
     @FXML
     void goToProductsOperationTab() {
-        if (!productsInit) {
-            initProducts();
-        }
         tabPane.getSelectionModel().select(productsOperationTab);
+        productsTabViewController.show();
     }
 
     @FXML
@@ -134,10 +134,6 @@ public class MainSceneController extends SceneController implements Initializabl
     void goToSettingTab() {
         tabPane.getSelectionModel().select(settingTab);
         settingTabViewController.show();
-    }
-
-    public Node getMainScenePane() {
-        return secondSplitPane;
     }
 
     //region DashBoard Tab
@@ -620,6 +616,11 @@ public class MainSceneController extends SceneController implements Initializabl
             loader.load();
             customersTabViewController = loader.getController();
             customersTab.setContent(customersTabViewController.getRoot());
+
+            loader = new FXMLLoader(SalesManagement.class.getResource("fxml-view/products-tab/products-tab-view.fxml"));
+            loader.load();
+            productsTabViewController = loader.getController();
+            productsOperationTab.setContent(productsTabViewController.getRoot());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

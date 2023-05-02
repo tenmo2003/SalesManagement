@@ -1,4 +1,4 @@
 package salesmanagement.salesmanagement.ViewController.EmployeesTab;
 
-public class EmployeeOrderViewController {
+public class EmployeeOrderViewController implements EmployeesTabController {
 }

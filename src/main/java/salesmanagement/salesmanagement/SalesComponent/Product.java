@@ -1,13 +1,11 @@
 package salesmanagement.salesmanagement.SalesComponent;
 
-import javafx.beans.property.SimpleStringProperty;
-
-public class Product {
-    private String productCode;
-    private String productName;
-    private String productLine;
-    private String productVendor;
-    private String productDescription;
+public class Product implements SalesComponent {
+    private String productCode = "";
+    private String productName = "";
+    private String productLine = "";
+    private String productVendor = "";
+    private String productDescription = "";
     private int quantityInStock;
     private double buyPrice;
     private double sellPrice;

@@ -12,7 +12,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import org.controlsfx.control.tableview2.FilteredTableView;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
+import salesmanagement.salesmanagement.SalesComponent.SalesComponent;
 import salesmanagement.salesmanagement.SalesManagement;
+import salesmanagement.salesmanagement.ViewController.FilterViewController;
 import salesmanagement.salesmanagement.ViewController.ViewController;
 
 import java.net.URL;
@@ -23,7 +25,7 @@ import java.util.ResourceBundle;
 
 import static salesmanagement.salesmanagement.SceneController.SceneController.runTask;
 
-public class EmployeesTabViewController extends ViewController {
+public class EmployeesTabViewController extends ViewController implements EmployeesTabController{
     @FXML
     private TableColumn<?, ?> accessibilityColumn;
 
@@ -37,7 +39,7 @@ public class EmployeesTabViewController extends ViewController {
     private TableColumn<?, ?> employeeStatusColumn;
 
     @FXML
-    private FilteredTableView<Employee> employeesTable;
+    private FilteredTableView<SalesComponent> employeesTable;
 
     @FXML
     private ProgressIndicator loadingIndicator;
@@ -47,10 +49,11 @@ public class EmployeesTabViewController extends ViewController {
 
     @FXML
     private TableColumn<?, ?> phoneColumn;
-    EmployeesExportViewController employeesExportViewController;
-    EmployeesFilterViewController employeesFilterViewController;
+
+    ViewController employeesExportViewController;
+    FilterViewController employeesFilterViewController;
     EmployeeInfoViewController employeeInfoViewController;
-    SortedList<Employee> sortedAndFilteredEmployees;
+    SortedList<SalesComponent> sortedAndFilteredEmployees;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -60,6 +63,7 @@ public class EmployeesTabViewController extends ViewController {
             loader.load();
             employeesExportViewController = loader.getController();
             root.getChildren().add(employeesExportViewController.getRoot());
+            employeesExportViewController.setParentController(this);
 
             loader = new FXMLLoader(SalesManagement.class.getResource("fxml-view/employees-tab/employees-filter-view.fxml"));
             loader.load();
@@ -83,7 +87,7 @@ public class EmployeesTabViewController extends ViewController {
 
         employeesTable.setOnMouseClicked((MouseEvent event) -> {
             if (event.getClickCount() == 2) {
-                Employee selected = employeesTable.getSelectionModel().getSelectedItem();
+                Employee selected = (Employee) employeesTable.getSelectionModel().getSelectedItem();
                 if (selected != null) {
                     employeeInfoViewController.show(selected);
                 }
@@ -109,7 +113,6 @@ public class EmployeesTabViewController extends ViewController {
         }
 
         ArrayList<Employee> employees = new ArrayList<>();
-        employeesFilterViewController.setEmployees(employees);
         runTask(() -> {
             String query = "SELECT * FROM employees";
             ResultSet resultSet = sqlConnection.getDataQuery(query);
@@ -120,9 +123,9 @@ public class EmployeesTabViewController extends ViewController {
             } catch (SQLException ignored) {
 
             }
-            ObservableList<Employee> employeeList = FXCollections.observableArrayList(employees);
-            employeesFilterViewController.setFilteredEmployees(new FilteredList<>(employeeList, p -> true));
-            sortedAndFilteredEmployees = new SortedList<>(employeesFilterViewController.getFilteredEmployees());
+            ObservableList<SalesComponent> employeeList = FXCollections.observableArrayList(employees);
+            employeesFilterViewController.setFilteredList(new FilteredList<>(employeeList, p -> true));
+            sortedAndFilteredEmployees = new SortedList<>(employeesFilterViewController.getFilteredList());
         }, () -> {
             employeesTable.setItems(sortedAndFilteredEmployees);
             sortedAndFilteredEmployees.comparatorProperty().bind(employeesTable.comparatorProperty());
@@ -130,17 +133,17 @@ public class EmployeesTabViewController extends ViewController {
     }
 
     @FXML
-    void addEmployeeFilter(MouseEvent event) {
+    void addEmployeeFilter() {
         employeesFilterViewController.show();
     }
 
     @FXML
-    void addNewEmployee(MouseEvent event) {
+    void addNewEmployee() {
         employeeInfoViewController.show(new Employee());
     }
 
     @FXML
-    void openExportEmployeesBox(MouseEvent event) {
+    void openExportEmployeesBox() {
         employeesExportViewController.show();
     }
 

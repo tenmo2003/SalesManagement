@@ -19,7 +19,7 @@ import java.util.ResourceBundle;
 
 import static salesmanagement.salesmanagement.SceneController.SceneController.runTask;
 
-public class SettingTabViewController extends ViewController {
+public class SettingTabViewController extends ViewController implements SettingsTabController{
     AccountActivityLogController accountActivityLogController;
     Employee user;
     @FXML

@@ -44,7 +44,7 @@
                <children>
                   <HBox prefHeight="30.0" prefWidth="314.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <JFXButton onMouseClicked="#addFilter" prefHeight="30.0" prefWidth="146.0" text="Customers Filter...">
+                        <JFXButton onMouseClicked="#applyFilter" prefHeight="30.0" prefWidth="146.0" text="Customers Filter...">
                            <graphic>
                               <FontAwesomeIconView glyphName="SEARCH" wrappingWidth="20.349998474121094" />
                            </graphic>
@@ -53,8 +53,8 @@
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="6.0" prefWidth="1050.0" spacing="10.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <JFXButton onMouseClicked="#addNewCustomer" text="ADD NEW" />
-                        <JFXButton onMouseClicked="#openExportCustomersBox" text="EXPORT" />
+                        <JFXButton onMouseClicked="#add" text="ADD" />
+                        <JFXButton onMouseClicked="#export" text="EXPORT" />
                      </children>
                   </HBox>
                </children>

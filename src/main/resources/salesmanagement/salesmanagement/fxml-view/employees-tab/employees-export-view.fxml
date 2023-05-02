@@ -73,7 +73,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="51.0" prefWidth="394.0" spacing="20.0">
                      <children>
-                        <JFXButton onMouseClicked="#exportEmployeesList" text="EXPORT">
+                        <JFXButton onMouseClicked="#export" text="EXPORT">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>

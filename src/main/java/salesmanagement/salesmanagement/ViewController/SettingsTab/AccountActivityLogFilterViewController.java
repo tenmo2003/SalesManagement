@@ -12,7 +12,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
-public class AccountActivityLogFilterViewController extends ViewController {
+public class AccountActivityLogFilterViewController extends ViewController implements SettingsTabController {
     @FXML
     private TextField actionIDTextField;
 

@@ -11,7 +11,7 @@ import java.util.Objects;
 /**
  * @since 1.3
  */
-public class Employee {
+public class Employee implements SalesComponent{
     private boolean isNewUser = true;
 
     public boolean isNewUser() {

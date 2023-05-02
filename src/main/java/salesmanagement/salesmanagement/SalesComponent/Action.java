@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 
-public class Action {
+public class Action implements SalesComponent {
     private int actionID;
     private String time;
     private String description;

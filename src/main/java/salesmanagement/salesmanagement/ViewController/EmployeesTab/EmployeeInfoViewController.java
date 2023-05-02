@@ -40,7 +40,7 @@ import static salesmanagement.salesmanagement.Utils.ImageController.isImageLoade
 import static salesmanagement.salesmanagement.Utils.InputErrorCode.getInputErrorLabel;
 import static salesmanagement.salesmanagement.Utils.Utils.shake;
 
-public class EmployeeInfoViewController extends ViewController {
+public class EmployeeInfoViewController extends ViewController implements EmployeesTabController {
 
     @FXML
     private ComboBox<String> accessibilityBox;

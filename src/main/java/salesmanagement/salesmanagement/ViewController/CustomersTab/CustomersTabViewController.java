@@ -11,6 +11,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import org.controlsfx.control.tableview2.FilteredTableView;
 import salesmanagement.salesmanagement.SalesComponent.Customer;
+import salesmanagement.salesmanagement.SalesComponent.SalesComponent;
 import salesmanagement.salesmanagement.SalesManagement;
 import salesmanagement.salesmanagement.ViewController.ViewController;
 
@@ -23,7 +24,11 @@ import java.util.ResourceBundle;
 
 import static salesmanagement.salesmanagement.SceneController.SceneController.runTask;
 
-public class CustomersTabViewController extends ViewController {
+public class CustomersTabViewController extends ViewController implements CustomersTabController {
+    private CustomerInfoViewController customerInfoViewController;
+    private CustomersExportViewController customersExportViewController;
+    private CustomersFilterViewController customersFilterViewController;
+
     @FXML
     private TableColumn<?, ?> addressColumn;
 
@@ -34,24 +39,27 @@ public class CustomersTabViewController extends ViewController {
     private TableColumn<?, ?> customerNameColumn;
 
     @FXML
-    private FilteredTableView<Customer> customersTable;
+    private FilteredTableView<SalesComponent> customersTable;
 
     @FXML
     private ProgressIndicator loadingIndicator;
 
     @FXML
     private TableColumn<?, ?> rankColumn;
-    private CustomerInfoViewController customerInfoViewController;
-private CustomersFilterViewController customersFilterViewController;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         super.initialize(url, resourceBundle);
-
         try {
             FXMLLoader loader = new FXMLLoader(SalesManagement.class.getResource("fxml-view/customers-tab/customer-info-view.fxml"));
             loader.load();
             customerInfoViewController = loader.getController();
             root.getChildren().add(customerInfoViewController.getRoot());
+
+            loader = new FXMLLoader(SalesManagement.class.getResource("fxml-view/customers-tab/customers-export-view.fxml"));
+            loader.load();
+            customersExportViewController = loader.getController();
+            root.getChildren().add(customersExportViewController.getRoot());
 
             loader = new FXMLLoader(SalesManagement.class.getResource("fxml-view/customers-tab/customers-filter-view.fxml"));
             loader.load();
@@ -68,30 +76,33 @@ private CustomersFilterViewController customersFilterViewController;
 
         customersTable.setOnMouseClicked((MouseEvent event) -> {
             if (event.getClickCount() == 2) {
-                Customer selected = customersTable.getSelectionModel().getSelectedItem();
+                Customer selected = (Customer) customersTable.getSelectionModel().getSelectedItem();
                 if (selected != null) {
                     customerInfoViewController.show(selected);
                 }
             }
         });
+
+        customerInfoViewController.setParentController(this);
+        customersExportViewController.setParentController(this);
     }
 
     @FXML
-    void addFilter(MouseEvent event) {
+    void applyFilter() {
         customersFilterViewController.show();
     }
 
     @FXML
-    void addNewCustomer(MouseEvent event) {
+    void add() {
         customerInfoViewController.show(new Customer());
     }
 
     @FXML
-    void openExportCustomersBox(MouseEvent event) {
-
+    void export() {
+        customersExportViewController.show();
     }
 
-    SortedList<Customer> sortedAndFilteredCustomers;
+    SortedList<SalesComponent> sortedAndFilteredCustomers;
 
     @Override
     public void show() {
@@ -104,8 +115,8 @@ private CustomersFilterViewController customersFilterViewController;
                 while (resultSet.next()) {
                     customers.add(new Customer(resultSet));
                 }
-                customersFilterViewController.setFilteredCustomers(new FilteredList<>(FXCollections.observableArrayList(customers), p -> true));
-                sortedAndFilteredCustomers = new SortedList<>(customersFilterViewController.getFilteredCustomers());
+                customersFilterViewController.setFilteredList(new FilteredList<>(FXCollections.observableArrayList(customers), p -> true));
+                sortedAndFilteredCustomers = new SortedList<>(customersFilterViewController.getFilteredList());
                 customersTable.setItems(sortedAndFilteredCustomers);
                 sortedAndFilteredCustomers.comparatorProperty().bind(customersTable.comparatorProperty());
             } catch (SQLException ex) {

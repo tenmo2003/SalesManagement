@@ -1,6 +1,6 @@
 package salesmanagement.salesmanagement.ViewController.EmployeesTab;
 
-public class EmployeeActivityLogViewController {
-    //TODO: Set up.
+public class EmployeeActivityLogViewController implements EmployeesTabController {
+    // TODO: Set up.
 
 }

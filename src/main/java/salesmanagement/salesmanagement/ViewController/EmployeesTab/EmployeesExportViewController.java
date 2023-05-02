@@ -3,24 +3,19 @@ package salesmanagement.salesmanagement.ViewController.EmployeesTab;
 import com.jfoenix.controls.JFXCheckBox;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
-
 import salesmanagement.salesmanagement.Utils.NotificationCode;
 import salesmanagement.salesmanagement.Utils.NotificationSystem;
-import salesmanagement.salesmanagement.ViewController.ViewController;
+import salesmanagement.salesmanagement.ViewController.ExportViewController;
 
 import java.io.File;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import static salesmanagement.salesmanagement.Utils.Utils.exportToExcel;
 import static salesmanagement.salesmanagement.SceneController.SceneController.runTask;
+import static salesmanagement.salesmanagement.Utils.Utils.exportToExcel;
 
-public class EmployeesExportViewController extends ViewController {
-
-
+public class EmployeesExportViewController extends ExportViewController implements EmployeesTabController {
     @FXML
     private JFXCheckBox accessibility;
 
@@ -32,9 +27,6 @@ public class EmployeesExportViewController extends ViewController {
 
     @FXML
     private JFXCheckBox employeeNumber;
-
-    @FXML
-    private VBox exportEmployeesBox;
 
     @FXML
     private JFXCheckBox firstName;
@@ -63,7 +55,6 @@ public class EmployeesExportViewController extends ViewController {
     @FXML
     private JFXCheckBox phoneNumber;
 
-
     @FXML
     private JFXCheckBox status;
 
@@ -73,18 +64,13 @@ public class EmployeesExportViewController extends ViewController {
     @FXML
     private JFXCheckBox username;
 
-
     @FXML
-    void exportEmployeesList() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save as");
-
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Excel Workbook", "*.xlsx"));
-        fileChooser.setInitialFileName("Employees_List.xlsx");
-        File file = fileChooser.showSaveDialog(stage);
-
+    public File export() {
+        setExportedFileName("Employees_List");
+        File file = super.export();
         if (file != null)
             runTask(() -> {
+                close();
                 List<String> selectedColumns = new ArrayList<>();
                 if (employeeNumber.isSelected()) selectedColumns.add("employeeNumber");
                 if (officeCode.isSelected()) selectedColumns.add("officeCode");
@@ -111,12 +97,8 @@ public class EmployeesExportViewController extends ViewController {
                     Platform.runLater(() -> NotificationSystem.throwNotification(NotificationCode.ERROR_EXPORTING, stage));
                 }
             }, () -> {
-                exportEmployeesBox.getParent().setVisible(false);
                 NotificationSystem.throwNotification(NotificationCode.SUCCEED_EXPORTING, stage);
-            }, null, null);
-
-
+            }, loadingIndicator, null);
+        return file;
     }
-
-
 }

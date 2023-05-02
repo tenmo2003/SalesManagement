@@ -1,20 +1,17 @@
 package salesmanagement.salesmanagement.ViewController.CustomersTab;
 
 import javafx.collections.FXCollections;
-import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
 import salesmanagement.salesmanagement.SalesComponent.Customer;
-import salesmanagement.salesmanagement.ViewController.ViewController;
+import salesmanagement.salesmanagement.ViewController.FilterViewController;
 
 import java.net.URL;
 import java.util.Arrays;
 import java.util.ResourceBundle;
 
-public class CustomersFilterViewController extends ViewController {
+public class CustomersFilterViewController extends FilterViewController<Customer> implements CustomersTabController{
 
     @FXML
     private TextField addressTextField;
@@ -32,19 +29,8 @@ public class CustomersFilterViewController extends ViewController {
     private ComboBox<String> rankComboBox;
 
     @FXML
-    private StackPane root;
-    private FilteredList<Customer> filteredCustomers;
-    public FilteredList<Customer> getFilteredCustomers() {
-        return filteredCustomers;
-    }
-
-    public void setFilteredCustomers(FilteredList<Customer> filteredCustomers) {
-        this.filteredCustomers = filteredCustomers;
-    }
-
-    @FXML
-    void applyFilter(MouseEvent event) {
-        filteredCustomers.setPredicate(customer -> {
+    public void applyFilter() {
+        filteredList.setPredicate(customer -> {
             boolean nameMatch = customer.getName().toLowerCase().contains(nameTextField.getText().toLowerCase());
             boolean addressMatch = customer.getAddress().toLowerCase().contains(addressTextField.getText().toLowerCase());
             boolean phoneMatch = customer.getContact().toLowerCase().contains(contactTextField.getText().toLowerCase());
@@ -56,12 +42,13 @@ public class CustomersFilterViewController extends ViewController {
     }
 
     @FXML
-    void clearFilter(MouseEvent event) {
+    public void clearFilter() {
         nameTextField.setText("");
         addressTextField.setText("");
         contactTextField.setText("");
         rankComboBox.setValue(null);
     }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         super.initialize(url, resourceBundle);

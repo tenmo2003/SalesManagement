@@ -3,7 +3,7 @@ package salesmanagement.salesmanagement.SalesComponent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Customer {
+public class Customer implements SalesComponent{
     private int customerNumber;
     private String name = "";
     private String contact = "";
