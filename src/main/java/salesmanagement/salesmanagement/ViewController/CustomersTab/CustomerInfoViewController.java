@@ -22,7 +22,6 @@ public class CustomerInfoViewController extends InfoViewController<Customer> imp
     @FXML
     private ComboBox<String> rankComboBox;
 
-
     protected void show(Customer customer) {
         super.show();
         super.selectedSalesComponent = customer;

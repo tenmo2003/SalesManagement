@@ -7,7 +7,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
@@ -56,7 +55,7 @@
                                                             <Font name="System Bold" size="15.0" />
                                                         </font>
                                                     </Label>
-                                                    <TextField fx:id="customerNumberTextField">
+                                                    <TextField fx:id="customerNameTextField">
                                                         <font>
                                                             <Font size="15.0" />
                                                         </font>
@@ -118,32 +117,27 @@
                                 <Insets top="10.0" />
                             </VBox.margin>
                         </VBox>
-                        <HBox alignment="CENTER" prefHeight="59.0" prefWidth="526.0">
-                            <children>
-                                <JFXButton onMouseClicked="#apply" text="Search" />
-                                <JFXButton onMouseClicked="#clearAll" text="Clear All" />
-                            </children>
-                        </HBox>
+                  <StackPane>
+                     <children>
+                              <HBox alignment="CENTER" prefHeight="59.0" prefWidth="526.0">
+                                  <children>
+                                      <JFXButton onMouseClicked="#search" text="Search" />
+                                      <JFXButton onMouseClicked="#clearAll" text="Clear All" />
+                                  </children>
+                              </HBox>
+                        <ProgressIndicator fx:id="loadingIndicator" prefHeight="42.0" prefWidth="34.0" visible="false" StackPane.alignment="CENTER_RIGHT" />
+                     </children>
+                  </StackPane>
                   <StackPane prefHeight="203.0" prefWidth="526.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <FilteredTableView fx:id="searchTable" minHeight="100.0" prefHeight="100.0" stylesheets="@../../table.css">
+                        <FilteredTableView fx:id="searchTable" minHeight="100.0" prefHeight="100.0" stylesheets="@../../table.css" StackPane.alignment="TOP_CENTER">
                            <columns>
-                              <TableColumn fx:id="customerNumberColumn" prefWidth="75.0" text="Customer Number" />
+                              <TableColumn fx:id="customerNumberColumn" prefWidth="75.0" text="No." />
                               <TableColumn fx:id="customerNameColumn" prefWidth="75.0" text="Customer Name" />
                               <TableColumn fx:id="SSNColumn" prefWidth="75.0" text="SSN" />
+                              <TableColumn fx:id="contactColumn" prefWidth="75.0" text="Contact" />
                            </columns>
-                           <columnResizePolicy>
-                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                           </columnResizePolicy>
                         </FilteredTableView>
-                        <HBox alignment="CENTER" StackPane.alignment="CENTER">
-                           <children>
-                              <ProgressIndicator prefHeight="42.0" prefWidth="34.0" />
-                           </children>
-                           <padding>
-                              <Insets top="20.0" />
-                           </padding>
-                        </HBox>
                      </children>
                   </StackPane>
                     </children>

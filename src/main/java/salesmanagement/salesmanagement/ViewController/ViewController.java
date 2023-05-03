@@ -19,7 +19,10 @@ public abstract class ViewController implements Initializable {
     protected boolean isShowing = false;
 
     protected ViewController parentController;
+
+    @FXML
     protected ProgressIndicator loadingIndicator;
+    protected boolean tableFigured = false;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

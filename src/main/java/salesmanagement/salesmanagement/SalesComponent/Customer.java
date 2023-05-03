@@ -3,12 +3,13 @@ package salesmanagement.salesmanagement.SalesComponent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Customer implements SalesComponent{
+public class Customer implements SalesComponent {
     private int customerNumber;
     private String name = "";
     private String contact = "";
     private String address;
     private String rank;
+    private long SSN;
 
     boolean isNewUser = true;
 
@@ -29,6 +30,15 @@ public class Customer implements SalesComponent{
         this.address = customerInfo.getString("addressLine");
         if (address == null) address = "";
         this.rank = customerInfo.getString("rank");
+        this.SSN = customerInfo.getLong("customerSSN");
+    }
+
+    public long getSSN() {
+        return SSN;
+    }
+
+    public void setSSN(long SSN) {
+        this.SSN = SSN;
     }
 
     public int getCustomerNumber() {

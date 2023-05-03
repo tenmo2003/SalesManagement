@@ -1,15 +1,26 @@
 package salesmanagement.salesmanagement.ViewController.CustomersTab;
 
+import javafx.collections.FXCollections;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import org.controlsfx.control.tableview2.FilteredTableView;
-import salesmanagement.salesmanagement.ViewController.ViewController;
+import javafx.scene.control.cell.PropertyValueFactory;
+import salesmanagement.salesmanagement.SalesComponent.Customer;
+import salesmanagement.salesmanagement.ViewController.OrdersTab.OrderInfoViewController;
+import salesmanagement.salesmanagement.ViewController.SearchViewController;
 
-public class CustomerSearchViewController extends ViewController {
+import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import static salesmanagement.salesmanagement.SceneController.SceneController.runTask;
+
+public class CustomerSearchViewController extends SearchViewController<Customer> {
 
     @FXML
     private TableColumn<?, ?> SSNColumn;
@@ -30,30 +41,71 @@ public class CustomerSearchViewController extends ViewController {
     private TableColumn<?, ?> customerNumberColumn;
 
     @FXML
-    private TextField customerNumberTextField;
+    private TableColumn<?, ?> contactColumn;
 
     @FXML
-    private VBox employeeFilterBox;
+    private TextField customerNameTextField;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        super.initialize(url, resourceBundle);
+        customerNumberColumn.setCellValueFactory(new PropertyValueFactory<>("customerNumber"));
+        customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        SSNColumn.setCellValueFactory(new PropertyValueFactory<>("SSN"));
+        contactColumn.setCellValueFactory(new PropertyValueFactory<>("contact"));
+
+        searchTable.setOnMouseClicked(event -> {
+            if(event.getClickCount() == 2) {
+                ((OrderInfoViewController)parentController).setSearchedCustomer(searchTable.getSelectionModel().getSelectedItem());
+                close();
+            }
+        });
+    }
+
+    @Override
+    public void show() {
+        super.show();
+        if (!tableFigured) {
+            tableFigured = true;
+            double tableWidth = searchTable.getWidth();
+            customerNumberColumn.setMinWidth(0.1 * tableWidth);
+            customerNameColumn.setMinWidth(0.3 * tableWidth);
+            contactColumn.setMinWidth(0.3 * tableWidth);
+            SSNColumn.setMinWidth(0.3 * tableWidth);
+        }
+        search();
+    }
 
     @FXML
-    private StackPane root;
-
-    @FXML
-    private FilteredTableView<?> searchTable;
-
-    @FXML
-    void apply(MouseEvent event) {
+    public void search() {
+        runTask(() -> {
+            String query = "select * from customers";
+            ResultSet resultSet = sqlConnection.getDataQuery(query);
+            List<Customer> customerList = new ArrayList<>();
+            try {
+                while (resultSet.next()) {
+                    customerList.add(new Customer(resultSet));
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            searchList = new FilteredList<>(FXCollections.observableArrayList(customerList));
+            searchList.setPredicate(customer -> {
+                boolean nameMatch = customer.getName().toLowerCase().contains(customerNameTextField.getText());
+                boolean contactMatch = customer.getContact().toLowerCase().contains(contactTextField.getText());
+                boolean SSNMatch = String.valueOf(customer.getSSN()).contains(SSNTextField.getText());
+                boolean addressMatch = customer.getAddress().toLowerCase().contains(addressTextField.getText());
+                return contactMatch && nameMatch && SSNMatch && addressMatch;
+            });
+        }, () -> searchTable.setItems(searchList), loadingIndicator, null);
 
     }
 
     @FXML
-    void clearAll(MouseEvent event) {
-
+    public void clearAll() {
+        customerNameTextField.setText("");
+        addressTextField.setText("");
+        SSNTextField.setText("");
+        contactTextField.setText("");
     }
-
-    @FXML
-    void close(MouseEvent event) {
-
-    }
-
 }

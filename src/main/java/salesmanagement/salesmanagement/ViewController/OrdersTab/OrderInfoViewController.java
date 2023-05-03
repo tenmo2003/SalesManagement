@@ -19,12 +19,14 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
 import org.controlsfx.control.tableview2.FilteredTableView;
 import org.controlsfx.control.textfield.TextFields;
+import salesmanagement.salesmanagement.SalesComponent.Customer;
 import salesmanagement.salesmanagement.SalesComponent.Order;
 import salesmanagement.salesmanagement.SalesComponent.OrderItem;
 import salesmanagement.salesmanagement.SalesManagement;
 import salesmanagement.salesmanagement.Utils.InputErrorCode;
 import salesmanagement.salesmanagement.Utils.NotificationCode;
 import salesmanagement.salesmanagement.Utils.NotificationSystem;
+import salesmanagement.salesmanagement.ViewController.CustomersTab.CustomerSearchViewController;
 import salesmanagement.salesmanagement.ViewController.EmployeesTab.EmployeeSearchViewController;
 import salesmanagement.salesmanagement.ViewController.ViewController;
 
@@ -107,7 +109,7 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
 
     @FXML
     private TextField totalTextField;
-    private EmployeeSearchViewController employeeSearchViewController;
+    private CustomerSearchViewController customerSearchViewController;
     @FXML
     private JFXButton addButton;
     @FXML
@@ -118,16 +120,23 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
     private JFXButton clearButton;
 
     private List<Node> disabledNodesList;
+    private Customer searchedCustomer;
+
+    public void setSearchedCustomer(Customer searchedCustomer) {
+        this.searchedCustomer = searchedCustomer;
+        customerNumberTextField.setText(String.valueOf(searchedCustomer.getCustomerNumber()));
+    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         super.initialize(url, resourceBundle);
         try {
-            FXMLLoader loader = new FXMLLoader(SalesManagement.class.getResource("fxml-view/employees-tab/employee-search-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(SalesManagement.class.getResource("fxml-view/customers-tab/customer-search-view.fxml"));
             loader.load();
-            employeeSearchViewController = loader.getController();
-            root.getChildren().add(employeeSearchViewController.getRoot());
-            employeeSearchViewController.setParentController(this);
+            customerSearchViewController = loader.getController();
+            root.getChildren().add(customerSearchViewController.getRoot());
+            customerSearchViewController.setParentController(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -173,7 +182,7 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
 
     @FXML
     void searchCustomer() {
-        employeeSearchViewController.show();
+        customerSearchViewController.show();
     }
 
     List<OrderItem> orderItems = new ArrayList<>();
@@ -492,9 +501,9 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
 
     @Override
     public void show() {
-        if(disabledNodesList == null) {
+        if (disabledNodesList == null) {
             disabledNodesList = new ArrayList<>(Arrays.asList(customerNumberTextField, productCodeTextField,
-                    quantityTextField, addButton, updateButton,removeButton, clearButton, orderType, orderedDatePicker,
+                    quantityTextField, addButton, updateButton, removeButton, clearButton, orderType, orderedDatePicker,
                     deliverTo, requiredDatePicker, paymentMethod));
         }
         super.show();
@@ -529,7 +538,7 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
 
     public void show(Order order) {
         show();
-        for(Node node : disabledNodesList) {
+        for (Node node : disabledNodesList) {
             if (node instanceof TextField) {
                 ((TextField) node).setEditable(false);
                 break;
@@ -564,7 +573,7 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
     @Override
     public void close() {
         super.close();
-        for(Node node : disabledNodesList) {
+        for (Node node : disabledNodesList) {
             if (node instanceof TextField) {
                 ((TextField) node).setEditable(true);
                 break;
