@@ -1,14 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<StackPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="salesmanagement.salesmanagement.ViewController.DashBoardTab.DashboardTabViewController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<StackPane fx:id="root" prefHeight="707.0" prefWidth="1111.0" stylesheets="@../../style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.DashBoardTab.DashboardTabViewController">
+    <VBox alignment="TOP_CENTER" prefHeight="720.0" prefWidth="997.6">
+        <children>
+            <HBox>
+                <children>
+                    <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="1477.0" spacing="20.0" HBox.hgrow="ALWAYS">
+                        <children>
+                            <Label id="top_label" text="DashBoard" textFill="#329efcab">
+                                <font>
+                                    <Font name="System Bold" size="22.0" />
+                                </font>
+                            </Label>
+                            <ProgressIndicator fx:id="loadingIndicator" prefHeight="38.0" prefWidth="32.0" />
+                        </children>
+                    </HBox>
+                    <HBox>
+                        <children>
+                            <JFXButton contentDisplay="GRAPHIC_ONLY" onMouseClicked="#show" prefHeight="26.0" prefWidth="26.0">
+                                <graphic>
+                                    <FontAwesomeIconView fill="#329efc" glyphName="UNDO" size="22" />
+                                </graphic>
+                            </JFXButton>
+                        </children>
+                    </HBox>
+                </children>
+            </HBox>
+         <ScrollPane fitToHeight="true" fitToWidth="true" stylesheets="@../../scroll-pane.css" VBox.vgrow="ALWAYS">
+            <content>
+               <VBox>
+                  <children>
+                     <HBox prefHeight="334.0" prefWidth="1050.0" VBox.vgrow="ALWAYS">
+                        <children>
+                           <StackPane fx:id="chart1Container" prefHeight="137.0" prefWidth="181.0" HBox.hgrow="ALWAYS" />
+                           <StackPane fx:id="chart2Container" prefHeight="150.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                        </children>
+                     </HBox>
+                     <HBox prefHeight="334.0" prefWidth="1050.0" VBox.vgrow="ALWAYS">
+                        <children>
+                           <StackPane fx:id="chart3Container" prefHeight="137.0" prefWidth="181.0" HBox.hgrow="ALWAYS" />
+                           <StackPane fx:id="chart4Container" prefHeight="150.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                        </children>
+                     </HBox>
+                  </children>
+               </VBox>
+            </content>
+         </ScrollPane>
+        </children>
+        <StackPane.margin>
+            <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
+        </StackPane.margin>
+    </VBox>
 </StackPane>

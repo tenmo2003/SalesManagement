@@ -45,6 +45,7 @@ import salesmanagement.salesmanagement.Utils.NotificationCode;
 import salesmanagement.salesmanagement.Utils.NotificationSystem;
 import salesmanagement.salesmanagement.ViewController.*;
 import salesmanagement.salesmanagement.ViewController.CustomersTab.CustomersTabViewController;
+import salesmanagement.salesmanagement.ViewController.DashBoardTab.DashboardTabViewController;
 import salesmanagement.salesmanagement.ViewController.EmployeesTab.EmployeesTabViewController;
 import salesmanagement.salesmanagement.ViewController.OrdersTab.OrdersTabViewController;
 import salesmanagement.salesmanagement.ViewController.ProductsTab.ProductsTabViewController;
@@ -101,6 +102,7 @@ public class MainSceneController extends SceneController implements Initializabl
     CustomersTabViewController customersTabViewController;
     ProductsTabViewController productsTabViewController;
     OrdersTabViewController ordersTabViewController;
+    DashboardTabViewController dashboardTabViewController;
 
     @FXML
     void goToCreateOrderTab() {
@@ -162,274 +164,275 @@ public class MainSceneController extends SceneController implements Initializabl
     public void displayDashBoardTab() {
 
         tabPane.getSelectionModel().select(dashBoardTab);
+        dashboardTabViewController.show();
 
-        chartPane1.getChildren().clear();
-        chartPane2.getChildren().clear();
-
-        final CategoryAxis totalRevenueAxis = new CategoryAxis();
-        final NumberAxis timeAxis = new NumberAxis();
-        final BarChart<String, Number> totalRevenueChart =
-                new BarChart<>(totalRevenueAxis, timeAxis);
-        chartPane1.getChildren().add(totalRevenueChart);
-        totalRevenueChart.setTitle("Total Revenue");
-
-        String query = "SELECT YEAR(months.month) AS year, " +
-                "MONTH(months.month) AS month, " +
-                "COALESCE(SUM(value), 0) AS revenue " +
-                "FROM ( SELECT DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL n MONTH) AS month " +
-                "FROM (SELECT 0 AS n UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5) AS numbers ) AS months " +
-                "LEFT JOIN orders " +
-                "ON YEAR(orderDate) = YEAR(months.month) AND MONTH(orderDate) = MONTH(months.month) " +
-                "WHERE months.month >= DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL 5 MONTH) " +
-                "GROUP BY YEAR(months.month), MONTH(months.month) " +
-                "ORDER BY year ASC, month ASC";
-        ResultSet rs = sqlConnection.getDataQuery(query);
-        try {
-            XYChart.Series<String, Number> series = new XYChart.Series<>();
-            NumberFormat nf = NumberFormat.getNumberInstance(Locale.US); // create a NumberFormat instance for US locale
-            nf.setMaximumFractionDigits(2); // set the maximum number of fraction digits to 2
-            while (rs.next()) {
-                double value = rs.getDouble(3);
-                XYChart.Data<String, Number> data = new XYChart.Data<>(rs.getString(2) + "-" + rs.getString(1), value);
-                Label label = new Label(nf.format(value)); // create a Label with the formatted value
-                label.setGraphic(new Group()); // set an empty graphic to ensure the Label is shown
-                label.setAlignment(Pos.CENTER);
-                data.setNode(label); // set the Label as the node for the Data object
-                series.getData().add(data);
-            }
-            totalRevenueChart.getData().add(series);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        final NumberAxis productRevenueAxis = new NumberAxis();
-        final CategoryAxis productAxis = new CategoryAxis();
-        final BarChart<String, Number> productRevenueChart =
-                new BarChart<>(productAxis, productRevenueAxis);
-        chartPane2.getChildren().add(productRevenueChart);
-
-        productRevenueChart.setTitle("Top Products");
-
-        query = "SELECT SUM(quantityOrdered * priceEach) AS revenue, products.productCode FROM orderdetails " +
-                "RIGHT JOIN products ON orderdetails.productCode = products.productCode " +
-                "GROUP BY products.productCode " +
-                "ORDER BY revenue DESC " +
-                "LIMIT 6";
-        rs = sqlConnection.getDataQuery(query);
-
-        try {
-            XYChart.Series<String, Number> series = new XYChart.Series<>();
-            NumberFormat nf = NumberFormat.getNumberInstance(Locale.US); // create a NumberFormat instance for US locale
-            nf.setMaximumFractionDigits(2); // set the maximum number of fraction digits to 2
-            while (rs.next()) {
-                double value = rs.getDouble(1);
-                XYChart.Data<String, Number> data = new XYChart.Data<>(rs.getString(2), rs.getDouble(1));
-                Label label = new Label(nf.format(value)); // create a Label with the formatted value
-                label.setGraphic(new Group()); // set an empty graphic to ensure the Label is shown
-                label.setAlignment(Pos.CENTER);
-                data.setNode(label); // set the Label as the node for the Data object
-                series.getData().add(data);
-            }
-            productRevenueChart.getData().add(series);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        final NumberAxis productLineRevenueAxis = new NumberAxis();
-        final CategoryAxis productLineAxis = new CategoryAxis();
-        final BarChart<String, Number> productLineRevenueChart =
-                new BarChart<>(productLineAxis, productLineRevenueAxis);
-
-        productLineRevenueChart.setTitle("Top Product Lines");
-
-        query = "SELECT SUM(quantityOrdered * priceEach) AS revenue, products.productLine FROM orderdetails " +
-                "RIGHT JOIN products ON orderdetails.productCode = products.productCode " +
-                "GROUP BY products.productLine " +
-                "ORDER BY revenue DESC " +
-                "LIMIT 6";
-        rs = sqlConnection.getDataQuery(query);
-
-        try {
-            XYChart.Series<String, Number> series = new XYChart.Series<>();
-            NumberFormat nf = NumberFormat.getNumberInstance(Locale.US); // create a NumberFormat instance for US locale
-            nf.setMaximumFractionDigits(2); // set the maximum number of fraction digits to 2
-            while (rs.next()) {
-                double value = rs.getDouble(1);
-                XYChart.Data<String, Number> data = new XYChart.Data<>(rs.getString(2), rs.getDouble(1));
-                Label label = new Label(nf.format(value)); // create a Label with the formatted value
-                label.setGraphic(new Group()); // set an empty graphic to ensure the Label is shown
-                label.setAlignment(Pos.CENTER);
-                data.setNode(label); // set the Label as the node for the Data object
-                series.getData().add(data);
-            }
-            productLineRevenueChart.getData().add(series);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        final NumberAxis customerRevenueAxis = new NumberAxis();
-        final CategoryAxis customerAxis = new CategoryAxis();
-        final BarChart<String, Number> customerRevenueChart =
-                new BarChart<>(customerAxis, customerRevenueAxis);
-
-        customerRevenueChart.setTitle("Top Customers");
-
-        query = "SELECT SUM(orderdetails.quantityOrdered * orderdetails.priceEach) AS revenue, customers.customerName " +
-                "FROM customers " +
-                "INNER JOIN orders ON customers.customerNumber = orders.customerNumber " +
-                "INNER JOIN orderdetails ON orders.orderNumber = orderdetails.orderNumber " +
-                "GROUP BY customers.customerNumber " +
-                "ORDER BY revenue DESC " +
-                "LIMIT 10; ";
-        rs = sqlConnection.getDataQuery(query);
-
-        try {
-            XYChart.Series<String, Number> series = new XYChart.Series<>();
-            NumberFormat nf = NumberFormat.getNumberInstance(Locale.US); // create a NumberFormat instance for US locale
-            nf.setMaximumFractionDigits(2); // set the maximum number of fraction digits to 2
-            while (rs.next()) {
-                double value = rs.getDouble(1);
-                XYChart.Data<String, Number> data = new XYChart.Data<>(rs.getString(2), rs.getDouble(1));
-                Label label = new Label(nf.format(value)); // create a Label with the formatted value
-                label.setGraphic(new Group()); // set an empty graphic to ensure the Label is shown
-                label.setAlignment(Pos.CENTER);
-                data.setNode(label); // set the Label as the node for the Data object
-                series.getData().add(data);
-            }
-            customerRevenueChart.getData().add(series);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        final NumberAxis storeRevenueAxis = new NumberAxis();
-        final CategoryAxis storeAxis = new CategoryAxis();
-        final BarChart<String, Number> storeRevenueChart =
-                new BarChart<>(storeAxis, storeRevenueAxis);
-
-        storeRevenueChart.setTitle("Top Stores");
-
-        query = "SELECT SUM(orderdetails.quantityOrdered * orderdetails.priceEach) AS revenue, offices.addressline " +
-                "FROM orderdetails " +
-                "INNER JOIN orders ON orders.orderNumber = orderdetails.orderNumber " +
-                "INNER JOIN employees ON orders.created_by = employees.employeeNumber " +
-                "RIGHT JOIN offices ON offices.officeCode = employees.officeCode " +
-                "GROUP BY offices.addressline " +
-                "ORDER BY revenue DESC " +
-                "LIMIT 10; ";
-        rs = sqlConnection.getDataQuery(query);
-
-        try {
-            XYChart.Series<String, Number> series = new XYChart.Series<>();
-            NumberFormat nf = NumberFormat.getNumberInstance(Locale.US); // create a NumberFormat instance for US locale
-            nf.setMaximumFractionDigits(2); // set the maximum number of fraction digits to 2
-            while (rs.next()) {
-                double value = rs.getDouble(1);
-                XYChart.Data<String, Number> data = new XYChart.Data<>(rs.getString(2), rs.getDouble(1));
-                Label label = new Label(nf.format(value)); // create a Label with the formatted value
-                label.setGraphic(new Group()); // set an empty graphic to ensure the Label is shown
-                label.setAlignment(Pos.CENTER);
-                data.setNode(label); // set the Label as the node for the Data object
-                series.getData().add(data);
-            }
-            storeRevenueChart.getData().add(series);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        totalRevenueCheck.setSelected(true);
-        totalRevenueCheck.setDisable(false);
-        topProductCheck.setSelected(true);
-        topProductCheck.setDisable(false);
-        topProductLineCheck.setSelected(false);
-        topProductLineCheck.setDisable(true);
-        topCustomerCheck.setSelected(false);
-        topCustomerCheck.setDisable(true);
-        topStoreCheck.setSelected(false);
-        topStoreCheck.setDisable(true);
-
-        totalRevenueCheck.setOnMouseClicked(event -> {
-            updateChecked(totalRevenueCheck);
-            if (totalRevenueCheck.isSelected()) {
-                if (chartPane1.getChildren().isEmpty()) {
-                    chartPane1.getChildren().add(totalRevenueChart);
-                } else if (chartPane2.getChildren().isEmpty()) {
-                    chartPane2.getChildren().add(totalRevenueChart);
-                }
-            } else {
-                if (chartPane1.getChildren().contains(totalRevenueChart)) {
-                    chartPane1.getChildren().clear();
-                } else {
-                    chartPane2.getChildren().clear();
-                }
-            }
-        });
-
-        topProductCheck.setOnMouseClicked(event -> {
-            updateChecked(topProductCheck);
-            if (topProductCheck.isSelected()) {
-                if (chartPane1.getChildren().isEmpty()) {
-                    chartPane1.getChildren().add(productRevenueChart);
-                } else if (chartPane2.getChildren().isEmpty()) {
-                    chartPane2.getChildren().add(productRevenueChart);
-                }
-            } else {
-                if (chartPane1.getChildren().contains(productRevenueChart)) {
-                    chartPane1.getChildren().clear();
-                } else {
-                    chartPane2.getChildren().clear();
-                }
-            }
-        });
-
-        topProductLineCheck.setOnMouseClicked(event -> {
-            updateChecked(topProductLineCheck);
-            if (topProductLineCheck.isSelected()) {
-                if (chartPane1.getChildren().isEmpty()) {
-                    chartPane1.getChildren().add(productLineRevenueChart);
-                } else if (chartPane2.getChildren().isEmpty()) {
-                    chartPane2.getChildren().add(productLineRevenueChart);
-                }
-            } else {
-                if (chartPane1.getChildren().contains(productLineRevenueChart)) {
-                    chartPane1.getChildren().clear();
-                } else {
-                    chartPane2.getChildren().clear();
-                }
-            }
-        });
-
-        topCustomerCheck.setOnMouseClicked(event -> {
-            updateChecked(topCustomerCheck);
-            if (topCustomerCheck.isSelected()) {
-                if (chartPane1.getChildren().isEmpty()) {
-                    chartPane1.getChildren().add(storeRevenueChart);
-                } else if (chartPane2.getChildren().isEmpty()) {
-                    chartPane2.getChildren().add(storeRevenueChart);
-                }
-            } else {
-                if (chartPane1.getChildren().contains(storeRevenueChart)) {
-                    chartPane1.getChildren().clear();
-                } else {
-                    chartPane2.getChildren().clear();
-                }
-            }
-        });
-
-        topStoreCheck.setOnMouseClicked(event -> {
-            updateChecked(topStoreCheck);
-            if (topStoreCheck.isSelected()) {
-                if (chartPane1.getChildren().isEmpty()) {
-                    chartPane1.getChildren().add(storeRevenueChart);
-                } else if (chartPane2.getChildren().isEmpty()) {
-                    chartPane2.getChildren().add(storeRevenueChart);
-                }
-            } else {
-                if (chartPane1.getChildren().contains(storeRevenueChart)) {
-                    chartPane1.getChildren().clear();
-                } else {
-                    chartPane2.getChildren().clear();
-                }
-            }
-        });
+//        chartPane1.getChildren().clear();
+//        chartPane2.getChildren().clear();
+//
+//        final CategoryAxis totalRevenueAxis = new CategoryAxis();
+//        final NumberAxis timeAxis = new NumberAxis();
+//        final BarChart<String, Number> totalRevenueChart =
+//                new BarChart<>(totalRevenueAxis, timeAxis);
+//        chartPane1.getChildren().add(totalRevenueChart);
+//        totalRevenueChart.setTitle("Total Revenue");
+//
+//        String query = "SELECT YEAR(months.month) AS year, " +
+//                "MONTH(months.month) AS month, " +
+//                "COALESCE(SUM(value), 0) AS revenue " +
+//                "FROM ( SELECT DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL n MONTH) AS month " +
+//                "FROM (SELECT 0 AS n UNION SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5) AS numbers ) AS months " +
+//                "LEFT JOIN orders " +
+//                "ON YEAR(orderDate) = YEAR(months.month) AND MONTH(orderDate) = MONTH(months.month) " +
+//                "WHERE months.month >= DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL 5 MONTH) " +
+//                "GROUP BY YEAR(months.month), MONTH(months.month) " +
+//                "ORDER BY year ASC, month ASC";
+//        ResultSet rs = sqlConnection.getDataQuery(query);
+//        try {
+//            XYChart.Series<String, Number> series = new XYChart.Series<>();
+//            NumberFormat nf = NumberFormat.getNumberInstance(Locale.US); // create a NumberFormat instance for US locale
+//            nf.setMaximumFractionDigits(2); // set the maximum number of fraction digits to 2
+//            while (rs.next()) {
+//                double value = rs.getDouble(3);
+//                XYChart.Data<String, Number> data = new XYChart.Data<>(rs.getString(2) + "-" + rs.getString(1), value);
+//                Label label = new Label(nf.format(value)); // create a Label with the formatted value
+//                label.setGraphic(new Group()); // set an empty graphic to ensure the Label is shown
+//                label.setAlignment(Pos.CENTER);
+//                data.setNode(label); // set the Label as the node for the Data object
+//                series.getData().add(data);
+//            }
+//            totalRevenueChart.getData().add(series);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        final NumberAxis productRevenueAxis = new NumberAxis();
+//        final CategoryAxis productAxis = new CategoryAxis();
+//        final BarChart<String, Number> productRevenueChart =
+//                new BarChart<>(productAxis, productRevenueAxis);
+//        chartPane2.getChildren().add(productRevenueChart);
+//
+//        productRevenueChart.setTitle("Top Products");
+//
+//        query = "SELECT SUM(quantityOrdered * priceEach) AS revenue, products.productCode FROM orderdetails " +
+//                "RIGHT JOIN products ON orderdetails.productCode = products.productCode " +
+//                "GROUP BY products.productCode " +
+//                "ORDER BY revenue DESC " +
+//                "LIMIT 6";
+//        rs = sqlConnection.getDataQuery(query);
+//
+//        try {
+//            XYChart.Series<String, Number> series = new XYChart.Series<>();
+//            NumberFormat nf = NumberFormat.getNumberInstance(Locale.US); // create a NumberFormat instance for US locale
+//            nf.setMaximumFractionDigits(2); // set the maximum number of fraction digits to 2
+//            while (rs.next()) {
+//                double value = rs.getDouble(1);
+//                XYChart.Data<String, Number> data = new XYChart.Data<>(rs.getString(2), rs.getDouble(1));
+//                Label label = new Label(nf.format(value)); // create a Label with the formatted value
+//                label.setGraphic(new Group()); // set an empty graphic to ensure the Label is shown
+//                label.setAlignment(Pos.CENTER);
+//                data.setNode(label); // set the Label as the node for the Data object
+//                series.getData().add(data);
+//            }
+//            productRevenueChart.getData().add(series);
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        final NumberAxis productLineRevenueAxis = new NumberAxis();
+//        final CategoryAxis productLineAxis = new CategoryAxis();
+//        final BarChart<String, Number> productLineRevenueChart =
+//                new BarChart<>(productLineAxis, productLineRevenueAxis);
+//
+//        productLineRevenueChart.setTitle("Top Product Lines");
+//
+//        query = "SELECT SUM(quantityOrdered * priceEach) AS revenue, products.productLine FROM orderdetails " +
+//                "RIGHT JOIN products ON orderdetails.productCode = products.productCode " +
+//                "GROUP BY products.productLine " +
+//                "ORDER BY revenue DESC " +
+//                "LIMIT 6";
+//        rs = sqlConnection.getDataQuery(query);
+//
+//        try {
+//            XYChart.Series<String, Number> series = new XYChart.Series<>();
+//            NumberFormat nf = NumberFormat.getNumberInstance(Locale.US); // create a NumberFormat instance for US locale
+//            nf.setMaximumFractionDigits(2); // set the maximum number of fraction digits to 2
+//            while (rs.next()) {
+//                double value = rs.getDouble(1);
+//                XYChart.Data<String, Number> data = new XYChart.Data<>(rs.getString(2), rs.getDouble(1));
+//                Label label = new Label(nf.format(value)); // create a Label with the formatted value
+//                label.setGraphic(new Group()); // set an empty graphic to ensure the Label is shown
+//                label.setAlignment(Pos.CENTER);
+//                data.setNode(label); // set the Label as the node for the Data object
+//                series.getData().add(data);
+//            }
+//            productLineRevenueChart.getData().add(series);
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        final NumberAxis customerRevenueAxis = new NumberAxis();
+//        final CategoryAxis customerAxis = new CategoryAxis();
+//        final BarChart<String, Number> customerRevenueChart =
+//                new BarChart<>(customerAxis, customerRevenueAxis);
+//
+//        customerRevenueChart.setTitle("Top Customers");
+//
+//        query = "SELECT SUM(orderdetails.quantityOrdered * orderdetails.priceEach) AS revenue, customers.customerName " +
+//                "FROM customers " +
+//                "INNER JOIN orders ON customers.customerNumber = orders.customerNumber " +
+//                "INNER JOIN orderdetails ON orders.orderNumber = orderdetails.orderNumber " +
+//                "GROUP BY customers.customerNumber " +
+//                "ORDER BY revenue DESC " +
+//                "LIMIT 10; ";
+//        rs = sqlConnection.getDataQuery(query);
+//
+//        try {
+//            XYChart.Series<String, Number> series = new XYChart.Series<>();
+//            NumberFormat nf = NumberFormat.getNumberInstance(Locale.US); // create a NumberFormat instance for US locale
+//            nf.setMaximumFractionDigits(2); // set the maximum number of fraction digits to 2
+//            while (rs.next()) {
+//                double value = rs.getDouble(1);
+//                XYChart.Data<String, Number> data = new XYChart.Data<>(rs.getString(2), rs.getDouble(1));
+//                Label label = new Label(nf.format(value)); // create a Label with the formatted value
+//                label.setGraphic(new Group()); // set an empty graphic to ensure the Label is shown
+//                label.setAlignment(Pos.CENTER);
+//                data.setNode(label); // set the Label as the node for the Data object
+//                series.getData().add(data);
+//            }
+//            customerRevenueChart.getData().add(series);
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        final NumberAxis storeRevenueAxis = new NumberAxis();
+//        final CategoryAxis storeAxis = new CategoryAxis();
+//        final BarChart<String, Number> storeRevenueChart =
+//                new BarChart<>(storeAxis, storeRevenueAxis);
+//
+//        storeRevenueChart.setTitle("Top Stores");
+//
+//        query = "SELECT SUM(orderdetails.quantityOrdered * orderdetails.priceEach) AS revenue, offices.addressline " +
+//                "FROM orderdetails " +
+//                "INNER JOIN orders ON orders.orderNumber = orderdetails.orderNumber " +
+//                "INNER JOIN employees ON orders.created_by = employees.employeeNumber " +
+//                "RIGHT JOIN offices ON offices.officeCode = employees.officeCode " +
+//                "GROUP BY offices.addressline " +
+//                "ORDER BY revenue DESC " +
+//                "LIMIT 10; ";
+//        rs = sqlConnection.getDataQuery(query);
+//
+//        try {
+//            XYChart.Series<String, Number> series = new XYChart.Series<>();
+//            NumberFormat nf = NumberFormat.getNumberInstance(Locale.US); // create a NumberFormat instance for US locale
+//            nf.setMaximumFractionDigits(2); // set the maximum number of fraction digits to 2
+//            while (rs.next()) {
+//                double value = rs.getDouble(1);
+//                XYChart.Data<String, Number> data = new XYChart.Data<>(rs.getString(2), rs.getDouble(1));
+//                Label label = new Label(nf.format(value)); // create a Label with the formatted value
+//                label.setGraphic(new Group()); // set an empty graphic to ensure the Label is shown
+//                label.setAlignment(Pos.CENTER);
+//                data.setNode(label); // set the Label as the node for the Data object
+//                series.getData().add(data);
+//            }
+//            storeRevenueChart.getData().add(series);
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        totalRevenueCheck.setSelected(true);
+//        totalRevenueCheck.setDisable(false);
+//        topProductCheck.setSelected(true);
+//        topProductCheck.setDisable(false);
+//        topProductLineCheck.setSelected(false);
+//        topProductLineCheck.setDisable(true);
+//        topCustomerCheck.setSelected(false);
+//        topCustomerCheck.setDisable(true);
+//        topStoreCheck.setSelected(false);
+//        topStoreCheck.setDisable(true);
+//
+//        totalRevenueCheck.setOnMouseClicked(event -> {
+//            updateChecked(totalRevenueCheck);
+//            if (totalRevenueCheck.isSelected()) {
+//                if (chartPane1.getChildren().isEmpty()) {
+//                    chartPane1.getChildren().add(totalRevenueChart);
+//                } else if (chartPane2.getChildren().isEmpty()) {
+//                    chartPane2.getChildren().add(totalRevenueChart);
+//                }
+//            } else {
+//                if (chartPane1.getChildren().contains(totalRevenueChart)) {
+//                    chartPane1.getChildren().clear();
+//                } else {
+//                    chartPane2.getChildren().clear();
+//                }
+//            }
+//        });
+//
+//        topProductCheck.setOnMouseClicked(event -> {
+//            updateChecked(topProductCheck);
+//            if (topProductCheck.isSelected()) {
+//                if (chartPane1.getChildren().isEmpty()) {
+//                    chartPane1.getChildren().add(productRevenueChart);
+//                } else if (chartPane2.getChildren().isEmpty()) {
+//                    chartPane2.getChildren().add(productRevenueChart);
+//                }
+//            } else {
+//                if (chartPane1.getChildren().contains(productRevenueChart)) {
+//                    chartPane1.getChildren().clear();
+//                } else {
+//                    chartPane2.getChildren().clear();
+//                }
+//            }
+//        });
+//
+//        topProductLineCheck.setOnMouseClicked(event -> {
+//            updateChecked(topProductLineCheck);
+//            if (topProductLineCheck.isSelected()) {
+//                if (chartPane1.getChildren().isEmpty()) {
+//                    chartPane1.getChildren().add(productLineRevenueChart);
+//                } else if (chartPane2.getChildren().isEmpty()) {
+//                    chartPane2.getChildren().add(productLineRevenueChart);
+//                }
+//            } else {
+//                if (chartPane1.getChildren().contains(productLineRevenueChart)) {
+//                    chartPane1.getChildren().clear();
+//                } else {
+//                    chartPane2.getChildren().clear();
+//                }
+//            }
+//        });
+//
+//        topCustomerCheck.setOnMouseClicked(event -> {
+//            updateChecked(topCustomerCheck);
+//            if (topCustomerCheck.isSelected()) {
+//                if (chartPane1.getChildren().isEmpty()) {
+//                    chartPane1.getChildren().add(storeRevenueChart);
+//                } else if (chartPane2.getChildren().isEmpty()) {
+//                    chartPane2.getChildren().add(storeRevenueChart);
+//                }
+//            } else {
+//                if (chartPane1.getChildren().contains(storeRevenueChart)) {
+//                    chartPane1.getChildren().clear();
+//                } else {
+//                    chartPane2.getChildren().clear();
+//                }
+//            }
+//        });
+//
+//        topStoreCheck.setOnMouseClicked(event -> {
+//            updateChecked(topStoreCheck);
+//            if (topStoreCheck.isSelected()) {
+//                if (chartPane1.getChildren().isEmpty()) {
+//                    chartPane1.getChildren().add(storeRevenueChart);
+//                } else if (chartPane2.getChildren().isEmpty()) {
+//                    chartPane2.getChildren().add(storeRevenueChart);
+//                }
+//            } else {
+//                if (chartPane1.getChildren().contains(storeRevenueChart)) {
+//                    chartPane1.getChildren().clear();
+//                } else {
+//                    chartPane2.getChildren().clear();
+//                }
+//            }
+//        });
 
 
     }
@@ -626,6 +629,11 @@ public class MainSceneController extends SceneController implements Initializabl
             loader.load();
             ordersTabViewController = loader.getController();
             ordersTab.setContent(ordersTabViewController.getRoot());
+
+            loader = new FXMLLoader(SalesManagement.class.getResource("fxml-view/dashboard-tab/dashboard-tab-view.fxml"));
+            loader.load();
+            dashboardTabViewController = loader.getController();
+            dashBoardTab.setContent(dashboardTabViewController.getRoot());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
