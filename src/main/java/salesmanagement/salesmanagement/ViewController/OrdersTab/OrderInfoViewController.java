@@ -178,6 +178,10 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
                 totalAmountTextField.setText(String.valueOf(orderTotalAmount));
             }
         });
+
+        addOrderButton.setOnAction(event -> {
+            addNewOrder(false);
+        });
     }
 
     @FXML
@@ -205,6 +209,11 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
                 orderItems.get(itemIndex).setQuantityOrdered(oldQuantity + Integer.parseInt(quantityTextField.getText()));
             }
             tableUpdated.set(false);
+
+            productCodeTextField.clear();
+            quantityTextField.clear();
+            priceEachTextField.clear();
+            totalTextField.clear();
         }
     }
 
@@ -253,7 +262,7 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
     }
 
     @FXML
-    void addNewOrder() {
+    void addNewOrder(boolean print) {
         runTask(() -> {
             String orderDate;
             if (orderedDatePicker.getValue() == null) {
@@ -366,6 +375,10 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
                         .append(",")
                         .append(item.getPriceEach())
                         .append("),");
+                if (orderType.getValue().equals("onsite") || status.getValue().equals("Shipped")) {
+                    String query = String.format("UPDATE products SET quantityInStock = quantityInStock - %d WHERE productCode = '%s';\n", item.getQuantityOrdered(), item.getProductCode());
+                    sqlConnection.updateQuery(query);
+                }
             }
             orderdetails.deleteCharAt(orderdetails.length() - 1);
             orderdetails.append(';');
@@ -375,6 +388,9 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
 //            printInvoiceButton.setOnAction(event -> {
 //                printInvoice(finalOrderNumber);
 //            });
+
+            if (print)
+                printOrder(orderNumber);
 
             int countOrd = -1;
             double totalValue = -1;
@@ -419,13 +435,49 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
         NotificationSystem.throwNotification(NotificationCode.SUCCEED_CREATE_ORDER, stage);
     }
 
+    void saveOrder(int orderNumber) {
+        if (orderType.getValue().equals("onsite") || status.getValue().equals("Shipped")) {
+            String query = String.format("SELECT * FROM orderdetails WHERE orderNumber = %d", orderNumber);
+            ResultSet rs = sqlConnection.getDataQuery(query);
+            try {
+                while (rs.next()) {
+                    String tmp = String.format("UPDATE products SET quantityInStock = quantityInStock + %d WHERE productCode = '%s'", rs.getInt(3), rs.getString(2));
+                    sqlConnection.updateQuery(tmp);
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        String query = String.format("DELETE FROM orderdetails WHERE orderNumber = %d", orderNumber);
+        sqlConnection.updateQuery(query);
+        for (OrderItem orderItem : orderTable.getItems()) {
+            String productCode = orderItem.getProductCode();
+            int quantity = orderItem.getQuantityOrdered();
+            double priceEach = orderItem.getPriceEach();
+            query = String.format("INSERT INTO orderdetails (orderNumber, productCode, quantityOrdered, priceEach) VALUES (%d, '%s', %d, %f)", orderNumber, productCode, quantity, priceEach);
+            sqlConnection.updateQuery(query);
+            if (orderType.getValue().equals("onsite") || status.getValue().equals("Shipped")) {
+                String tmp = String.format("UPDATE products SET quantityInStock = quantityInStock + %d WHERE productCode = '%s'", quantity, productCode);
+                sqlConnection.updateQuery(tmp);
+            }
+        }
+        // Get the values from the input fields
+        LocalDate orderDate = orderedDatePicker.getValue();
+        String requiredDate = requiredDatePicker.getValue() != null ? "'" + requiredDatePicker.getValue().toString() + "'" : null;
+        String shippedDate = shippedDatePicker.getValue() != null ? "'" + shippedDatePicker.getValue().toString() + "'" : "null";
+        String st = (String) status.getValue();
+        String comments = commentsTextField.getText();
+        query = String.format("UPDATE orders SET orderDate = '%s', requiredDate = %s, shippedDate = %s, status = '%s', comments = '%s', payment_method = '%s', deliver_to = '%s' WHERE orderNumber = %d", orderDate.toString(), requiredDate, shippedDate, st, comments, paymentMethod.getValue(), deliverTo.getText(), orderNumber);
+        sqlConnection.updateQuery(query);
+    }
+
     @FXML
-    void printOrder() {
+    void printOrder(int orderNumber) {
         String sourceFile = "src/main/resources/salesmanagement/salesmanagement/invoice.jrxml";
         try {
             JasperReport jr = JasperCompileManager.compileReport(sourceFile);
             HashMap<String, Object> para = new HashMap<>();
-            para.put("invoiceNo", "INV" + String.format("%04d", 234));
+            para.put("invoiceNo", "INV" + String.format("%04d", orderNumber));
             para.put("customerName", customerNumberTextField.getText());
             para.put("contact", "");
             para.put("totalAmount", "totalAmount");
@@ -442,41 +494,43 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
             para.put("orderMonth", orderDate.getMonthValue() - 1);
             para.put("orderDay", orderDate.getDayOfMonth());
             para.put("paymentMethod", paymentMethod.getValue());
-            String query = String.format("SELECT value, type, CONCAT(lastName, ' ', firstName) AS name, `rank` FROM orders INNER JOIN employees ON orders.created_by = employees.employeeNumber INNER JOIN customers ON orders.customerNumber = customers.customerNumber WHERE orderNumber = %d", 25);
+            String query = String.format("SELECT value, type, CONCAT(lastName, ' ', firstName) AS name, `rank`, customerName, customers.phone FROM orders INNER JOIN employees ON orders.created_by = employees.employeeNumber INNER JOIN customers ON orders.customerNumber = customers.customerNumber WHERE orderNumber = %d", orderNumber);
             ResultSet rs = sqlConnection.getDataQuery(query);
             if (rs.next()) {
                 String rank = rs.getString(4);
                 double left = 1;
                 switch (rank) {
-                    case "Emerald":
+                    case "Emerald" -> {
                         para.put("discount", "25%");
                         left = 0.75;
-                        break;
-                    case "Diamond":
+                    }
+                    case "Diamond" -> {
                         para.put("discount", "20%");
                         left = 0.8;
-                        break;
-                    case "Platinum":
+                    }
+                    case "Platinum" -> {
                         para.put("discount", "15%");
                         left = 0.85;
-                        break;
-                    case "Gold":
+                    }
+                    case "Gold" -> {
                         para.put("discount", "10%");
                         left = 0.9;
-                        break;
-                    case "Silver":
+                    }
+                    case "Silver" -> {
                         para.put("discount", "5%");
                         left = 0.95;
-                        break;
-                    case "Membership":
+                    }
+                    case "Membership" -> {
                         para.put("discount", "0%");
                         left = 1;
-                        break;
+                    }
                 }
-                para.put("totalAmount", rs.getDouble(1) / left);
+                para.put("totalAmount", Double.parseDouble(String.format("%.2f", rs.getDouble(1) / left)));
                 para.put("leftAmount", rs.getDouble(1));
                 para.put("type", rs.getString(2).substring(0, 1).toUpperCase() + rs.getString(2).substring(1));
                 para.put("employee", rs.getString(3));
+                para.put("customerName", rs.getString(5));
+                para.put("contact", rs.getString(6));
             }
 
             ArrayList<OrderItem> plist = new ArrayList<>();
@@ -508,6 +562,10 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
         }
         super.show();
         addOrderButton.setVisible(true);
+        print.setOnAction(event -> {
+            addNewOrder(true);
+        });
+
         orderItems.clear();
         runTask(() -> {
             List<String> customerCodeList = new ArrayList<>();
@@ -547,6 +605,9 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
         }
         addOrderButton.setVisible(false);
         saveOrderButton.setVisible(true);
+        saveOrderButton.setOnAction(event -> {
+            saveOrder(order.getOrderNumber());
+        });
         runTask(() -> {
             String query = "select * from orderdetails where orderNumber = " + order.getOrderNumber();
             ResultSet resultSet = sqlConnection.getDataQuery(query);
@@ -568,6 +629,8 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
         paymentMethod.setValue(order.getPayment_method());
         status.setValue(order.getStatus());
         commentsTextField.setText(order.getComments());
+
+        print.setOnAction(event -> printOrder(order.getOrderNumber()));
     }
 
     @Override
@@ -658,8 +721,8 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
                 }
             }
         });
-        quantityTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue) {
+        quantityTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.equals("")) {
                 VBox container = (VBox) quantityTextField.getParent();
                 if (!quantityTextField.getText().matches("^\\d+$")) {
                     quantityTextField.setStyle("-fx-border-color: #f35050");
