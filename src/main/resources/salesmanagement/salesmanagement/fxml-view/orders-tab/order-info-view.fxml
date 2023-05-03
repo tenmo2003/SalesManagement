@@ -264,11 +264,11 @@
                         <VBox alignment="TOP_CENTER" />
                         <StackPane>
                            <children>
-                              <JFXButton fx:id="addOrderButton" onMouseClicked="#addNewOrder" text="Create Order" visible="false" />
+                              <JFXButton fx:id="addOrderButton" text="Create Order" visible="false" />
                               <JFXButton fx:id="saveOrderButton" text="Save Order" visible="false" />
                            </children>
                         </StackPane>
-                        <JFXButton fx:id="print" onMouseClicked="#printOrder" text="Print" />
+                        <JFXButton fx:id="print" text="Print" />
                      </children>
                         </VBox>
                     </content>
