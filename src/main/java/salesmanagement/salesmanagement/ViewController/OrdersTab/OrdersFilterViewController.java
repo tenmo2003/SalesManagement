@@ -86,7 +86,7 @@ public class OrdersFilterViewController extends FilterViewController<Order> impl
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         super.initialize(url, resourceBundle);
-        orderStatus.setItems(FXCollections.observableList(Arrays.asList("Disputed", "On Hold", "In Progress")));
-        orderType.setItems(FXCollections.observableList(Arrays.asList("online", "onsite")));
+        orderStatus.setItems(FXCollections.observableList(Order.getorderStatusList()));
+        orderType.setItems(FXCollections.observableList(Order.getorderTypeList()));
     }
 }

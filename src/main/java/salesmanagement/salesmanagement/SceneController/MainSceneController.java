@@ -17,7 +17,6 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -1183,7 +1182,7 @@ public class MainSceneController extends SceneController implements Initializabl
                     String productCode = rs.getString("productCode");
                     int quantity = rs.getInt("quantityOrdered");
                     double priceEach = rs.getDouble("priceEach");
-                    OrderItem orderItem = new OrderItem(productCode, quantity, priceEach, quantity * priceEach);
+                    OrderItem orderItem = new OrderItem(productCode, quantity, priceEach);
                     orderDetailsTable.getItems().add(orderItem);
                     totalAmount.set(totalAmount.get() + orderItem.getAmount());
                 }
@@ -1328,7 +1327,7 @@ public class MainSceneController extends SceneController implements Initializabl
         }
 
         // If no existing order was found, create a new one and add it to the tableView
-        OrderItem orderItem = new OrderItem(productCode, quantity, priceEach, quantity * priceEach);
+        OrderItem orderItem = new OrderItem(productCode, quantity, priceEach);
         orderDetailsTable.getItems().add(orderItem);
 
         totalAmount.set(totalAmount.get() + quantity * priceEach);
@@ -2041,7 +2040,7 @@ public class MainSceneController extends SceneController implements Initializabl
             ArrayList<OrderItem> plist = new ArrayList<>();
 
             for (OrderItem item : orderDetailsTable.getItems()) {
-                plist.add(new OrderItem(item.getProductCode(), item.getQuantityOrdered(), item.getPriceEach(), item.getQuantityOrdered() * item.getPriceEach()));
+                plist.add(new OrderItem(item.getProductCode(), item.getQuantityOrdered(), item.getPriceEach()));
             }
 
             JRBeanCollectionDataSource jcs = new JRBeanCollectionDataSource(plist);

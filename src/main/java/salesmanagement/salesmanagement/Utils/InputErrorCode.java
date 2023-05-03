@@ -17,7 +17,7 @@ public enum InputErrorCode {
     INVALID_DATE,
     EMPTY_DATE,
     INVALID_PHONE_NUMBER,
-    INVALID_LENGTH_PASSWORD;
+    INVALID_LENGTH_PASSWORD, INVALID_INPUT, NOT_ENOUGH_QUANTITY, PRODUCT_NOT_EXIST, CUSTOMER_NOT_EXIST, INVALID_CUSTOMER_NUMBER;
 
     public static String getInputErrorNotification(InputErrorCode code) {
         switch (code) {
@@ -56,6 +56,21 @@ public enum InputErrorCode {
             }
             case INVALID_LENGTH_PASSWORD -> {
                 return "Use 8 or more characters with a mix of letters, numbers & symbols";
+            }
+            case INVALID_INPUT -> {
+                return "Invalid Input!";
+            }
+            case NOT_ENOUGH_QUANTITY -> {
+                return "Not enough in Stock!";
+            }
+            case PRODUCT_NOT_EXIST -> {
+                return "Product not exist!";
+            }
+            case CUSTOMER_NOT_EXIST -> {
+                return "Customer not exist!";
+            }
+            case INVALID_CUSTOMER_NUMBER -> {
+                return "Invalid Customer Number!";
             }
         }
         return null;

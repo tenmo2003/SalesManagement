@@ -87,8 +87,8 @@ public class OrdersTabViewController extends ViewController implements OrdersTab
                 while (resultSet.next()) {
                     orders.add(new Order(resultSet));
                 }
-            } catch (SQLException ignored) {
-                ignored.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
 
             ordersFilterViewController.setFilteredList(new FilteredList<>(FXCollections.observableArrayList(orders)));
@@ -132,10 +132,10 @@ public class OrdersTabViewController extends ViewController implements OrdersTab
         valueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
         customerColumn.setCellValueFactory(new PropertyValueFactory<>("customerNumber"));
 
-//        ordersTable.setOnMouseClicked(event -> {
-//            if(event.getClickCount() == 2) {
-//                productInfoViewController.show(productsTable.getSelectionModel().getSelectedItem());
-//            }
-//        });
+        ordersTable.setOnMouseClicked(event -> {
+            if(event.getClickCount() == 2) {
+                orderInfoViewController.show(ordersTable.getSelectionModel().getSelectedItem());
+            }
+        });
     }
 }

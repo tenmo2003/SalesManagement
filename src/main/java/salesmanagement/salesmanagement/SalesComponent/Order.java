@@ -4,6 +4,9 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Order implements SalesComponent {
     private int orderNumber;
@@ -24,6 +27,21 @@ public class Order implements SalesComponent {
     private double value;
     private String payment_method;
     private String deliver_to;
+    private static final List<String> orderStatusList = new ArrayList<>(Arrays.asList("Cancelled", "Disputed", "In Process", "On Hold", "Resolved", "Shipped"));
+
+    public static List<String> getorderStatusList() {
+        return orderStatusList;
+    }
+    private static final List<String> paymentMethodList = new ArrayList<>(Arrays.asList("Cash", "Credit Card", "Debit Card", "E-Wallet", "Bank Transfer"));
+
+    public static List<String> getPaymentMethodList() {
+        return paymentMethodList;
+    }
+    private static final List<String> orderTypeList = new ArrayList<>(Arrays.asList("online", "onsite"));
+
+    public static List<String> getorderTypeList() {
+        return orderTypeList;
+    }
 
     public Order(int orderNumber, int employeeNumber, String employeeName, LocalDate orderDate, LocalDate requiredDate, LocalDate shippedDate, String status, String comments, String customerName, String contact, String type, double value, String payment_method, String deliver_to) {
         this.orderNumber = orderNumber;

@@ -78,6 +78,7 @@ public class LoginSceneController extends SceneController implements Initializab
                 ResultSet resultSet = sqlConnection.getDataQuery(query);
                 if (resultSet.next()) {
                     MainSceneController.loggerID = resultSet.getInt("employeeNumber");
+                    sqlConnection.setUserID(resultSet.getInt("employeeNumber"));
                     MainSceneController.haveJustOpened = true;
                     return true;
                 }

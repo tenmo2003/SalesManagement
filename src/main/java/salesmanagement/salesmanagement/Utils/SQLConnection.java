@@ -4,6 +4,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import salesmanagement.salesmanagement.SalesComponent.SalesComponent;
 
 import java.io.FileOutputStream;
 import java.sql.*;
@@ -22,6 +23,16 @@ public class SQLConnection {
     private String password;
     private boolean reconnectingNotification;
     private boolean reconnecting;
+
+    int userID;
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
 
     public boolean isReconnecting() {
         return reconnectingNotification;
@@ -99,6 +110,7 @@ public class SQLConnection {
             statement.executeUpdate(query);
         } catch (SQLException ex) {
             ex.printStackTrace();
+            System.out.println(query);
         }
     }
 

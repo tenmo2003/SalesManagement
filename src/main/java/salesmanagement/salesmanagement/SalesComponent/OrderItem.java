@@ -12,11 +12,11 @@ public class OrderItem implements SalesComponent{
     Double priceEach;
     Double amount;
 
-    public OrderItem(String productCode, int quantityOrdered, double priceEach, double amount) {
+    public OrderItem(String productCode, int quantityOrdered, double priceEach) {
         this.productCode = productCode;
         this.quantityOrdered = quantityOrdered;
         this.priceEach = priceEach;
-        this.amount = amount;
+        this.amount = quantityOrdered * priceEach;
     }
 
     public String getProductCode() {
@@ -46,7 +46,6 @@ public class OrderItem implements SalesComponent{
     }
 
     public Double getAmount() {
-        String formattedAmount = String.format("%.2f", amount);
-        return Double.parseDouble(formattedAmount);
+        return amount;
     }
 }
