@@ -3,6 +3,11 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.ScrollPane?>
@@ -11,8 +16,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="root" prefHeight="707.0" prefWidth="1111.0" stylesheets="@../../style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.DashBoardTab.DashboardTabViewController">
-    <VBox alignment="TOP_CENTER" prefHeight="720.0" prefWidth="997.6">
+<StackPane fx:id="root" prefHeight="1248.0" prefWidth="1111.0" stylesheets="@../../style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.DashBoardTab.DashboardTabViewController">
+    <VBox alignment="TOP_CENTER" prefHeight="1450.0" prefWidth="1111.0">
         <children>
             <HBox>
                 <children>
@@ -36,30 +41,80 @@
                         </children>
                     </HBox>
                 </children>
+            <VBox.margin>
+               <Insets left="30.0" right="30.0" />
+            </VBox.margin>
             </HBox>
-         <ScrollPane fitToHeight="true" fitToWidth="true" stylesheets="@../../scroll-pane.css" VBox.vgrow="ALWAYS">
+         <ScrollPane fitToWidth="true" stylesheets="@../../scroll-pane.css" VBox.vgrow="ALWAYS">
             <content>
-               <VBox>
+               <VBox prefHeight="1480.0" prefWidth="1034.0" spacing="20.0">
                   <children>
-                     <HBox prefHeight="334.0" prefWidth="1050.0" VBox.vgrow="ALWAYS">
+                     <HBox prefHeight="380.0" prefWidth="1064.0">
                         <children>
-                           <StackPane fx:id="chart1Container" prefHeight="137.0" prefWidth="181.0" HBox.hgrow="ALWAYS" />
-                           <StackPane fx:id="chart2Container" prefHeight="150.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                           <BarChart fx:id="totalRevenueChart" legendVisible="false" prefHeight="500.0" prefWidth="553.0" title="Total Revenue By Month" HBox.hgrow="ALWAYS">
+                             <xAxis>
+                               <CategoryAxis side="BOTTOM" />
+                             </xAxis>
+                             <yAxis>
+                               <NumberAxis side="LEFT" upperBound="1.0E7" />
+                             </yAxis>
+                           </BarChart>
+                           <PieChart fx:id="revenueByRegionChart" prefHeight="500.0" title="Revenue By Area" HBox.hgrow="ALWAYS" />
                         </children>
                      </HBox>
-                     <HBox prefHeight="334.0" prefWidth="1050.0" VBox.vgrow="ALWAYS">
+                     <HBox prefHeight="380.0">
                         <children>
-                           <StackPane fx:id="chart3Container" prefHeight="137.0" prefWidth="181.0" HBox.hgrow="ALWAYS" />
-                           <StackPane fx:id="chart4Container" prefHeight="150.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                           <LineChart fx:id="revenueByChannelChart" prefHeight="380.0" prefWidth="554.0" title="Revenue By Channel" HBox.hgrow="ALWAYS">
+                             <xAxis>
+                               <CategoryAxis side="BOTTOM" />
+                             </xAxis>
+                             <yAxis>
+                               <NumberAxis side="LEFT" upperBound="1.0E7" />
+                             </yAxis>
+                           </LineChart>
+                           <BarChart fx:id="revenueByProductLineChart" prefHeight="500.0" title="Revenue By ProductLine" HBox.hgrow="ALWAYS">
+                             <xAxis>
+                               <NumberAxis side="BOTTOM" />
+                             </xAxis>
+                             <yAxis>
+                               <CategoryAxis side="LEFT" />
+                             </yAxis>
+                           </BarChart>
+                        </children>
+                     </HBox>
+                     <HBox prefHeight="380.0">
+                        <children>
+                           <BarChart fx:id="topCustomersChart" legendVisible="false" prefHeight="380.0" prefWidth="309.0" title="Top Customers" HBox.hgrow="ALWAYS">
+                              <xAxis>
+                                 <CategoryAxis side="BOTTOM" />
+                              </xAxis>
+                              <yAxis>
+                                 <NumberAxis side="LEFT" upperBound="9000000.0" />
+                              </yAxis>
+                           </BarChart>
+                           <BarChart fx:id="topProductsChart" legendVisible="false" prefHeight="380.0" prefWidth="295.0" title="Top Products" HBox.hgrow="ALWAYS">
+                             <xAxis>
+                               <CategoryAxis side="BOTTOM" />
+                             </xAxis>
+                             <yAxis>
+                               <NumberAxis side="LEFT" upperBound="9000000.0" />
+                             </yAxis>
+                           </BarChart>
                         </children>
                      </HBox>
                   </children>
                </VBox>
             </content>
+            <VBox.margin>
+               <Insets />
+            </VBox.margin>
+            <padding>
+               <Insets left="30.0" right="30.0" />
+            </padding>
          </ScrollPane>
         </children>
         <StackPane.margin>
-            <Insets bottom="10.0" left="30.0" right="30.0" top="10.0" />
+            <Insets top="10.0" />
         </StackPane.margin>
     </VBox>
 </StackPane>
