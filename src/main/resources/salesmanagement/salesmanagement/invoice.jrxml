@@ -454,13 +454,13 @@
                 </textElement>
                 <text><![CDATA[Discount]]></text>
             </staticText>
-            <staticText>
-                <reportElement x="-3" y="69" width="90" height="15" uuid="cf1de42a-ace6-47bb-ac04-cd5464bdf2f4"/>
-                <textElement>
-                    <font isBold="true"/>
-                </textElement>
-                <text><![CDATA[Paid Amount]]></text>
-            </staticText>
+<!--            <staticText>-->
+<!--                <reportElement x="-3" y="69" width="90" height="15" uuid="cf1de42a-ace6-47bb-ac04-cd5464bdf2f4"/>-->
+<!--                <textElement>-->
+<!--                    <font isBold="true"/>-->
+<!--                </textElement>-->
+<!--                <text><![CDATA[Paid Amount]]></text>-->
+<!--            </staticText>-->
             <staticText>
                 <reportElement x="-3" y="54" width="90" height="15" uuid="d8474fd9-38b7-4b6d-8f57-5d1773990820"/>
                 <textElement>
@@ -468,13 +468,13 @@
                 </textElement>
                 <text><![CDATA[Total]]></text>
             </staticText>
-            <staticText>
-                <reportElement x="-3" y="84" width="90" height="15" uuid="1afb983b-2726-43e4-9e3b-2961fe310bbc"/>
-                <textElement>
-                    <font isBold="true"/>
-                </textElement>
-                <text><![CDATA[Due Amount]]></text>
-            </staticText>
+<!--            <staticText>-->
+<!--                <reportElement x="-3" y="84" width="90" height="15" uuid="1afb983b-2726-43e4-9e3b-2961fe310bbc"/>-->
+<!--                <textElement>-->
+<!--                    <font isBold="true"/>-->
+<!--                </textElement>-->
+<!--                <text><![CDATA[Due Amount]]></text>-->
+<!--            </staticText>-->
             <textField>
                 <reportElement x="106" y="24" width="71" height="15" uuid="59d64b6e-cd9b-4bc7-8002-13c8d7ed2772"/>
                 <textElement textAlignment="Right"/>
@@ -490,18 +490,18 @@
                 <textElement textAlignment="Right"/>
                 <textFieldExpression><![CDATA[$P{leftAmount}]]></textFieldExpression>
             </textField>
-            <textField>
-                <reportElement x="106" y="69" width="72" height="15" uuid="ff0a53e7-55a7-4aff-a3d6-8c03afd2bc56"/>
-                <textElement textAlignment="Right"/>
-                <textFieldExpression><![CDATA[$P{paidAmount}]]></textFieldExpression>
-            </textField>
-            <textField>
-                <reportElement x="106" y="84" width="72" height="15" uuid="ab59dd77-c22f-40c1-b5f6-e7fd8eb7dbbc"/>
-                <textElement textAlignment="Right"/>
-                <textFieldExpression><![CDATA[$P{dueAmount}]]></textFieldExpression>
-            </textField>
+<!--            <textField>-->
+<!--                <reportElement x="106" y="69" width="72" height="15" uuid="ff0a53e7-55a7-4aff-a3d6-8c03afd2bc56"/>-->
+<!--                <textElement textAlignment="Right"/>-->
+<!--                <textFieldExpression><![CDATA[$P{paidAmount}]]></textFieldExpression>-->
+<!--            </textField>-->
+<!--            <textField>-->
+<!--                <reportElement x="106" y="84" width="72" height="15" uuid="ab59dd77-c22f-40c1-b5f6-e7fd8eb7dbbc"/>-->
+<!--                <textElement textAlignment="Right"/>-->
+<!--                <textFieldExpression><![CDATA[$P{dueAmount}]]></textFieldExpression>-->
+<!--            </textField>-->
             <textField textAdjust="StretchHeight">
-                <reportElement x="-3" y="99" width="180" height="20" uuid="24a9086d-3ac5-4a10-b2fe-3d3c1c208727" positionType="Float"/>
+                <reportElement x="-3" y="69" width="180" height="30" uuid="24a9086d-3ac5-4a10-b2fe-3d3c1c208727" positionType="Float"/>
                 <box>
                     <pen lineStyle="Dotted"/>
                     <topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
