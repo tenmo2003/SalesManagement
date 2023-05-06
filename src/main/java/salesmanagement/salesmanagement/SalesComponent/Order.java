@@ -37,7 +37,7 @@ public class Order implements SalesComponent {
     public static List<String> getPaymentMethodList() {
         return paymentMethodList;
     }
-    private static final List<String> orderTypeList = new ArrayList<>(Arrays.asList("online", "onsite"));
+    private static final List<String> orderTypeList = new ArrayList<>(Arrays.asList("onsite", "online"));
 
     public static List<String> getorderTypeList() {
         return orderTypeList;

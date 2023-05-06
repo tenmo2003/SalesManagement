@@ -190,14 +190,15 @@
                            </children>
                         </VBox>
                         <Label text="Verify your email" />
-                        <ImageView fx:id="avatarImageView" fitHeight="109.0" fitWidth="97.0" onMouseClicked="#changeAvatar" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="avatarImageView" fitHeight="109.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true" />
+                        <JFXButton fx:id="uploadAvatarButton" onAction="#uploadAvatar" text="Change Avatar" />
                      </children>
                   </VBox>
                </children>
             </HBox>
             <StackPane prefHeight="50.0" prefWidth="912.0" VBox.vgrow="ALWAYS">
                <children>
-                  <JFXButton text="SAVE ACCOUNT INFO" StackPane.alignment="TOP_CENTER" />
+                  <JFXButton fx:id="saveInfo" onMouseClicked="#saveInfo" text="SAVE ACCOUNT INFO" StackPane.alignment="TOP_CENTER" />
                </children>
             </StackPane>
          </children>

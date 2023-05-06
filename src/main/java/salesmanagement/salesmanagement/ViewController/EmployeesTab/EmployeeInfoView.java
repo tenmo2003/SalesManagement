@@ -32,6 +32,7 @@ import java.io.File;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -111,11 +112,17 @@ public class EmployeeInfoView extends ViewController implements EmployeesTab {
     private TextField usernameTextField;
 
     private Employee user;
+
+    private Employee loggedInUser;
     @FXML
     private StackPane loadingAvatar;
 
     public void setUser(Employee user) {
         this.user = user;
+    }
+
+    public void setLoggedInUser(Employee loggedInUser) {
+        this.loggedInUser = loggedInUser;
     }
 
     @FXML
@@ -429,10 +436,14 @@ public class EmployeeInfoView extends ViewController implements EmployeesTab {
 
     @FXML
     public void editEmployeeInfo() {
-        // UNLOCK ALL
-        disableNodes(false);
-        editButton.setVisible(false);
-        saveButton.setVisible(true);
+        if (!loggedInUser.getJobTitle().equals("Employee")) {
+            // UNLOCK ALL
+            disableNodes(false);
+            editButton.setVisible(false);
+            saveButton.setVisible(true);
+        } else {
+            NotificationSystem.throwNotification(NotificationCode.NOT_AUTHORIZED, stage);
+        }
     }
 
     @FXML
@@ -476,14 +487,15 @@ public class EmployeeInfoView extends ViewController implements EmployeesTab {
             if (!allValid.get()) {
                 Platform.runLater(() -> NotificationSystem.throwNotification(NotificationCode.INVALID_INPUTS, stage));
             } else {
+                String lastWorking = lastWorkingDatePicker.getValue() != null ? "'" + lastWorkingDatePicker.getValue() + "'" : "null";
                 String query = "INSERT INTO `employees` (`employeeNumber`, `lastName`, `firstName`, `birthDate`, `gender`, `email`, `mailVerified`, " +
                         "`officeCode`, `reportsTo`, `jobTitle`, `username`, `password`, `phoneCode`, `phone`, `status`, `joiningDate`, `lastWorkingDate`) " +
                         "VALUES (NULL,'" + lastNameTextField.getText() + "', '" + firstNameTextField.getText() + "', '" + birthDatePicker.getValue()
                         + "','" + (maleRadioButton.isSelected() ? "male" : "female") + "', '" + emailTextField.getText() + "', '0', " +
                         "'" + officeCodeTextField.getText() + "'," + supervisorTextField.getText() + ", '" + accessibilityBox.getValue() + "', '"
                         + usernameTextField.getText() + "', '" + passwordField.getText() + "', '" + phoneCodeBox.getValue()
-                        + "', '" + phoneNumberTextField.getText() + "', 'ACTIVE', '" + joiningDatePicker.getValue() + "', '"
-                        + null + "')";
+                        + "', '" + phoneNumberTextField.getText() + "', 'ACTIVE', '" + joiningDatePicker.getValue() + "', "
+                        + lastWorking  + ")";
                 sqlConnection.updateQuery(query);
                 query = "SELECT * FROM employees WHERE username = '" + usernameTextField.getText() + "'";
                 ResultSet resultSet = sqlConnection.getDataQuery(query);
@@ -515,8 +527,6 @@ public class EmployeeInfoView extends ViewController implements EmployeesTab {
         if (birthDatePicker.getValue() == null) return false;
 
         if (joiningDatePicker.getValue() == null) return false;
-
-        if (lastWorkingDatePicker.getValue() == null) return false;
 
         String query = "SELECT officeCode FROM offices WHERE officeCode = '" + officeCodeTextField.getText() + "'";
         ResultSet resultSet = sqlConnection.getDataQuery(query);
@@ -615,6 +625,7 @@ public class EmployeeInfoView extends ViewController implements EmployeesTab {
             employeeCodeTextField.setText("");
             supervisorTextField.setText("");
             fillUpInfo();
+            joiningDatePicker.setValue(LocalDate.now());
         } else {
             addButton.setVisible(false);
             saveButton.setVisible(false);

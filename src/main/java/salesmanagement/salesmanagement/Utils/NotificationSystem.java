@@ -87,7 +87,15 @@ public class NotificationSystem {
             }
             case SUCCEED_DELETE_CUSTOMER -> {
                 title = "";
-                content = "Customer Removed Successfully";
+                content = "Customer Removed Successfully!";
+            }
+            case NOT_AUTHORIZED -> {
+                title = "";
+                content = "Employees are not allowed to edit here!";
+            }
+            case SUCCEED_SAVE_INFO -> {
+                title = "";
+                content = "Saved Successfully!";
             }
         }
         Notifications notificationBuilder = Notifications.create()

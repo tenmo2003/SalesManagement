@@ -606,6 +606,9 @@ public class OrderInfoView extends ViewController implements OrdersTab {
         orderType.setValue("onsite");
 
         orderItems.clear();
+
+        orderedDatePicker.setValue(LocalDate.now());
+
         if (!init) {
             runTask(() -> {
                 List<String> customerCodeList = new ArrayList<>();
