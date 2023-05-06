@@ -89,7 +89,10 @@ public class NotificationSystem {
                 title = "";
                 content = "Customer Removed Successfully!";
             }
-            case NO_RIGHT -> {
+            case SUCCEED_SAVE_INFO -> {
+                title = "";
+                content = "Saved Successfully!";
+            case NOT_AUTHORIZED -> {
                 title = "Notification";
                 content = "You do not have permission to perform this action!";
             }

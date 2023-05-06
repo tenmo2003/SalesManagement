@@ -149,6 +149,7 @@ public class MainScene extends SceneController implements Initializable {
     public void initialSetup() {
         user = new Employee(sqlConnection, loggerID);
         settingTabView.setUser(user);
+        employeesTabView.setLoggedInUser(user);
         ViewController.setSqlConnection(sqlConnection);
         // Load current UI.
 

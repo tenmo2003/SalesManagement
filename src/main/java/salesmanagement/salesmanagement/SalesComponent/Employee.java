@@ -85,6 +85,9 @@ public class Employee implements SalesComponent {
         ResultSet resultSet = Employee.sqlConnection.getDataQuery(query);
         try {
             if (resultSet.next()) {
+                username = resultSet.getString("username");
+                password = resultSet.getString("password");
+                email = resultSet.getString("email");
                 lastName = resultSet.getString("lastName");
                 firstName = resultSet.getString("firstName");
                 email = resultSet.getString("email");

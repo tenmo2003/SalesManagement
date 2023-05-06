@@ -1,15 +1,21 @@
 package salesmanagement.salesmanagement.ViewController.SettingsTab;
 
+import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesManagement;
 import salesmanagement.salesmanagement.Utils.ImageController;
+import salesmanagement.salesmanagement.Utils.NotificationCode;
+import salesmanagement.salesmanagement.Utils.NotificationSystem;
 import salesmanagement.salesmanagement.ViewController.TabView;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
@@ -26,6 +32,8 @@ public class SettingTabView extends TabView implements SettingsTab {
 
     @FXML
     private ImageView avatarImageView;
+
+    private String avatarURI = "";
 
     @FXML
     private DatePicker birthDatePicker;
@@ -61,6 +69,9 @@ public class SettingTabView extends TabView implements SettingsTab {
     private TextField usernameTextField;
 
     @FXML
+    JFXButton saveInfo;
+
+    @FXML
     private ProgressIndicator loadingIndicator;
 
     @Override
@@ -77,13 +88,34 @@ public class SettingTabView extends TabView implements SettingsTab {
     }
 
     @FXML
-    void changeAvatar() {
-
+    void uploadAvatar() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose Avatar Image");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Image", "*.png", "*.jpg", "*.gif")
+        );
+        File selectedFile = fileChooser.showOpenDialog(stage);
+        if (selectedFile != null) {
+            avatarImageView.setImage(new Image(selectedFile.toURI().toString()));
+            avatarURI = selectedFile.getAbsolutePath();
+        }
     }
 
     @FXML
     void showAccountActivityLog() {
         accountActivityLogView.show();
+    }
+
+    @FXML
+    void saveInfo() {
+        runTask(() -> {
+            String query = String.format("UPDATE employees SET username = '%s', password = '%s', email = '%s' WHERE employeeNumber = %d", usernameTextField.getText(), passwordTextField.getText(), emailTextField.getText(), user.getEmployeeNumber());
+            sqlConnection.updateQuery(query);
+            if (avatarImageView.getImage() != null) {
+                ImageController.uploadImage(avatarURI, "avatar_employee_" + user.getEmployeeNumber() + ".png");
+            }
+        }, () -> NotificationSystem.throwNotification(NotificationCode.SUCCEED_SAVE_INFO, stage),
+                loadingIndicator, null);
     }
 
     public void setUser(Employee user) {
@@ -110,7 +142,7 @@ public class SettingTabView extends TabView implements SettingsTab {
 
                         phoneNumberTextField.setText(employeeInfo.getString("phone"));
                         joinngDatePicker.setValue(employeeInfo.getDate("joiningDate").toLocalDate());
-                        lastWorkingDatePicker.setValue(employeeInfo.getDate("lastWorkingDate").toLocalDate());
+                        lastWorkingDatePicker.setValue(employeeInfo.getDate("lastWorkingDate") != null ? employeeInfo.getDate("lastWorkingDate").toLocalDate() : null);
 
                         usernameTextField.setText(employeeInfo.getString("username"));
                         passwordTextField.setText(employeeInfo.getString("password"));

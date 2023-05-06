@@ -1,5 +1,6 @@
 package salesmanagement.salesmanagement.ViewController.EmployeesTab;
 
+import com.jfoenix.controls.JFXButton;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -56,6 +57,10 @@ public class EmployeesTabView extends TabView implements EmployeesTab {
     EmployeeInfoView employeeInfoView;
     SortedList<SalesComponent> sortedAndFilteredEmployees;
 
+    Employee loggedInUser;
+    @FXML
+    JFXButton addEmployee;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         super.initialize(url, resourceBundle);
@@ -94,6 +99,16 @@ public class EmployeesTabView extends TabView implements EmployeesTab {
                 }
             }
         });
+    }
+
+    public void setLoggedInUser(Employee loggedInUser) {
+        this.loggedInUser = loggedInUser;
+        if (loggedInUser.getJobTitle().equals("Employee")) {
+            addEmployee.setVisible(false);
+        } else {
+            addEmployee.setVisible(true);
+        }
+        employeeInfoView.setLoggedInUser(loggedInUser);
     }
 
     boolean employeesTableConfigured = false;
