@@ -119,23 +119,23 @@ public class EmployeeInfoViewController extends ViewController implements Employ
     }
 
     @FXML
-    void downloadResume(MouseEvent event) {
+    void downloadResume() {
 
     }
 
     @FXML
-    void downloadSalaryReport(MouseEvent event) {
+    void downloadSalaryReport() {
 
     }
 
     @FXML
-    void downloadSalesReport(MouseEvent event) {
+    void downloadSalesReport() {
 
     }
 
 
     @FXML
-    void uploadResume(MouseEvent event) {
+    void uploadResume() {
 
     }
 
@@ -617,6 +617,7 @@ public class EmployeeInfoViewController extends ViewController implements Employ
             fillUpInfo();
         } else {
             addButton.setVisible(false);
+            saveButton.setVisible(false);
             editButton.setVisible(true);
             disableNodes(true);
 

@@ -2,10 +2,15 @@ package salesmanagement.salesmanagement.ViewController;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import salesmanagement.salesmanagement.Utils.SQLConnection;
+import salesmanagement.salesmanagement.Utils.Utils;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -14,32 +19,17 @@ public abstract class ViewController implements Initializable {
     @FXML
     protected StackPane root;
 
-    protected static SQLConnection sqlConnection;
-    protected Stage stage;
-    protected boolean isShowing = false;
-
-    protected ViewController parentController;
-
     @FXML
     protected ProgressIndicator loadingIndicator;
+
+    protected static SQLConnection sqlConnection;
+    protected Stage stage;
+    protected ViewController parentController;
     protected boolean tableFigured = false;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         root.setVisible(false);
-    }
-
-    public static void setSqlConnection(SQLConnection sqlConnection) {
-        if (ViewController.sqlConnection == null)
-            ViewController.sqlConnection = sqlConnection;
-    }
-
-    public void setParentController(ViewController parentController) {
-        this.parentController = parentController;
-    }
-
-    public ProgressIndicator getLoadingIndicator() {
-        return loadingIndicator;
     }
 
     @FXML
@@ -53,7 +43,29 @@ public abstract class ViewController implements Initializable {
         root.setVisible(true);
     }
 
-    public StackPane getRoot() {
+    public static void setSqlConnection(SQLConnection sqlConnection) {
+        if (ViewController.sqlConnection == null)
+            ViewController.sqlConnection = sqlConnection;
+    }
+
+    final public void setParentController(ViewController parentController) {
+        this.parentController = parentController;
+    }
+
+    final public ProgressIndicator getLoadingIndicator() {
+        return loadingIndicator;
+    }
+
+    final public StackPane getRoot() {
         return root;
+    }
+
+    @FXML
+    protected void resetData() {
+        for (Node node : Utils.getAllNodes(root)) {
+            if (node instanceof TextField) ((TextField) node).setText("");
+            if (node instanceof ComboBox<?>) ((ComboBox<?>) node).setValue(null);
+            if (node instanceof DatePicker) ((DatePicker) node).setValue(null);
+        }
     }
 }

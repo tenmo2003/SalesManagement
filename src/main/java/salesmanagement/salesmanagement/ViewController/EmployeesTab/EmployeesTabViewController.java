@@ -13,6 +13,7 @@ import org.controlsfx.control.tableview2.FilteredTableView;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesComponent.SalesComponent;
 import salesmanagement.salesmanagement.SalesManagement;
+import salesmanagement.salesmanagement.ViewController.TabView;
 import salesmanagement.salesmanagement.ViewController.ViewController;
 
 import java.net.URL;
@@ -24,7 +25,7 @@ import java.util.ResourceBundle;
 
 import static salesmanagement.salesmanagement.SceneController.SceneController.runTask;
 
-public class EmployeesTabViewController extends ViewController implements EmployeesTabController {
+public class EmployeesTabViewController extends TabView implements EmployeesTabController {
     @FXML
     private TableColumn<?, ?> accessibilityColumn;
 
@@ -97,8 +98,8 @@ public class EmployeesTabViewController extends ViewController implements Employ
     boolean employeesTableConfigured = false;
 
     @Override
-    public void show() {
-        super.show();
+    protected void figureShow() {
+        super.figureShow();
         employeeInfoViewController.close();
         if (!employeesTableConfigured) {
             employeesTableConfigured = true;
@@ -110,7 +111,6 @@ public class EmployeesTabViewController extends ViewController implements Employ
             accessibilityColumn.setMinWidth(0.1 * tableWidth);
             employeeStatusColumn.setMinWidth(0.1 * tableWidth);
         }
-
 
         runTask(() -> {
             List<Employee> employees = new ArrayList<>();

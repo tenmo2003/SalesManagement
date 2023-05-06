@@ -5,25 +5,20 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.chart.*;
 import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
+import salesmanagement.salesmanagement.ViewController.TabView;
 import salesmanagement.salesmanagement.ViewController.ViewController;
 
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static salesmanagement.salesmanagement.SceneController.SceneController.runTask;
 
-public class DashboardTabViewController extends ViewController {
-
+public class DashboardTabViewController extends TabView {
     @FXML
     private LineChart<String, Number> revenueByChannelChart;
 
@@ -35,37 +30,37 @@ public class DashboardTabViewController extends ViewController {
 
     @FXML
     private BarChart<String, Number> topProductsChart;
+
     @FXML
     private BarChart<String, Number> topCustomersChart;
+
     @FXML
-    private BarChart<Number, String> revenueByProductLineChart;
+    private BarChart<Number, String> topProductLinesChart;
 
     private ResultSet[] chartResultSet;
+    private boolean[] showingChartFlag;
+    NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         super.initialize(url, resourceBundle);
         chartResultSet = new ResultSet[6];
+        showingChartFlag = new boolean[6];
+        Arrays.fill(showingChartFlag, false);
         nf.setMaximumFractionDigits(2);
-
     }
 
-    NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
-
-    @FXML
-    public void show() {
-
-
-        super.show();
-
+    @Override
+    public void figureShow() {
+        super.figureShow();
+        Arrays.fill(showingChartFlag, true);
         initTotalRevenueChart();
         initTopProductsChart();
-        initRevenueByProductLineChart();
+        initTopProductLines();
         initCustomersChart();
         initRevenueByRegionChart();
         initRevenueByChannelChart();
-
-
     }
 
     private void initTotalRevenueChart() {
@@ -106,6 +101,11 @@ public class DashboardTabViewController extends ViewController {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+
+            showingChartFlag[ChartCode.TOTAL_REVENUE.ordinal()] = false;
+            boolean check = false;
+            for (boolean b : showingChartFlag) check = check || b;
+            if (!check) isShowing = false;
         }, loadingIndicator, null);
     }
 
@@ -124,7 +124,6 @@ public class DashboardTabViewController extends ViewController {
             try {
                 XYChart.Series<String, Number> series = new XYChart.Series<>();
                 NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
-                nf.setMaximumFractionDigits(2);
                 ResultSet rs = chartResultSet[ChartCode.TOP_PRODUCTS.ordinal()];
                 List<String> xAxisLabels = new ArrayList<>();
                 while (rs.next()) {
@@ -142,6 +141,10 @@ public class DashboardTabViewController extends ViewController {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+            showingChartFlag[ChartCode.TOP_PRODUCTS.ordinal()] = false;
+            boolean check = false;
+            for (boolean b : showingChartFlag) check = check || b;
+            if (!check) isShowing = false;
         }, loadingIndicator, null);
     }
 
@@ -180,47 +183,49 @@ public class DashboardTabViewController extends ViewController {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+            showingChartFlag[ChartCode.TOP_CUSTOMERS.ordinal()] = false;
+            boolean check = false;
+            for (boolean b : showingChartFlag) check = check || b;
+            if (!check) isShowing = false;
         }, loadingIndicator, null);
     }
 
-    private void initRevenueByProductLineChart() {
-//
-//        runTask(() -> {
-//            String query = "SELECT SUM(quantityOrdered * priceEach) AS revenue, products.productLine FROM orderdetails " +
-//                    "RIGHT JOIN products ON orderdetails.productCode = products.productCode " +
-//                    "GROUP BY products.productLine " +
-//                    "ORDER BY revenue DESC " +
-//                    "LIMIT 6";
-//            chartResultSet[2] = sqlConnection.getDataQuery(query);
-//
-//
-//        }, () -> {
-//            final NumberAxis productLineRevenueAxis = new NumberAxis();
-//            final CategoryAxis productLineAxis = new CategoryAxis();
-//            BarChart<String, Number> productLineRevenueChart = new BarChart<>(productLineAxis, productLineRevenueAxis);
-//            chart2Container.getChildren().add(productLineRevenueChart);
-//            productLineRevenueChart.setTitle("Top Product Lines");
-//            ResultSet rs = chartResultSet[2];
-//
-//            try {
-//                XYChart.Series<String, Number> series = new XYChart.Series<>();
-//                NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
-//                nf.setMaximumFractionDigits(2);
-//                while (rs.next()) {
-//                    double value = rs.getDouble(1);
-//                    XYChart.Data<String, Number> data = new XYChart.Data<>(rs.getString(2), rs.getDouble(1));
-//                    Label label = new Label(nf.format(value));
-//                    label.setGraphic(new Group());
-//                    label.setAlignment(Pos.CENTER);
-//                    data.setNode(label);
-//                    series.getData().add(data);
-//                }
-//                productLineRevenueChart.getData().add(series);
-//            } catch (SQLException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }, loadingIndicator, null);
-//
+
+    private void initTopProductLines() {
+        topProductLinesChart.getData().clear();
+        runTask(() -> {
+            String query = "SELECT SUM(quantityOrdered * priceEach) AS revenue, products.productLine FROM orderdetails " +
+                    "RIGHT JOIN products ON orderdetails.productCode = products.productCode " +
+                    "GROUP BY products.productLine " +
+                    "ORDER BY revenue DESC " +
+                    "LIMIT 6";
+            chartResultSet[ChartCode.TOP_PRODUCTLINES.ordinal()] = sqlConnection.getDataQuery(query);
+        }, () -> {
+            ResultSet rs = chartResultSet[ChartCode.TOP_PRODUCTLINES.ordinal()];
+            XYChart.Series<Number, String> series = new XYChart.Series<>();
+            List<String> xAxisLabels = new ArrayList<>();
+            try {
+                while (rs.next()) {
+                    double value = rs.getDouble(1);
+                    XYChart.Data<Number, String> data = new XYChart.Data<>(rs.getDouble(1), rs.getString(2));
+                    xAxisLabels.add(rs.getString(2));
+                    Label label = new Label(nf.format(value));
+                    label.setGraphic(new Group());
+                    label.setAlignment(Pos.CENTER);
+                    data.setNode(label);
+                    series.getData().add(data);
+                }
+                ((CategoryAxis) topProductLinesChart.getYAxis()).setCategories(FXCollections.observableList(xAxisLabels));
+                topProductLinesChart.getData().add(series);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            showingChartFlag[ChartCode.TOP_PRODUCTLINES.ordinal()] = false;
+            boolean check = false;
+            for (boolean b : showingChartFlag) check = check || b;
+            if (!check) isShowing = false;
+        }, loadingIndicator, null);
+
     }
 
     private void initRevenueByRegionChart() {
@@ -249,6 +254,10 @@ public class DashboardTabViewController extends ViewController {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+            showingChartFlag[ChartCode.REVENUE_BY_REGION.ordinal()] = false;
+            boolean check = false;
+            for (boolean b : showingChartFlag) check = check || b;
+            if (!check) isShowing = false;
         }, loadingIndicator, null);
     }
 
@@ -291,6 +300,10 @@ public class DashboardTabViewController extends ViewController {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+            showingChartFlag[ChartCode.REVENUE_BY_CHANNEL.ordinal()] = false;
+            boolean check = false;
+            for (boolean b : showingChartFlag) check = check || b;
+            if (!check) isShowing = false;
         }, loadingIndicator, null);
     }
 }

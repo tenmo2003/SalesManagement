@@ -55,6 +55,20 @@
                         </VBox>
                         <VBox prefHeight="170.0" prefWidth="448.0">
                            <children>
+                              <Label text="SSN">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="SSNTextField">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </TextField>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="170.0" prefWidth="448.0">
+                           <children>
                               <Label text="Name">
                                  <font>
                                     <Font name="System Bold" size="15.0" />

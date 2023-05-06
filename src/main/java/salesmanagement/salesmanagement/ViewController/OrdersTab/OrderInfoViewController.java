@@ -26,8 +26,8 @@ import salesmanagement.salesmanagement.SalesManagement;
 import salesmanagement.salesmanagement.Utils.InputErrorCode;
 import salesmanagement.salesmanagement.Utils.NotificationCode;
 import salesmanagement.salesmanagement.Utils.NotificationSystem;
+import salesmanagement.salesmanagement.ViewController.CustomersTab.CustomerInfoViewController;
 import salesmanagement.salesmanagement.ViewController.CustomersTab.CustomerSearchViewController;
-import salesmanagement.salesmanagement.ViewController.EmployeesTab.EmployeeSearchViewController;
 import salesmanagement.salesmanagement.ViewController.ViewController;
 
 import java.io.IOException;
@@ -43,10 +43,6 @@ import static salesmanagement.salesmanagement.Utils.InputErrorCode.getInputError
 import static salesmanagement.salesmanagement.Utils.Utils.shake;
 
 public class OrderInfoViewController extends ViewController implements OrdersTabController {
-
-    @FXML
-    private JFXButton add;
-
     @FXML
     private TextField commentsTextField;
 
@@ -110,6 +106,7 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
     @FXML
     private TextField totalTextField;
     private CustomerSearchViewController customerSearchViewController;
+    private CustomerInfoViewController customerInfoViewController;
     @FXML
     private JFXButton addButton;
     @FXML
@@ -137,6 +134,12 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
             customerSearchViewController = loader.getController();
             root.getChildren().add(customerSearchViewController.getRoot());
             customerSearchViewController.setParentController(this);
+
+            loader = new FXMLLoader(SalesManagement.class.getResource("fxml-view/customers-tab/customer-info-view.fxml"));
+            loader.load();
+            customerInfoViewController = loader.getController();
+            root.getChildren().add(customerInfoViewController.getRoot());
+            customerInfoViewController.setParentController(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -543,8 +546,8 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
             JasperPrint jp = JasperFillManager.fillReport(jr, para, jcs);
             JasperViewer.viewReport(jp, false);
 
-        } catch (Exception ex) {
-            System.out.println(ex);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -552,6 +555,8 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
     JFXButton saveOrderButton;
     @FXML
     JFXButton addOrderButton;
+    @FXML
+    JFXButton addNewCustomerButton;
 
     @Override
     public void show() {
@@ -594,8 +599,11 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
         }, null, null, null);
     }
 
+    Order selectedOrder;
+
     public void show(Order order) {
         show();
+        selectedOrder = order;
         for (Node node : disabledNodesList) {
             if (node instanceof TextField) {
                 ((TextField) node).setEditable(false);
@@ -636,6 +644,7 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
     @Override
     public void close() {
         super.close();
+        selectedOrder = null;
         for (Node node : disabledNodesList) {
             if (node instanceof TextField) {
                 ((TextField) node).setEditable(true);
@@ -656,6 +665,11 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
         orderItems.clear();
         tableUpdated.set(false);
         clearAll();
+    }
+
+    @FXML
+    public void addNewCustomer() {
+        customerInfoViewController.show();
     }
 
     private void addCheckUserInput() {

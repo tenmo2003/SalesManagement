@@ -5,11 +5,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesManagement;
 import salesmanagement.salesmanagement.Utils.ImageController;
-import salesmanagement.salesmanagement.ViewController.ViewController;
+import salesmanagement.salesmanagement.ViewController.TabView;
 
 import java.io.IOException;
 import java.net.URL;
@@ -19,7 +18,7 @@ import java.util.ResourceBundle;
 
 import static salesmanagement.salesmanagement.SceneController.SceneController.runTask;
 
-public class SettingTabViewController extends ViewController implements SettingsTabController{
+public class SettingTabViewController extends TabView implements SettingsTabController {
     AccountActivityLogController accountActivityLogController;
     Employee user;
     @FXML
@@ -78,7 +77,7 @@ public class SettingTabViewController extends ViewController implements Settings
     }
 
     @FXML
-    void changeAvatar(MouseEvent event) {
+    void changeAvatar() {
 
     }
 
@@ -92,13 +91,9 @@ public class SettingTabViewController extends ViewController implements Settings
         accountActivityLogController.setUser(user);
     }
 
-
     @Override
-    public void show() {
-        if (isShowing) return;
-        isShowing = true;
-
-        super.show();
+    protected void figureShow() {
+        super.figureShow();
         runTask(() -> {
             String query = "SELECT * FROM employees WHERE employeeNumber = " + user.getEmployeeNumber();
             ResultSet employeeInfo = sqlConnection.getDataQuery(query);
@@ -125,9 +120,7 @@ public class SettingTabViewController extends ViewController implements Settings
                     throw new RuntimeException(e);
                 }
             });
-        }, () -> {
-            isShowing = false;
-        }, loadingIndicator, null);
+        }, () -> isShowing = false, loadingIndicator, null);
         runTask(() -> avatarImageView.setImage(ImageController.getImage("avatar_employee_" + user.getEmployeeNumber() + ".png", true)), null, null, null);
     }
 }

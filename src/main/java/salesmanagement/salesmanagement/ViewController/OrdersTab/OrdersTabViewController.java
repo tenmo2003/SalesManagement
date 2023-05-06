@@ -12,7 +12,7 @@ import javafx.scene.layout.StackPane;
 import org.controlsfx.control.tableview2.FilteredTableView;
 import salesmanagement.salesmanagement.SalesComponent.Order;
 import salesmanagement.salesmanagement.SalesManagement;
-import salesmanagement.salesmanagement.ViewController.ViewController;
+import salesmanagement.salesmanagement.ViewController.TabView;
 
 import java.net.URL;
 import java.sql.ResultSet;
@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
 
 import static salesmanagement.salesmanagement.SceneController.SceneController.runTask;
 
-public class OrdersTabViewController extends ViewController implements OrdersTabController {
+public class OrdersTabViewController extends TabView implements OrdersTabController {
 
     @FXML
     private TableColumn<?, ?> commentsColumn;
@@ -61,23 +61,23 @@ public class OrdersTabViewController extends ViewController implements OrdersTab
     private OrderInfoViewController orderInfoViewController;
 
     @FXML
-    void addNewOrder() {
+    public void addNewOrder() {
         orderInfoViewController.show();
     }
 
     @FXML
-    void applyFilter() {
+    public void applyFilter() {
         ordersFilterViewController.show();
     }
 
     @FXML
-    void exportOrdersList() {
+    public void exportOrdersList() {
         ordersExportViewController.show();
     }
 
     @Override
-    public void show() {
-        super.show();
+    protected void figureShow() {
+        super.figureShow();
         runTask(() -> {
             List<Order> orders = new ArrayList<>();
 
@@ -96,6 +96,7 @@ public class OrdersTabViewController extends ViewController implements OrdersTab
         }, () -> {
             ordersTable.setItems(sortedAndFilteredOrders);
             sortedAndFilteredOrders.comparatorProperty().bind(ordersTable.comparatorProperty());
+            isShowing = false;
         }, loadingIndicator, null);
     }
 
@@ -133,7 +134,7 @@ public class OrdersTabViewController extends ViewController implements OrdersTab
         customerColumn.setCellValueFactory(new PropertyValueFactory<>("customerNumber"));
 
         ordersTable.setOnMouseClicked(event -> {
-            if(event.getClickCount() == 2) {
+            if (event.getClickCount() == 2) {
                 orderInfoViewController.show(ordersTable.getSelectionModel().getSelectedItem());
             }
         });

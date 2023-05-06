@@ -105,36 +105,4 @@ public abstract class SceneController {
         task.setOnFailed(e -> task.getException().printStackTrace());
         new Thread(task).start();
     }
-
-
-    static public void runTaskWithLayer(Runnable taskFunction, Runnable finishFunction, StackPane bannedArea) {
-        Task<Void> task = new Task<>() {
-            @Override
-            protected Void call() {
-                taskFunction.run();
-                return null;
-            }
-        };
-
-        // Add layer for banned area.
-        AnchorPane layer = new AnchorPane();
-        layer.setStyle("-fx-background-color: grey");
-        layer.setOpacity(0.5);
-        bannedArea.getChildren().add(layer);
-
-        // Add progress indicator.
-        ProgressIndicator progressIndicator = new ProgressIndicator();
-        progressIndicator.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
-        progressIndicator.visibleProperty().bind(task.runningProperty());
-        bannedArea.getChildren().add(progressIndicator);
-
-        if (finishFunction != null) {
-            task.setOnSucceeded(workerStateEvent -> {
-                finishFunction.run();
-                bannedArea.getChildren().removeAll(progressIndicator, layer);
-            });
-        }
-        task.setOnFailed(e -> task.getException().printStackTrace());
-        new Thread(task).start();
-    }
 }

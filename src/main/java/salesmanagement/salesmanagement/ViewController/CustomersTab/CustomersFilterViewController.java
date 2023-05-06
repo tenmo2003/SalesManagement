@@ -41,14 +41,6 @@ public class CustomersFilterViewController extends FilterViewController<Customer
         close();
     }
 
-    @FXML
-    public void clearFilter() {
-        nameTextField.setText("");
-        addressTextField.setText("");
-        contactTextField.setText("");
-        rankComboBox.setValue(null);
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         super.initialize(url, resourceBundle);

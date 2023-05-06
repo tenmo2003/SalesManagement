@@ -13,6 +13,7 @@ import org.controlsfx.control.tableview2.FilteredTableView;
 import salesmanagement.salesmanagement.SalesComponent.Customer;
 import salesmanagement.salesmanagement.SalesComponent.SalesComponent;
 import salesmanagement.salesmanagement.SalesManagement;
+import salesmanagement.salesmanagement.ViewController.TabView;
 import salesmanagement.salesmanagement.ViewController.ViewController;
 
 import java.net.URL;
@@ -24,7 +25,7 @@ import java.util.ResourceBundle;
 
 import static salesmanagement.salesmanagement.SceneController.SceneController.runTask;
 
-public class CustomersTabViewController extends ViewController implements CustomersTabController {
+public class CustomersTabViewController extends TabView implements CustomersTabController {
     private CustomerInfoViewController customerInfoViewController;
     private CustomersExportViewController customersExportViewController;
     private CustomersFilterViewController customersFilterViewController;
@@ -94,7 +95,7 @@ public class CustomersTabViewController extends ViewController implements Custom
 
     @FXML
     void add() {
-        customerInfoViewController.show(new Customer());
+        customerInfoViewController.show();
     }
 
     @FXML
@@ -105,8 +106,9 @@ public class CustomersTabViewController extends ViewController implements Custom
     SortedList<SalesComponent> sortedAndFilteredCustomers;
 
     @Override
-    public void show() {
-        super.show();
+    public void figureShow() {
+        isShowing = true;
+        super.figureShow();
         runTask(() -> {
             try {
                 String query = "SELECT * FROM customers WHERE customerNumber != 6";
@@ -122,6 +124,8 @@ public class CustomersTabViewController extends ViewController implements Custom
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
-        }, null, loadingIndicator, null);
+        }, () -> {
+            isShowing = false;
+        }, loadingIndicator, null);
     }
 }

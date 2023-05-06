@@ -116,7 +116,7 @@
                   <HBox alignment="CENTER">
                      <children>
                                 <JFXButton onMouseClicked="#applyFilter" text="Apply Filter" />
-                        <JFXButton onMouseClicked="#clearFilter" text="Clear All" />
+                        <JFXButton onMouseClicked="#resetData" text="Clear All" />
                      </children>
                   </HBox>
                     </children>

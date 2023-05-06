@@ -8,11 +8,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import org.controlsfx.control.tableview2.FilteredTableView;
 import salesmanagement.salesmanagement.SalesComponent.Product;
 import salesmanagement.salesmanagement.SalesManagement;
+import salesmanagement.salesmanagement.ViewController.TabView;
 import salesmanagement.salesmanagement.ViewController.ViewController;
 
 import java.net.URL;
@@ -24,7 +24,7 @@ import java.util.ResourceBundle;
 
 import static salesmanagement.salesmanagement.SceneController.SceneController.runTask;
 
-public class ProductsTabViewController extends ViewController implements ProductsTabController {
+public class ProductsTabViewController extends TabView implements ProductsTabController {
 
     @FXML
     private ProgressIndicator loadingIndicator;
@@ -57,10 +57,6 @@ public class ProductsTabViewController extends ViewController implements Product
         productInfoViewController.show();
     }
 
-    public ProgressIndicator getLoadingIndicator() {
-        return loadingIndicator;
-    }
-
     @FXML
     void openExportProductsBox() {
         productsExportViewController.show();
@@ -68,7 +64,6 @@ public class ProductsTabViewController extends ViewController implements Product
 
     SortedList<Product> sortedAndFilteredProducts;
 
-    // View inside.
     ProductInfoViewController productInfoViewController;
     ViewController productsExportViewController;
     ProductsFilterViewController productsFilterViewController;
@@ -103,15 +98,15 @@ public class ProductsTabViewController extends ViewController implements Product
         }
 
         productsTable.setOnMouseClicked(event -> {
-            if(event.getClickCount() == 2) {
+            if (event.getClickCount() == 2) {
                 productInfoViewController.show(productsTable.getSelectionModel().getSelectedItem());
             }
         });
     }
 
     @Override
-    public void show() {
-        super.show();
+    protected void figureShow() {
+        super.figureShow();
         runTask(() -> {
             productInfoViewController.loadProductLine();
             List<Product> products = new ArrayList<>();
@@ -139,6 +134,6 @@ public class ProductsTabViewController extends ViewController implements Product
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
-        }, null, loadingIndicator, null);
+        }, () -> isShowing = false, loadingIndicator, null);
     }
 }

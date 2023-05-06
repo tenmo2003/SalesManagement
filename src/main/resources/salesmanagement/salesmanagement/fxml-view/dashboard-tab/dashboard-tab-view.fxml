@@ -72,9 +72,9 @@
                                <NumberAxis side="LEFT" upperBound="1.0E7" />
                              </yAxis>
                            </LineChart>
-                           <BarChart fx:id="revenueByProductLineChart" prefHeight="500.0" title="Revenue By ProductLine" HBox.hgrow="ALWAYS">
+                           <BarChart fx:id="topProductLinesChart" title="Top ProductLines" HBox.hgrow="ALWAYS">
                              <xAxis>
-                               <NumberAxis side="BOTTOM" />
+                               <NumberAxis minorTickCount="0" side="BOTTOM" upperBound="9000000.0" />
                              </xAxis>
                              <yAxis>
                                <CategoryAxis side="LEFT" />

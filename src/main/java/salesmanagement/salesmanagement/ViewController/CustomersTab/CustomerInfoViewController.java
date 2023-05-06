@@ -8,6 +8,9 @@ import salesmanagement.salesmanagement.Utils.NotificationCode;
 import salesmanagement.salesmanagement.Utils.NotificationSystem;
 import salesmanagement.salesmanagement.ViewController.InfoViewController;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import static salesmanagement.salesmanagement.SceneController.SceneController.runTask;
 
 public class CustomerInfoViewController extends InfoViewController<Customer> implements CustomersTabController {
@@ -20,20 +23,41 @@ public class CustomerInfoViewController extends InfoViewController<Customer> imp
     @FXML
     private TextField nameTextField;
     @FXML
+    private TextField SSNTextField;
+    @FXML
     private ComboBox<String> rankComboBox;
 
-    protected void show(Customer customer) {
+    @Override
+    public void show() {
+        super.show();
+        addButton.setVisible(true);
+    }
+
+    public void show(Customer customer) {
         super.show();
         super.selectedSalesComponent = customer;
-        if (customer.isNewUser()) {
-            addButton.setVisible(true);
-        } else saveButton.setVisible(true);
-        if (customer.isNewUser()) customerNumberTextField.setText("");
-        else customerNumberTextField.setText(Integer.toString(customer.getCustomerNumber()));
+        saveButton.setVisible(true);
+        customerNumberTextField.setText(Integer.toString(customer.getCustomerNumber()));
+        SSNTextField.setText(String.valueOf(customer.getSSN()));
         addressTextField.setText(customer.getAddress());
         contactTextField.setText(customer.getContact());
         rankComboBox.setValue(customer.getRank());
         nameTextField.setText(customer.getName());
+    }
+
+    @Override
+    public void close() {
+        super.close();
+        resetData();
+    }
+
+    protected void resetData() {
+        customerNumberTextField.setText("");
+        SSNTextField.setText("");
+        addressTextField.setText("");
+        contactTextField.setText("");
+        rankComboBox.setValue(null);
+        nameTextField.setText("");
     }
 
     @FXML
@@ -54,9 +78,18 @@ public class CustomerInfoViewController extends InfoViewController<Customer> imp
     public void add() {
         runTask(() -> {
                     close();
-                    String query = String.format("insert into customers(customerName, phone, addressLine) values ('%s', '%s', '%s')",
-                            nameTextField.getText(), contactTextField.getText(), addressTextField.getText());
+                    String query = String.format("insert into customers(customerName, phone, addressLine, customerSSN) values ('%s', '%s', '%s', '%s')",
+                            nameTextField.getText(), contactTextField.getText(), addressTextField.getText(), SSNTextField.getText());
                     sqlConnection.updateQuery(query);
+                    query = "select customerNumber from customers where customerSSN = " + SSNTextField.getText();
+                    ResultSet resultSet = sqlConnection.getDataQuery(query);
+                    try {
+                        while (resultSet.next()) {
+                            customerNumberTextField.setText(String.valueOf(resultSet.getInt("customerNumber")));
+                        }
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
                 }, () -> {
                     parentController.show();
                     NotificationSystem.throwNotification(NotificationCode.SUCCEED_ADD_CUSTOMER, stage);

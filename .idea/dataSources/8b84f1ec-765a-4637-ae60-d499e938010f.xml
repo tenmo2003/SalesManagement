@@ -993,7 +993,7 @@ b7kidpocyxjnjhwdw73i|schema||udomuzbs3hfulslz||UPDATE|G</Grants>
       <Position>3</Position>
     </column>
     <column id="299" parent="278" name="addressLine">
-      <DasType>varchar(50)|0s</DasType>
+      <DasType>varchar(1000)|0s</DasType>
       <Position>4</Position>
     </column>
     <column id="300" parent="278" name="rank">
@@ -1169,7 +1169,7 @@ phone</ColNames>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="337" parent="281" name="officeCode">
-      <AutoIncrement>5</AutoIncrement>
+      <AutoIncrement>6</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -1247,7 +1247,7 @@ productCode</ColNames>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="352" parent="283" name="orderNumber">
-      <AutoIncrement>88</AutoIncrement>
+      <AutoIncrement>93</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>

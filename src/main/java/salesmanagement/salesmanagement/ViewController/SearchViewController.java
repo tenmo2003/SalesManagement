@@ -8,6 +8,7 @@ import salesmanagement.salesmanagement.SalesComponent.SalesComponent;
 public abstract class SearchViewController<T extends SalesComponent> extends ViewController {
     @FXML
     protected FilteredTableView<T> searchTable;
+
     protected FilteredList<T> searchList;
 
     abstract protected void search();

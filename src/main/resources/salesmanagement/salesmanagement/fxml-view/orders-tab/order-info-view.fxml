@@ -99,7 +99,7 @@
                                           <Insets top="5.0" />
                                        </VBox.margin>
                                        <children>
-                                          <JFXButton text="Add new Customer" />
+                                          <JFXButton fx:id="addNewCustomerButton" onMouseClicked="#addNewCustomer" text="Add new Customer" />
                                        </children>
                                     </HBox>
                                     <VBox prefHeight="30.0" prefWidth="59.0">
