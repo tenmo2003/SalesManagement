@@ -34,7 +34,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-import static salesmanagement.salesmanagement.Utils.NotificationCode.NO_RIGHT;
+import static salesmanagement.salesmanagement.Utils.NotificationCode.NOT_AUTHORIZED;
 
 public class MainScene extends SceneController implements Initializable {
     @FXML
@@ -124,7 +124,7 @@ public class MainScene extends SceneController implements Initializable {
             tabPane.getSelectionModel().select(employeesOperationTab);
             employeesTabView.show();
         } else {
-            NotificationSystem.throwNotification(NO_RIGHT, stage);
+            NotificationSystem.throwNotification(NOT_AUTHORIZED, stage);
         }
     }
 

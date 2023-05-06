@@ -5,6 +5,8 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controlsfx.control.Notifications;
 
+import static salesmanagement.salesmanagement.Utils.NotificationCode.NOT_AUTHORIZED;
+
 
 public class NotificationSystem {
     private static String title;
@@ -92,6 +94,7 @@ public class NotificationSystem {
             case SUCCEED_SAVE_INFO -> {
                 title = "";
                 content = "Saved Successfully!";
+            }
             case NOT_AUTHORIZED -> {
                 title = "Notification";
                 content = "You do not have permission to perform this action!";
