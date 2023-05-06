@@ -18,14 +18,14 @@ import java.util.ResourceBundle;
 public abstract class ViewController implements Initializable {
     @FXML
     protected StackPane root;
-
     @FXML
     protected ProgressIndicator loadingIndicator;
-
     protected static SQLConnection sqlConnection;
     protected Stage stage;
     protected ViewController parentController;
     protected boolean tableFigured = false;
+    protected static UserRight userRight;
+    protected boolean rightSet = false;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -48,6 +48,16 @@ public abstract class ViewController implements Initializable {
             ViewController.sqlConnection = sqlConnection;
     }
 
+    public static void setUserRight(String userRight) {
+        if (userRight.equalsIgnoreCase("employee")) ViewController.userRight = UserRight.EMPLOYEE;
+        else if (userRight.equalsIgnoreCase("manager")) ViewController.userRight = UserRight.MANAGER;
+        else if (userRight.equalsIgnoreCase("hr")) ViewController.userRight = UserRight.HR;
+    }
+
+    public static UserRight getUserRight() {
+        return userRight;
+    }
+
     final public void setParentController(ViewController parentController) {
         this.parentController = parentController;
     }
@@ -66,6 +76,15 @@ public abstract class ViewController implements Initializable {
             if (node instanceof TextField) ((TextField) node).setText("");
             if (node instanceof ComboBox<?>) ((ComboBox<?>) node).setValue(null);
             if (node instanceof DatePicker) ((DatePicker) node).setValue(null);
+        }
+    }
+
+    @FXML
+    protected void lockData(boolean lock) {
+        for (Node node : Utils.getAllNodes(root)) {
+            if (node instanceof TextField) node.setDisable(lock);
+            if (node instanceof ComboBox<?>) node.setDisable(lock);
+            if (node instanceof DatePicker) node.setDisable(lock);
         }
     }
 }

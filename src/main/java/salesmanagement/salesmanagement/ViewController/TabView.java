@@ -1,11 +1,19 @@
 package salesmanagement.salesmanagement.ViewController;
 
+import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 
 public abstract class TabView extends ViewController {
     protected boolean isShowing = false;
 
+    @FXML
+    protected JFXButton addButton;
+
     protected void figureShow() {
+        if (!rightSet && addButton != null) {
+            rightSet = true;
+            addButton.setDisable(userRight == UserRight.HR);
+        }
         super.show();
     }
 

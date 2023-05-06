@@ -68,6 +68,11 @@
                                         <Cursor fx:constant="HAND" />
                                     </cursor>
                                 </JFXButton>
+                        <JFXButton onMouseClicked="#resetData" text="RESET">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </JFXButton>
                             </children>
                         </HBox>
                     </children>

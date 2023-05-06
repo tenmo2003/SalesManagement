@@ -1,7 +1,8 @@
 package salesmanagement.salesmanagement.SalesComponent;
 
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
 import salesmanagement.salesmanagement.Utils.SQLConnection;
+import salesmanagement.salesmanagement.ViewController.UserRight;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,16 +12,10 @@ import java.util.Objects;
 /**
  * @since 1.3
  */
-public class Employee implements SalesComponent{
+public class Employee implements SalesComponent {
+    private UserRight right;
+
     private boolean isNewUser = true;
-
-    public boolean isNewUser() {
-        return isNewUser;
-    }
-
-    public void setNewUser(boolean newUser) {
-        isNewUser = newUser;
-    }
 
     private int employeeNumber = -1;
     private String lastName = "";
@@ -46,11 +41,7 @@ public class Employee implements SalesComponent{
 
     }
 
-    /**
-     * This constructor is used to create an employee object
-     * for content storage purposes only,
-     * without affecting database connection variables.
-     */
+
     public Employee(ResultSet employeeRecord) {
         isNewUser = false;
         try {
@@ -78,24 +69,18 @@ public class Employee implements SalesComponent{
             if (Objects.equals(getStatus().toLowerCase(), "active")) statusBoxColor = "#19C37D";
             else if (Objects.equals(getStatus().toLowerCase(), "inactive")) statusBoxColor = "#EF9589FF";
             statusLabel.setStyle("-fx-background-color:" + statusBoxColor + ";-fx-pref-width: 100; -fx-pref-height: 20;-fx-text-fill: white;-fx-alignment: center;-fx-font-weight: bold;");
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    /*
-    /**
-     * This Employee's initializer allows initialization when the user logs into the application.
-     * This also means that when entering the main screen of the application, this class is only
-     * used once. It is reused when logging out to the login page. The connection to the data
-     * storage server is saved as private static within this class to use the connection variable
-     * for other employee objects. This means that employees created by other initialization methods
-     * use this connection and do not create new connections.
-     */
-    public Employee(SQLConnection sqlConnection, int employeeNumber) {
+    public boolean isNewUser() {
+        return isNewUser;
+    }
+
+    public Employee(SQLConnection sqlConnection, int userID) {
         if (sqlConnection != null) Employee.sqlConnection = sqlConnection;
-        this.employeeNumber = employeeNumber;
+        this.employeeNumber = userID;
         String query = "select * from employees where employeeNumber = " + employeeNumber;
         ResultSet resultSet = Employee.sqlConnection.getDataQuery(query);
         try {
@@ -119,21 +104,6 @@ public class Employee implements SalesComponent{
     public String getFullName() {
         if (isNewUser) return "";
         return lastName + " " + firstName;
-    }
-
-    /**
-     * This code defines a toString() method to return a string
-     * representation of the current Employee object. Specifically,
-     * the method uses the String class to create a string that
-     * combines the properties of the Employee object, including
-     * the employee number, full name, email address, and office code.
-     * Finally, the method returns this string as the result.
-     * Defining a toString() method is very useful for displaying
-     * object information in a readable and user-friendly way.
-     */
-    @Override
-    public String toString() {
-        return String.format("Employee: %d \nFull Name: %s \nEmail: %s \nOffice Code: %s", employeeNumber, getFullName(), email, officeCode);
     }
 
     public int getEmployeeNumber() {

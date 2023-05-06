@@ -1,5 +1,6 @@
 package salesmanagement.salesmanagement.ViewController.CustomersTab;
 
+import com.jfoenix.controls.JFXButton;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -14,6 +15,7 @@ import salesmanagement.salesmanagement.SalesComponent.Customer;
 import salesmanagement.salesmanagement.SalesComponent.SalesComponent;
 import salesmanagement.salesmanagement.SalesManagement;
 import salesmanagement.salesmanagement.ViewController.TabView;
+import salesmanagement.salesmanagement.ViewController.UserRight;
 
 import java.net.URL;
 import java.sql.ResultSet;
@@ -46,6 +48,8 @@ public class CustomersTabView extends TabView implements CustomersTab {
 
     @FXML
     private TableColumn<?, ?> rankColumn;
+    @FXML
+    private JFXButton addButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -106,7 +110,6 @@ public class CustomersTabView extends TabView implements CustomersTab {
 
     @Override
     public void figureShow() {
-        isShowing = true;
         super.figureShow();
         runTask(() -> {
             try {

@@ -88,6 +88,12 @@
     -fx-font-weight: bold;
 }
 
+#small_top_label {
+    -fx-text-fill: #329efcab;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
 #close_color {
     -fx-fill: #329efcab;
 }

@@ -19,7 +19,7 @@ import java.util.ResourceBundle;
 import static salesmanagement.salesmanagement.SceneController.SceneController.runTask;
 
 public class SettingTabView extends TabView implements SettingsTab {
-    AccountActivityLog accountActivityLog;
+    AccountActivityLogView accountActivityLogView;
     Employee user;
     @FXML
     private ComboBox<String> accessibilityComboBox;
@@ -69,8 +69,8 @@ public class SettingTabView extends TabView implements SettingsTab {
         try {
             FXMLLoader loader = new FXMLLoader(SalesManagement.class.getResource("fxml-view/settings-tab/account-activity-log-view.fxml"));
             loader.load();
-            accountActivityLog = loader.getController();
-            root.getChildren().add(accountActivityLog.getRoot());
+            accountActivityLogView = loader.getController();
+            root.getChildren().add(accountActivityLogView.getRoot());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -83,12 +83,12 @@ public class SettingTabView extends TabView implements SettingsTab {
 
     @FXML
     void showAccountActivityLog() {
-        accountActivityLog.show();
+        accountActivityLogView.show();
     }
 
     public void setUser(Employee user) {
         this.user = user;
-        accountActivityLog.setUser(user);
+        accountActivityLogView.setUser(user);
     }
 
     @Override

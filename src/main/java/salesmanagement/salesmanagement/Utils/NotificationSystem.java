@@ -87,7 +87,11 @@ public class NotificationSystem {
             }
             case SUCCEED_DELETE_CUSTOMER -> {
                 title = "";
-                content = "Customer Removed Successfully";
+                content = "Customer Removed Successfully!";
+            }
+            case NO_RIGHT -> {
+                title = "Notification";
+                content = "You do not have permission to perform this action!";
             }
         }
         Notifications notificationBuilder = Notifications.create()

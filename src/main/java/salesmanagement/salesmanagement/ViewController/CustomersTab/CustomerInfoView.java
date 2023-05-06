@@ -48,7 +48,6 @@ public class CustomerInfoView extends InfoView<Customer> implements CustomersTab
     @Override
     public void close() {
         super.close();
-        resetData();
     }
 
     protected void resetData() {

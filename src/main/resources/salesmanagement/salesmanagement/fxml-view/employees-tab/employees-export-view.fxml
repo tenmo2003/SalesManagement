@@ -12,7 +12,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <StackPane fx:id="root" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.EmployeesTab.EmployeesExportView">
    <children>
       <StackPane opacity="0.5" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: grey;" />
@@ -74,6 +73,11 @@
                   <HBox alignment="CENTER" prefHeight="51.0" prefWidth="394.0" spacing="20.0">
                      <children>
                         <JFXButton onMouseClicked="#export" text="EXPORT">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </JFXButton>
+                        <JFXButton onMouseClicked="#resetData" text="RESET">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>

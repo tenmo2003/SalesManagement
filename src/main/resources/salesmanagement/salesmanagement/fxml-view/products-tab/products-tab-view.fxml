@@ -52,7 +52,7 @@
                     </HBox>
                     <HBox alignment="CENTER_RIGHT" prefHeight="6.0" prefWidth="1050.0" spacing="10.0" HBox.hgrow="ALWAYS">
                         <children>
-                            <JFXButton onMouseClicked="#addNewProduct" text="ADD NEW" />
+                            <JFXButton fx:id="addButton" onMouseClicked="#addNewProduct" text="ADD NEW" />
                             <JFXButton onMouseClicked="#openExportProductsBox" text="EXPORT" />
                         </children>
                     </HBox>

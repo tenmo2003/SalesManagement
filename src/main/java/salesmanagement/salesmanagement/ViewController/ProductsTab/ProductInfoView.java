@@ -105,13 +105,5 @@ public class ProductInfoView extends InfoView<Product> implements ProductsTab {
     public void show() {
         super.show();
         addButton.setVisible(true);
-        productCodeTextField.setText("");
-        productNameTextField.setText("");
-        productVendorTextField.setText("");
-        productLineTextField.setText("");
-        descriptionTextField.setText("");
-        inStockTextField.setText("");
-        sellPriceTextField.setText("");
-        buyPriceTextField.setText("");
     }
 }

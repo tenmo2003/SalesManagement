@@ -10,6 +10,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import org.controlsfx.control.tableview2.FilteredTableView;
+
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesComponent.SalesComponent;
 import salesmanagement.salesmanagement.SalesManagement;
@@ -128,6 +129,7 @@ public class EmployeesTabView extends TabView implements EmployeesTab {
         }, () -> {
             employeesTable.setItems(sortedAndFilteredEmployees);
             sortedAndFilteredEmployees.comparatorProperty().bind(employeesTable.comparatorProperty());
+            isShowing = false;
         }, loadingIndicator, null);
     }
 
@@ -145,6 +147,4 @@ public class EmployeesTabView extends TabView implements EmployeesTab {
     void openExportEmployeesBox() {
         employeesExportView.show();
     }
-
-
 }
