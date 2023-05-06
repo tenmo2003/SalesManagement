@@ -118,6 +118,7 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
 
     private List<Node> disabledNodesList;
     private Customer searchedCustomer;
+    private boolean init = false;
 
     public void setSearchedCustomer(Customer searchedCustomer) {
         this.searchedCustomer = searchedCustomer;
@@ -154,7 +155,7 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
         totalColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
         addCheckUserInput();
 
-        orderType.setValue("onsite");
+
         status.setValue("In Process");
         paymentMethod.setValue("Cash");
 
@@ -185,6 +186,21 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
         addOrderButton.setOnAction(event -> {
             addNewOrder(false);
         });
+
+        orderType.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.equals("online")) {
+                requiredDatePicker.setDisable(false);
+                shippedDatePicker.setDisable(false);
+                status.setDisable(false);
+                deliverTo.setDisable(false);
+            } else {
+                requiredDatePicker.setDisable(true);
+                shippedDatePicker.setDisable(true);
+                status.setDisable(true);
+                deliverTo.setDisable(true);
+            }
+        });
+        orderType.setValue("onsite");
     }
 
     @FXML
@@ -433,45 +449,58 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
                     throw new RuntimeException(e);
                 }
             }
-        }, null, loadingIndicator, null);
+
+        }, () -> {
+            close();
+            parentController.show();
+        }, loadingIndicator, null);
 
         NotificationSystem.throwNotification(NotificationCode.SUCCEED_CREATE_ORDER, stage);
     }
 
     void saveOrder(int orderNumber) {
-        if (orderType.getValue().equals("onsite") || status.getValue().equals("Shipped")) {
-            String query = String.format("SELECT * FROM orderdetails WHERE orderNumber = %d", orderNumber);
-            ResultSet rs = sqlConnection.getDataQuery(query);
-            try {
-                while (rs.next()) {
-                    String tmp = String.format("UPDATE products SET quantityInStock = quantityInStock + %d WHERE productCode = '%s'", rs.getInt(3), rs.getString(2));
+        runTask(() -> {
+            if (orderType.getValue().equals("onsite") || status.getValue().equals("Shipped")) {
+                String query = String.format("SELECT * FROM orderdetails WHERE orderNumber = %d", orderNumber);
+                ResultSet rs = sqlConnection.getDataQuery(query);
+                try {
+                    while (rs.next()) {
+                        String tmp = String.format("UPDATE products SET quantityInStock = quantityInStock + %d WHERE productCode = '%s'", rs.getInt(3), rs.getString(2));
+                        sqlConnection.updateQuery(tmp);
+                    }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            String query = String.format("DELETE FROM orderdetails WHERE orderNumber = %d", orderNumber);
+            sqlConnection.updateQuery(query);
+            for (OrderItem orderItem : orderTable.getItems()) {
+                String productCode = orderItem.getProductCode();
+                int quantity = orderItem.getQuantityOrdered();
+                double priceEach = orderItem.getPriceEach();
+                query = String.format("INSERT INTO orderdetails (orderNumber, productCode, quantityOrdered, priceEach) VALUES (%d, '%s', %d, %f)", orderNumber, productCode, quantity, priceEach);
+                sqlConnection.updateQuery(query);
+                if (orderType.getValue().equals("onsite") || status.getValue().equals("Shipped")) {
+                    String tmp = String.format("UPDATE products SET quantityInStock = quantityInStock + %d WHERE productCode = '%s'", quantity, productCode);
                     sqlConnection.updateQuery(tmp);
                 }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
             }
-        }
-        String query = String.format("DELETE FROM orderdetails WHERE orderNumber = %d", orderNumber);
-        sqlConnection.updateQuery(query);
-        for (OrderItem orderItem : orderTable.getItems()) {
-            String productCode = orderItem.getProductCode();
-            int quantity = orderItem.getQuantityOrdered();
-            double priceEach = orderItem.getPriceEach();
-            query = String.format("INSERT INTO orderdetails (orderNumber, productCode, quantityOrdered, priceEach) VALUES (%d, '%s', %d, %f)", orderNumber, productCode, quantity, priceEach);
+            // Get the values from the input fields
+            LocalDate orderDate = orderedDatePicker.getValue();
+            String requiredDate = requiredDatePicker.getValue() != null ? "'" + requiredDatePicker.getValue().toString() + "'" : null;
+            String shippedDate = shippedDatePicker.getValue() != null ? "'" + shippedDatePicker.getValue().toString() + "'" : "null";
+            String st = (String) status.getValue();
+            String comments = commentsTextField.getText();
+            query = String.format("UPDATE orders SET orderDate = '%s', requiredDate = %s, shippedDate = %s, status = '%s', comments = '%s', payment_method = '%s', deliver_to = '%s' WHERE orderNumber = %d", orderDate.toString(), requiredDate, shippedDate, st, comments, paymentMethod.getValue(), deliverTo.getText(), orderNumber);
             sqlConnection.updateQuery(query);
-            if (orderType.getValue().equals("onsite") || status.getValue().equals("Shipped")) {
-                String tmp = String.format("UPDATE products SET quantityInStock = quantityInStock + %d WHERE productCode = '%s'", quantity, productCode);
-                sqlConnection.updateQuery(tmp);
-            }
-        }
-        // Get the values from the input fields
-        LocalDate orderDate = orderedDatePicker.getValue();
-        String requiredDate = requiredDatePicker.getValue() != null ? "'" + requiredDatePicker.getValue().toString() + "'" : null;
-        String shippedDate = shippedDatePicker.getValue() != null ? "'" + shippedDatePicker.getValue().toString() + "'" : "null";
-        String st = (String) status.getValue();
-        String comments = commentsTextField.getText();
-        query = String.format("UPDATE orders SET orderDate = '%s', requiredDate = %s, shippedDate = %s, status = '%s', comments = '%s', payment_method = '%s', deliver_to = '%s' WHERE orderNumber = %d", orderDate.toString(), requiredDate, shippedDate, st, comments, paymentMethod.getValue(), deliverTo.getText(), orderNumber);
-        sqlConnection.updateQuery(query);
+
+        }, () -> {
+            close();
+            parentController.show();
+        }, loadingIndicator, null);
+
+
+        NotificationSystem.throwNotification(NotificationCode.SUCCEED_EDIT_ORDER, stage);
     }
 
     @FXML
@@ -570,33 +599,41 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
         print.setOnAction(event -> {
             addNewOrder(true);
         });
+        print.setText("Create and Print");
+
+        paymentMethod.setValue("Cash");
+
+        orderType.setValue("onsite");
 
         orderItems.clear();
-        runTask(() -> {
-            List<String> customerCodeList = new ArrayList<>();
-            String query = "select customerNumber from customers";
-            ResultSet customerInfo = sqlConnection.getDataQuery(query);
-            try {
-                while (customerInfo.next()) {
-                    customerCodeList.add(customerInfo.getString("customerNumber"));
+        if (!init) {
+            runTask(() -> {
+                List<String> customerCodeList = new ArrayList<>();
+                String query = "select customerNumber from customers";
+                ResultSet customerInfo = sqlConnection.getDataQuery(query);
+                try {
+                    while (customerInfo.next()) {
+                        customerCodeList.add(customerInfo.getString("customerNumber"));
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            TextFields.bindAutoCompletion(customerNumberTextField, customerCodeList);
+                TextFields.bindAutoCompletion(customerNumberTextField, customerCodeList);
 
-            List<String> productCodeList = new ArrayList<>();
-            query = "select productCode from products";
-            ResultSet productInfo = sqlConnection.getDataQuery(query);
-            try {
-                while (productInfo.next()) {
-                    productCodeList.add(productInfo.getString("productCode"));
+                List<String> productCodeList = new ArrayList<>();
+                query = "select productCode from products";
+                ResultSet productInfo = sqlConnection.getDataQuery(query);
+                try {
+                    while (productInfo.next()) {
+                        productCodeList.add(productInfo.getString("productCode"));
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            TextFields.bindAutoCompletion(productCodeTextField, productCodeList);
-        }, null, null, null);
+                TextFields.bindAutoCompletion(productCodeTextField, productCodeList);
+                init = true;
+            }, null, null, null);
+        }
     }
 
     Order selectedOrder;
@@ -657,11 +694,11 @@ public class OrderInfoViewController extends ViewController implements OrdersTab
         orderedDatePicker.setValue(null);
         requiredDatePicker.setValue(null);
         shippedDatePicker.setValue(null);
-        deliverTo.setText(null);
+        deliverTo.clear();
         paymentMethod.setValue(null);
         status.setValue(null);
-        commentsTextField.setText(null);
-        customerNumberTextField.setText(null);
+        commentsTextField.clear();
+        customerNumberTextField.clear();
         orderItems.clear();
         tableUpdated.set(false);
         clearAll();
