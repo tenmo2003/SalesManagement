@@ -5,13 +5,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.burningwave.core.assembler.StaticComponentContainer;
-import salesmanagement.salesmanagement.SceneController.LoginSceneController;
-import salesmanagement.salesmanagement.SceneController.MainSceneController;
+import salesmanagement.salesmanagement.SceneController.LoginScene;
+import salesmanagement.salesmanagement.SceneController.MainScene;
 import salesmanagement.salesmanagement.Utils.ImageController;
 import salesmanagement.salesmanagement.Utils.SQLConnection;
 
@@ -48,35 +47,35 @@ public class AppController {
         //Load login scene.
         FXMLLoader loginFXMLLoader = new FXMLLoader(SalesManagement.class.getResource("fxml-scene/login-scene.fxml"));
         try {
-            loginScene = new Scene(loginFXMLLoader.load());
+            this.loginScene = new Scene(loginFXMLLoader.load());
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(0);
         }
-        LoginSceneController loginSceneController = loginFXMLLoader.getController();
+        LoginScene loginScene = loginFXMLLoader.getController();
 
         //Load main scene.
         FXMLLoader mainFXMLLoader = new FXMLLoader(SalesManagement.class.getResource("fxml-scene/main-scene.fxml"));
         try {
-            mainScene = new Scene(mainFXMLLoader.load());
+            this.mainScene = new Scene(mainFXMLLoader.load());
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(0);
         }
 
-        MainSceneController mainSceneController = mainFXMLLoader.getController();
-        mainSceneController.setScene(mainScene);
+        MainScene mainScene = mainFXMLLoader.getController();
+        mainScene.setScene(this.mainScene);
 
-        ((AnchorPane) mainScene.getRoot()).setPrefWidth(Screen.getPrimary().getVisualBounds().getWidth());
-        ((AnchorPane) mainScene.getRoot()).setPrefHeight(Screen.getPrimary().getVisualBounds().getHeight());
-        ((SplitPane) ((AnchorPane) mainScene.getRoot()).getChildren().get(0)).setPrefSize(Screen.getPrimary().getVisualBounds().getWidth(), Screen.getPrimary().getVisualBounds().getHeight());
+        ((AnchorPane) this.mainScene.getRoot()).setPrefWidth(Screen.getPrimary().getVisualBounds().getWidth());
+        ((AnchorPane) this.mainScene.getRoot()).setPrefHeight(Screen.getPrimary().getVisualBounds().getHeight());
+        ((SplitPane) ((AnchorPane) this.mainScene.getRoot()).getChildren().get(0)).setPrefSize(Screen.getPrimary().getVisualBounds().getWidth(), Screen.getPrimary().getVisualBounds().getHeight());
 
         //Set up stage config.
 
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.setTitle("Sales Management");
-        stage.setScene(loginScene);
-        loginScene.setFill(Color.TRANSPARENT);
+        stage.setScene(this.loginScene);
+        this.loginScene.setFill(Color.TRANSPARENT);
         stage.getIcons().add(ImageController.getImage("app_icon.png"));
         stage.show();
 
@@ -84,14 +83,14 @@ public class AppController {
         var user = "udomuzbs3hfulslz";
         var url = "jdbc:mysql://b7kidpocyxjnjhwdw73i-mysql.services.clever-cloud.com:3306/b7kidpocyxjnjhwdw73i";
         sqlConnection = new SQLConnection(url, user, password);
-        loginSceneController.setSqlConnection(sqlConnection, stage);
-        mainSceneController.setSqlConnection(sqlConnection, stage);
+        loginScene.setSqlConnection(sqlConnection, stage);
+        mainScene.setSqlConnection(sqlConnection, stage);
 
         // Set up SQL Connection for scene controllers.
         runTask(() -> {
             sqlConnection.connectServer();
-        }, null,loginSceneController.getProgressIndicator(), loginSceneController.getLoginPane());
-        mainSceneController.loginDataListener.start();
+        }, null, loginScene.getProgressIndicator(), loginScene.getLoginPane());
+        mainScene.loginDataListener.start();
 
 //        AnimationTimer notifyInternetConnection = new AnimationTimer() {
 //            @Override
@@ -110,7 +109,7 @@ public class AppController {
                 LocalDateTime dateTime = LocalDateTime.now();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 String formattedDateTime = dateTime.format(formatter);
-                mainSceneController.setTimeDateText(formattedDateTime);
+                mainScene.setTimeDateText(formattedDateTime);
             }
         };
         timer.start();*/

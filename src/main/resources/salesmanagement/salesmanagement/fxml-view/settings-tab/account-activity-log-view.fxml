@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.control.tableview2.FilteredTableView?>
 
-<StackPane id="background_color" fx:id="root" prefHeight="618.0" prefWidth="855.0" stylesheets="@../../style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.SettingsTab.AccountActivityLogController">
+<StackPane id="background_color" fx:id="root" prefHeight="618.0" prefWidth="855.0" stylesheets="@../../style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.SettingsTab.AccountActivityLog">
    <children>
       <VBox>
          <children>

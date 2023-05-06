@@ -8,7 +8,7 @@
 <?import org.controlsfx.control.tableview2.FilteredTableView?>
 
 
-<StackPane fx:id="root" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.EmployeesTab.EmployeeOrderViewController">
+<StackPane fx:id="root" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.EmployeesTab.EmployeeOrderView">
    <children>
       <VBox>
          <children>

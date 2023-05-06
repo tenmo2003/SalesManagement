@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<StackPane fx:id="root" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.EmployeesTab.EmployeesExportViewController">
+<StackPane fx:id="root" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.EmployeesTab.EmployeesExportView">
    <children>
       <StackPane opacity="0.5" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: grey;" />
       <FlowPane alignment="CENTER" StackPane.alignment="CENTER">
