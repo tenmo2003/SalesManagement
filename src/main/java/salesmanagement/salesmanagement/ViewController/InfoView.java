@@ -24,8 +24,25 @@ public abstract class InfoView<T extends SalesComponent> extends ViewController 
     protected abstract void show(T selectedSalesComponent);
 
     @Override
+    public void show() {
+        if (!rightSet) {
+            rightSet = true;
+            if (userRight == UserRight.HR) {
+                lockData(true);
+                saveButton.setDisable(true);
+            } else {
+                lockData(false);
+                saveButton.setDisable(false);
+            }
+        }
+        super.show();
+        resetData();
+    }
+
+    @Override
     public void close() {
         super.close();
+
         addButton.setVisible(false);
         saveButton.setVisible(false);
     }

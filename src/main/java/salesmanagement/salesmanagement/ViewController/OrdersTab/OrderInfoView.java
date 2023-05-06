@@ -28,6 +28,7 @@ import salesmanagement.salesmanagement.Utils.NotificationCode;
 import salesmanagement.salesmanagement.Utils.NotificationSystem;
 import salesmanagement.salesmanagement.ViewController.CustomersTab.CustomerInfoView;
 import salesmanagement.salesmanagement.ViewController.CustomersTab.CustomerSearchView;
+import salesmanagement.salesmanagement.ViewController.UserRight;
 import salesmanagement.salesmanagement.ViewController.ViewController;
 
 import java.io.IOException;
@@ -93,6 +94,7 @@ public class OrderInfoView extends ViewController implements OrdersTab {
 
     @FXML
     private ComboBox<String> status;
+
     @FXML
     private ComboBox<String> orderType;
 
@@ -101,21 +103,25 @@ public class OrderInfoView extends ViewController implements OrdersTab {
 
     @FXML
     private TableColumn<OrderItem, String> totalColumn;
-    private final BooleanProperty tableUpdated = new SimpleBooleanProperty(true);
 
     @FXML
     private TextField totalTextField;
-    private CustomerSearchView customerSearchView;
-    private CustomerInfoView customerInfoView;
+
     @FXML
     private JFXButton addButton;
+
     @FXML
     private JFXButton updateButton;
+
     @FXML
     private JFXButton removeButton;
+
     @FXML
     private JFXButton clearButton;
 
+    private final BooleanProperty tableUpdated = new SimpleBooleanProperty(true);
+    private CustomerSearchView customerSearchView;
+    private CustomerInfoView customerInfoView;
     private List<Node> disabledNodesList;
     private Customer searchedCustomer;
     private boolean init = false;
@@ -593,6 +599,22 @@ public class OrderInfoView extends ViewController implements OrdersTab {
             disabledNodesList = new ArrayList<>(Arrays.asList(customerNumberTextField, productCodeTextField,
                     quantityTextField, addButton, updateButton, removeButton, clearButton, orderType, orderedDatePicker,
                     deliverTo, requiredDatePicker, paymentMethod));
+        }
+        if (!rightSet) {
+            rightSet = true;
+            if (userRight == UserRight.HR) {
+                lockData(true);
+                addButton.setDisable(true);
+                saveOrderButton.setDisable(true);
+                orderTable.getSelectionModel().setSelectionMode(null);
+                for (Node node : disabledNodesList) node.setDisable(true);
+            } else {
+                lockData(false);
+                addButton.setDisable(false);
+                saveOrderButton.setDisable(false);
+                orderTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+                for (Node node : disabledNodesList) node.setDisable(false);
+            }
         }
         super.show();
         addOrderButton.setVisible(true);

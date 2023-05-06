@@ -21,6 +21,7 @@ import org.controlsfx.control.textfield.CustomTextField;
 import salesmanagement.salesmanagement.Utils.MailSender;
 import salesmanagement.salesmanagement.Utils.NotificationCode;
 import salesmanagement.salesmanagement.Utils.NotificationSystem;
+import salesmanagement.salesmanagement.ViewController.ViewController;
 
 import java.net.URL;
 import java.sql.ResultSet;
@@ -74,11 +75,12 @@ public class LoginScene extends SceneController implements Initializable {
         Task<Boolean> checkAccountTask = new Task<>() {
             @Override
             protected Boolean call() throws SQLException {
-                String query = "SELECT employeeNumber, username, password FROM employees WHERE username = '" + username + "' AND password = '" + password + "'";
+                String query = "SELECT employeeNumber, username, password, jobTitle FROM employees WHERE username = '" + username + "' AND password = '" + password + "'";
                 ResultSet resultSet = sqlConnection.getDataQuery(query);
                 if (resultSet.next()) {
                     MainScene.loggerID = resultSet.getInt("employeeNumber");
                     sqlConnection.setUserID(resultSet.getInt("employeeNumber"));
+                    ViewController.setUserRight(resultSet.getString("jobTitle"));
                     MainScene.haveJustOpened = true;
                     return true;
                 }

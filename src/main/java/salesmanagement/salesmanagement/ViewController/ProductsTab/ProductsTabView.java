@@ -1,5 +1,6 @@
 package salesmanagement.salesmanagement.ViewController.ProductsTab;
 
+import com.jfoenix.controls.JFXButton;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -13,6 +14,7 @@ import org.controlsfx.control.tableview2.FilteredTableView;
 import salesmanagement.salesmanagement.SalesComponent.Product;
 import salesmanagement.salesmanagement.SalesManagement;
 import salesmanagement.salesmanagement.ViewController.TabView;
+import salesmanagement.salesmanagement.ViewController.UserRight;
 import salesmanagement.salesmanagement.ViewController.ViewController;
 
 import java.net.URL;
@@ -46,6 +48,8 @@ public class ProductsTabView extends TabView implements ProductsTab {
 
     @FXML
     private StackPane root;
+    @FXML
+    private JFXButton addButton;
 
     @FXML
     void addFilter() {

@@ -89,13 +89,12 @@ public class NotificationSystem {
                 title = "";
                 content = "Customer Removed Successfully!";
             }
-            case NOT_AUTHORIZED -> {
-                title = "";
-                content = "Employees are not allowed to edit here!";
-            }
             case SUCCEED_SAVE_INFO -> {
                 title = "";
                 content = "Saved Successfully!";
+            case NOT_AUTHORIZED -> {
+                title = "Notification";
+                content = "You do not have permission to perform this action!";
             }
         }
         Notifications notificationBuilder = Notifications.create()

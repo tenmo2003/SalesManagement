@@ -17,9 +17,11 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 
-import salesmanagement.salesmanagement.SalesComponent.*;
+import salesmanagement.salesmanagement.SalesComponent.Employee;
+import salesmanagement.salesmanagement.ViewController.UserRight;
 import salesmanagement.salesmanagement.SalesManagement;
 import salesmanagement.salesmanagement.Utils.ImageController;
+import salesmanagement.salesmanagement.Utils.NotificationSystem;
 import salesmanagement.salesmanagement.ViewController.*;
 import salesmanagement.salesmanagement.ViewController.CustomersTab.CustomersTabView;
 import salesmanagement.salesmanagement.ViewController.DashBoardTab.DashboardTabView;
@@ -32,6 +34,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
+import static salesmanagement.salesmanagement.Utils.NotificationCode.NO_RIGHT;
+
 public class MainScene extends SceneController implements Initializable {
     @FXML
     Text usernameText;
@@ -41,23 +45,18 @@ public class MainScene extends SceneController implements Initializable {
     private Tab employeesOperationTab;
     @FXML
     private Tab createOrderTab;
-    boolean createOrderInit = false;
     @FXML
     private Tab settingTab;
     @FXML
     private Tab productsOperationTab;
-    boolean productsInit = false;
     @FXML
     private Tab ordersTab;
-    boolean ordersInit = false;
     @FXML
     private Tab customersTab;
     @FXML
     JFXButton dashBoardTabButton;
     @FXML
     JFXButton ordersTabButton;
-    @FXML
-    JFXButton newsTabButton;
     @FXML
     JFXButton settingsTabButton;
     @FXML
@@ -77,18 +76,9 @@ public class MainScene extends SceneController implements Initializable {
     DashboardTabView dashboardTabView;
 
     @FXML
-    void goToCreateOrderTab() {
-        tabPane.getSelectionModel().select(createOrderTab);
-    }
-
-    @FXML
     void goToOrdersTab() {
         tabPane.getSelectionModel().select(ordersTab);
         ordersTabView.show();
-    }
-
-    void goToEditOrderTab() {
-        tabPane.getSelectionModel().select(createOrderTab);
     }
 
     @FXML
@@ -109,17 +99,8 @@ public class MainScene extends SceneController implements Initializable {
         settingTabView.show();
     }
 
-    //region DashBoard Tab
     @FXML
     Tab dashBoardTab;
-
-    @FXML
-    private StackPane chartPane1;
-    @FXML
-    private StackPane chartPane2;
-
-    final int maximumChecked = 2;
-    int numChecked = 2;
 
     @FXML
     JFXCheckBox totalRevenueCheck;
@@ -136,18 +117,17 @@ public class MainScene extends SceneController implements Initializable {
         tabPane.getSelectionModel().select(dashBoardTab);
         dashboardTabView.show();
     }
-    //endregion
 
-    //region Employees Tab: list employees, employee's info: details, order, operations.
     @FXML
     void displayEmployeesTab() {
-        tabPane.getSelectionModel().select(employeesOperationTab);
-        employeesTabView.show();
+        if (ViewController.getUserRight() != UserRight.EMPLOYEE) {
+            tabPane.getSelectionModel().select(employeesOperationTab);
+            employeesTabView.show();
+        } else {
+            NotificationSystem.throwNotification(NO_RIGHT, stage);
+        }
     }
 
-
-
-    //endregion
     @FXML
     SplitPane firstSplitPane;
     @FXML
@@ -171,7 +151,6 @@ public class MainScene extends SceneController implements Initializable {
         settingTabView.setUser(user);
         employeesTabView.setLoggedInUser(user);
         ViewController.setSqlConnection(sqlConnection);
-
         // Load current UI.
 
         usernameText.setText(user.getFullName());
@@ -196,40 +175,8 @@ public class MainScene extends SceneController implements Initializable {
         currentTabButton = dashBoardTabButton;
 
 
-        //TODO: test area
-//        ScrollPane scroll = (ScrollPane) detailsInfoBox.getParent().getParent().getParent();
-//        Transition down = new Transition() {
-//            {
-//                setCycleDuration(Duration.INDEFINITE);
-//            }
-//
-//            @Override
-//            protected void interpolate(double v) {
-//                scroll.setVvalue(scroll.getVvalue() + 0.001);
-//            }
-//        };
-//
-//        Transition up = new Transition() {
-//            {
-//                setCycleDuration(Duration.INDEFINITE);
-//            }
-//
-//            @Override
-//            protected void interpolate(double v) {
-//                scroll.setVvalue(scroll.getVvalue() - 0.001);
-//            }
-//        };
-
-
-        // Load UI for others.
         runTask(() -> {
-            // Load small avatar.
             smallAvatar.setImage(ImageController.getImage("avatar_employee_" + user.getEmployeeNumber() + ".png", true));
-
-
-            // Employees Tab Preparation.
-
-
         }, null, null, null);
     }
 
@@ -255,9 +202,7 @@ public class MainScene extends SceneController implements Initializable {
                         stage.setY(0);
                         stage.show();
                         displayDashBoardTab();
-
                     });
-
                 }, null, null, null);
                 stop();
             }
@@ -300,7 +245,6 @@ public class MainScene extends SceneController implements Initializable {
             throw new RuntimeException(e);
         }
     }
-
 
     @FXML
     void tabSelectingEffect(Event event) {

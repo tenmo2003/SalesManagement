@@ -11,6 +11,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -22,10 +23,13 @@ import javafx.stage.FileChooser;
 import javafx.util.Duration;
 
 import salesmanagement.salesmanagement.SalesComponent.Employee;
+import salesmanagement.salesmanagement.ViewController.UserRight;
+import salesmanagement.salesmanagement.SalesManagement;
 import salesmanagement.salesmanagement.Utils.ImageController;
 import salesmanagement.salesmanagement.Utils.InputErrorCode;
 import salesmanagement.salesmanagement.Utils.NotificationCode;
 import salesmanagement.salesmanagement.Utils.NotificationSystem;
+import salesmanagement.salesmanagement.ViewController.SettingsTab.AccountActivityLogView;
 import salesmanagement.salesmanagement.ViewController.ViewController;
 
 import java.io.File;
@@ -117,8 +121,12 @@ public class EmployeeInfoView extends ViewController implements EmployeesTab {
     @FXML
     private StackPane loadingAvatar;
 
-    public void setUser(Employee user) {
+    private AccountActivityLogView accountActivityLogView;
+
+
+    public EmployeeInfoView setUser(Employee user) {
         this.user = user;
+        return this;
     }
 
     public void setLoggedInUser(Employee loggedInUser) {
@@ -151,6 +159,14 @@ public class EmployeeInfoView extends ViewController implements EmployeesTab {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         super.initialize(url, resourceBundle);
+        try {
+            FXMLLoader loader = new FXMLLoader(SalesManagement.class.getResource("fxml-view/settings-tab/account-activity-log-view.fxml"));
+            loader.load();
+            accountActivityLogView = loader.getController();
+            root.getChildren().add(accountActivityLogView.getRoot());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         List<String> phoneCodes = new ArrayList<>();
         PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
@@ -178,7 +194,6 @@ public class EmployeeInfoView extends ViewController implements EmployeesTab {
                 femaleRadioButton.setSelected(false);
             }
         });
-
 
         avatarLoading = new javafx.beans.property.SimpleBooleanProperty(true);
         loadingAvatar.setStyle("-fx-background-color: grey;-fx-background-radius: 10;");
@@ -431,7 +446,6 @@ public class EmployeeInfoView extends ViewController implements EmployeesTab {
                 }
             }
         });
-        //endregion
     }
 
     @FXML
@@ -607,11 +621,14 @@ public class EmployeeInfoView extends ViewController implements EmployeesTab {
 
     protected void show(Employee employee) {
         employeeInfoBox.setVvalue(0.0);
-        if (disabledNodes == null)
+        if (disabledNodes == null) {
             disabledNodes = new Node[]{lastNameTextField, firstNameTextField, birthDatePicker, maleRadioButton, femaleRadioButton, emailTextField,
                     officeCodeTextField, supervisorTextField, accessibilityBox, usernameTextField, passwordField, phoneCodeBox,
                     phoneNumberTextField, joiningDatePicker, statusBox, uploadAvatarButton};
+        }
+
         refreshEmployeeInfoTab();
+
 
         super.show();
 
@@ -644,6 +661,11 @@ public class EmployeeInfoView extends ViewController implements EmployeesTab {
                 employeeCodeTextField.setText(Integer.toString(employee.getEmployeeNumber()));
             }, this::fillUpInfo, loadingIndicator, null);
         }
+    }
+
+    @FXML
+    public void showAccountActivityLog() {
+        accountActivityLogView.setUser(user).show();
     }
 
     @Override
@@ -765,4 +787,7 @@ public class EmployeeInfoView extends ViewController implements EmployeesTab {
         passwordField.setStyle("-fx-border-color: #d1d1d1");
     }
 
+    private void disableModification() {
+
+    }
 }
