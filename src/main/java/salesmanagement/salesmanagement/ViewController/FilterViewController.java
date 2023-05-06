@@ -1,14 +1,17 @@
 package salesmanagement.salesmanagement.ViewController;
 
 import javafx.collections.transformation.FilteredList;
+import javafx.scene.Node;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
 import salesmanagement.salesmanagement.SalesComponent.SalesComponent;
+import salesmanagement.salesmanagement.Utils.Utils;
 
 public abstract class FilterViewController<T extends SalesComponent> extends ViewController {
     protected FilteredList<T> filteredList;
 
     protected abstract void applyFilter();
-
-    protected abstract void clearFilter();
 
     public void setFilteredList(FilteredList<T> filteredList) {
         this.filteredList = filteredList;
