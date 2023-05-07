@@ -41,7 +41,6 @@ public class Employee implements SalesComponent {
 
     }
 
-
     public Employee(ResultSet employeeRecord) {
         isNewUser = false;
         try {
@@ -79,6 +78,7 @@ public class Employee implements SalesComponent {
     }
 
     public Employee(SQLConnection sqlConnection, int userID) {
+        isNewUser = false;
         if (sqlConnection != null) Employee.sqlConnection = sqlConnection;
         this.employeeNumber = userID;
         String query = "select * from employees where employeeNumber = " + employeeNumber;

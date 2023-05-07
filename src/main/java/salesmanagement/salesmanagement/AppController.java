@@ -4,6 +4,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -66,9 +68,7 @@ public class AppController {
         MainScene mainScene = mainFXMLLoader.getController();
         mainScene.setScene(this.mainScene);
 
-        ((AnchorPane) this.mainScene.getRoot()).setPrefWidth(Screen.getPrimary().getVisualBounds().getWidth());
-        ((AnchorPane) this.mainScene.getRoot()).setPrefHeight(Screen.getPrimary().getVisualBounds().getHeight());
-        ((SplitPane) ((AnchorPane) this.mainScene.getRoot()).getChildren().get(0)).setPrefSize(Screen.getPrimary().getVisualBounds().getWidth(), Screen.getPrimary().getVisualBounds().getHeight());
+
 
         //Set up stage config.
 

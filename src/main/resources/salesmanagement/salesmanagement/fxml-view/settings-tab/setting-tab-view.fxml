@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="root" prefHeight="743.0" prefWidth="912.0" style="-fx-background-color: transparent;" stylesheets="@../../style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.SettingsTab.SettingTabView">
+<StackPane fx:id="root" prefHeight="743.0" prefWidth="912.0" style="-fx-background-color: transparent;" stylesheets="@../../style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.SettingsTab.SettingsTabView">
    <children>
       <VBox prefHeight="683.0" prefWidth="912.0">
          <children>

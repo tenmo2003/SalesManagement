@@ -1,44 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXCheckBox?>
-<?import com.jfoenix.controls.JFXComboBox?>
-<?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ProgressIndicator?>
-<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.SceneController.MainScene">
+
+<VBox fx:id="root" minWidth="1000.0" prefWidth="500.0" stylesheets="@../style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.SceneController.MainScene">
    <children>
-      <SplitPane id="split-pane-border-color" fx:id="firstSplitPane" dividerPositions="0.06" focusTraversable="false" orientation="VERTICAL" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <items>
-            <StackPane id="background_color" fx:id="menuPane" prefHeight="293.0" prefWidth="1918.0">
+      <StackPane id="background_color" fx:id="menuPane" prefHeight="47.0" prefWidth="1000.0">
+         <children>
+            <Text fx:id="companyName" fill="#32a2fcac" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: Bold;" text="Alpha Trading Corporation Joint Stock Company" textAlignment="CENTER" wrappingWidth="636.3433833599083">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Text>
+            <HBox>
                <children>
-                  <Text fx:id="companyName" fill="#32a2fcac" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: Bold;" text="Alpha Trading Corporation Joint Stock Company" textAlignment="CENTER" wrappingWidth="874.7435298442833">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                  </Text>
-                  <HBox alignment="CENTER_RIGHT">
+                  <HBox fx:id="appName" alignment="CENTER" prefHeight="39.0" prefWidth="254.0" spacing="15.0">
+                     <children>
+                        <ImageView disable="true" fitHeight="38.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../img/app_icon.png" />
+                           </image>
+                        </ImageView>
+                        <Label style="-fx-font-family: SVN-Poppins; -fx-font-size: 25; -fx-font-weight: 800;" text="SAMA" textFill="#329efcb7" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="39.0" prefWidth="500.0" HBox.hgrow="ALWAYS">
                      <children>
                         <JFXButton fx:id="minimizeIcon" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" minWidth="36.0" onMouseClicked="#minimizeStage" prefHeight="28.0" prefWidth="34.0" style="-fx-background-radius: 10; -fx-border-radius: 10;" textAlignment="CENTER" textFill="TRANSPARENT">
                            <graphic>
@@ -57,554 +56,198 @@
                         </JFXButton>
                      </children>
                   </HBox>
-                  <HBox fx:id="appName" alignment="CENTER" prefHeight="18.0" prefWidth="319.0" spacing="15.0" StackPane.alignment="CENTER_LEFT">
+               </children>
+            </HBox>
+         </children>
+      </StackPane>
+      <HBox VBox.vgrow="ALWAYS">
+         <children>
+            <VBox fx:id="sideBarBox" minWidth="50.0" prefHeight="750.0" prefWidth="300.0" spacing="20.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <HBox alignment="CENTER_LEFT" prefHeight="68.0" prefWidth="319.0" spacing="15.0">
                      <children>
-                        <ImageView disable="true" fitHeight="38.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="smallAvatar" fitHeight="40.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../img/app_icon.png" />
+                              <Image url="@../img/default_acc_icon.png" />
                            </image>
                         </ImageView>
-                        <Label style="-fx-font-family: SVN-Poppins; -fx-font-size: 25; -fx-font-weight: 800;" text="SAMA" textFill="#329efcb7" />
+                        <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label fx:id="usernameLabel" styleClass="username-label" text="Ngũ Thành An" />
+                              <Label fx:id="jobTitleLabel" styleClass="job-title-label" text="Manager" />
+                           </children>
+                        </VBox>
                      </children>
-                     <StackPane.margin>
-                        <Insets right="1600.0" />
-                     </StackPane.margin>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="20.0" left="20.0" top="20.0" />
+                     </padding>
                   </HBox>
+                  <VBox alignment="TOP_CENTER" maxHeight="630.0" maxWidth="559.0" minHeight="362.0" minWidth="72.0" prefHeight="630.0" prefWidth="243.0" spacing="10.0" styleClass="tab-button-bar">
+                     <children>
+                        <HBox prefHeight="60.0" prefWidth="213.0">
+                           <children>
+                              <JFXButton fx:id="dashBoardTabButton" focusTraversable="false" graphicTextGap="15.0" prefHeight="43.0" prefWidth="236.0" styleClass="tab-button" text="Dashboard" HBox.hgrow="ALWAYS">
+                                 <graphic>
+                                    <StackPane prefWidth="32.0">
+                                       <children>
+                                          <FontAwesomeIconView glyphName="DASHBOARD" size="25" />
+                                       </children>
+                                    </StackPane>
+                                 </graphic>
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </JFXButton>
+                           </children>
+                        </HBox>
+                        <HBox>
+                           <children>
+                              <JFXButton fx:id="ordersTabButton" focusTraversable="false" graphicTextGap="15.0" prefHeight="43.0" prefWidth="325.0" styleClass="tab-button" text="Orders" HBox.hgrow="ALWAYS">
+                                 <graphic>
+                                    <StackPane prefWidth="32.0">
+                                       <children>
+                                          <FontAwesomeIconView glyphName="FILE_TEXT_ALT" size="25" />
+                                       </children>
+                                    </StackPane>
+                                 </graphic>
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </JFXButton>
+                           </children>
+                        </HBox>
+                        <HBox>
+                           <children>
+                              <JFXButton fx:id="productsTabButton" focusTraversable="false" graphicTextGap="15.0" prefHeight="43.0" prefWidth="325.0" styleClass="tab-button" text="Products" HBox.hgrow="ALWAYS">
+                                 <graphic>
+                                    <StackPane prefWidth="32.0">
+                                       <children>
+                                          <FontAwesomeIconView glyphName="SHOPPING_BAG" size="25" StackPane.alignment="CENTER" />
+                                       </children>
+                                    </StackPane>
+                                 </graphic>
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </JFXButton>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="60.0" prefWidth="118.0">
+                           <children>
+                              <JFXButton fx:id="customersTabButton" focusTraversable="false" graphicTextGap="15.0" prefHeight="43.0" prefWidth="520.0" styleClass="tab-button" text="Customers" HBox.hgrow="ALWAYS">
+                                 <graphic>
+                                    <StackPane prefWidth="32.0">
+                                       <children>
+                                          <FontAwesomeIconView glyphName="USER" size="25" />
+                                       </children>
+                                    </StackPane>
+                                 </graphic>
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </JFXButton>
+                           </children>
+                        </HBox>
+                        <HBox>
+                           <children>
+                              <JFXButton fx:id="employeesTabButton" focusTraversable="false" graphicTextGap="15.0" prefHeight="43.0" prefWidth="325.0" styleClass="tab-button" text="Employees" HBox.hgrow="ALWAYS">
+                                 <graphic>
+                                    <StackPane prefWidth="32.0">
+                                       <children>
+                                          <FontAwesomeIconView glyphName="USERS" size="25" />
+                                       </children>
+                                    </StackPane>
+                                 </graphic>
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </JFXButton>
+                           </children>
+                        </HBox>
+                        <HBox>
+                           <children>
+                              <JFXButton fx:id="settingsTabButton" focusTraversable="false" graphicTextGap="15.0" prefHeight="43.0" prefWidth="325.0" styleClass="tab-button" text="Settings" HBox.hgrow="ALWAYS">
+                                 <graphic>
+                                    <StackPane prefWidth="32.0">
+                                       <children>
+                                          <FontAwesomeIconView glyphName="GEARS" size="25" />
+                                       </children>
+                                    </StackPane>
+                                 </graphic>
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </JFXButton>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox alignment="BOTTOM_LEFT" prefHeight="254.0" prefWidth="654.0" styleClass="tab-button-bar" VBox.vgrow="ALWAYS">
+                     <children>
+                        <HBox>
+                           <children>
+                              <JFXButton fx:id="settingsTabButton1" focusTraversable="false" graphicTextGap="12.0" prefHeight="43.0" prefWidth="325.0" styleClass="tab-button" text="Logout" HBox.hgrow="ALWAYS">
+                                 <graphic>
+                                    <StackPane prefWidth="32.0" style="-fx-rotate: 180;">
+                                       <children>
+                                          <FontAwesomeIconView glyphName="SIGN_OUT" size="25" />
+                                       </children>
+                                    </StackPane>
+                                 </graphic>
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </JFXButton>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+            <StackPane prefHeight="750.0" prefWidth="30.0">
+               <children>
+                  <JFXButton fx:id="shrinkSideBarButton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" styleClass="shrink-button" text="Button" StackPane.alignment="TOP_CENTER">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="CHEVRON_CIRCLE_LEFT" size="28" />
+                     </graphic>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </JFXButton>
                </children>
             </StackPane>
-            <SplitPane id="split-pane-border-color" fx:id="secondSplitPane" dividerPositions="0.1667" focusTraversable="false" prefHeight="947.0" prefWidth="1918.0">
-               <items>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                     <children>
-                        <SplitPane id="split-pane-no-border-color" fx:id="forthSplitPane" dividerPositions="0.15981012658227847" layoutY="187.0" maxWidth="319.0" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="838.0" prefWidth="319.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <items>
-                              <VBox alignment="CENTER" fillWidth="false" maxHeight="158.0" maxWidth="194.0" minHeight="140.0" minWidth="180.0" prefHeight="158.0" prefWidth="193.0" spacing="5.0">
-                                 <children>
-                                    <VBox alignment="CENTER" prefHeight="70.0" prefWidth="70.0" styleClass="avatar-image">
-                                       <children>
-                                          <ImageView fx:id="smallAvatar" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@../img/default_acc_icon.png" />
-                                             </image>
-                                          </ImageView>
-                                       </children>
-                                    </VBox>
-                                    <Text fx:id="usernameText" fill="#329cfe" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: SVN-Poppins; -fx-font-weight: 600;" text="Ngũ Thành An" textAlignment="CENTER" wrappingWidth="153.57815885543823">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                    </Text>
-                                 </children>
-                              </VBox>
-                              <VBox alignment="TOP_CENTER" maxHeight="516.0" maxWidth="559.0" minHeight="362.0" minWidth="180.0" prefHeight="516.0" prefWidth="435.0" spacing="5.0">
-                                 <children>
-                                    <JFXButton fx:id="dashBoardTabButton" focusTraversable="false" onAction="#tabSelectingEffect" onMouseClicked="#displayDashBoardTab" prefHeight="50.0" prefWidth="383.0" styleClass="main-button" textFill="WHITE">
-                                       <font>
-                                          <Font size="16.0" />
-                                       </font>
-                                       <graphic>
-                                          <HBox alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="258.0" spacing="10.0">
-                                             <children>
-                                                <ImageView fitHeight="22.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../img/order_icon.png" />
-                                                   </image>
-                                                   <HBox.margin>
-                                                      <Insets left="10.0" />
-                                                   </HBox.margin>
-                                                </ImageView>
-                                                <Label style="-fx-font-weight: 800; -fx-font-family: SVN-Poppins;" text="Dashboard" textFill="#7c8db5">
-                                                   <font>
-                                                      <Font size="15.0" />
-                                                   </font>
-                                                </Label>
-                                             </children>
-                                          </HBox>
-                                       </graphic>
-                                    </JFXButton>
-                                    <JFXButton fx:id="ordersTabButton" focusTraversable="false" onAction="#tabSelectingEffect" onMouseClicked="#goToOrdersTab" prefHeight="50.0" prefWidth="383.0" styleClass="main-button" textFill="WHITE">
-                                       <font>
-                                          <Font size="16.0" />
-                                       </font>
-                                       <VBox.margin>
-                                          <Insets />
-                                       </VBox.margin>
-                                       <graphic>
-                                          <HBox alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="258.0" spacing="10.0">
-                                             <children>
-                                                <ImageView fitHeight="22.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../img/order_icon.png" />
-                                                   </image>
-                                                   <HBox.margin>
-                                                      <Insets left="10.0" />
-                                                   </HBox.margin>
-                                                </ImageView>
-                                                <Label style="-fx-font-weight: 800; -fx-font-family: SVN-Poppins;" text="Order" textFill="#7c8db5">
-                                                   <font>
-                                                      <Font size="15.0" />
-                                                   </font>
-                                                </Label>
-                                             </children>
-                                          </HBox>
-                                       </graphic>
-                                    </JFXButton>
-                                    <JFXButton fx:id="productsTabButton" focusTraversable="false" onAction="#tabSelectingEffect" onMouseClicked="#goToProductsOperationTab" prefHeight="50.0" prefWidth="523.0" styleClass="main-button" textFill="WHITE">
-                                       <font>
-                                          <Font size="16.0" />
-                                       </font>
-                                       <graphic>
-                                          <HBox alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="246.0" spacing="10.0">
-                                             <children>
-                                                <ImageView fitHeight="22.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../img/product_icon.png" />
-                                                   </image>
-                                                   <HBox.margin>
-                                                      <Insets left="10.0" />
-                                                   </HBox.margin>
-                                                </ImageView>
-                                                <Label fx:id="Products" style="-fx-font-weight: 800; -fx-font-family: SVN-Poppins;" text="Products" textFill="#7c8db5">
-                                                   <font>
-                                                      <Font size="15.0" />
-                                                   </font>
-                                                </Label>
-                                             </children>
-                                          </HBox>
-                                       </graphic>
-                                       <VBox.margin>
-                                          <Insets />
-                                       </VBox.margin>
-                                    </JFXButton>
-                                    <JFXButton fx:id="customersTabButton" focusTraversable="false" onAction="#tabSelectingEffect" onMouseClicked="#goToCustomersTab" prefHeight="50.0" prefWidth="435.0" styleClass="main-button" textFill="WHITE">
-                                       <font>
-                                          <Font size="16.0" />
-                                       </font>
-                                       <graphic>
-                                          <HBox alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="246.0" spacing="10.0">
-                                             <children>
-                                                <ImageView fitHeight="22.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../img/employee_icon.png" />
-                                                   </image>
-                                                   <HBox.margin>
-                                                      <Insets left="10.0" />
-                                                   </HBox.margin>
-                                                </ImageView>
-                                                <Label fx:id="Employee1" style="-fx-font-weight: 800; -fx-font-family: SVN-Poppins;" text="Customers" textFill="#7c8db5">
-                                                   <font>
-                                                      <Font size="15.0" />
-                                                   </font>
-                                                </Label>
-                                             </children>
-                                          </HBox>
-                                       </graphic>
-                                    </JFXButton>
-                                    <JFXButton fx:id="employeesTabButton" focusTraversable="false" onAction="#tabSelectingEffect" onMouseClicked="#displayEmployeesTab" prefHeight="50.0" prefWidth="435.0" styleClass="main-button" textFill="WHITE">
-                                       <font>
-                                          <Font size="16.0" />
-                                       </font>
-                                       <VBox.margin>
-                                          <Insets />
-                                       </VBox.margin>
-                                       <graphic>
-                                          <HBox alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="246.0" spacing="10.0">
-                                             <children>
-                                                <ImageView fitHeight="22.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../img/employee_icon.png" />
-                                                   </image>
-                                                   <HBox.margin>
-                                                      <Insets left="10.0" />
-                                                   </HBox.margin>
-                                                </ImageView>
-                                                <Label fx:id="Employee" style="-fx-font-weight: 800; -fx-font-family: SVN-Poppins;" text="Employees" textFill="#7c8db5">
-                                                   <font>
-                                                      <Font size="15.0" />
-                                                   </font>
-                                                </Label>
-                                             </children>
-                                          </HBox>
-                                       </graphic>
-                                    </JFXButton>
-                                    <JFXButton fx:id="settingsTabButton" focusTraversable="false" onAction="#tabSelectingEffect" onMouseClicked="#goToSettingTab" prefHeight="50.0" prefWidth="425.0" styleClass="main-button" textFill="WHITE">
-                                       <font>
-                                          <Font size="16.0" />
-                                       </font>
-                                       <graphic>
-                                          <HBox alignment="CENTER_LEFT" prefHeight="39.0" prefWidth="280.0" spacing="10.0">
-                                             <children>
-                                                <ImageView fitHeight="22.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../img/settings_icon.png" />
-                                                   </image>
-                                                   <HBox.margin>
-                                                      <Insets left="10.0" />
-                                                   </HBox.margin>
-                                                </ImageView>
-                                                <Label style="-fx-font-family: SVN-Poppins; -fx-font-weight: 800;" text="Settings" textFill="#7c8db5">
-                                                   <font>
-                                                      <Font size="15.0" />
-                                                   </font>
-                                                </Label>
-                                             </children>
-                                          </HBox>
-                                       </graphic>
-                                       <VBox.margin>
-                                          <Insets />
-                                       </VBox.margin>
-                                    </JFXButton>
-                                 </children>
-                              </VBox>
-                           </items>
-                        </SplitPane>
-                     </children>
-                  </AnchorPane>
-                  <TabPane id="background_color" fx:id="tabPane" prefHeight="758.4" prefWidth="997.6" styleClass="main-tab-pane" stylesheets="@../tabpane_style.css" tabClosingPolicy="UNAVAILABLE">
-                     <tabs>
-                        <Tab fx:id="createOrderTab" closable="false" text="Create Order">
-                           <content>
-                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                                 <children>
-                                    <JFXButton fx:id="submitOrderButton" layoutX="445.0" layoutY="696.0" prefHeight="53.0" prefWidth="216.0" stylesheets="@../button_style.css" text="Create Order" />
-                                    <JFXTextField fx:id="commentsInput" layoutX="176.0" layoutY="637.0" prefHeight="31.0" prefWidth="685.0" />
-                                    <DatePicker fx:id="requiredDateInput" layoutX="449.0" layoutY="419.0" prefHeight="34.0" prefWidth="154.0" promptText="Required Date" />
-                                    <Text layoutX="176.0" layoutY="617.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Comments" wrappingWidth="102.90938186645508">
-                                       <font>
-                                          <Font size="16.0" />
-                                       </font>
-                                    </Text>
-                                    <DatePicker fx:id="shippedDateInput" layoutX="704.0" layoutY="419.0" prefHeight="34.0" prefWidth="154.0" promptText="Shipped Date" />
-                                    <JFXTextField fx:id="quantityInput" layoutX="335.0" layoutY="88.0" prefHeight="26.0" prefWidth="73.0" />
-                                    <JFXButton fx:id="removeItemButton" layoutX="749.0" layoutY="88.0" text="Remove" />
-                                    <JFXTextField fx:id="priceEachInput" editable="false" focusTraversable="false" layoutX="424.0" layoutY="88.0" prefHeight="26.0" prefWidth="86.0" />
-                                    <DatePicker fx:id="orderDateInput" layoutX="179.0" layoutY="419.0" prefHeight="34.0" prefWidth="154.0" promptText="Order Date" />
-                                    <TableView fx:id="orderDetailsTable" layoutX="176.0" layoutY="130.0" prefHeight="232.0" prefWidth="696.0" stylesheets="@../table.css">
-                                       <columns>
-                                          <TableColumn fx:id="productCodeOD" prefWidth="246.98178100585938" text="Item" />
-                                          <TableColumn fx:id="quantityOD" prefWidth="143.12725830078125" text="Quantity" />
-                                          <TableColumn fx:id="priceEachOD" minWidth="0.0" prefWidth="144.00006103515625" text="Price" />
-                                          <TableColumn fx:id="totalOD" minWidth="0.0" prefWidth="160.58178626194558" text="Total" />
-                                       </columns>
-                                    </TableView>
-                                    <JFXTextField fx:id="productCodeInput" layoutX="176.0" layoutY="88.0" />
-                                    <ListView fx:id="suggestionList" layoutX="176.0" layoutY="114.0" prefHeight="127.0" prefWidth="136.0" visible="false" />
-                                    <Text layoutX="176.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Code">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Text>
-                                    <Text layoutX="335.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Quantity">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Text>
-                                    <Text layoutX="424.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Price each">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Text>
-                                    <JFXTextField fx:id="totalInput" editable="false" focusTraversable="false" layoutX="538.0" layoutY="88.0" prefHeight="26.0" prefWidth="100.0" />
-                                    <Text layoutX="538.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Text>
-                                    <VBox layoutX="176.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="58.0" prefWidth="240.0">
-                                       <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Customer Name">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Text>
-                                          <JFXTextField fx:id="customerNameInput" prefHeight="26.0" prefWidth="240.0" />
-                                       </children>
-                                    </VBox>
-                                    <VBox layoutX="455.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="58.0" prefWidth="164.0">
-                                       <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Phone Number">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Text>
-                                          <JFXTextField fx:id="phoneNumberInput" prefHeight="26.0" prefWidth="168.0" />
-                                       </children>
-                                    </VBox>
-                                    <Text layoutX="179.0" layoutY="411.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Order Date">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font></Text>
-                                    <Text fx:id="requiredDateText" layoutX="449.0" layoutY="411.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Required Date">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font></Text>
-                                    <Text fx:id="shippedDateText" layoutX="704.0" layoutY="410.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Shipped Date">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font></Text>
-                                    <JFXButton fx:id="printInvoiceButton" layoutX="499.0" layoutY="749.0" prefHeight="38.0" prefWidth="107.0" text="Print" />
-                                    <Text layoutX="607.0" layoutY="388.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Amount: ">
-                                       <font>
-                                          <Font name="System Bold" size="14.0" />
-                                       </font>
-                                    </Text>
-                                    <TextField fx:id="totalAmountForOrder" editable="false" focusTraversable="false" layoutX="712.0" layoutY="369.0" prefWidth="160.58178626194558" />
-                                    <JFXComboBox fx:id="statusInput" layoutX="362.0" layoutY="557.0" prefHeight="31.0" prefWidth="150.0" promptText="Status" />
-                                    <JFXComboBox fx:id="paymentMethodInput" layoutX="176.0" layoutY="557.0" prefHeight="31.0" prefWidth="150.0" promptText="Payment Method" />
-                                    <JFXTextField fx:id="deliverInput" layoutX="176.0" layoutY="501.0" prefHeight="31.0" prefWidth="422.0" />
-                                    <Text fx:id="deliverText" layoutX="176.0" layoutY="492.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Deliver To">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Text>
-                                 </children>
-                              </AnchorPane>
-                           </content>
-                        </Tab>
-                        <Tab fx:id="productsOperationTab" closable="false" text="Products Operation">
-                           <content>
-                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                                 <children>
-                                    <JFXButton fx:id="removeProductButton" layoutX="1134.0" layoutY="57.0" text="Remove" />
-                                    <TableView fx:id="productsTable" layoutX="255.0" layoutY="95.0" prefHeight="675.0" prefWidth="950.0" stylesheets="@../table.css">
-                                       <columns>
-                                          <TableColumn fx:id="productCodeProd" prefWidth="163.199951171875" text="Product Code" />
-                                          <TableColumn fx:id="productNameProd" prefWidth="330.76373291015625" text="Name" />
-                                          <TableColumn fx:id="productLineProd" prefWidth="205.0909423828125" text="Product Line" />
-                                          <TableColumn fx:id="productVendorProd" prefWidth="254.8363037109375" text="Product Vendor" />
-                                       </columns>
-                                    </TableView>
-                                    <Pane fx:id="bgPaneProducts" opacity="0.5" prefHeight="900.0" prefWidth="1500.0" style="-fx-background-color: black;" visible="false" />
-                                    <AnchorPane fx:id="productDetailsPane" focusTraversable="true" layoutX="385.0" layoutY="199.0" prefHeight="466.0" prefWidth="677.0" style="-fx-background-color: white;" visible="false">
-                                       <children>
-                                          <JFXTextField fx:id="productCodePDetails" layoutX="54.0" layoutY="72.0" prefHeight="26.0" prefWidth="195.0" />
-                                          <JFXTextField fx:id="productNamePDetails" layoutX="382.0" layoutY="72.0" prefWidth="195.0" />
-                                          <Text layoutX="54.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Code">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font></Text>
-                                          <Text layoutX="54.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PRODUCT DETAILS" wrappingWidth="175.5630645751953">
-                                             <font>
-                                                <Font name="System Bold Italic" size="17.0" />
-                                             </font>
-                                          </Text>
-                                          <Text layoutX="384.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Name">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font></Text>
-                                          <Text layoutX="53.0" layoutY="238.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Line">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font></Text>
-                                          <JFXButton fx:id="closeProductDetailsButton" buttonType="RAISED" layoutX="596.0" layoutY="18.0" prefHeight="24.0" prefWidth="15.0" text="X">
-                                             <font>
-                                                <Font name="System Bold" size="14.0" />
-                                             </font>
-                                          </JFXButton>
-                                          <JFXTextField fx:id="productVendorPDetails" layoutX="54.0" layoutY="133.0" prefWidth="195.0" />
-                                          <Text layoutX="54.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Vendor">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Text>
-                                          <JFXTextField fx:id="inStockPDetails" layoutX="382.0" layoutY="133.0" prefWidth="195.0" />
-                                          <Text layoutX="385.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" text="In Stock">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Text>
-                                          <JFXTextField fx:id="buyPricePDetails" layoutX="53.0" layoutY="191.0" prefWidth="195.0" />
-                                          <Text layoutX="53.0" layoutY="183.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Buy Price">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Text>
-                                          <JFXTextField fx:id="sellPricePDetails" layoutX="382.0" layoutY="191.0" prefWidth="195.0" />
-                                          <Text layoutX="382.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sell Price">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Text>
-                                          <JFXTextField fx:id="productDescriptionPDetails" layoutX="53.0" layoutY="323.0" maxHeight="60.0" prefHeight="34.0" prefWidth="531.0" />
-                                          <Text layoutX="54.0" layoutY="315.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Description">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Text>
-                                          <JFXButton fx:id="productDetailsButton" layoutX="298.0" layoutY="398.0" text="Save" />
-                                          <JFXTextField fx:id="productLinePDetails" layoutX="53.0" layoutY="248.0" prefHeight="26.0" prefWidth="195.0" />
-                                          <ListView fx:id="plSuggestionList" layoutX="53.0" layoutY="274.0" prefHeight="117.0" prefWidth="195.0" visible="false" />
-                                       </children>
-                                    </AnchorPane>
-                                    <JFXButton fx:id="editProductButton" layoutX="1018.0" layoutY="57.0" prefHeight="26.0" prefWidth="52.0" text="Edit" />
-                                    <AnchorPane fx:id="productFilterPane" focusTraversable="true" layoutX="400.0" layoutY="188.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="281.0" prefWidth="628.0" style="-fx-background-color: white;" visible="false">
-                                       <children>
-                                          <Text layoutX="336.0" layoutY="144.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Vendor">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Text>
-                                          <Text layoutX="54.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="175.5630645751953">
-                                             <font>
-                                                <Font name="System Bold Italic" size="17.0" />
-                                             </font>
-                                          </Text>
-                                          <Text layoutX="90.0" layoutY="144.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Line">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Text>
-                                          <JFXButton fx:id="closeProductFilterButton" buttonType="RAISED" layoutX="553.0" layoutY="18.0" prefHeight="24.0" prefWidth="15.0" text="X">
-                                             <font>
-                                                <Font name="System Bold" size="14.0" />
-                                             </font>
-                                          </JFXButton>
-                                          <JFXTextField fx:id="productCodeFilter" layoutX="90.0" layoutY="75.0" prefWidth="195.0" />
-                                          <Text layoutX="90.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Code">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Text>
-                                          <JFXTextField fx:id="productNameFilter" layoutX="336.0" layoutY="75.0" prefWidth="195.0" />
-                                          <Text layoutX="336.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Product Name">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Text>
-                                          <JFXButton fx:id="applyProductFilterButton" layoutX="230.0" layoutY="219.0" text="Apply Filter" />
-                                          <ListView fx:id="plSuggestionList11" layoutX="53.0" layoutY="274.0" prefHeight="117.0" prefWidth="195.0" visible="false" />
-                                          <JFXButton fx:id="clearProductFilterButton" layoutX="319.0" layoutY="219.0" text="Clear Filters" />
-                                          <JFXTextField fx:id="productLineFilter" layoutX="90.0" layoutY="158.0" prefWidth="195.0" />
-                                          <JFXTextField fx:id="productVendorFilter" layoutX="336.0" layoutY="158.0" prefWidth="195.0" />
-                                       </children>
-                                    </AnchorPane>
-                                    <JFXButton fx:id="addProductFilterButton" layoutX="255.0" layoutY="58.0" text="Filter..." />
-                                 </children>
-                              </AnchorPane>
-
-                           </content>
-                        </Tab>
-                        <Tab fx:id="employeesOperationTab" closable="false" text="Employees Operation" />
-                        <Tab fx:id="dashBoardTab" text="Dashboard">
-                           <content>
-                              <AnchorPane>
-                                 <children>
-                                    <StackPane fx:id="chartPane1" layoutX="58.0" layoutY="26.0" prefHeight="360.0" prefWidth="1000.0" />
-                                    <StackPane fx:id="chartPane2" layoutX="58.0" layoutY="434.0" prefHeight="328.0" prefWidth="1000.0" />
-                                    <VBox alignment="CENTER" layoutX="1110.0" layoutY="286.0" prefHeight="201.0" prefWidth="122.0" spacing="6.0">
-                                       <children>
-                                          <JFXCheckBox fx:id="totalRevenueCheck" prefHeight="18.0" prefWidth="131.0" selected="true" text="Total Revenue">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </JFXCheckBox>
-                                          <JFXCheckBox fx:id="topProductCheck" prefHeight="18.0" prefWidth="131.0" selected="true" text="Top Product">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </JFXCheckBox>
-                                          <JFXCheckBox fx:id="topProductLineCheck" prefHeight="18.0" prefWidth="131.0" text="Top Product Line">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </JFXCheckBox>
-                                          <JFXCheckBox fx:id="topCustomerCheck" prefHeight="18.0" prefWidth="131.0" text="Top Customer">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </JFXCheckBox>
-                                          <JFXCheckBox fx:id="topStoreCheck" prefHeight="18.0" prefWidth="131.0" text="Top Store">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </JFXCheckBox>
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </AnchorPane>
-                           </content>
-                        </Tab>
-                        <Tab fx:id="ordersTab" text="Orders">
-                           <content>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                 <children>
-                                    <TableView fx:id="ordersTable" layoutX="164.0" layoutY="103.0" prefHeight="593.0" prefWidth="984.0" stylesheets="@../table.css">
-                                       <columns>
-                                          <TableColumn fx:id="orderNumberOrd" prefWidth="82.90908813476562" text="Order No." />
-                                          <TableColumn fx:id="createdOrd" prefWidth="150.10906982421875" text="Created" />
-                                          <TableColumn fx:id="orderDateOrd" minWidth="6.103515625E-5" prefWidth="92.50909423828125" text="Order Date" />
-                                          <TableColumn fx:id="typeOrd" prefWidth="68.07275390625" text="Type" />
-                                          <TableColumn fx:id="commentsOrd" prefWidth="165.8182373046875" text="Comments" />
-                                          <TableColumn fx:id="valueOrd" prefWidth="104.7274169921875" text="Value" />
-                                          <TableColumn fx:id="customerNameOrd" prefWidth="170.181640625" text="Customer" />
-                                          <TableColumn fx:id="contactOrd" prefWidth="153.60009765625" text="Contact" />
-                                       </columns>
-                                    </TableView>
-                                    <JFXButton fx:id="removeOrderButton" layoutX="1057.0" layoutY="64.0" prefHeight="26.0" prefWidth="79.0" text="Remove" />
-                                    <JFXButton fx:id="createOrderButton" layoutX="943.0" layoutY="64.0" text="Create New Order" />
-                                    <JFXButton fx:id="editOrderButton" layoutX="906.0" layoutY="64.0" text="Edit" />
-                                    <JFXButton fx:id="addOrderFilterButton" layoutX="164.0" layoutY="64.0" prefHeight="26.0" prefWidth="73.0" text="Filter..." />
-                                    <Pane fx:id="bgPaneOrders" opacity="0.5" prefHeight="900.0" prefWidth="1500.0" style="-fx-background-color: black;" visible="false" />
-                                    <AnchorPane fx:id="orderFilterPane" focusTraversable="true" layoutX="326.0" layoutY="199.0" prefHeight="393.0" prefWidth="628.0" style="-fx-background-color: white;" visible="false">
-                                       <children>
-                                          <Text layoutX="91.0" layoutY="186.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Order Date">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Text>
-                                          <Text layoutX="91.0" layoutY="125.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Order type">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Text>
-                                          <JFXButton fx:id="closeOrderFilterButton" buttonType="RAISED" layoutX="553.0" layoutY="18.0" prefHeight="24.0" prefWidth="15.0" text="X">
-                                             <font>
-                                                <Font name="System Bold" size="14.0" />
-                                             </font>
-                                          </JFXButton>
-                                          <JFXTextField fx:id="customerNameFilter" layoutX="90.0" layoutY="75.0" prefWidth="195.0" />
-                                          <Text layoutX="90.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Customer">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Text>
-                                          <JFXTextField fx:id="contactFilter" layoutX="336.0" layoutY="75.0" prefWidth="195.0" />
-                                          <Text layoutX="336.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Contact">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Text>
-                                          <JFXButton fx:id="applyOrderFilterButton" layoutX="230.0" layoutY="333.0" text="Apply Filter" />
-                                          <ListView fx:id="plSuggestionList1" layoutX="53.0" layoutY="274.0" prefHeight="117.0" prefWidth="195.0" visible="false" />
-                                          <DatePicker fx:id="orderDateFilter" layoutX="90.0" layoutY="197.0" />
-                                          <ComboBox fx:id="typeFilter" layoutX="90.0" layoutY="137.0" prefHeight="26.0" prefWidth="178.0" />
-                                          <Text layoutX="91.0" layoutY="249.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Comments">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Text>
-                                          <JFXTextField fx:id="commentsFilter" layoutX="89.0" layoutY="265.0" prefHeight="38.0" prefWidth="449.0" />
-                                          <JFXButton fx:id="clearOrderFilterButton" layoutX="319.0" layoutY="333.0" text="Clear Filters" />
-                                          <JFXTextField fx:id="createdFilter" layoutX="336.0" layoutY="137.0" prefWidth="195.0" />
-                                          <Text layoutX="336.0" layoutY="125.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Created">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Text>
-                                       </children>
-                                    </AnchorPane>
-                                 </children>
-                              </AnchorPane>
-                           </content>
-                        </Tab>
-                        <Tab fx:id="customersTab" closable="false" text="Customers" />
-                        <Tab fx:id="settingTab" text="Setting" />
-                     </tabs>
-                  </TabPane>
-               </items>
-            </SplitPane>
-         </items>
-      </SplitPane>
-      <ProgressIndicator fx:id="progressIndicator" layoutX="650.0" layoutY="270.0" visible="false" />
+            <TabPane id="background_color" fx:id="tabPane" prefHeight="750.0" prefWidth="794.0" styleClass="main-tab-pane" stylesheets="@../tabpane_style.css" tabClosingPolicy="UNAVAILABLE" HBox.hgrow="ALWAYS">
+               <tabs>
+                  <Tab fx:id="productsTab" closable="false" text="Products" />
+                  <Tab fx:id="employeesTab" closable="false" text="Employees" />
+                  <Tab fx:id="dashBoardTab" text="Dashboard" />
+                  <Tab fx:id="ordersTab" text="Orders" />
+                  <Tab fx:id="customersTab" closable="false" text="Customers" />
+                  <Tab fx:id="settingsTab" text="Setting" />
+               </tabs>
+            </TabPane>
+         </children>
+      </HBox>
    </children>
-</AnchorPane>
+</VBox>

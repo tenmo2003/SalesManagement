@@ -28,13 +28,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-/**
- * The LoginScene class controls the actions and behaviors of the login scene in the Sales Management application.
- * It implements the Initializable interface to initialize the FXML components and SceneController abstract class to have access to the common functionalities.
- * The class contains methods to check the login information of an employee, handle the forgot password and reset password functionality, and verify the email for password reset.
- * It also contains methods to save login information in a text file and set the progress indicator status of a task.
- * The class uses various FXML components and external libraries like ControlsFX, JavaFX, and JavaMail.
- */
 public class LoginScene extends SceneController implements Initializable {
     @FXML
     CustomTextField username;

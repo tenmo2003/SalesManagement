@@ -24,7 +24,7 @@ import java.util.ResourceBundle;
 
 import static salesmanagement.salesmanagement.SceneController.SceneController.runTask;
 
-public class SettingTabView extends TabView implements SettingsTab {
+public class SettingsTabView extends TabView implements SettingsTab {
     AccountActivityLogView accountActivityLogView;
     Employee user;
     @FXML

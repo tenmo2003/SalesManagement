@@ -14,6 +14,7 @@
     -fx-background-color: transparent;
     -fx-padding: 0 0 0 0;
 }
+
 #split-pane-no-border-color.split-pane:vertical > .split-pane-divider {
     -fx-border-color: transparent;
     -fx-background-color: transparent;
@@ -68,12 +69,6 @@
     /*-fx-font-size: 15;*/
 }
 
-.text-style {
-    -fx-fill: black;
-    -fx-font-size: 15;
-    -fx-font-family: SVN-Poppins;
-}
-
 .text-style:hover {
     -fx-fill: #329cfe;
 }
@@ -96,4 +91,69 @@
 
 #close_color {
     -fx-fill: #329efcab;
+}
+
+.tab-button {
+    -fx-text-fill: #7c8db5;
+    -fx-font-size: 16;
+    -fx-font-weight: 700;
+    -fx-pref-height: 60;
+    -fx-pref-width: 300;
+    -fx-alignment: CENTER_LEFT;
+    -fx-border-radius: 6;
+    -fx-graphic-text-gap: 15;
+}
+
+.tab-button .glyph-icon {
+    -fx-fill: #7c8db5;
+    -fx-font-size: 20;
+}
+
+.tab-button:hover {
+    -fx-text-fill: white;
+    -fx-background-color: transparent, transparent, transparent, #329efcab;
+}
+
+.tab-button:hover .glyph-icon {
+    -fx-fill: white;
+}
+
+.active-tab-button {
+    -fx-background-color: transparent, transparent, transparent, #dbdfe7;
+}
+
+
+.tab-button-bar {
+    -fx-padding: 0 10 0 10;
+}
+
+.username-label {
+    -fx-text-fill: #7c8db5;
+    -fx-font-size: 18;
+    -fx-font-weight: 700;
+}
+
+.job-title-label {
+    -fx-text-fill: #7c8db5;
+    -fx-font-size: 15;
+}
+
+.shrink-tab-button {
+    -fx-content-display: GRAPHIC_ONLY;
+}
+
+.active-shrink-button {
+    -fx-rotate: 180;
+}
+
+.shrink-button .glyph-icon {
+    -fx-fill: #329efcab;
+}
+
+.shrink-button-box {
+    -fx-background-color: linear-gradient(to right, #00FF00 50%, #FF0000 50%);
+}
+
+.side-bar-box {
+    -fx-min-width: 30;
 }
