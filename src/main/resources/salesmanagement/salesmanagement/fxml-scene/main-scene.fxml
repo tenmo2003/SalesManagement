@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="root" minWidth="1000.0" prefHeight="700.0" prefWidth="1000.0" stylesheets="@../style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.SceneController.MainScene">
+<VBox fx:id="root" minWidth="1000.0" prefHeight="700.0" prefWidth="1000.0" stylesheets="@../style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.SceneController.MainSceneController">
    <children>
       <StackPane id="background_color" fx:id="menuPane" prefHeight="47.0" prefWidth="1000.0">
          <children>

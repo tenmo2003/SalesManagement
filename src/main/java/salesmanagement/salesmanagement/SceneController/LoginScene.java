@@ -71,10 +71,10 @@ public class LoginScene extends SceneController implements Initializable {
                 String query = "SELECT employeeNumber, username, password, jobTitle FROM employees WHERE username = '" + username + "' AND password = '" + password + "'";
                 ResultSet resultSet = sqlConnection.getDataQuery(query);
                 if (resultSet.next()) {
-                    MainScene.loggerID = resultSet.getInt("employeeNumber");
+                    MainSceneController.loggerID = resultSet.getInt("employeeNumber");
                     sqlConnection.setUserID(resultSet.getInt("employeeNumber"));
                     ViewController.setUserRight(resultSet.getString("jobTitle"));
-                    MainScene.haveJustOpened = true;
+                    MainSceneController.haveJustOpened = true;
                     return true;
                 }
                 return false;
@@ -83,7 +83,7 @@ public class LoginScene extends SceneController implements Initializable {
 
         checkAccountTask.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
-                NotificationSystem.throwNotification(NotificationCode.INVALID_LOGIN, stage);
+                NotificationSystem.throwNotification(NotificationCode.INVALID_LOGIN, getStage());
             }
         });
 

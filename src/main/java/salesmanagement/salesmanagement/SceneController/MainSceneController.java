@@ -38,7 +38,7 @@ import java.util.ResourceBundle;
 
 import static salesmanagement.salesmanagement.Utils.NotificationCode.NOT_AUTHORIZED;
 
-public class MainScene extends SceneController implements Initializable {
+public class MainSceneController extends SceneController implements Initializable {
     @FXML
     private Label usernameLabel;
     @FXML
@@ -129,10 +129,10 @@ public class MainScene extends SceneController implements Initializable {
     public AnimationTimer loginDataListener = new AnimationTimer() {
         @Override
         public void handle(long l) {
-            if (MainScene.loggerID > 0) {
+            if (MainSceneController.loggerID > 0) {
                 runTask(() -> {
                     Platform.runLater(() -> {
-                        stage.setScene(MainScene.this.scene);
+                        stage.setScene(MainSceneController.this.scene);
                         stage.hide();
                         initialSetup();
 
@@ -150,6 +150,16 @@ public class MainScene extends SceneController implements Initializable {
             }
         }
     };
+
+    private boolean close = false;
+
+    public boolean beClosed() {
+        return close;
+    }
+
+    public void close() {
+        close = false;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -241,6 +251,10 @@ public class MainScene extends SceneController implements Initializable {
         shrinkSideBarButton.setOnMouseClicked(event -> {
             shrink();
         });
+
+        logOutButton.setOnMouseClicked(event -> {
+            close = true;
+        });
     }
 
     @FXML
@@ -263,7 +277,7 @@ public class MainScene extends SceneController implements Initializable {
 
             Transition transition = new Transition() {
                 {
-                    setCycleDuration(Duration.seconds(0.5));
+                    setCycleDuration(Duration.seconds(0.6));
                 }
 
                 @Override
@@ -283,7 +297,7 @@ public class MainScene extends SceneController implements Initializable {
 
             Transition transition = new Transition() {
                 {
-                    setCycleDuration(Duration.seconds(0.5));
+                    setCycleDuration(Duration.seconds(0.6));
                 }
 
                 @Override

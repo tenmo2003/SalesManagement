@@ -1,7 +1,6 @@
 package salesmanagement.salesmanagement.SceneController;
 
 import com.jfoenix.controls.JFXButton;
-import javafx.beans.binding.Bindings;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -11,17 +10,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import salesmanagement.salesmanagement.Utils.SQLConnection;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-
 public abstract class SceneController {
-    SQLConnection sqlConnection;
-    Stage stage;
+    protected static SQLConnection sqlConnection;
+    protected static Stage stage;
 
     public void setSqlConnection(SQLConnection sqlConnection, Stage stage) {
-        this.sqlConnection = sqlConnection;
-        this.stage = stage;
+        SceneController.sqlConnection = sqlConnection;
+        SceneController.stage = stage;
     }
 
     public Stage getStage() {

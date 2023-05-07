@@ -1,5 +1,8 @@
 package salesmanagement.salesmanagement;
 
+import javafx.animation.AnimationTimer;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
@@ -7,7 +10,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.burningwave.core.assembler.StaticComponentContainer;
 import salesmanagement.salesmanagement.SceneController.LoginScene;
-import salesmanagement.salesmanagement.SceneController.MainScene;
+import salesmanagement.salesmanagement.SceneController.MainSceneController;
 import salesmanagement.salesmanagement.Utils.ImageController;
 import salesmanagement.salesmanagement.Utils.SQLConnection;
 
@@ -35,6 +38,8 @@ public class AppController {
         return appController;
     }
 
+    MainSceneController mainSceneController;
+
     public synchronized void run() {
         StaticComponentContainer.JVMInfo.getVersion();
 
@@ -55,8 +60,8 @@ public class AppController {
             System.exit(0);
         }
 
-        MainScene mainScene = mainFXMLLoader.getController();
-        mainScene.setScene(this.mainScene);
+        mainSceneController = mainFXMLLoader.getController();
+        mainSceneController.setScene(this.mainScene);
 
         //Set up stage config.
         stage.initStyle(StageStyle.TRANSPARENT);
@@ -81,10 +86,42 @@ public class AppController {
         var url = "jdbc:mysql://b7kidpocyxjnjhwdw73i-mysql.services.clever-cloud.com:3306/b7kidpocyxjnjhwdw73i";
         sqlConnection = new SQLConnection(url, user, password);
         loginScene.setSqlConnection(sqlConnection, stage);
-        mainScene.setSqlConnection(sqlConnection, stage);
 
         runTask(() -> sqlConnection.connectServer(), null, loginScene.getProgressIndicator(), loginScene.getLoginPane());
-        mainScene.loginDataListener.start();
+        mainSceneController.loginDataListener.start();
+
+        BooleanProperty reLogin = new SimpleBooleanProperty(false);
+        reLogin.addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                reLogin.set(false);
+                System.out.println(2345);
+                FXMLLoader loader = new FXMLLoader(SalesManagement.class.getResource("fxml-scene/main-scene.fxml"));
+                try {
+                    this.mainScene = new Scene(loader.load());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.exit(0);
+                }
+                mainSceneController = loader.getController();
+                mainSceneController.setScene(this.mainScene);
+                mainSceneController.loginDataListener.start();
+            }
+        });
+
+        AnimationTimer logOutListener = new AnimationTimer() {
+            @Override
+            public void handle(long l) {
+                if (mainSceneController.beClosed()) {
+                    mainSceneController.close();
+                    MainSceneController.loggerID = -1;
+                    System.out.println(23);
+                    reLogin.set(true);
+                    stage.setScene(AppController.this.loginScene);
+                }
+            }
+        };
+        logOutListener.start();
+
 
 //        AnimationTimer notifyInternetConnection = new AnimationTimer() {
 //            @Override
