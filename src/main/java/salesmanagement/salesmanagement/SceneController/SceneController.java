@@ -1,16 +1,19 @@
 package salesmanagement.salesmanagement.SceneController;
 
 import com.jfoenix.controls.JFXButton;
+import javafx.beans.binding.Bindings;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import salesmanagement.salesmanagement.Utils.SQLConnection;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public abstract class SceneController {
     SQLConnection sqlConnection;
@@ -26,14 +29,14 @@ public abstract class SceneController {
     }
 
     @FXML
-    protected void closeStage() {
+    final protected void closeStage() {
         if (sqlConnection != null)
             sqlConnection.addClosingWork();
         System.exit(0);
     }
 
     @FXML
-    protected void minimizeStage(MouseEvent mouseEvent) {
+    final protected void minimizeStage(MouseEvent mouseEvent) {
         ((Stage) ((JFXButton) mouseEvent.getSource()).getScene().getWindow()).setIconified(true);
     }
 

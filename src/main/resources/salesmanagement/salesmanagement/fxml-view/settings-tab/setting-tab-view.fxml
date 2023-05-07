@@ -23,7 +23,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="32.0" prefWidth="339.0">
                      <children>
-                        <Label id="top_label" prefHeight="32.0" prefWidth="174.0" text="Account Setting" />
+                        <Label id="top_label" prefHeight="32.0" prefWidth="212.0" text="Account Settings" />
                         <ProgressIndicator fx:id="loadingIndicator" prefHeight="32.0" prefWidth="37.0" />
                      </children>
                   </HBox>

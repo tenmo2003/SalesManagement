@@ -7,17 +7,12 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.control.Label;
-import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Screen;
 import javafx.util.Duration;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesManagement;
@@ -34,6 +29,8 @@ import salesmanagement.salesmanagement.ViewController.ViewController;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -75,13 +72,9 @@ public class MainScene extends SceneController implements Initializable {
     @FXML
     private JFXButton shrinkSideBarButton;
     @FXML
-    SplitPane firstSplitPane;
-    @FXML
-    HBox appName;
+    private JFXButton logOutButton;
     @FXML
     ImageView smallAvatar;
-    @FXML
-    StackPane menuPane;
 
     JFXButton previousTabButton = dashBoardTabButton;
 
@@ -94,10 +87,26 @@ public class MainScene extends SceneController implements Initializable {
 
     @Override
     protected void maximumStage(MouseEvent mouseEvent) {
-
+        if (stage.isMaximized()) {
+            stage.setMaximized(false);
+        } else {
+            stage.setMaximized(true);
+        }
     }
 
+    double xOffset;
+    double yOffset;
+
     public void initialSetup() {
+        stage.getScene().setOnMousePressed(event -> {
+            xOffset = stage.getX() - event.getScreenX();
+            yOffset = stage.getY() - event.getScreenY();
+        });
+        stage.getScene().setOnMouseDragged(event -> {
+            stage.setX(event.getScreenX() + xOffset);
+            stage.setY(event.getScreenY() + yOffset);
+        });
+
         user = new Employee(sqlConnection, loggerID);
         settingsTabView.setUser(user);
         employeesTabView.setLoggedInUser(user);
@@ -105,9 +114,6 @@ public class MainScene extends SceneController implements Initializable {
 
         usernameLabel.setText(user.getFullName());
         jobTitleLabel.setText(user.getJobTitle());
-
-        Insets hboxMargin = new Insets(0, 0.8333 * Screen.getPrimary().getVisualBounds().getWidth(), 0, 0);
-        StackPane.setMargin(appName, hboxMargin);
 
         previousTabButton = dashBoardTabButton;
 
@@ -129,16 +135,15 @@ public class MainScene extends SceneController implements Initializable {
                         stage.setScene(MainScene.this.scene);
                         stage.hide();
                         initialSetup();
-                        stage.setX(0);
-                        stage.setY(0);
 
-
-                        root.setPrefSize(1000, 500);
+                        root.setMinSize(800, 400);
                         stage.show();
 
-                        sideBarBox.setMinWidth(300);
-                        System.out.println(sideBarBox.getPrefWidth());
-                        // dashBoardTabButton.fire();
+                        sideBarBox.setPrefWidth(300);
+                        sideBarBox.setMinWidth(95);
+                        sideBarBox.setMaxWidth(300);
+
+                        dashBoardTabButton.fire();
                     });
                 }, null, null, null);
                 stop();
@@ -182,8 +187,18 @@ public class MainScene extends SceneController implements Initializable {
             throw new RuntimeException(e);
         }
 
+        AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                LocalDateTime dateTime = LocalDateTime.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                String formattedDateTime = dateTime.format(formatter);
+                timeLabel.setText(formattedDateTime);
+            }
+        };
+        timer.start();
 
-        dashBoardTabButton.setOnMouseClicked(event -> {
+        dashBoardTabButton.setOnAction(event -> {
             tabSelectingEffect(dashBoardTabButton);
             tabPane.getSelectionModel().select(dashBoardTab);
             dashboardTabView.show();
@@ -231,27 +246,54 @@ public class MainScene extends SceneController implements Initializable {
     @FXML
     VBox sideBarBox;
     List<JFXButton> tabButtons;
+    boolean shrinkSideBar = false;
 
     public void shrink() {
         if (tabButtons == null) {
-            tabButtons = new ArrayList<>(Arrays.asList(dashBoardTabButton, employeesTabButton, customersTabButton, ordersTabButton, productsTabButton, settingsTabButton));
+            tabButtons = new ArrayList<>(Arrays.asList(dashBoardTabButton, employeesTabButton, customersTabButton, ordersTabButton, productsTabButton, settingsTabButton, logOutButton));
         }
-        for (JFXButton button : tabButtons)
-            button.getStyleClass().add("shrink-tab-button");
 
-        sideBarBox.setMinWidth(30);
-        Transition transition = new Transition() {
-            {
-                setCycleDuration(Duration.seconds(1));
-            }
+        if (!shrinkSideBar) {
+            shrinkSideBar = true;
 
-            @Override
-            protected void interpolate(double frac) {
-                double width = sideBarBox.getWidth() * (1 - frac);
-                sideBarBox.setPrefWidth(width);
-            }
-        };
-        transition.play();
+            for (JFXButton button : tabButtons)
+                button.getStyleClass().add("shrink-tab-button");
+            usernameLabel.getStyleClass().add("shrink-tab-button");
+            shrinkSideBarButton.getStyleClass().add("active-shrink-button");
+
+            Transition transition = new Transition() {
+                {
+                    setCycleDuration(Duration.seconds(0.5));
+                }
+
+                @Override
+                protected void interpolate(double frac) {
+                    double width = sideBarBox.getWidth() * (1 - frac);
+                    sideBarBox.setPrefWidth(width);
+                }
+            };
+            transition.play();
+        } else {
+            shrinkSideBar = false;
+
+            for (JFXButton button : tabButtons)
+                button.getStyleClass().remove("shrink-tab-button");
+            usernameLabel.getStyleClass().remove("shrink-tab-button");
+            shrinkSideBarButton.getStyleClass().remove("active-shrink-button");
+
+            Transition transition = new Transition() {
+                {
+                    setCycleDuration(Duration.seconds(0.5));
+                }
+
+                @Override
+                protected void interpolate(double frac) {
+                    double width = sideBarBox.getWidth() * (1 + frac);
+                    sideBarBox.setPrefWidth(width);
+                }
+            };
+            transition.play();
+        }
     }
 
     private void tabSelectingEffect(JFXButton selectedTabButton) {
@@ -259,4 +301,7 @@ public class MainScene extends SceneController implements Initializable {
         previousTabButton = selectedTabButton;
         previousTabButton.getStyleClass().add("active-tab-button");
     }
+
+    @FXML
+    Label timeLabel;
 }

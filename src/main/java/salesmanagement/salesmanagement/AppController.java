@@ -2,12 +2,7 @@ package salesmanagement.salesmanagement;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.SplitPane;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.burningwave.core.assembler.StaticComponentContainer;
@@ -20,10 +15,6 @@ import java.io.IOException;
 
 import static salesmanagement.salesmanagement.SceneController.SceneController.runTask;
 
-
-/**
- * @since 1.0
- */
 public class AppController {
     private static AppController appController = null;
     private final Stage stage;
@@ -46,7 +37,7 @@ public class AppController {
 
     public synchronized void run() {
         StaticComponentContainer.JVMInfo.getVersion();
-        //Load login scene.
+
         FXMLLoader loginFXMLLoader = new FXMLLoader(SalesManagement.class.getResource("fxml-scene/login-scene.fxml"));
         try {
             this.loginScene = new Scene(loginFXMLLoader.load());
@@ -56,7 +47,6 @@ public class AppController {
         }
         LoginScene loginScene = loginFXMLLoader.getController();
 
-        //Load main scene.
         FXMLLoader mainFXMLLoader = new FXMLLoader(SalesManagement.class.getResource("fxml-scene/main-scene.fxml"));
         try {
             this.mainScene = new Scene(mainFXMLLoader.load());
@@ -68,16 +58,23 @@ public class AppController {
         MainScene mainScene = mainFXMLLoader.getController();
         mainScene.setScene(this.mainScene);
 
-
-
         //Set up stage config.
-
         stage.initStyle(StageStyle.TRANSPARENT);
-        stage.setTitle("Sales Management");
+        stage.setTitle("SAMA");
         stage.setScene(this.loginScene);
         this.loginScene.setFill(Color.TRANSPARENT);
         stage.getIcons().add(ImageController.getImage("app_icon.png"));
         stage.show();
+
+        stage.getScene().setOnMousePressed(event -> {
+            xOffset = stage.getX() - event.getScreenX();
+            yOffset = stage.getY() - event.getScreenY();
+        });
+        stage.getScene().setOnMouseDragged(event -> {
+            stage.setX(event.getScreenX() + xOffset);
+            stage.setY(event.getScreenY() + yOffset);
+        });
+
 
         var password = "lbfj2nEwsHTelFcZAqLU";
         var user = "udomuzbs3hfulslz";
@@ -86,10 +83,7 @@ public class AppController {
         loginScene.setSqlConnection(sqlConnection, stage);
         mainScene.setSqlConnection(sqlConnection, stage);
 
-        // Set up SQL Connection for scene controllers.
-        runTask(() -> {
-            sqlConnection.connectServer();
-        }, null, loginScene.getProgressIndicator(), loginScene.getLoginPane());
+        runTask(() -> sqlConnection.connectServer(), null, loginScene.getProgressIndicator(), loginScene.getLoginPane());
         mainScene.loginDataListener.start();
 
 //        AnimationTimer notifyInternetConnection = new AnimationTimer() {
@@ -102,16 +96,8 @@ public class AppController {
 //            }
 //        };
 //        notifyInternetConnection.start();
-        // Create timer to update the date/time every frame.
-       /* AnimationTimer timer = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                LocalDateTime dateTime = LocalDateTime.now();
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                String formattedDateTime = dateTime.format(formatter);
-                mainScene.setTimeDateText(formattedDateTime);
-            }
-        };
-        timer.start();*/
     }
+
+    double xOffset;
+    double yOffset;
 }
