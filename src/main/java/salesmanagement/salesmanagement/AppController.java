@@ -9,12 +9,13 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.burningwave.core.assembler.StaticComponentContainer;
-import salesmanagement.salesmanagement.SceneController.LoginScene;
+import salesmanagement.salesmanagement.SceneController.LoginSceneController;
 import salesmanagement.salesmanagement.SceneController.MainSceneController;
 import salesmanagement.salesmanagement.Utils.ImageController;
 import salesmanagement.salesmanagement.Utils.SQLConnection;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import static salesmanagement.salesmanagement.SceneController.SceneController.runTask;
 
@@ -50,7 +51,9 @@ public class AppController {
             e.printStackTrace();
             System.exit(0);
         }
-        LoginScene loginScene = loginFXMLLoader.getController();
+        LoginSceneController loginSceneController = loginFXMLLoader.getController();
+
+        loginScene.getStylesheets().add(0, Objects.requireNonNull(SalesManagement.class.getResource("notification-style.css")).toExternalForm());
 
         FXMLLoader mainFXMLLoader = new FXMLLoader(SalesManagement.class.getResource("fxml-scene/main-scene.fxml"));
         try {
@@ -81,20 +84,20 @@ public class AppController {
         });
 
 
+
         var password = "lbfj2nEwsHTelFcZAqLU";
         var user = "udomuzbs3hfulslz";
         var url = "jdbc:mysql://b7kidpocyxjnjhwdw73i-mysql.services.clever-cloud.com:3306/b7kidpocyxjnjhwdw73i";
         sqlConnection = new SQLConnection(url, user, password);
-        loginScene.setSqlConnection(sqlConnection, stage);
+        loginSceneController.setSqlConnection(sqlConnection, stage);
 
-        runTask(() -> sqlConnection.connectServer(), null, loginScene.getProgressIndicator(), loginScene.getLoginPane());
+        runTask(() -> sqlConnection.connectServer(), null, loginSceneController.getProgressIndicator(), loginSceneController.getLoginPane());
         mainSceneController.loginDataListener.start();
 
         BooleanProperty reLogin = new SimpleBooleanProperty(false);
         reLogin.addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 reLogin.set(false);
-                System.out.println(2345);
                 FXMLLoader loader = new FXMLLoader(SalesManagement.class.getResource("fxml-scene/main-scene.fxml"));
                 try {
                     this.mainScene = new Scene(loader.load());
@@ -114,7 +117,6 @@ public class AppController {
                 if (mainSceneController.beClosed()) {
                     mainSceneController.close();
                     MainSceneController.loggerID = -1;
-                    System.out.println(23);
                     reLogin.set(true);
                     stage.setScene(AppController.this.loginScene);
                 }

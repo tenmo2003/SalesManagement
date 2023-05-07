@@ -28,7 +28,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class LoginScene extends SceneController implements Initializable {
+public class LoginSceneController extends SceneController implements Initializable {
     @FXML
     CustomTextField username;
     @FXML
@@ -174,16 +174,8 @@ public class LoginScene extends SceneController implements Initializable {
         super.showProgressIndicator(loginPane);
     }
 
-    public void hideProgressIndicator() {
-        super.hideProgressIndicator(loginPane);
-    }
-
-    @FXML
-    MediaView mediaView;
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        //mediaView.setMediaPlayer(new MediaPlayer(new Media("")));
         Rectangle rect = new Rectangle(loginRoot.getPrefWidth(), loginRoot.getPrefHeight());
         rect.setArcHeight(15.0);
         rect.setArcWidth(15.0);

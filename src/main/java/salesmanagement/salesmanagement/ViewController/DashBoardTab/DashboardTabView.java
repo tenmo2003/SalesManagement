@@ -102,7 +102,7 @@ public class DashboardTabView extends TabView {
 
     private void initTotalRevenueChart() throws InterruptedException {
         Platform.runLater(() -> totalRevenueChart.getData().clear());
-        Thread.sleep(500);
+        Thread.sleep(300);
         String query = "SELECT YEAR(months.month) AS year, " +
                 "MONTH(months.month) AS month, " +
                 "COALESCE(SUM(value), 0) AS revenue " +
@@ -146,7 +146,7 @@ public class DashboardTabView extends TabView {
 
     private void initTopProductsChart() throws InterruptedException {
         Platform.runLater(() -> topProductsChart.getData().clear());
-        Thread.sleep(500);
+        Thread.sleep(300);
         String query = "SELECT SUM(quantityOrdered * priceEach) AS revenue, products.productCode FROM orderdetails " +
                 "RIGHT JOIN products ON orderdetails.productCode = products.productCode " +
                 "GROUP BY products.productCode " +
@@ -183,7 +183,7 @@ public class DashboardTabView extends TabView {
 
     private void initCustomersChart() throws InterruptedException {
         Platform.runLater(() -> topCustomersChart.getData().clear());
-        Thread.sleep(500);
+        Thread.sleep(300);
         ((CategoryAxis) topCustomersChart.getXAxis()).setCategories(FXCollections.observableArrayList());
         String query = "SELECT SUM(orderdetails.quantityOrdered * orderdetails.priceEach) AS revenue, customers.customerNumber " +
                 "FROM customers " +
@@ -224,7 +224,7 @@ public class DashboardTabView extends TabView {
 
     private void initTopProductLines() throws InterruptedException {
         Platform.runLater(() -> topProductLinesChart.getData().clear());
-        Thread.sleep(500);
+        Thread.sleep(300);
         String query = "SELECT SUM(quantityOrdered * priceEach) AS revenue, products.productLine FROM orderdetails " +
                 "RIGHT JOIN products ON orderdetails.productCode = products.productCode " +
                 "GROUP BY products.productLine " +
@@ -258,7 +258,7 @@ public class DashboardTabView extends TabView {
 
     private void initRevenueByRegionChart() throws InterruptedException {
         Platform.runLater(() -> revenueByRegionChart.getData().clear());
-        Thread.sleep(500);
+        Thread.sleep(300);
         String query = "SELECT o.region AS `region`,\n" +
                 "       SUM(value) AS `totalRevenue`\n" +
                 "FROM orders AS od\n" +
@@ -290,7 +290,7 @@ public class DashboardTabView extends TabView {
 
     private void initRevenueByChannelChart() throws InterruptedException {
         Platform.runLater(() -> revenueByChannelChart.getData().clear());
-        Thread.sleep(500);
+        Thread.sleep(300);
         String query = "SELECT DATE_FORMAT(orderDate, '%m-%Y') AS `month - year`,\n" +
                 "       SUM(CASE WHEN type = 'online' THEN value ELSE 0 END) AS `onlineRevenue`,\n" +
                 "       SUM(CASE WHEN type = 'onsite' THEN value ELSE 0 END) AS `onsiteRevenue`\n" +

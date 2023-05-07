@@ -47,7 +47,7 @@
             </HBox>
          <ScrollPane fitToWidth="true" stylesheets="@../../scroll-pane.css" VBox.vgrow="ALWAYS">
             <content>
-               <VBox prefHeight="1480.0" prefWidth="1034.0" spacing="20.0">
+               <VBox prefHeight="1200.0" prefWidth="1034.0" spacing="20.0">
                   <children>
                      <HBox prefHeight="380.0" prefWidth="1064.0">
                         <children>

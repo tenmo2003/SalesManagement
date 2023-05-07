@@ -143,3 +143,7 @@
     -fx-font-weight: 700;
 }
 
+.notification-bar > .pane {
+    -fx-background-color: red !important;
+    -fx-padding: 10 10 10 10 !important;
+}

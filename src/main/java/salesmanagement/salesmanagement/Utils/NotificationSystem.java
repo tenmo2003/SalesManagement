@@ -1,17 +1,25 @@
 package salesmanagement.salesmanagement.Utils;
 
-import javafx.geometry.Pos;
+import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
-import org.controlsfx.control.Notifications;
+import salesmanagement.salesmanagement.SalesManagement;
+import salesmanagement.salesmanagement.SceneController.NotificationSceneController;
 
-import static salesmanagement.salesmanagement.Utils.NotificationCode.NOT_AUTHORIZED;
+import java.io.IOException;
 
 
 public class NotificationSystem {
     private static String title;
     private static String content;
-
+    public static Stage previousNotification;
 
     public static void throwNotification(NotificationCode code, Stage stage) {
         switch (code) {
@@ -48,63 +56,156 @@ public class NotificationSystem {
                 content = "Reset Password Successfully!";
             }
             case SUCCEED_ADD_NEW_EMPLOYEE -> {
-                title = "";
+                title = "Action Result Notification";
                 content = "Added New Employee Successfully!";
             }
             case ERROR_EXPORTING -> {
-                title = "";
+                title = "Action Result Notification";
                 content = "Cannot export data!";
             }
             case SUCCEED_EXPORTING -> {
-                title = "";
+                title = "Action Result Notification";
                 content = "Export data successfully!";
             }
             case SUCCEED_ADD_CUSTOMER -> {
-                title = "";
+                title = "Action Result Notification";
                 content = "Added New Customer Successfully!";
             }
             case SUCCEED_CREATE_ORDER -> {
-                title = "";
+                title = "Action Result Notification";
                 content = "Order Created Successfully!";
             }
             case SUCCEED_EDIT_ORDER -> {
-                title = "";
+                title = "Action Result Notification";
                 content = "Order Saved Successfully!";
             }
             case SUCCEED_DELETE_ORDER -> {
-                title = "";
+                title = "Action Result Notification";
                 content = "Order Removed Successfully!";
             }
             case SUCCEED_CREATE_PRODUCT -> {
-                title = "";
+                title = "Action Result Notification";
                 content = "Product Added Successfully!";
             }
             case SUCCEED_EDIT_PRODUCT -> {
-                title = "";
+                title = "Action Result Notification";
                 content = "Product Saved Successfully!";
             }
             case SUCCEED_DELETE_PRODUCT -> {
-                title = "";
+                title = "Action Result Notification";
                 content = "Product Removed Successfully!";
             }
             case SUCCEED_DELETE_CUSTOMER -> {
-                title = "";
+                title = "Action Result Notification";
                 content = "Customer Removed Successfully!";
             }
             case SUCCEED_SAVE_INFO -> {
-                title = "";
+                title = "Action Result Notification";
                 content = "Saved Successfully!";
             }
             case NOT_AUTHORIZED -> {
-                title = "Notification";
+                title = "Action Result Notification";
                 content = "You do not have permission to perform this action!";
             }
         }
-        Notifications notificationBuilder = Notifications.create()
-                .title(title)
-                .text(content)
-                .owner(stage)
-                .position(Pos.TOP_CENTER).hideAfter(Duration.seconds(2));
-        notificationBuilder.show();
+
+        Scene notificationScene = null;
+        FXMLLoader loginFXMLLoader = new FXMLLoader(SalesManagement.class.getResource("fxml-scene/notification-scene.fxml"));
+        try {
+            notificationScene = new Scene(loginFXMLLoader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
+        notificationScene.setFill(Color.TRANSPARENT);
+        NotificationSceneController notificationSceneController = loginFXMLLoader.getController();
+        notificationSceneController.init(title, content, code);
+
+        Stage notificationStage = new Stage();
+        notificationStage.initStyle(StageStyle.TRANSPARENT);
+        notificationStage.initOwner(stage);
+
+        // Hide notification after 1.5s.
+        Timeline timeline = new Timeline(new KeyFrame(
+                Duration.seconds(1.5),
+                event -> {
+                    if (notificationStage.isShowing()) {
+                        double endX = Screen.getPrimary().getVisualBounds().getWidth();
+                        double startX = endX - notificationStage.getWidth();
+                        long duration = 500000000L;
+
+                        AnimationTimer animationTimer = new AnimationTimer() {
+                            long startTime = 0;
+                            final double distance = endX - startX;
+                            final double speed = distance / (double) duration;
+
+                            @Override
+                            public void start() {
+                                super.start();
+                                startTime = System.nanoTime();
+                            }
+
+                            @Override
+                            public void handle(long now) {
+                                long elapsed = now - startTime;
+                                double newX = startX + speed * elapsed;
+                                notificationStage.setX(newX);
+                                if (newX >= endX) {
+                                    notificationStage.close();
+                                    stop();
+                                }
+                            }
+                        };
+                        animationTimer.start();
+                    }
+                }));
+
+        notificationStage.setScene(notificationScene);
+        notificationStage.setX(Screen.getPrimary().getVisualBounds().getWidth());
+        notificationStage.setY(Screen.getPrimary().getVisualBounds().getHeight() - 120);
+        notificationStage.show();
+
+        // Close previous notification if alive.
+        if (previousNotification != null) {
+            if (previousNotification.isShowing()) {
+               previousNotification.close();
+            }
+            Timeline wait = new Timeline(new KeyFrame(
+                    Duration.seconds(0.2),
+                    event -> notificationSceneController.show()));
+            wait.play();
+        } else notificationSceneController.show();
+
+
+        // Appearing animation.
+        double startX = Screen.getPrimary().getVisualBounds().getWidth();
+        double endX = startX - notificationStage.getWidth();
+        long duration = 500000000L; // 0.5s
+
+        AnimationTimer animationTimer = new AnimationTimer() {
+            long startTime = 0;
+            final double distance = endX - startX;
+            final double speed = distance / (double) duration;
+
+            @Override
+            public void start() {
+                super.start();
+                startTime = System.nanoTime();
+            }
+
+            @Override
+            public void handle(long now) {
+                long elapsed = now - startTime;
+                double newX = startX + speed * elapsed;
+                notificationStage.setX(newX);
+                if (newX <= endX) {
+                    stop();
+                }
+            }
+        };
+        animationTimer.start();
+
+        previousNotification = notificationStage;
+        timeline.play();
     }
 }

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextArea?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -11,45 +13,74 @@
 <?import javafx.scene.text.Font?>
 
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="137.0" prefWidth="354.0" style="-fx-border-radius: 20; -fx-background-radius: 20; -fx-background-color: #E4EFFA;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane fx:id="root" prefHeight="100.0" prefWidth="354.0" style="-fx-background-color: #e2eef9;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.SceneController.NotificationSceneController">
    <children>
-      <StackPane prefHeight="22.0" prefWidth="344.0">
+      <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="126.0" prefWidth="354.0" style="-fx-background-color: transparent;" stylesheets="@../notification-style.css" StackPane.alignment="TOP_CENTER">
          <children>
-            <HBox prefHeight="0.0" prefWidth="354.0" StackPane.alignment="CENTER_LEFT">
+            <HBox prefHeight="3.0" prefWidth="319.0">
                <children>
-                  <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../img/app_icon.png" />
-                     </image>
-                  </ImageView>
-                  <Label text="Sama">
-                     <HBox.margin>
-                        <Insets left="10.0" />
-                     </HBox.margin>
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
+                  <HBox alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="354.0">
+                     <children>
+                        <Label graphicTextGap="10.0" styleClass="app-label" text="sama">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="20.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../img/app_icon.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <JFXButton contentDisplay="GRAPHIC_ONLY" focusTraversable="false" onMouseClicked="#close" styleClass="close-button">
+                           <graphic>
+                              <FontAwesomeIconView glyphName="CLOSE" size="20" />
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                  </HBox>
                </children>
             </HBox>
-            <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" StackPane.alignment="TOP_RIGHT">
+            <HBox alignment="CENTER_LEFT" prefHeight="94.0" prefWidth="331.0" spacing="15.0" VBox.vgrow="ALWAYS">
                <children>
-                  <FontAwesomeIconView glyphName="CLOSE" size="18" />
+                  <VBox>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <children>
+                        <FontAwesomeIconView fx:id="symbolView" fill="#3b8cf3" glyphName="CHECK_CIRCLE" size="45" textAlignment="CENTER" wrappingWidth="46.05715560913086" />
+                     </children>
+                     <padding>
+                        <Insets top="8.0" />
+                     </padding>
+                  </VBox>
+                  <VBox prefHeight="91.0" prefWidth="270.0">
+                     <children>
+                        <Label fx:id="titleLabel" prefHeight="21.0" prefWidth="273.0" styleClass="title-label" text="Login Notification">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <JFXTextArea fx:id="contentLabel" editable="false" focusColor="TRANSPARENT" focusTraversable="false" prefHeight="58.0" prefWidth="270.0" styleClass="content-label" text="You do not have permission to perform this action!" unFocusColor="TRANSPARENT" VBox.vgrow="ALWAYS" />
+                     </children>
+                  </VBox>
                </children>
             </HBox>
          </children>
-      </StackPane>
-      <Label prefHeight="36.0" prefWidth="490.0" text="Login Notification">
-         <VBox.margin>
-            <Insets top="10.0" />
-         </VBox.margin>
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Label>
-      <Label prefHeight="36.0" prefWidth="507.0" text="Please check your internet connection!" />
+         <padding>
+            <Insets left="15.0" right="8.0" top="5.0" />
+         </padding>
+         <StackPane.margin>
+            <Insets top="-5.0" />
+         </StackPane.margin>
+      </VBox>
    </children>
-   <padding>
-      <Insets left="15.0" right="20.0" top="5.0" />
-   </padding>
-</VBox>
+</StackPane>
