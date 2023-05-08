@@ -2,16 +2,22 @@ package salesmanagement.salesmanagement.SceneController;
 
 import com.jfoenix.controls.JFXButton;
 import javafx.animation.AnimationTimer;
+import javafx.animation.FadeTransition;
+import javafx.animation.Timeline;
 import javafx.animation.Transition;
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
@@ -36,6 +42,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import static salesmanagement.salesmanagement.Utils.ImageController.isImageLoaded;
 import static salesmanagement.salesmanagement.Utils.NotificationCode.NOT_AUTHORIZED;
 
 public class MainSceneController extends SceneController implements Initializable {
@@ -117,7 +124,14 @@ public class MainSceneController extends SceneController implements Initializabl
 
         previousTabButton = dashBoardTabButton;
 
-        runTask(() -> smallAvatar.setImage(ImageController.getImage("avatar_employee_" + user.getEmployeeNumber() + ".png", true)), null, null, null);
+        runTask(() -> {
+            Image image = ImageController.getImage("avatar_employee_" + user.getEmployeeNumber() + ".png", true);
+            if (isImageLoaded(image.getUrl())) {
+                smallAvatar.setImage(image);
+            } else {
+                smallAvatar.setImage(ImageController.getImage("avatar_employee_default.png", true));
+            }
+        }, () -> avatarLoading.set(false), null, null);
     }
 
     @FXML
@@ -139,9 +153,9 @@ public class MainSceneController extends SceneController implements Initializabl
                         root.setMinSize(800, 400);
                         stage.show();
 
-                        sideBarBox.setPrefWidth(300);
+                        sideBarBox.setPrefWidth(250);
                         sideBarBox.setMinWidth(95);
-                        sideBarBox.setMaxWidth(300);
+                        sideBarBox.setMaxWidth(250);
 
                         dashBoardTabButton.fire();
                     });
@@ -160,6 +174,11 @@ public class MainSceneController extends SceneController implements Initializabl
     public void close() {
         close = false;
     }
+
+    BooleanProperty avatarLoading;
+
+    @FXML
+    StackPane avatarLayer;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -197,6 +216,28 @@ public class MainSceneController extends SceneController implements Initializabl
             throw new RuntimeException(e);
         }
 
+        // Avatar Loading.
+        avatarLoading = new javafx.beans.property.SimpleBooleanProperty(true);
+        avatarLayer.setStyle("-fx-background-color: grey;-fx-background-radius: 10;");
+        FadeTransition imageFadeTransition = new FadeTransition(Duration.seconds(2), avatarLayer);
+        imageFadeTransition.setFromValue(0.2);
+        imageFadeTransition.setToValue(0.4);
+        imageFadeTransition.setCycleCount(Timeline.INDEFINITE);
+        imageFadeTransition.setAutoReverse(true);
+        imageFadeTransition.play();
+
+        ChangeListener<Boolean> imageLoadingListener = (observable, oldValue, newValue) -> {
+            if (newValue) {
+                avatarLayer.setStyle("-fx-background-color: grey;-fx-background-radius: 10;");
+                imageFadeTransition.play();
+            } else {
+                imageFadeTransition.pause();
+                avatarLayer.setStyle("-fx-background-color: transparent");
+            }
+        };
+        avatarLoading.addListener(imageLoadingListener);
+
+        // Time label.
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -208,6 +249,7 @@ public class MainSceneController extends SceneController implements Initializabl
         };
         timer.start();
 
+        // Figure button event.
         dashBoardTabButton.setOnAction(event -> {
             tabSelectingEffect(dashBoardTabButton);
             tabPane.getSelectionModel().select(dashBoardTab);
