@@ -66,7 +66,7 @@ public class Order implements SalesComponent {
         this.customerNumber = resultSet.getInt("customerNumber");
         this.employeeNumber = resultSet.getInt("orders.created_by");
         this.customerName = resultSet.getString("customerName");
-        this.employeeName = resultSet.getString("lastName") + resultSet.getString("firstName");
+        this.employeeName = resultSet.getString("lastName") + " " + resultSet.getString("firstName");
         this.contact = resultSet.getString("phone");
         Date orderDate = resultSet.getDate("orderDate");
         if (orderDate != null) this.orderDate = resultSet.getDate("orderDate").toLocalDate();

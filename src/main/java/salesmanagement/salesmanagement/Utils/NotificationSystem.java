@@ -71,6 +71,10 @@ public class NotificationSystem {
                 title = "Action Result Notification";
                 content = "Added New Customer Successfully!";
             }
+            case SUCCEED_EDIT_CUSTOMER -> {
+                title = "Action Result Notification";
+                content = "Customer Information Saved Successfully!";
+            }
             case SUCCEED_CREATE_ORDER -> {
                 title = "Action Result Notification";
                 content = "Order Created Successfully!";
@@ -127,7 +131,7 @@ public class NotificationSystem {
 
         // Hide notification after 1.5s.
         Timeline timeline = new Timeline(new KeyFrame(
-                Duration.seconds(1.5),
+                Duration.seconds(3),
                 event -> {
                     if (notificationStage.isShowing()) {
                         double endX = Screen.getPrimary().getVisualBounds().getWidth();

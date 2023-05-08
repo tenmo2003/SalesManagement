@@ -126,12 +126,12 @@ public class OrdersTabView extends TabView implements OrdersTab {
         }
 
         orderNumberColumn.setCellValueFactory(new PropertyValueFactory<>("orderNumber"));
-        employeeColumn.setCellValueFactory(new PropertyValueFactory<>("employeeNumber"));
+        employeeColumn.setCellValueFactory(new PropertyValueFactory<>("employeeName"));
         orderDateColumn.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
         commentsColumn.setCellValueFactory(new PropertyValueFactory<>("comments"));
         valueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
-        customerColumn.setCellValueFactory(new PropertyValueFactory<>("customerNumber"));
+        customerColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
 
         ordersTable.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
