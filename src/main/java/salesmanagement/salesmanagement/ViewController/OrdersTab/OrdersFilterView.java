@@ -47,22 +47,22 @@ public class OrdersFilterView extends FilterView<Order> implements OrdersTab {
     public void applyFilter() {
         close();
         filteredList.setPredicate(order -> {
-            boolean contactMatch = order.getContact().toLowerCase().contains(contactTextField.getText());
+            boolean contactMatch = order.getContact().toLowerCase().contains(contactTextField.getText().toLowerCase());
             boolean shippedDateMatch = order.getShippedDate().equals(shippedDatePicker.getValue());
             if (shippedDatePicker.getValue() == null) shippedDateMatch = true;
             boolean requiredDateMatch = order.getRequiredDate().equals(requiredDatePicker.getValue());
             if (requiredDatePicker.getValue() == null) requiredDateMatch = true;
             boolean orderedDateMatch = order.getOrderDate().equals(orderedDatePicker.getValue());
             if (orderedDatePicker.getValue() == null) orderedDateMatch = true;
-            boolean destinationMatch = order.getDestination().toLowerCase().contains(destinationTextField.getText());
-            boolean commentMatch = order.getComments().toLowerCase().contains(commentTextField.getText());
+            boolean destinationMatch = order.getDestination().toLowerCase().contains(destinationTextField.getText().toLowerCase());
+            boolean commentMatch = order.getComments().toLowerCase().contains(commentTextField.getText().toLowerCase());
             boolean statusMatch = order.getStatus().equals(orderStatus.getValue());
             if (orderStatus.getValue() == null) statusMatch = true;
             boolean typeMatch = order.getType().equals(orderType.getValue());
             if (orderType.getValue() == null) typeMatch = true;
-            boolean customerMatch = order.getCustomerName().toLowerCase().contains(customerNameTextField.getText());
-            System.out.println(order.getCustomerName() + "   " + customerNameTextField.getText());
-            boolean employeeMatch = order.getEmployeeName().toLowerCase().contains(employeeNameTextField.getText());
+            boolean customerMatch = order.getCustomerName().toLowerCase().contains(customerNameTextField.getText().toLowerCase());
+            System.out.println(order.getCustomerName() + "   " + customerNameTextField.getText().toLowerCase());
+            boolean employeeMatch = order.getEmployeeName().toLowerCase().contains(employeeNameTextField.getText().toLowerCase());
             return contactMatch && orderedDateMatch && customerMatch && shippedDateMatch && employeeMatch
                     && requiredDateMatch && destinationMatch && commentMatch && statusMatch && typeMatch;
         });

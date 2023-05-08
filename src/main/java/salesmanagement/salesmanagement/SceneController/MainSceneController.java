@@ -12,10 +12,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.image.Image;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -42,10 +39,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static salesmanagement.salesmanagement.Utils.ImageController.isImageLoaded;
 import static salesmanagement.salesmanagement.Utils.NotificationCode.NOT_AUTHORIZED;
@@ -323,7 +317,16 @@ public class MainSceneController extends SceneController implements Initializabl
         });
 
         logOutButton.setOnMouseClicked(event -> {
-            close = true;
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirm Logout");
+            alert.setHeaderText(null);
+            alert.setContentText("Are you sure you want to log out?");
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK){
+                close = true;
+                // Perform other logout actions here
+            }
         });
     }
 

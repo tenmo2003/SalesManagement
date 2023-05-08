@@ -161,6 +161,8 @@ public class OrderInfoView extends ViewController implements OrdersTab {
         totalColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
         addCheckUserInput();
 
+        priceEachTextField.setEditable(false);
+        totalTextField.setEditable(false);
 
         status.setValue("In Process");
         paymentMethod.setValue("Cash");
@@ -700,6 +702,7 @@ public class OrderInfoView extends ViewController implements OrdersTab {
         status.setValue(order.getStatus());
         commentsTextField.setText(order.getComments());
 
+        print.setText("Print");
         print.setOnAction(event -> printOrder(order.getOrderNumber()));
     }
 

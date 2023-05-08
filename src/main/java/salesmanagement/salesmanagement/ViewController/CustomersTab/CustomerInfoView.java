@@ -31,11 +31,13 @@ public class CustomerInfoView extends InfoView<Customer> implements CustomersTab
     public void show() {
         super.show();
         addButton.setVisible(true);
+        customerNumberTextField.setEditable(false);
     }
 
     public void show(Customer customer) {
         super.show();
         super.selectedSalesComponent = customer;
+        customerNumberTextField.setEditable(false);
         saveButton.setVisible(true);
         customerNumberTextField.setText(Integer.toString(customer.getCustomerNumber()));
         SSNTextField.setText(String.valueOf(customer.getSSN()));
@@ -62,13 +64,13 @@ public class CustomerInfoView extends InfoView<Customer> implements CustomersTab
     @FXML
     public void save() {
         runTask(() -> {
-                    String query = String.format("UPDATE customers SET customerName = '%s', phone = '%s', addressLine = '%s' WHERE customerNumber = %d",
-                            nameTextField.getText(), contactTextField.getText(), addressTextField.getText(), selectedSalesComponent.getCustomerNumber());
+                    String query = String.format("UPDATE customers SET customerName = '%s', customerSSN = '%s',  phone = '%s', addressLine = '%s' WHERE customerNumber = %d",
+                            nameTextField.getText(), SSNTextField.getText() ,contactTextField.getText(), addressTextField.getText(), selectedSalesComponent.getCustomerNumber());
                     sqlConnection.updateQuery(query);
                 }, () -> {
                     close();
                     parentController.show();
-                    NotificationSystem.throwNotification(NotificationCode.SUCCEED_ADD_CUSTOMER, stage);
+                    NotificationSystem.throwNotification(NotificationCode.SUCCEED_EDIT_CUSTOMER, stage);
                 },
                 parentController.getLoadingIndicator(), null);
     }
