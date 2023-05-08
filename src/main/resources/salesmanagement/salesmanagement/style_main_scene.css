@@ -129,6 +129,7 @@
     -fx-border-radius: 50%;
     -fx-background-radius: 50%;
 }
+
 .shrink-button .glyph-icon {
     -fx-fill: #329efcab;
 }
@@ -143,7 +144,7 @@
     -fx-font-weight: 700;
 }
 
-.notification-bar > .pane {
-    -fx-background-color: red !important;
-    -fx-padding: 10 10 10 10 !important;
+.top-menu-pane {
+    -fx-border-width: 0 0 2 0;
+    -fx-border-color: #e0e0e0;
 }

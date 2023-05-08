@@ -8,6 +8,7 @@ import javafx.animation.Transition;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -16,9 +17,12 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
 import javafx.util.Duration;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesManagement;
@@ -28,6 +32,7 @@ import salesmanagement.salesmanagement.ViewController.CustomersTab.CustomersTabV
 import salesmanagement.salesmanagement.ViewController.DashBoardTab.DashboardTabView;
 import salesmanagement.salesmanagement.ViewController.EmployeesTab.EmployeesTabView;
 import salesmanagement.salesmanagement.ViewController.OrdersTab.OrdersTabView;
+import salesmanagement.salesmanagement.ViewController.ProductLinesTab.ProductLinesTabView;
 import salesmanagement.salesmanagement.ViewController.ProductsTab.ProductsTabView;
 import salesmanagement.salesmanagement.ViewController.SettingsTab.SettingsTabView;
 import salesmanagement.salesmanagement.ViewController.UserRight;
@@ -65,6 +70,8 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     private Tab dashBoardTab;
     @FXML
+    private Tab productLinesTab;
+    @FXML
     private JFXButton dashBoardTabButton;
     @FXML
     private JFXButton ordersTabButton;
@@ -81,6 +88,8 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     private JFXButton logOutButton;
     @FXML
+    private JFXButton productLinesTabButton;
+    @FXML
     ImageView smallAvatar;
 
     JFXButton previousTabButton = dashBoardTabButton;
@@ -91,6 +100,7 @@ public class MainSceneController extends SceneController implements Initializabl
     ProductsTabView productsTabView;
     OrdersTabView ordersTabView;
     DashboardTabView dashboardTabView;
+    ProductLinesTabView productLinesTabView;
 
     @Override
     protected void maximumStage(MouseEvent mouseEvent) {
@@ -212,9 +222,21 @@ public class MainSceneController extends SceneController implements Initializabl
             loader.load();
             dashboardTabView = loader.getController();
             dashBoardTab.setContent(dashboardTabView.getRoot());
+
+            loader = new FXMLLoader(SalesManagement.class.getResource("fxml-view/productlines-tab/productlines-tab-view.fxml"));
+            loader.load();
+            productLinesTabView = loader.getController();
+            productLinesTab.setContent(productLinesTabView.getRoot());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        // Prevent tab switching by Ctrl + Tab.
+        tabPane.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.isControlDown() && event.getCode() == KeyCode.TAB) {
+                event.consume();
+            }
+        });
 
         // Avatar Loading.
         avatarLoading = new javafx.beans.property.SimpleBooleanProperty(true);
@@ -290,6 +312,12 @@ public class MainSceneController extends SceneController implements Initializabl
             productsTabView.show();
         });
 
+        productLinesTabButton.setOnMouseClicked(event -> {
+            tabSelectingEffect(productLinesTabButton);
+            tabPane.getSelectionModel().select(productLinesTab);
+            productLinesTabView.show();
+        });
+
         shrinkSideBarButton.setOnMouseClicked(event -> {
             shrink();
         });
@@ -306,7 +334,9 @@ public class MainSceneController extends SceneController implements Initializabl
 
     public void shrink() {
         if (tabButtons == null) {
-            tabButtons = new ArrayList<>(Arrays.asList(dashBoardTabButton, employeesTabButton, customersTabButton, ordersTabButton, productsTabButton, settingsTabButton, logOutButton));
+            tabButtons = new ArrayList<>(Arrays.asList(dashBoardTabButton, employeesTabButton,
+                    customersTabButton, ordersTabButton, productsTabButton,
+                    settingsTabButton, productLinesTabButton, logOutButton));
         }
 
         if (!shrinkSideBar) {
@@ -316,6 +346,34 @@ public class MainSceneController extends SceneController implements Initializabl
                 button.getStyleClass().add("shrink-tab-button");
             usernameLabel.getStyleClass().add("shrink-tab-button");
             shrinkSideBarButton.getStyleClass().add("active-shrink-button");
+
+//            double endX = Screen.getPrimary().getVisualBounds().getWidth();
+//            double startX = endX - notificationStage.getWidth();
+//            long duration = 500000000L;
+//
+//            AnimationTimer animationTimer = new AnimationTimer() {
+//                long startTime = 0;
+//                final double distance = endX - startX;
+//                final double speed = distance / (double) duration;
+//
+//                @Override
+//                public void start() {
+//                    super.start();
+//                    startTime = System.nanoTime();
+//                }
+//
+//                @Override
+//                public void handle(long now) {
+//                    long elapsed = now - startTime;
+//                    double newX = startX + speed * elapsed;
+//                    notificationStage.setX(newX);
+//                    if (newX >= endX) {
+//                        notificationStage.close();
+//                        stop();
+//                    }
+//                }
+//            };
+//            animationTimer.start();
 
             Transition transition = new Transition() {
                 {

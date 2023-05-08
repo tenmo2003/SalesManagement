@@ -17,8 +17,10 @@ public abstract class InfoView<T extends SalesComponent> extends ViewController 
     @FXML
     protected JFXButton saveButton;
 
+    @FXML
     protected abstract void save();
 
+    @FXML
     protected abstract void add();
 
     protected abstract void show(T selectedSalesComponent);

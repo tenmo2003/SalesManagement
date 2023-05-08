@@ -14,9 +14,9 @@ public abstract class ExportView extends ViewController {
     @Override
     @FXML
     final protected void resetData() {
-        for(Node node : Utils.getAllNodes(root)) {
-            if(node instanceof CheckBox) {
-                ((CheckBox)node).setSelected(true);
+        for (Node node : Utils.getAllNodes(root)) {
+            if (node instanceof CheckBox) {
+                ((CheckBox) node).setSelected(true);
             }
         }
     }
@@ -25,6 +25,7 @@ public abstract class ExportView extends ViewController {
         this.exportedFileName = exportedFileName;
     }
 
+    @FXML
     protected File export() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save as");
