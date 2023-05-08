@@ -4,10 +4,10 @@ import com.jfoenix.controls.JFXButton;
 import javafx.fxml.FXML;
 
 public abstract class TabView extends ViewController {
-    protected boolean isShowing = false;
-
     @FXML
     protected JFXButton addButton;
+
+    protected boolean isShowing = false;
 
     protected void figureShow() {
         if (!rightSet && addButton != null) {

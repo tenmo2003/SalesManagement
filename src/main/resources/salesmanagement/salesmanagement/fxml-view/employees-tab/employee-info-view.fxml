@@ -66,7 +66,7 @@
                               <JFXButton fx:id="editButton" onMouseClicked="#editEmployeeInfo" text="EDIT" visible="false" StackPane.alignment="CENTER_RIGHT" />
                               <JFXButton fx:id="saveButton" onMouseClicked="#saveEmployeeInfo" text="SAVE" visible="false" StackPane.alignment="CENTER_RIGHT" />
                               <JFXButton fx:id="addButton" onMouseClicked="#addNewEmployee" text="ADD" visible="false" StackPane.alignment="CENTER_RIGHT" />
-                              <JFXButton onMouseClicked="#showAccountActivityLog" text="SHOW ACCOUNT ACTIVITY LOG" StackPane.alignment="CENTER_LEFT" />
+                              <JFXButton minWidth="200.0" onMouseClicked="#showAccountActivityLog" prefHeight="26.0" prefWidth="202.0" text="SHOW ACCOUNT ACTIVITY LOG" StackPane.alignment="CENTER_LEFT" />
                            </children>
                            <VBox.margin>
                               <Insets bottom="10.0" left="30.0" right="30.0" />

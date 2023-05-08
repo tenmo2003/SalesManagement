@@ -98,6 +98,7 @@ public class SQLConnection {
             statement = connection.createStatement();
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
+            System.out.println(query);
             e.printStackTrace();
         }
         return resultSet;

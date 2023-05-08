@@ -33,5 +33,4 @@ module salesmanagement.salesmanagement {
     opens salesmanagement.salesmanagement.ViewController.SettingsTab to javafx.fxml;
     exports salesmanagement.salesmanagement.Utils;
     opens salesmanagement.salesmanagement.Utils to javafx.fxml;
-
 }

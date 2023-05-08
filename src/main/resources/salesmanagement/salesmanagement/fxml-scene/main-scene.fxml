@@ -16,7 +16,7 @@
 
 <VBox fx:id="root" minWidth="1000.0" prefHeight="700.0" prefWidth="1000.0" stylesheets="@../style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.SceneController.MainSceneController">
    <children>
-      <StackPane id="background_color" fx:id="menuPane" prefHeight="47.0" prefWidth="1000.0">
+      <StackPane id="background_color" fx:id="menuPane" prefHeight="47.0" prefWidth="1000.0" styleClass="top-menu-pane">
          <children>
             <Label fx:id="timeLabel" styleClass="top-label" text="11:11 11/11/2023" />
             <HBox>
@@ -71,11 +71,16 @@
                      <graphic>
                         <VBox alignment="TOP_CENTER">
                            <children>
-                              <ImageView fx:id="smallAvatar" fitHeight="49.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../img/sign_up.png" />
-                                 </image>
-                              </ImageView>
+                              <HBox alignment="CENTER">
+                                 <children>
+                                    <StackPane prefHeight="42.0" prefWidth="44.0">
+                                       <children>
+                                          <ImageView fx:id="smallAvatar" fitHeight="42.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" />
+                                          <StackPane fx:id="avatarLayer" prefHeight="150.0" prefWidth="200.0" />
+                                       </children>
+                                    </StackPane>
+                                 </children>
+                              </HBox>
                               <Label fx:id="jobTitleLabel" styleClass="job-title-label" text="Manager" wrapText="true" />
                            </children>
                         </VBox>
@@ -128,6 +133,25 @@
                                     <StackPane prefWidth="32.0">
                                        <children>
                                           <FontAwesomeIconView glyphName="SHOPPING_BAG" size="25" StackPane.alignment="CENTER" />
+                                       </children>
+                                    </StackPane>
+                                 </graphic>
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </JFXButton>
+                           </children>
+                        </HBox>
+                        <HBox>
+                           <children>
+                              <JFXButton fx:id="productLinesTabButton" focusTraversable="false" graphicTextGap="15.0" prefHeight="43.0" prefWidth="325.0" styleClass="tab-button" text="ProductLines" HBox.hgrow="ALWAYS">
+                                 <graphic>
+                                    <StackPane prefWidth="32.0">
+                                       <children>
+                                          <FontAwesomeIconView glyphName="ALIGN_LEFT" size="25" StackPane.alignment="CENTER" />
                                        </children>
                                     </StackPane>
                                  </graphic>
@@ -249,6 +273,7 @@
                         <Tab fx:id="ordersTab" text="Orders" />
                         <Tab fx:id="customersTab" closable="false" text="Customers" />
                         <Tab fx:id="settingsTab" text="Setting" />
+                        <Tab fx:id="productLinesTab" closable="false" text="ProductLines" />
                      </tabs>
                   </TabPane>
                </children>

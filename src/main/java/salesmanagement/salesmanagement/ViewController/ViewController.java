@@ -7,6 +7,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import salesmanagement.salesmanagement.Utils.SQLConnection;
@@ -39,7 +40,9 @@ public abstract class ViewController implements Initializable {
 
     @FXML
     public void show() {
-        if (stage == null) stage = (Stage) root.getScene().getWindow();
+        if (stage == null) {
+            stage = (Stage) root.getScene().getWindow();
+        }
         root.setVisible(true);
     }
 
