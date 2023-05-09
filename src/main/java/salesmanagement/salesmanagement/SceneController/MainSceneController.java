@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -96,14 +97,7 @@ public class MainSceneController extends SceneController implements Initializabl
     DashboardTabView dashboardTabView;
     ProductLinesTabView productLinesTabView;
 
-    @Override
-    protected void maximumStage(MouseEvent mouseEvent) {
-        if (stage.isMaximized()) {
-            stage.setMaximized(false);
-        } else {
-            stage.setMaximized(true);
-        }
-    }
+
 
     double xOffset;
     double yOffset;

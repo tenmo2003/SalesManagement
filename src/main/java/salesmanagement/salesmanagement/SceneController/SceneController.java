@@ -36,8 +36,8 @@ public abstract class SceneController {
     }
 
     @FXML
-    protected void maximumStage(MouseEvent mouseEvent) {
-
+    final protected void maximumStage() {
+        stage.setMaximized(!stage.isMaximized());
     }
 
     protected Scene scene;
@@ -61,11 +61,6 @@ public abstract class SceneController {
     public void showProgressIndicator(Node bannedPane) {
         progressIndicator.setVisible(true);
         bannedPane.setDisable(true);
-    }
-
-    public void hideProgressIndicator(Node bannedPane) {
-        progressIndicator.setVisible(false);
-        bannedPane.setDisable(false);
     }
 
     /**

@@ -931,7 +931,7 @@ b7kidpocyxjnjhwdw73i|schema||udomuzbs3hfulslz||UPDATE|G</Grants>
       <CollationName>utf8mb4_unicode_ci</CollationName>
     </table>
     <column id="287" parent="277" name="actionID">
-      <AutoIncrement>28</AutoIncrement>
+      <AutoIncrement>29</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -977,7 +977,7 @@ b7kidpocyxjnjhwdw73i|schema||udomuzbs3hfulslz||UPDATE|G</Grants>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="296" parent="278" name="customerNumber">
-      <AutoIncrement>30</AutoIncrement>
+      <AutoIncrement>32</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -1024,7 +1024,7 @@ phone</ColNames>
       <UnderlyingIndexName>customerName</UnderlyingIndexName>
     </key>
     <column id="306" parent="279" name="employeeNumber">
-      <AutoIncrement>21000041</AutoIncrement>
+      <AutoIncrement>21000042</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -1247,7 +1247,7 @@ productCode</ColNames>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
     <column id="352" parent="283" name="orderNumber">
-      <AutoIncrement>93</AutoIncrement>
+      <AutoIncrement>94</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
@@ -1380,8 +1380,10 @@ checkNumber</ColNames>
       <DasType>varchar(4000)|0s</DasType>
       <Position>2</Position>
     </column>
-    <column id="379" parent="285" name="image">
-      <DasType>mediumblob|0s</DasType>
+    <column id="379" parent="285" name="status">
+      <DasType>varchar(10)|0s</DasType>
+      <DefaultExpression>&apos;ACTIVE&apos;</DefaultExpression>
+      <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
     <index id="380" parent="285" name="PRIMARY">

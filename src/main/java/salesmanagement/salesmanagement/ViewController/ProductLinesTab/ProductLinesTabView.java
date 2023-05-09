@@ -8,9 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import org.controlsfx.control.tableview2.FilteredTableView;
-import salesmanagement.salesmanagement.SalesComponent.Product;
 import salesmanagement.salesmanagement.SalesComponent.ProductLine;
 import salesmanagement.salesmanagement.SalesManagement;
 import salesmanagement.salesmanagement.ViewController.TabView;
@@ -120,7 +118,7 @@ public class ProductLinesTabView extends TabView implements Initializable, Produ
                         "                                    INNER JOIN productlines ON products.productLine = productlines.productLine\n" +
                         "                           GROUP BY productlines.productLine, productVendor) as t\n" +
                         "                     group by t.productLine) as mainvendor on mainvendor.productLine = totalRevenueTable.productLine\n" +
-                        "inner join productlines on totalRevenueTable.productLine = productlines.productLine;\n";
+                        "right join productlines on totalRevenueTable.productLine = productlines.productLine;\n";
                 ResultSet resultSet = sqlConnection.getDataQuery(query);
                 while (resultSet.next()) {
                     ProductLine productLine = new ProductLine(resultSet);
