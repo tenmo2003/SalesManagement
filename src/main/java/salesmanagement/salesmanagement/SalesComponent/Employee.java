@@ -98,6 +98,9 @@ public class Employee implements SalesComponent {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        query = String.format("UPDATE employees SET lastWorkingDate = '%s'", LocalDate.now().toString());
+        sqlConnection.updateQuery(query);
     }
 
     public Employee(int employeeNumber) {
