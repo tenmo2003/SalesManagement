@@ -183,11 +183,11 @@ public class OrderInfoView extends ViewController implements OrdersTab {
             if (!newValue) {
                 orderTable.setItems(FXCollections.observableList(orderItems));
                 tableUpdated.set(true);
-                int orderTotalAmount = 0;
+                double orderTotalAmount = 0;
                 for (OrderItem orderItem : orderItems) {
                     orderTotalAmount += orderItem.getAmount();
                 }
-                totalAmountTextField.setText(String.valueOf(orderTotalAmount));
+                totalAmountTextField.setText(String.format("%.2f", orderTotalAmount));
             }
         });
 
@@ -208,7 +208,6 @@ public class OrderInfoView extends ViewController implements OrdersTab {
                 deliverTo.setDisable(true);
             }
         });
-        orderType.setValue("onsite");
     }
 
     @FXML
