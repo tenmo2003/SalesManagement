@@ -29,13 +29,4 @@ public class ProductsFilterView extends FilterView<Product> implements ProductsT
         });
         close();
     }
-
-    @FXML
-    public void clearFilter() {
-        productVendorTextField.setText("");
-        productCodeTextField.setText("");
-        productLineTextField.setText("");
-        productNameTextField.setText("");
-    }
-
 }

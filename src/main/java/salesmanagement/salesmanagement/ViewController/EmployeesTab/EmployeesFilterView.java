@@ -48,14 +48,4 @@ public class EmployeesFilterView extends FilterView<Employee> implements Employe
         });
         close();
     }
-
-    @FXML
-    public void clearFilter() {
-        emailTextField.setText("");
-        nameTextField.setText("");
-        phoneTextField.setText("");
-        accessibilityComboBox.setValue(null);
-        statusComboBox.setValue(null);
-    }
-
 }

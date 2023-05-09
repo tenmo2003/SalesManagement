@@ -30,7 +30,7 @@
                     </HBox>
                     <HBox>
                         <children>
-                            <JFXButton contentDisplay="GRAPHIC_ONLY" onMouseClicked="#show" prefHeight="26.0" prefWidth="26.0">
+                            <JFXButton contentDisplay="GRAPHIC_ONLY" focusTraversable="false" onMouseClicked="#show" prefHeight="26.0" prefWidth="26.0">
                                 <graphic>
                                     <FontAwesomeIconView fill="#329efc" glyphName="UNDO" size="22" />
                                 </graphic>
@@ -52,8 +52,9 @@
                     </HBox>
                     <HBox alignment="CENTER_RIGHT" prefHeight="6.0" prefWidth="1050.0" spacing="10.0" HBox.hgrow="ALWAYS">
                         <children>
-                            <JFXButton fx:id="addButton" onMouseClicked="#addNewProductLine" text="ADD NEW" />
-                            <JFXButton onMouseClicked="#openExportProductLinesBox" text="EXPORT" />
+                            <JFXButton fx:id="addButton" focusTraversable="false" onMouseClicked="#addNewProductLine" text="ADD NEW" />
+                     <JFXButton fx:id="removeButton" focusTraversable="false" onMouseClicked="#remove" text="REMOVE" />
+                            <JFXButton focusTraversable="false" onMouseClicked="#openExportProductLinesBox" text="EXPORT" />
                         </children>
                     </HBox>
                 </children>

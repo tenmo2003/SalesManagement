@@ -1,16 +1,24 @@
 package salesmanagement.salesmanagement.ViewController.ProductLinesTab;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import org.controlsfx.control.tableview2.FilteredTableView;
 import salesmanagement.salesmanagement.SalesComponent.ProductLine;
 import salesmanagement.salesmanagement.SalesManagement;
+import salesmanagement.salesmanagement.Utils.NotificationCode;
+import salesmanagement.salesmanagement.Utils.NotificationSystem;
 import salesmanagement.salesmanagement.ViewController.TabView;
 
 import java.net.URL;
@@ -71,6 +79,7 @@ public class ProductLinesTabView extends TabView implements Initializable, Produ
             e.printStackTrace();
         }
 
+
         productLinesTable.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 productLineInfoView.show(productLinesTable.getSelectionModel().getSelectedItem());
@@ -89,6 +98,20 @@ public class ProductLinesTabView extends TabView implements Initializable, Produ
     }
 
     @FXML
+    public void remove() {
+        ProductLine selected = productLinesTable.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            runTask(() -> {
+                String query = "delete from productlines where productline = '" + selected.getProductLine() + "'";
+                sqlConnection.updateQuery(query);
+                show();
+            }, ()->{
+                NotificationSystem.throwNotification(NotificationCode.INVALID_INPUTS, stage);
+            }, loadingIndicator, null);
+        }
+    }
+
+    @FXML
     void openExportProductLinesBox() {
         productLinesExportView.show();
     }
@@ -96,6 +119,7 @@ public class ProductLinesTabView extends TabView implements Initializable, Produ
     @Override
     protected void figureShow() {
         super.figureShow();
+
         runTask(() -> {
             List<ProductLine> productLines = new ArrayList<>();
             try {

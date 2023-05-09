@@ -68,20 +68,6 @@ public class OrdersFilterView extends FilterView<Order> implements OrdersTab {
         });
     }
 
-    @FXML
-    public void clearFilter() {
-        commentTextField.setText("");
-        contactTextField.setText("");
-        customerNameTextField.setText("");
-        destinationTextField.setText("");
-        employeeNameTextField.setText("");
-        orderStatus.setValue(null);
-        orderType.setValue(null);
-        orderedDatePicker.setValue(null);
-        requiredDatePicker.setValue(null);
-        shippedDatePicker.setValue(null);
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         super.initialize(url, resourceBundle);

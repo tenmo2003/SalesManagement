@@ -10,6 +10,11 @@ public abstract class FilterView<T extends SalesComponent> extends ViewControlle
     @FXML
     protected abstract void applyFilter();
 
+    @FXML
+    final protected void clearFilter() {
+        resetData();
+    }
+
     public void setFilteredList(FilteredList<T> filteredList) {
         this.filteredList = filteredList;
     }

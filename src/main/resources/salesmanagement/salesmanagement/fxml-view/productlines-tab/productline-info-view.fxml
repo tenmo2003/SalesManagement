@@ -81,7 +81,7 @@
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="mainProductVendorTextField" editable="false">
+                                    <TextField fx:id="mainProductVendorTextField" disable="true">
                                        <font>
                                           <Font size="15.0" />
                                        </font>
@@ -95,7 +95,7 @@
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="totalRevenueTextField" editable="false">
+                                    <TextField fx:id="totalRevenueTextField" disable="true">
                                        <font>
                                           <Font size="15.0" />
                                        </font>
@@ -109,7 +109,7 @@
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="quantityInStockTextField" editable="false">
+                                    <TextField fx:id="quantityInStockTextField" disable="true">
                                        <font>
                                           <Font size="15.0" />
                                        </font>

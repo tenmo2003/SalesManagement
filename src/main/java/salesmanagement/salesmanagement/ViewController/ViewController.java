@@ -84,9 +84,11 @@ public abstract class ViewController implements Initializable {
     @FXML
     protected void lockData(boolean lock) {
         for (Node node : Utils.getAllNodes(root)) {
-            if (node instanceof TextField) node.setDisable(lock);
-            if (node instanceof ComboBox<?>) node.setDisable(lock);
-            if (node instanceof DatePicker) node.setDisable(lock);
+            if (!node.isDisable()) {
+                if (node instanceof TextField) node.setDisable(lock);
+                if (node instanceof ComboBox<?>) node.setDisable(lock);
+                if (node instanceof DatePicker) node.setDisable(lock);
+            }
         }
     }
 }

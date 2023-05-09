@@ -146,6 +146,7 @@ public class Utils {
         int columnIndex = 0;
         for (int i = 1; i <= columnCount; i++) {
             String columnName = metaData.getColumnName(i);
+            System.out.println(columnName);
             if (selectedColumns.contains(columnName)) {
                 Cell cell = headerRow.createCell(columnIndex++);
                 cell.setCellValue(columnName);
