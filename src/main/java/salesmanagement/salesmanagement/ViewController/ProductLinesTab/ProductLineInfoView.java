@@ -3,17 +3,13 @@ package salesmanagement.salesmanagement.ViewController.ProductLinesTab;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.ColumnConstraints;
 import salesmanagement.salesmanagement.SalesComponent.Action;
-import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesComponent.ProductLine;
-import salesmanagement.salesmanagement.Utils.ImageController;
 import salesmanagement.salesmanagement.Utils.NotificationCode;
 import salesmanagement.salesmanagement.Utils.NotificationSystem;
 import salesmanagement.salesmanagement.ViewController.InfoView;
 
 import java.net.URL;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
@@ -39,7 +35,7 @@ public class ProductLineInfoView extends InfoView<ProductLine> implements Produc
     }
 
     @Override
-    protected void save() {
+    protected void figureSave() {
         runTask(() -> {
             close();
             String query = String.format("update productlines set textDescription = '%s' where productLine = '%s'", descriptionTextField.getText(), productLineTextField.getText());
@@ -107,5 +103,20 @@ public class ProductLineInfoView extends InfoView<ProductLine> implements Produc
         descriptionTextField.setText("");
         mainProductVendorTextField.setText("");
         quantityInStockTextField.setText("");
+    }
+
+    @Override
+    public void addRegexChecker() {
+
+    }
+
+    @Override
+    public boolean validInput() {
+        return true;
+    }
+
+    @Override
+    public void removeInvalidAlert() {
+
     }
 }

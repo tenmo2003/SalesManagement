@@ -42,7 +42,7 @@ public class ProductInfoView extends InfoView<Product> implements ProductsTab {
     private TextField sellPriceTextField;
 
     @FXML
-    protected void save() {
+    protected void figureSave() {
         runTask(() -> {
                     close();
                     String query = String.format("UPDATE products SET productName = '%s', productLine = '%s', productVendor = '%s', productDescription = '%s', quantityInStock = %d, buyPrice = %s, sellPrice = %s WHERE productCode = '%s'",
@@ -124,5 +124,20 @@ public class ProductInfoView extends InfoView<Product> implements ProductsTab {
     public void show() {
         super.show();
         addButton.setVisible(true);
+    }
+
+    @Override
+    public void addRegexChecker() {
+
+    }
+
+    @Override
+    public boolean validInput() {
+        return true;
+    }
+
+    @Override
+    public void removeInvalidAlert() {
+
     }
 }

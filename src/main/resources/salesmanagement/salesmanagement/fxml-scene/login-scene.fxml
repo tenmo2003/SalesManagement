@@ -89,7 +89,7 @@
                               </StackPane>
                               <VBox id="loginPane" fx:id="forgotPasswordPane" alignment="TOP_CENTER" fillWidth="false" layoutX="325.0" layoutY="50.0" prefHeight="325.0" prefWidth="387.0" spacing="15.0" visible="false">
                                  <children>
-                                    <FontAwesomeIconView fill="WHITE" glyphName="USER" opacity="0.53" size="70" text="" textAlignment="CENTER">
+                                    <FontAwesomeIconView fill="WHITE" glyphName="USER" size="70" text="" textAlignment="CENTER">
                                        <VBox.margin>
                                           <Insets bottom="10.0" />
                                        </VBox.margin>
@@ -131,7 +131,7 @@
                               </VBox>
                               <VBox id="loginPane" fx:id="resetPasswordPane" alignment="TOP_CENTER" fillWidth="false" layoutX="325.0" layoutY="50.0" prefHeight="325.0" prefWidth="387.0" spacing="15.0" visible="false">
                                  <children>
-                                    <FontAwesomeIconView fill="WHITE" glyphName="USER" opacity="0.53" size="70" text="" textAlignment="CENTER">
+                                    <FontAwesomeIconView fill="WHITE" glyphName="USER" size="70" text="" textAlignment="CENTER">
                                        <VBox.margin>
                                           <Insets bottom="10.0" />
                                        </VBox.margin>
@@ -141,7 +141,11 @@
                                           <Font size="21.0" />
                                        </font>
                                     </Label>
-                                    <CustomPasswordField id="inputTextField" fx:id="passwordReset" prefHeight="35.0" prefWidth="300.0" promptText="New Password" />
+                                    <VBox>
+                                       <children>
+                                          <CustomPasswordField id="inputTextField" fx:id="passwordReset" prefHeight="35.0" prefWidth="300.0" promptText="New Password" />
+                                       </children>
+                                    </VBox>
                                     <StackPane prefHeight="40.0" prefWidth="296.0">
                                        <children>
                                           <JFXButton id="backButton" alignment="CENTER" onMouseClicked="#backToLoginPane" prefHeight="40.0" prefWidth="69.0" text="Back" textAlignment="CENTER" StackPane.alignment="CENTER_LEFT">
@@ -172,7 +176,7 @@
                               </VBox>
                               <VBox id="loginPane" fx:id="emailVerifyPane" alignment="TOP_CENTER" fillWidth="false" layoutX="325.0" layoutY="60.0" prefHeight="325.0" prefWidth="387.0" spacing="15.0" visible="false">
                                  <children>
-                                    <FontAwesomeIconView fill="WHITE" glyphName="USER" opacity="0.53" size="70" text="" textAlignment="CENTER">
+                                    <FontAwesomeIconView fill="WHITE" glyphName="USER" size="70" text="" textAlignment="CENTER">
                                        <VBox.margin>
                                           <Insets bottom="10.0" />
                                        </VBox.margin>

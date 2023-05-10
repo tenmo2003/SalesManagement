@@ -4,7 +4,7 @@
     <module name="SalesManagement" />
     <extension name="coverage">
       <pattern>
-        <option name="PATTERN" value="salesmanagement.salesmanagement.*" />
+        <option name="PATTERN" value="salesmanagement.salesmanagement.ViewController.*" />
         <option name="ENABLED" value="true" />
       </pattern>
     </extension>

@@ -8,19 +8,21 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import org.controlsfx.control.textfield.CustomPasswordField;
 import org.controlsfx.control.textfield.CustomTextField;
+import salesmanagement.salesmanagement.Utils.InputErrorCode;
 import salesmanagement.salesmanagement.Utils.MailSender;
 import salesmanagement.salesmanagement.Utils.NotificationCode;
 import salesmanagement.salesmanagement.Utils.NotificationSystem;
+import salesmanagement.salesmanagement.ViewController.InputValidator;
 import salesmanagement.salesmanagement.ViewController.ViewController;
 
 import java.net.URL;
@@ -28,7 +30,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class LoginSceneController extends SceneController implements Initializable {
+import static salesmanagement.salesmanagement.Utils.InputErrorCode.getInputErrorLabel;
+import static salesmanagement.salesmanagement.Utils.Utils.shake;
+
+public class LoginSceneController extends SceneController implements Initializable, InputValidator {
     @FXML
     CustomTextField username;
     @FXML
@@ -51,11 +56,48 @@ public class LoginSceneController extends SceneController implements Initializab
     CustomPasswordField passwordReset;
     @FXML
     private HBox securityCodeBox;
+
     private int securityCode;
     private int employeeNumber;
 
-    public VBox getLoginPane() {
-        return loginPane;
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        Rectangle rect = new Rectangle(loginRoot.getPrefWidth(), loginRoot.getPrefHeight());
+        rect.setArcHeight(15.0);
+        rect.setArcWidth(15.0);
+        loginRoot.setClip(rect);
+
+        for (int i = 0; i < securityCodeBox.getChildren().size(); i++) {
+            CustomTextField textField = (CustomTextField) securityCodeBox.getChildren().get(i);
+            int finalI = i;
+            textField.setOnMouseClicked(event -> {
+                textField.selectAll();
+            });
+            textField.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (!newValue.matches("\\d*") || newValue.length() > 1) {
+                    textField.setText(oldValue);
+                } else if (newValue.length() == 1 && finalI < securityCodeBox.getChildren().size() - 1) {
+                    securityCodeBox.getChildren().get(finalI + 1).requestFocus();
+                }
+            });
+        }
+        FontAwesomeIconView userIcon = new FontAwesomeIconView(FontAwesomeIcon.USER);
+        userIcon.setFill(Color.WHITE);
+        FontAwesomeIconView keyIcon = new FontAwesomeIconView(FontAwesomeIcon.KEY);
+        keyIcon.setFill(Color.WHITE);
+
+        StackPane userIconContainer = new StackPane(userIcon);
+        userIconContainer.setAlignment(Pos.CENTER);
+        userIconContainer.setPrefSize(30, username.getPrefHeight());
+
+        StackPane keyIconContainer = new StackPane(keyIcon);
+        keyIconContainer.setAlignment(Pos.CENTER);
+        keyIconContainer.setPrefSize(30, password.getPrefHeight());
+
+        username.setLeft(userIconContainer);
+        password.setLeft(keyIconContainer);
+
+        addRegexChecker();
     }
 
     @FXML
@@ -129,6 +171,7 @@ public class LoginSceneController extends SceneController implements Initializab
         forgotPasswordPane.setVisible(false);
         resetPasswordPane.setVisible(false);
         emailVerifyPane.setVisible(false);
+
     }
 
     @FXML
@@ -150,6 +193,10 @@ public class LoginSceneController extends SceneController implements Initializab
 
     @FXML
     public void resetPassword() {
+        if (!validInput()) {
+            NotificationSystem.throwNotification(NotificationCode.INVALID_INPUTS, stage);
+            return;
+        }
         runTask(() -> {
             String query = "UPDATE employees SET password = " + "'" + passwordReset.getCharacters().toString() + "' WHERE employeeNumber = " + employeeNumber;
             try {
@@ -164,55 +211,40 @@ public class LoginSceneController extends SceneController implements Initializab
         }, progressIndicator, resetPasswordPane);
     }
 
-    public void setProgressIndicatorStatus(Task<?> databaseConnectionTask) {
-        super.setProgressIndicatorStatus(databaseConnectionTask, loginPane);
-    }
-
-    public void setProgressIndicatorStatus(boolean loading) {
-        if (loading) {
-            showProgressIndicator();
-        }
-    }
-
-    public void showProgressIndicator() {
-        super.showProgressIndicator(loginPane);
+    @Override
+    public void addRegexChecker() {
+        passwordReset.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                VBox container = (VBox) passwordReset.getParent();
+                if (passwordReset.getCharacters().toString().length() < 8) {
+                    if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                        container.getChildren().remove(container.getChildren().size() - 1);
+                    }
+                    container.getChildren().add(getInputErrorLabel(InputErrorCode.INVALID_LENGTH_PASSWORD));
+                    shake(passwordReset);
+                } else {
+                    if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                        container.getChildren().remove(container.getChildren().size() - 1);
+                    }
+                }
+            }
+        });
     }
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        Rectangle rect = new Rectangle(loginRoot.getPrefWidth(), loginRoot.getPrefHeight());
-        rect.setArcHeight(15.0);
-        rect.setArcWidth(15.0);
-        loginRoot.setClip(rect);
+    public boolean validInput() {
+        return passwordReset.getCharacters().toString().length() >= 8;
+    }
 
-        for (int i = 0; i < securityCodeBox.getChildren().size(); i++) {
-            CustomTextField textField = (CustomTextField) securityCodeBox.getChildren().get(i);
-            int finalI = i;
-            textField.setOnMouseClicked(event -> {
-                textField.selectAll();
-            });
-            textField.textProperty().addListener((observable, oldValue, newValue) -> {
-                if (!newValue.matches("\\d*") || newValue.length() > 1) {
-                    textField.setText(oldValue);
-                } else if (newValue.length() == 1 && finalI < securityCodeBox.getChildren().size() - 1) {
-                    securityCodeBox.getChildren().get(finalI + 1).requestFocus();
-                }
-            });
+    @Override
+    public void removeInvalidAlert() {
+        VBox container = (VBox) passwordReset.getParent();
+        if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+            container.getChildren().remove(container.getChildren().size() - 1);
         }
-        FontAwesomeIconView userIcon = new FontAwesomeIconView(FontAwesomeIcon.USER);
-        userIcon.setFill(Color.WHITE);
-        FontAwesomeIconView keyIcon = new FontAwesomeIconView(FontAwesomeIcon.KEY);
-        keyIcon.setFill(Color.WHITE);
+    }
 
-        StackPane userIconContainer = new StackPane(userIcon);
-        userIconContainer.setAlignment(Pos.CENTER);
-        userIconContainer.setPrefSize(30, username.getPrefHeight());
-
-        StackPane keyIconContainer = new StackPane(keyIcon);
-        keyIconContainer.setAlignment(Pos.CENTER);
-        keyIconContainer.setPrefSize(30, password.getPrefHeight());
-
-        username.setLeft(userIconContainer);
-        password.setLeft(keyIconContainer);
+    public VBox getLoginPane() {
+        return loginPane;
     }
 }

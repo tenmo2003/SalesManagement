@@ -63,7 +63,7 @@ public class CustomerInfoView extends InfoView<Customer> implements CustomersTab
     }
 
     @FXML
-    public void save() {
+    public void figureSave() {
         runTask(() -> {
                     String query = String.format("UPDATE customers SET customerName = '%s', customerSSN = '%s',  phone = '%s', addressLine = '%s' WHERE customerNumber = %d",
                             nameTextField.getText(), SSNTextField.getText(), contactTextField.getText(), addressTextField.getText(), selectedSalesComponent.getCustomerNumber());
@@ -113,5 +113,20 @@ public class CustomerInfoView extends InfoView<Customer> implements CustomersTab
                     NotificationSystem.throwNotification(NotificationCode.SUCCEED_ADD_CUSTOMER, stage);
                 },
                 parentController.getLoadingIndicator(), null);
+    }
+
+    @Override
+    public void addRegexChecker() {
+
+    }
+
+    @Override
+    public boolean validInput() {
+        return true;
+    }
+
+    @Override
+    public void removeInvalidAlert() {
+
     }
 }

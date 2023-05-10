@@ -12,7 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import org.controlsfx.control.textfield.CustomTextField;
+import salesmanagement.salesmanagement.ViewController.InputValidator;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesManagement;
 import salesmanagement.salesmanagement.Utils.*;
@@ -31,7 +31,7 @@ import static salesmanagement.salesmanagement.Utils.InputErrorCode.getInputError
 import static salesmanagement.salesmanagement.Utils.Utils.shake;
 import static salesmanagement.salesmanagement.Utils.Utils.skeletonEffect;
 
-public class SettingsTabView extends TabView implements SettingsTab {
+public class SettingsTabView extends TabView implements SettingsTab, InputValidator {
     @FXML
     private ComboBox<String> accessibilityComboBox;
     @FXML
@@ -142,7 +142,10 @@ public class SettingsTabView extends TabView implements SettingsTab {
     @Override
     protected void figureShow() {
         super.figureShow();
+
         codeVerifiedBox.setVisible(false);
+        removeInvalidAlert();
+
         runTask(() -> {
             String query = "SELECT * FROM employees WHERE employeeNumber = " + user.getEmployeeNumber();
             ResultSet employeeInfo = sqlConnection.getDataQuery(query);
@@ -188,7 +191,7 @@ public class SettingsTabView extends TabView implements SettingsTab {
         }, () -> avatarLoading.set(false), null, null);
     }
 
-    protected boolean validInput() {
+    public boolean validInput() {
         if (!emailTextField.getText().matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) return false;
 
         if (!phoneNumberTextField.getText().matches("\\d+")) return false;
@@ -212,7 +215,37 @@ public class SettingsTabView extends TabView implements SettingsTab {
         return passwordField.getCharacters().toString().length() >= 8;
     }
 
-    protected void addRegexChecker() {
+    @Override
+    public void removeInvalidAlert() {
+        VBox container = (VBox) usernameTextField.getParent().getParent();
+        if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+            container.getChildren().remove(container.getChildren().size() - 1);
+        }
+        usernameTextField.setStyle("-fx-border-color: transparent");
+        FontAwesomeIconView validIconView = (FontAwesomeIconView) ((HBox) usernameTextField.getParent()).getChildren().get(1);
+        validIconView.getStyleClass().clear();
+        validIconView.getStyleClass().add("valid-icon-view");
+
+        container = (VBox) passwordField.getParent().getParent();
+        if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+            container.getChildren().remove(container.getChildren().size() - 1);
+        }
+        passwordField.setStyle("-fx-border-color: transparent");
+        validIconView = (FontAwesomeIconView) ((HBox) passwordField.getParent()).getChildren().get(1);
+        validIconView.getStyleClass().clear();
+        validIconView.getStyleClass().add("valid-icon-view");
+
+        container = (VBox) emailTextField.getParent().getParent();
+        if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+            container.getChildren().remove(container.getChildren().size() - 1);
+        }
+        emailTextField.setStyle("-fx-border-color: transparent");
+        validIconView = (FontAwesomeIconView) ((HBox) emailTextField.getParent()).getChildren().get(1);
+        validIconView.getStyleClass().clear();
+        validIconView.getStyleClass().add("valid-icon-view");
+    }
+
+    public void addRegexChecker() {
         usernameTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
                 VBox container = (VBox) usernameTextField.getParent().getParent();
