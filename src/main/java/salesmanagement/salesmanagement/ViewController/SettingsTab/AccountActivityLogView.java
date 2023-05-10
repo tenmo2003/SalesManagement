@@ -12,7 +12,7 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.controlsfx.control.tableview2.FilteredTableView;
+import javafx.scene.control.TableView;
 import salesmanagement.salesmanagement.SalesComponent.Action;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesManagement;
@@ -31,7 +31,7 @@ import static salesmanagement.salesmanagement.SceneController.SceneController.ru
 
 public class AccountActivityLogView extends TabView implements SettingsTab {
     @FXML
-    private FilteredTableView<Action> actionsTable;
+    private TableView<Action> actionsTable;
     @FXML
     private TableColumn<?, ?> descriptionColumn;
     @FXML

@@ -5,7 +5,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import org.controlsfx.control.tableview2.FilteredTableView;
+import javafx.scene.control.TableView;
 import salesmanagement.salesmanagement.ViewController.ViewController;
 
 public class EmployeeSearchView extends ViewController {
@@ -20,7 +20,7 @@ public class EmployeeSearchView extends ViewController {
     private VBox employeeFilterBox;
 
     @FXML
-    private FilteredTableView<?> employeesTable;
+    private TableView<?> employeesTable;
 
     @FXML
     private TextField nameTextField;

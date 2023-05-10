@@ -1,12 +1,6 @@
 package salesmanagement.salesmanagement.SalesComponent;
 
-public class OrderItem implements SalesComponent{
-    //    int orderNumber;
-//    Date orderDate;
-//    Date requiredDate;
-//    Date shippedDate;
-//    String status;
-//    String comments;
+public class OrderItem implements SalesComponent {
     String productCode;
     Integer quantityOrdered;
     Double priceEach;
@@ -16,7 +10,7 @@ public class OrderItem implements SalesComponent{
         this.productCode = productCode;
         this.quantityOrdered = quantityOrdered;
         this.priceEach = priceEach;
-        this.amount = Double.parseDouble(String.format("%.2f",quantityOrdered * priceEach));
+        this.amount = Double.parseDouble(String.format("%.2f", quantityOrdered * priceEach));
     }
 
     public String getProductCode() {
@@ -33,7 +27,7 @@ public class OrderItem implements SalesComponent{
 
     public void setQuantityOrdered(int quantityOrdered) {
         this.quantityOrdered = quantityOrdered;
-        amount = Double.parseDouble(String.format("%.2f",priceEach * quantityOrdered));
+        amount = Double.parseDouble(String.format("%.2f", priceEach * quantityOrdered));
     }
 
     public Double getPriceEach() {

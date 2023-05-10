@@ -7,8 +7,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.controlsfx.control.tableview2.FilteredTableView;
+import javafx.scene.layout.Background;
+import javafx.scene.control.TableView;
 import salesmanagement.salesmanagement.SalesComponent.Action;
 import salesmanagement.salesmanagement.SalesComponent.ProductLine;
 import salesmanagement.salesmanagement.SalesManagement;
@@ -35,7 +37,7 @@ public class ProductLinesTabView extends TabView implements Initializable, Produ
     @FXML
     private TableColumn<String, String> productLineColumn;
     @FXML
-    private FilteredTableView<ProductLine> productLinesTable;
+    private TableView<ProductLine> productLinesTable;
     @FXML
     private TableColumn<?, ?> totalRevenueColumn;
 
@@ -73,7 +75,6 @@ public class ProductLinesTabView extends TabView implements Initializable, Produ
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
         productLinesTable.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {

@@ -2,12 +2,12 @@ package salesmanagement.salesmanagement.ViewController;
 
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
-import org.controlsfx.control.tableview2.FilteredTableView;
+import javafx.scene.control.TableView;
 import salesmanagement.salesmanagement.SalesComponent.SalesComponent;
 
 public abstract class SearchView<T extends SalesComponent> extends ViewController {
     @FXML
-    protected FilteredTableView<T> searchTable;
+    protected TableView<T> searchTable;
 
     protected FilteredList<T> searchList;
 

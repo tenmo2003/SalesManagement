@@ -10,7 +10,7 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import org.controlsfx.control.tableview2.FilteredTableView;
+import javafx.scene.control.TableView;
 import salesmanagement.salesmanagement.SalesComponent.Customer;
 import salesmanagement.salesmanagement.SalesComponent.SalesComponent;
 import salesmanagement.salesmanagement.SalesManagement;
@@ -41,7 +41,7 @@ public class CustomersTabView extends TabView implements CustomersTab {
     private TableColumn<?, ?> customerNameColumn;
 
     @FXML
-    private FilteredTableView<SalesComponent> customersTable;
+    private TableView<SalesComponent> customersTable;
 
     @FXML
     private ProgressIndicator loadingIndicator;

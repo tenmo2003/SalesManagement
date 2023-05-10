@@ -8,9 +8,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import org.controlsfx.control.tableview2.FilteredTableView;
 
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesComponent.SalesComponent;
@@ -41,7 +41,7 @@ public class EmployeesTabView extends TabView implements EmployeesTab {
     private TableColumn<?, ?> employeeStatusColumn;
 
     @FXML
-    private FilteredTableView<SalesComponent> employeesTable;
+    private TableView<SalesComponent> employeesTable;
 
     @FXML
     private ProgressIndicator loadingIndicator;

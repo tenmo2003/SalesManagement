@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import org.controlsfx.control.tableview2.FilteredTableView?>
+<?import javafx.scene.control.TableView?>
 
 <StackPane fx:id="root" prefHeight="707.0" prefWidth="1111.0" stylesheets="@../../style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.ProductsTab.ProductsTabView">
     <VBox alignment="TOP_CENTER" prefHeight="720.0" prefWidth="997.6">
@@ -63,7 +63,7 @@
             </HBox>
             <HBox VBox.vgrow="ALWAYS">
                 <children>
-                    <FilteredTableView fx:id="productsTable" stylesheets="@../../table.css" HBox.hgrow="ALWAYS">
+                    <TableView fx:id="productsTable" stylesheets="@../../table.css" HBox.hgrow="ALWAYS">
                         <columnResizePolicy>
                             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                         </columnResizePolicy>
@@ -73,7 +73,7 @@
                      <TableColumn fx:id="productLineColumn" prefWidth="205.0909423828125" text="Product Line" />
                      <TableColumn fx:id="productVendorColumn" prefWidth="254.8363037109375" text="Product Vendor" />
                   </columns>
-                    </FilteredTableView>
+                    </TableView>
                 </children>
             </HBox>
         </children>

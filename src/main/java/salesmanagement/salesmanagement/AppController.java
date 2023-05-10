@@ -85,9 +85,14 @@ public class AppController {
 
 
 
-        var password = "lbfj2nEwsHTelFcZAqLU";
-        var user = "udomuzbs3hfulslz";
-        var url = "jdbc:mysql://b7kidpocyxjnjhwdw73i-mysql.services.clever-cloud.com:3306/b7kidpocyxjnjhwdw73i";
+//        var password = "lbfj2nEwsHTelFcZAqLU";
+//        var user = "udomuzbs3hfulslz";
+//        var url = "jdbc:mysql://b7kidpocyxjnjhwdw73i-mysql.services.clever-cloud.com:3306/b7kidpocyxjnjhwdw73i";
+
+        var password = "";
+        var user = "root";
+        var url = "jdbc:mysql://localhost:3306/b7kidpocyxjnjhwdw73i";
+
         sqlConnection = new SQLConnection(url, user, password);
         loginSceneController.setSqlConnection(sqlConnection, stage);
 

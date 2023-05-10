@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import org.controlsfx.control.tableview2.FilteredTableView?>
+<?import javafx.scene.control.TableView?>
 
 <StackPane fx:id="root" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.EmployeesTab.EmployeeSearchView">
     <children>
@@ -133,7 +133,7 @@
                         </HBox>
                   <StackPane prefHeight="148.0" prefWidth="392.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <FilteredTableView fx:id="employeesTable" minHeight="100.0" prefHeight="100.0" stylesheets="@../../table.css">
+                        <TableView fx:id="employeesTable" minHeight="100.0" prefHeight="100.0" stylesheets="@../../table.css">
                            <columns>
                               <TableColumn prefWidth="75.0" text="Employee Code" />
                               <TableColumn prefWidth="75.0" text="EmployeeName" />
@@ -142,7 +142,7 @@
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                            </columnResizePolicy>
-                        </FilteredTableView>
+                        </TableView>
                         <HBox alignment="CENTER" StackPane.alignment="CENTER">
                            <children>
                               <ProgressIndicator prefHeight="42.0" prefWidth="34.0" />

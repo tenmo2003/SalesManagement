@@ -10,7 +10,7 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
-import org.controlsfx.control.tableview2.FilteredTableView;
+import javafx.scene.control.TableView;
 import salesmanagement.salesmanagement.SalesComponent.Product;
 import salesmanagement.salesmanagement.SalesManagement;
 import salesmanagement.salesmanagement.ViewController.TabView;
@@ -44,7 +44,7 @@ public class ProductsTabView extends TabView implements ProductsTab {
     private TableColumn<?, ?> productVendorColumn;
 
     @FXML
-    private FilteredTableView<Product> productsTable;
+    private TableView<Product> productsTable;
 
     @FXML
     private StackPane root;

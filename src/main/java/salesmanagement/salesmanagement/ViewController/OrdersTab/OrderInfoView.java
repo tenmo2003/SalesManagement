@@ -17,7 +17,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
-import org.controlsfx.control.tableview2.FilteredTableView;
+import javafx.scene.control.TableView;
 import org.controlsfx.control.textfield.TextFields;
 import salesmanagement.salesmanagement.SalesComponent.Action;
 import salesmanagement.salesmanagement.SalesComponent.Customer;
@@ -62,7 +62,7 @@ public class OrderInfoView extends ViewController implements OrdersTab, InputVal
     private DatePicker orderedDatePicker;
 
     @FXML
-    private FilteredTableView<OrderItem> orderTable;
+    private TableView<OrderItem> orderTable;
 
     @FXML
     private ComboBox<String> paymentMethod;

@@ -9,7 +9,7 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.StackPane;
-import org.controlsfx.control.tableview2.FilteredTableView;
+import javafx.scene.control.TableView;
 import salesmanagement.salesmanagement.SalesComponent.Order;
 import salesmanagement.salesmanagement.SalesManagement;
 import salesmanagement.salesmanagement.ViewController.TabView;
@@ -44,7 +44,7 @@ public class OrdersTabView extends TabView implements OrdersTab {
     private TableColumn<?, ?> orderNumberColumn;
 
     @FXML
-    private FilteredTableView<Order> ordersTable;
+    private TableView<Order> ordersTable;
 
     @FXML
     private StackPane root;

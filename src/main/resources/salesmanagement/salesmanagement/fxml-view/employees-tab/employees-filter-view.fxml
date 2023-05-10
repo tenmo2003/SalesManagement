@@ -13,8 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<StackPane fx:id="root" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.EmployeesTab.EmployeesFilterView">
+<StackPane fx:id="root" style="-fx-background-color: transparent;" stylesheets="@../../style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.EmployeesTab.EmployeesFilterView">
    <children>
       <StackPane opacity="0.5" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: grey;" />
       <FlowPane alignment="CENTER" StackPane.alignment="CENTER">
@@ -28,7 +27,7 @@
                               <Font size="21.0" />
                            </font>
                         </Label>
-                        <JFXButton alignment="CENTER" contentDisplay="CENTER" minWidth="46.0" onMouseClicked="#close" prefHeight="30.0" prefWidth="46.0" textAlignment="CENTER" StackPane.alignment="CENTER_RIGHT">
+                        <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minWidth="46.0" onMouseClicked="#close" prefHeight="30.0" prefWidth="46.0" textAlignment="CENTER" StackPane.alignment="CENTER_RIGHT">
                            <graphic>
                               <FontAwesomeIconView glyphName="CLOSE" size="25" />
                            </graphic>
@@ -48,7 +47,7 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="nameTextField" prefHeight="30.0" prefWidth="538.0" VBox.vgrow="ALWAYS">
+                        <TextField fx:id="nameTextField" prefHeight="30.0" prefWidth="538.0" styleClass="field-size" VBox.vgrow="ALWAYS">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -64,7 +63,7 @@
                                     <Font size="14.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="phoneTextField" prefHeight="30.0" prefWidth="303.0" VBox.vgrow="ALWAYS">
+                              <TextField fx:id="phoneTextField" prefHeight="30.0" prefWidth="303.0" styleClass="field-size" VBox.vgrow="ALWAYS">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -78,7 +77,7 @@
                                     <Font size="14.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="emailTextField" prefHeight="30.0" prefWidth="294.0" VBox.vgrow="ALWAYS">
+                              <TextField fx:id="emailTextField" prefHeight="30.0" prefWidth="294.0" styleClass="field-size" VBox.vgrow="ALWAYS">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -96,7 +95,7 @@
                                     <Font size="14.0" />
                                  </font>
                               </Label>
-                              <ComboBox fx:id="statusComboBox" prefHeight="28.0" prefWidth="251.0" VBox.vgrow="ALWAYS" />
+                              <ComboBox fx:id="statusComboBox" prefHeight="28.0" prefWidth="251.0" styleClass="field-size" VBox.vgrow="ALWAYS" />
                            </children>
                         </VBox>
                         <VBox fillWidth="false" prefHeight="58.0" prefWidth="523.0" HBox.hgrow="ALWAYS">
@@ -106,19 +105,19 @@
                                     <Font size="14.0" />
                                  </font>
                               </Label>
-                              <ComboBox fx:id="accessibilityComboBox" prefHeight="28.0" prefWidth="246.0" />
+                              <ComboBox fx:id="accessibilityComboBox" prefHeight="28.0" prefWidth="246.0" styleClass="field-size" />
                            </children>
                         </VBox>
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="46.0" prefWidth="392.0" spacing="20.0">
                      <children>
-                        <JFXButton onMouseClicked="#applyFilter" text="Apply Filter">
+                        <JFXButton onMouseClicked="#applyFilter" prefWidth="100.0" styleClass="button-in-view" text="Apply Filter">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </JFXButton>
-                        <JFXButton onMouseClicked="#clearFilter" text="Clear All">
+                        <JFXButton onMouseClicked="#clearFilter" prefWidth="100.0" styleClass="button-in-view" text="Clear All">
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
