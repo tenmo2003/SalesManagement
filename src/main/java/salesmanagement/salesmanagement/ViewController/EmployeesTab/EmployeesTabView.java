@@ -127,6 +127,18 @@ public class EmployeesTabView extends TabView implements EmployeesTab {
         }
 
         runTask(() -> {
+            String activity = "UPDATE employees\n" +
+                    "SET status = \n" +
+                    "CASE \n" +
+                    "WHEN COALESCE(lastWorkingDate, joiningDate) <= DATE_ADD(NOW(), INTERVAL -1 MONTH) \n" +
+                    "THEN 'INACTIVE'\n" +
+                    "ELSE 'ACTIVE'\n" +
+                    "END";
+            try {
+                sqlConnection.updateQuery(activity);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
             List<Employee> employees = new ArrayList<>();
             String query = "SELECT * FROM employees";
             ResultSet resultSet = sqlConnection.getDataQuery(query);
