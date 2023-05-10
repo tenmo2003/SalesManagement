@@ -37,14 +37,9 @@ public class ImageController {
             String firstRemoteFile = "public_html/" + remoteName;
             InputStream inputStream = new FileInputStream(firstLocalFile);
 
-            System.out.println("Start uploading first file");
-            boolean done = ftpClient.storeFile(firstRemoteFile, inputStream);
+            ftpClient.storeFile(firstRemoteFile, inputStream);
             inputStream.close();
-            if (done) {
-                System.out.println("The first file is uploaded successfully.");
-            }
         } catch (IOException ex) {
-            System.out.println("Error: " + ex.getMessage());
             ex.printStackTrace();
         } finally {
             try {

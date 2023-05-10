@@ -148,3 +148,13 @@
     -fx-border-width: 0 0 2 0;
     -fx-border-color: #e0e0e0;
 }
+
+.valid-icon-view {
+    -glyph-name: "CHECK";
+    -fx-fill: #71ea71
+}
+
+.invalid-icon-view {
+    -glyph-name: "CLOSE";
+    -fx-fill: #e71c1c
+}

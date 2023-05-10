@@ -1,10 +1,15 @@
 package salesmanagement.salesmanagement.Utils;
 
+import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -18,11 +23,21 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * A utility class providing common functionality for working with JavaFX nodes and node trees.
+ * This is a utility class created to support programming projects.
+ * It provides various helper methods that can be used in a project
+ * to perform common tasks or operations.
+ * <p>
+ * This class should not be instantiated as all the methods are
+ * static and can be accessed directly through the class name.
+ * <p>
+ * To use this class, simply import it into your project and call
+ * the desired method using the class name followed by the method name.
+ * <p>
  *
- * @author THANHAN
- * @since 1.4
+ * @author THANH AN
+ * @since 1.0
  */
+
 public class Utils {
     /**
      * Returns a list of all descendant nodes of the specified root node, including the root node itself.
@@ -136,6 +151,53 @@ public class Utils {
         timeline.play();
     }
 
+    /**
+     * Adds a skeleton effect to an ImageView by fading in and out a grey background with rounded corners.
+     * <p>
+     * The effect is automatically paused and resumed based on the value of a BooleanProperty that represents
+     * whether the image is still loading or not.
+     *
+     * @param imageView the ImageView to add the skeleton effect to
+     * @return a BooleanProperty that represents whether the image is still loading or not
+     */
+    public static BooleanProperty skeletonEffect(ImageView imageView) {
+        BooleanProperty avatarLoading = new javafx.beans.property.SimpleBooleanProperty(true);
+        StackPane avatarLayer = (StackPane) ((StackPane) imageView.getParent()).getChildren().get(1);
+        avatarLayer.setStyle("-fx-background-color: grey;-fx-background-radius: 10;");
+
+        FadeTransition imageFadeTransition = new FadeTransition(Duration.seconds(1.2), avatarLayer);
+        imageFadeTransition.setFromValue(0.2);
+        imageFadeTransition.setToValue(0.4);
+        imageFadeTransition.setCycleCount(Timeline.INDEFINITE);
+        imageFadeTransition.setAutoReverse(true);
+        imageFadeTransition.play();
+
+        ChangeListener<Boolean> imageLoadingListener = (observable, oldValue, newValue) -> {
+            if (newValue) {
+                avatarLayer.setStyle("-fx-background-color: grey;-fx-background-radius: 10;");
+                imageFadeTransition.play();
+            } else {
+                imageFadeTransition.pause();
+                avatarLayer.setStyle("-fx-background-color: transparent");
+            }
+        };
+        avatarLoading.addListener(imageLoadingListener);
+
+        return avatarLoading;
+    }
+
+    /**
+     * Exports the data from a ResultSet to an Excel file, given a list of selected columns to include.
+     * <p>
+     * Creates a new sheet named "Result" in the workbook and writes the selected columns as headers
+     * <p>
+     * in the first row of the sheet, and the data from the ResultSet in subsequent rows.
+     *
+     * @param resultSet       the ResultSet containing the data to be exported
+     * @param outputFile      the output file where the data will be exported to
+     * @param selectedColumns the list of column names to be included in the exported data
+     * @throws Exception if an error occurs while creating the Excel file or writing the data to it
+     */
     public static void exportToExcel(ResultSet resultSet, File outputFile, List<String> selectedColumns) throws Exception {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Result");

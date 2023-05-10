@@ -26,6 +26,7 @@ import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesManagement;
 import salesmanagement.salesmanagement.Utils.ImageController;
 import salesmanagement.salesmanagement.Utils.NotificationSystem;
+import salesmanagement.salesmanagement.Utils.Utils;
 import salesmanagement.salesmanagement.ViewController.CustomersTab.CustomersTabView;
 import salesmanagement.salesmanagement.ViewController.DashBoardTab.DashboardTabView;
 import salesmanagement.salesmanagement.ViewController.EmployeesTab.EmployeesTabView;
@@ -96,7 +97,6 @@ public class MainSceneController extends SceneController implements Initializabl
     OrdersTabView ordersTabView;
     DashboardTabView dashboardTabView;
     ProductLinesTabView productLinesTabView;
-
 
 
     double xOffset;
@@ -226,26 +226,7 @@ public class MainSceneController extends SceneController implements Initializabl
             }
         });
 
-        // Avatar Loading.
-        avatarLoading = new javafx.beans.property.SimpleBooleanProperty(true);
-        avatarLayer.setStyle("-fx-background-color: grey;-fx-background-radius: 10;");
-        FadeTransition imageFadeTransition = new FadeTransition(Duration.seconds(2), avatarLayer);
-        imageFadeTransition.setFromValue(0.2);
-        imageFadeTransition.setToValue(0.4);
-        imageFadeTransition.setCycleCount(Timeline.INDEFINITE);
-        imageFadeTransition.setAutoReverse(true);
-        imageFadeTransition.play();
-
-        ChangeListener<Boolean> imageLoadingListener = (observable, oldValue, newValue) -> {
-            if (newValue) {
-                avatarLayer.setStyle("-fx-background-color: grey;-fx-background-radius: 10;");
-                imageFadeTransition.play();
-            } else {
-                imageFadeTransition.pause();
-                avatarLayer.setStyle("-fx-background-color: transparent");
-            }
-        };
-        avatarLoading.addListener(imageLoadingListener);
+        avatarLoading = Utils.skeletonEffect(smallAvatar);
 
         // Time label.
         AnimationTimer timer = new AnimationTimer() {
@@ -317,7 +298,7 @@ public class MainSceneController extends SceneController implements Initializabl
             alert.setContentText("Are you sure you want to log out?");
 
             Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.OK){
+            if (result.isPresent() && result.get() == ButtonType.OK) {
                 close = true;
                 // Perform other logout actions here
             }

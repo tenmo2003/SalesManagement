@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
@@ -16,19 +17,19 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="root" prefHeight="743.0" prefWidth="912.0" style="-fx-background-color: transparent;" stylesheets="@../../style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.SettingsTab.SettingsTabView">
+<StackPane fx:id="root" prefHeight="743.0" prefWidth="1082.0" style="-fx-background-color: transparent;" stylesheets="@../../style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.SettingsTab.SettingsTabView">
    <children>
-      <VBox prefHeight="683.0" prefWidth="912.0">
+      <VBox prefHeight="743.0" prefWidth="1016.0">
          <children>
             <HBox>
                <children>
-                  <HBox alignment="CENTER_LEFT" prefHeight="32.0" prefWidth="458.0">
+                  <HBox alignment="CENTER_LEFT" minWidth="500.0" prefHeight="32.0" prefWidth="614.0">
                      <children>
                         <Label id="top_label" prefHeight="32.0" prefWidth="194.0" text="Account Settings" />
                         <ProgressIndicator fx:id="loadingIndicator" prefHeight="32.0" prefWidth="39.0" />
                      </children>
                   </HBox>
-                  <HBox alignment="CENTER_RIGHT" prefHeight="26.0" prefWidth="750.0" HBox.hgrow="ALWAYS">
+                  <HBox alignment="CENTER_RIGHT" prefHeight="32.0" prefWidth="340.0" HBox.hgrow="ALWAYS">
                      <children>
                         <JFXButton contentDisplay="GRAPHIC_ONLY" focusTraversable="false" onMouseClicked="#show" prefHeight="26.0" prefWidth="26.0">
                            <graphic>
@@ -54,16 +55,19 @@
                               <JFXButton focusTraversable="false" onMouseClicked="#showAccountActivityLog" text="SHOW ACCOUNT ACTIVITY LOG" StackPane.alignment="CENTER_RIGHT" />
                            </children>
                         </StackPane>
-                        <HBox alignment="TOP_CENTER" prefHeight="495.0" prefWidth="912.0" spacing="200.0">
+                        <HBox alignment="TOP_CENTER" prefHeight="495.0" prefWidth="912.0" spacing="100.0">
                            <children>
-                              <VBox fx:id="fixedInfoBox" alignment="TOP_RIGHT" prefHeight="495.0" prefWidth="277.0" spacing="20.0">
+                              <VBox fx:id="fixedInfoBox" alignment="TOP_RIGHT" prefHeight="599.0" prefWidth="447.0" spacing="20.0" HBox.hgrow="ALWAYS">
                                  <children>
                                     <VBox>
                                        <children>
-                                          <Label text="Full Name" />
+                                          <Label text="Full Name">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font></Label>
                                           <HBox alignment="CENTER_LEFT" prefWidth="450.0" spacing="10.0">
                                              <children>
-                                                <TextField fx:id="fullNameTextField" disable="true" prefHeight="26.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
+                                                <TextField fx:id="fullNameTextField" disable="true" prefHeight="26.0" prefWidth="350.0" HBox.hgrow="ALWAYS">
                                                    <font>
                                                       <Font size="15.0" />
                                                    </font>
@@ -74,17 +78,27 @@
                                     </VBox>
                                     <VBox prefHeight="43.0" prefWidth="255.0">
                                        <children>
-                                          <Label text="Birth Date" />
-                                          <DatePicker fx:id="birthDatePicker" disable="true" prefHeight="26.0" prefWidth="490.0" stylesheets="@../../date_picker.css" VBox.vgrow="ALWAYS" />
+                                          <Label text="Birth Date">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font></Label>
+                                          <HBox VBox.vgrow="ALWAYS">
+                                             <children>
+                                                <DatePicker fx:id="birthDatePicker" disable="true" prefHeight="31.0" prefWidth="784.0" stylesheets="@../../date_picker.css" HBox.hgrow="ALWAYS" />
+                                             </children>
+                                          </HBox>
                                           <HBox alignment="CENTER_LEFT" prefWidth="450.0" spacing="10.0" />
                                        </children>
                                     </VBox>
                                     <VBox>
                                        <children>
-                                          <Label text="Office Code" />
+                                          <Label text="Office Code">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font></Label>
                                           <HBox alignment="CENTER_LEFT" prefWidth="450.0" spacing="10.0">
                                              <children>
-                                                <TextField fx:id="officeCodeTextField" disable="true" prefHeight="26.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
+                                                <TextField fx:id="officeCodeTextField" disable="true" prefHeight="26.0" prefWidth="350.0" HBox.hgrow="ALWAYS">
                                                    <font>
                                                       <Font size="15.0" />
                                                    </font>
@@ -95,10 +109,13 @@
                                     </VBox>
                                     <VBox>
                                        <children>
-                                          <Label text="Supervisor Code" />
+                                          <Label text="Supervisor Code">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font></Label>
                                           <HBox alignment="CENTER_LEFT" prefWidth="450.0" spacing="10.0">
                                              <children>
-                                                <TextField fx:id="supervisorCode" disable="true" prefHeight="26.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
+                                                <TextField fx:id="supervisorCode" disable="true" prefHeight="26.0" prefWidth="350.0" HBox.hgrow="ALWAYS">
                                                    <font>
                                                       <Font size="15.0" />
                                                    </font>
@@ -109,23 +126,32 @@
                                     </VBox>
                                     <VBox>
                                        <children>
-                                          <Label text="Accessibility" />
+                                          <Label text="Accessibility">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font></Label>
                                           <ComboBox fx:id="accessibilityComboBox" disable="true" prefHeight="53.0" prefWidth="150.0" style="-fx-font-size: 15;" />
                                           <HBox alignment="CENTER_LEFT" prefWidth="450.0" spacing="10.0" />
                                        </children>
                                     </VBox>
                                     <VBox>
                                        <children>
-                                          <Label text="Phone Code" />
+                                          <Label text="Phone Code">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font></Label>
                                           <ComboBox fx:id="phoneCodeComboBox" disable="true" prefWidth="150.0" style="-fx-font-size: 15;" />
                                        </children>
                                     </VBox>
                                     <VBox>
                                        <children>
-                                          <Label text="Phone Number" />
+                                          <Label text="Phone Number">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font></Label>
                                           <HBox alignment="CENTER_LEFT" prefWidth="450.0" spacing="10.0">
                                              <children>
-                                                <TextField fx:id="phoneNumberTextField" disable="true" prefHeight="26.0" prefWidth="250.0" HBox.hgrow="ALWAYS">
+                                                <TextField fx:id="phoneNumberTextField" disable="true" prefHeight="26.0" prefWidth="350.0" HBox.hgrow="ALWAYS">
                                                    <font>
                                                       <Font size="15.0" />
                                                    </font>
@@ -136,43 +162,74 @@
                                     </VBox>
                                     <VBox>
                                        <children>
-                                          <Label text="Joining Date" />
-                                          <DatePicker fx:id="joinngDatePicker" disable="true" prefHeight="26.0" prefWidth="415.0" stylesheets="@../../date_picker.css" />
+                                          <Label text="Joining Date">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font></Label>
+                                          <HBox>
+                                             <children>
+                                                <DatePicker fx:id="joinngDatePicker" disable="true" prefHeight="31.0" prefWidth="641.0" stylesheets="@../../date_picker.css" />
+                                             </children>
+                                          </HBox>
                                           <HBox alignment="CENTER_LEFT" prefWidth="450.0" spacing="10.0" />
                                        </children>
                                     </VBox>
                                     <VBox>
                                        <children>
-                                          <Label text="Last Working Date" />
-                                          <DatePicker fx:id="lastWorkingDatePicker" disable="true" prefHeight="26.0" prefWidth="423.0" stylesheets="@../../date_picker.css" />
+                                          <Label text="Last Working Date">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font></Label>
+                                          <HBox>
+                                             <children>
+                                                <DatePicker fx:id="lastWorkingDatePicker" disable="true" prefHeight="31.0" prefWidth="714.0" stylesheets="@../../date_picker.css" />
+                                             </children>
+                                          </HBox>
                                           <HBox alignment="CENTER_LEFT" prefWidth="450.0" spacing="10.0" />
                                        </children>
                                     </VBox>
                                  </children>
                               </VBox>
-                              <VBox prefHeight="495.0" prefWidth="294.0" spacing="20.0">
+                              <VBox prefHeight="599.0" prefWidth="496.0" spacing="20.0" HBox.hgrow="ALWAYS">
                                  <children>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="113.0" prefWidth="485.0">
+                                       <children>
+                                          <JFXButton fx:id="uploadAvatarButton" onAction="#uploadAvatar" text="Change Avatar" />
+                                          <StackPane prefHeight="69.0" prefWidth="98.0">
+                                             <children>
+                                                <ImageView fx:id="avatarImageView" fitHeight="109.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true" />
+                                                <StackPane fx:id="avatarLayer" prefHeight="150.0" prefWidth="200.0" />
+                                             </children>
+                                          </StackPane>
+                                       </children>
+                                    </HBox>
                                     <VBox>
                                        <children>
-                                          <Label text="Username" />
+                                          <Label text="Username">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font></Label>
                                           <HBox alignment="CENTER_LEFT" prefWidth="450.0" spacing="10.0">
                                              <children>
-                                                <TextField fx:id="usernameTextField" prefHeight="26.0" prefWidth="250.0">
+                                                <TextField fx:id="usernameTextField" prefHeight="26.0" prefWidth="350.0" HBox.hgrow="ALWAYS">
                                                    <font>
                                                       <Font size="15.0" />
                                                    </font>
                                                 </TextField>
-                                                <FontAwesomeIconView fill="#6de165" glyphName="CHECK" size="22" />
+                                                <FontAwesomeIconView fill="#52df48" glyphName="CHECK" size="22" styleClass="valid-icon-view" />
                                              </children>
                                           </HBox>
                                        </children>
                                     </VBox>
                                     <VBox>
                                        <children>
-                                          <Label text="Password" />
+                                          <Label text="Password">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font></Label>
                                           <HBox alignment="CENTER_LEFT" prefWidth="450.0" spacing="10.0">
                                              <children>
-                                                <PasswordField fx:id="passwordTextField" prefHeight="26.0" prefWidth="250.0">
+                                                <PasswordField fx:id="passwordField" prefHeight="26.0" prefWidth="350.0" HBox.hgrow="ALWAYS">
                                                    <font>
                                                       <Font size="15.0" />
                                                    </font>
@@ -184,10 +241,13 @@
                                     </VBox>
                                     <VBox>
                                        <children>
-                                          <Label text="Email" />
+                                          <Label text="Email">
+                                             <font>
+                                                <Font name="System Bold" size="12.0" />
+                                             </font></Label>
                                           <HBox alignment="CENTER_LEFT" prefWidth="400.0" spacing="10.0">
                                              <children>
-                                                <TextField fx:id="emailTextField" prefHeight="26.0" prefWidth="250.0">
+                                                <TextField fx:id="emailTextField" prefHeight="26.0" prefWidth="350.0" HBox.hgrow="ALWAYS">
                                                    <font>
                                                       <Font size="15.0" />
                                                    </font>
@@ -197,25 +257,37 @@
                                           </HBox>
                                        </children>
                                     </VBox>
-                                    <Label text="Verify your email" />
-                                    <HBox>
+                                    <Label fx:id="emailVerifiedLabel" onMouseClicked="#sendEmailCodeVerified" text="Verify your email now" textFill="#679ae7">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <font>
+                                          <Font name="System Bold" size="13.0" />
+                                       </font>
+                                    </Label>
+                                    <VBox fx:id="codeVerifiedBox" visible="false">
                                        <children>
-                                          <StackPane prefHeight="69.0" prefWidth="98.0">
+                                          <Label text="Code verified sent to your email" />
+                                          <HBox alignment="CENTER_LEFT" prefWidth="400.0" spacing="10.0">
                                              <children>
-                                                <ImageView fx:id="avatarImageView" fitHeight="109.0" fitWidth="97.0" pickOnBounds="true" preserveRatio="true" />
-                                                <StackPane fx:id="avatarLayer" prefHeight="150.0" prefWidth="200.0" />
+                                                <TextField fx:id="codeVerifiedTextField" prefHeight="31.0" prefWidth="198.0">
+                                                   <font>
+                                                      <Font size="15.0" />
+                                                   </font>
+                                                </TextField>
+                                                <JFXButton onMouseClicked="#verifyEmail" text="VERIFY EMAIL" />
                                              </children>
-                                          </StackPane>
+                                          </HBox>
                                        </children>
-                                    </HBox>
-                                    <JFXButton fx:id="uploadAvatarButton" onAction="#uploadAvatar" text="Change Avatar" />
+                                    </VBox>
+                                    <HBox alignment="CENTER_LEFT" />
                                  </children>
                               </VBox>
                            </children>
                         </HBox>
                         <StackPane prefHeight="50.0" prefWidth="912.0">
                            <children>
-                              <JFXButton fx:id="saveInfo" onMouseClicked="#saveInfo" text="SAVE ACCOUNT INFO" StackPane.alignment="TOP_CENTER" />
+                              <JFXButton fx:id="saveInfo" onMouseClicked="#saveInfo" text="SAVE ACCOUNT INFO" StackPane.alignment="CENTER" />
                            </children>
                         </StackPane>
                      </children>
