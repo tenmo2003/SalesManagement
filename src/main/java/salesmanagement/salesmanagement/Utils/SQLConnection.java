@@ -1,14 +1,10 @@
 package salesmanagement.salesmanagement.Utils;
 
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import salesmanagement.salesmanagement.SalesComponent.SalesComponent;
+import org.apache.commons.net.ntp.TimeStamp;
+import salesmanagement.salesmanagement.SalesComponent.Action;
 
-import java.io.FileOutputStream;
 import java.sql.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * SQLConnection helps you connect to SQL server and database table.
@@ -104,15 +100,24 @@ public class SQLConnection {
         return resultSet;
     }
 
-    public void updateQuery(String query) {
-        Statement statement = null;
+    public void updateQuery(String query, String componentModifiedCode, Action.ComponentModified componentModified,
+                            Action.ActionCode actionCode) {
+        Statement statement;
+        Action action;
         try {
             statement = connection.createStatement();
             statement.executeUpdate(query);
+            action = new Action(componentModifiedCode, componentModified, actionCode, Action.ResultCode.SUCCESSFUL);
         } catch (SQLException ex) {
-            ex.printStackTrace();
-            System.out.println(query);
+            action = new Action(componentModifiedCode, componentModified, actionCode, Action.ResultCode.FAILED);
         }
+        action.pushAction(this);
+    }
+
+    public void updateQuery(String query) throws SQLException {
+        Statement statement;
+        statement = connection.createStatement();
+        statement.executeUpdate(query);
     }
 
     /**

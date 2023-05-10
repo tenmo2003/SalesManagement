@@ -19,10 +19,9 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
 import org.controlsfx.control.tableview2.FilteredTableView;
 import org.controlsfx.control.textfield.TextFields;
-import salesmanagement.salesmanagement.SalesComponent.Customer;
-import salesmanagement.salesmanagement.SalesComponent.Order;
-import salesmanagement.salesmanagement.SalesComponent.OrderItem;
+import salesmanagement.salesmanagement.SalesComponent.*;
 import salesmanagement.salesmanagement.SalesManagement;
+import salesmanagement.salesmanagement.Utils.ImageController;
 import salesmanagement.salesmanagement.Utils.InputErrorCode;
 import salesmanagement.salesmanagement.Utils.NotificationCode;
 import salesmanagement.salesmanagement.Utils.NotificationSystem;
@@ -366,7 +365,7 @@ public class OrderInfoView extends ViewController implements OrdersTab {
                 throw new RuntimeException(e);
             }
 
-            String order = "insert into orders(orderDate, requiredDate, shippedDate, status, comments, customerNumber, type, value, payment_method, created_by) values ('"
+            String query = "insert into orders(orderDate, requiredDate, shippedDate, status, comments, customerNumber, type, value, payment_method, created_by) values ('"
                     + orderDate + "',"
                     + requiredDate + ","
                     + shippedDate + ",'"
@@ -377,8 +376,33 @@ public class OrderInfoView extends ViewController implements OrdersTab {
                     + value + ", '"
                     + paymentMethod.getValue() + "'," +
                     sqlConnection.getUserID() + ");";
-            sqlConnection.updateQuery(order);
-            result = sqlConnection.getDataQuery("SELECT LAST_INSERT_ID() FROM orders;");
+
+            Action action;
+            try {
+                sqlConnection.updateQuery(query);
+                action = new Action(null,
+                        Action.ComponentModified.ORDER,
+                        Action.ActionCode.CREATE_NEW,
+                        Action.ResultCode.SUCCESSFUL);
+
+                result = sqlConnection.getDataQuery("SELECT LAST_INSERT_ID() FROM orders;");
+
+                try {
+                    if (result.next()) {
+
+                        action.setComponentModifiedID(String.valueOf(result.getInt("orderNumber")));
+
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            } catch (SQLException e) {
+                action = new Action(null,
+                        Action.ComponentModified.ORDER,
+                        Action.ActionCode.CREATE_NEW,
+                        Action.ResultCode.FAILED);
+            }
+            action.pushAction(sqlConnection);
 
             int orderNumber = 0;
             try {
@@ -402,18 +426,21 @@ public class OrderInfoView extends ViewController implements OrdersTab {
                         .append(item.getPriceEach())
                         .append("),");
                 if (orderType.getValue().equals("onsite") || status.getValue().equals("Shipped")) {
-                    String query = String.format("UPDATE products SET quantityInStock = quantityInStock - %d WHERE productCode = '%s';\n", item.getQuantityOrdered(), item.getProductCode());
-                    sqlConnection.updateQuery(query);
+                    query = String.format("UPDATE products SET quantityInStock = quantityInStock - %d WHERE productCode = '%s';\n", item.getQuantityOrdered(), item.getProductCode());
+                    try {
+                        sqlConnection.updateQuery(query);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
             orderdetails.deleteCharAt(orderdetails.length() - 1);
             orderdetails.append(';');
-            sqlConnection.updateQuery(orderdetails.toString());
-
-//            int finalOrderNumber = orderNumber;
-//            printInvoiceButton.setOnAction(event -> {
-//                printInvoice(finalOrderNumber);
-//            });
+            try {
+                sqlConnection.updateQuery(orderdetails.toString());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
 
             if (print)
                 printOrder(orderNumber);
@@ -480,26 +507,42 @@ public class OrderInfoView extends ViewController implements OrdersTab {
                 }
             }
             String query = String.format("DELETE FROM orderdetails WHERE orderNumber = %d", orderNumber);
-            sqlConnection.updateQuery(query);
+            try {
+                sqlConnection.updateQuery(query);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
             for (OrderItem orderItem : orderTable.getItems()) {
                 String productCode = orderItem.getProductCode();
                 int quantity = orderItem.getQuantityOrdered();
                 double priceEach = orderItem.getPriceEach();
                 query = String.format("INSERT INTO orderdetails (orderNumber, productCode, quantityOrdered, priceEach) VALUES (%d, '%s', %d, %f)", orderNumber, productCode, quantity, priceEach);
-                sqlConnection.updateQuery(query);
+                try {
+                    sqlConnection.updateQuery(query);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
                 if (orderType.getValue().equals("onsite") || status.getValue().equals("Shipped")) {
                     String tmp = String.format("UPDATE products SET quantityInStock = quantityInStock + %d WHERE productCode = '%s'", quantity, productCode);
-                    sqlConnection.updateQuery(tmp);
+                    try {
+                        sqlConnection.updateQuery(tmp);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
             // Get the values from the input fields
             LocalDate orderDate = orderedDatePicker.getValue();
             String requiredDate = requiredDatePicker.getValue() != null ? "'" + requiredDatePicker.getValue().toString() + "'" : null;
             String shippedDate = shippedDatePicker.getValue() != null ? "'" + shippedDatePicker.getValue().toString() + "'" : "null";
-            String st = (String) status.getValue();
+            String st = status.getValue();
             String comments = commentsTextField.getText();
             query = String.format("UPDATE orders SET orderDate = '%s', requiredDate = %s, shippedDate = %s, status = '%s', comments = '%s', payment_method = '%s', deliver_to = '%s' WHERE orderNumber = %d", orderDate.toString(), requiredDate, shippedDate, st, comments, paymentMethod.getValue(), deliverTo.getText(), orderNumber);
-            sqlConnection.updateQuery(query);
+            try {
+                sqlConnection.updateQuery(query);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
 
         }, () -> {
             close();

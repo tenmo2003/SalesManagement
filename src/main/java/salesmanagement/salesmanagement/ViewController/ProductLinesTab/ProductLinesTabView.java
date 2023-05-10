@@ -1,20 +1,15 @@
 package salesmanagement.salesmanagement.ViewController.ProductLinesTab;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Bounds;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import org.controlsfx.control.tableview2.FilteredTableView;
+import salesmanagement.salesmanagement.SalesComponent.Action;
 import salesmanagement.salesmanagement.SalesComponent.ProductLine;
 import salesmanagement.salesmanagement.SalesManagement;
 import salesmanagement.salesmanagement.Utils.NotificationCode;
@@ -38,7 +33,7 @@ public class ProductLinesTabView extends TabView implements Initializable, Produ
     @FXML
     private TableColumn<?, ?> numberOfProductsColumn;
     @FXML
-    private TableColumn<?, ?> productLineColumn;
+    private TableColumn<String, String> productLineColumn;
     @FXML
     private FilteredTableView<ProductLine> productLinesTable;
     @FXML
@@ -103,9 +98,10 @@ public class ProductLinesTabView extends TabView implements Initializable, Produ
         if (selected != null) {
             runTask(() -> {
                 String query = "delete from productlines where productline = '" + selected.getProductLine() + "'";
-                sqlConnection.updateQuery(query);
+                sqlConnection.updateQuery(query, selected.getProductLine(), Action.ComponentModified.PRODUCTLINES, Action.ActionCode.REMOVE);
                 show();
-            }, ()->{
+
+            }, () -> {
                 NotificationSystem.throwNotification(NotificationCode.INVALID_INPUTS, stage);
             }, loadingIndicator, null);
         }

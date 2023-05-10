@@ -152,7 +152,11 @@ public class LoginSceneController extends SceneController implements Initializab
     public void resetPassword() {
         runTask(() -> {
             String query = "UPDATE employees SET password = " + "'" + passwordReset.getCharacters().toString() + "' WHERE employeeNumber = " + employeeNumber;
-            sqlConnection.updateQuery(query);
+            try {
+                sqlConnection.updateQuery(query);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }, () -> {
             Platform.runLater(() -> NotificationSystem.throwNotification(NotificationCode.SUCCEED_RESET_PASSWORD, stage));
             loginPane.setVisible(true);

@@ -3,6 +3,7 @@ package salesmanagement.salesmanagement.ViewController.ProductsTab;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import org.controlsfx.control.textfield.TextFields;
+import salesmanagement.salesmanagement.SalesComponent.Action;
 import salesmanagement.salesmanagement.SalesComponent.Product;
 import salesmanagement.salesmanagement.Utils.NotificationCode;
 import salesmanagement.salesmanagement.Utils.NotificationSystem;
@@ -47,7 +48,9 @@ public class ProductInfoView extends InfoView<Product> implements ProductsTab {
                     String query = String.format("UPDATE products SET productName = '%s', productLine = '%s', productVendor = '%s', productDescription = '%s', quantityInStock = %d, buyPrice = %s, sellPrice = %s WHERE productCode = '%s'",
                             productNameTextField.getText(), productLineTextField.getText(), productVendorTextField.getText(), descriptionTextField.getText(),
                             Integer.parseInt(inStockTextField.getText()), buyPriceTextField.getText().replaceAll(",", "."), sellPriceTextField.getText().replaceAll(",", "."), productCodeTextField.getText());
-                    sqlConnection.updateQuery(query);
+
+                    sqlConnection.updateQuery(query, productCodeTextField.getText(),
+                            Action.ComponentModified.PRODUCT, Action.ActionCode.EDIT);
                 }, () -> {
                     parentController.show();
                     NotificationSystem.throwNotification(NotificationCode.SUCCEED_CREATE_PRODUCT, stage);
@@ -63,8 +66,24 @@ public class ProductInfoView extends InfoView<Product> implements ProductsTab {
                                     "VALUES ('%s', '%s', '%s', '%s', '%s', %d, %s, %s);",
                             productCodeTextField.getText(), productNameTextField.getText(),
                             productLineTextField.getText(), productVendorTextField.getText(), descriptionTextField.getText(),
-                            Integer.parseInt(inStockTextField.getText()), buyPriceTextField.getText().replaceAll(",", "."), sellPriceTextField.getText().replaceAll(",", "."));
-                    sqlConnection.updateQuery(query);
+                            Integer.parseInt(inStockTextField.getText()),
+                            buyPriceTextField.getText().replaceAll(",", "."),
+                            sellPriceTextField.getText().replaceAll(",", "."));
+
+                    Action action;
+                    try {
+                        sqlConnection.updateQuery(query);
+                        action = new Action(productCodeTextField.getText(),
+                                Action.ComponentModified.PRODUCT,
+                                Action.ActionCode.CREATE_NEW,
+                                Action.ResultCode.SUCCESSFUL);
+                    } catch (SQLException e) {
+                        action = new Action( null,
+                                Action.ComponentModified.PRODUCT,
+                                Action.ActionCode.CREATE_NEW,
+                                Action.ResultCode.FAILED);
+                    }
+                    action.pushAction(sqlConnection);
                 }, () -> {
                     parentController.show();
                     NotificationSystem.throwNotification(NotificationCode.SUCCEED_CREATE_PRODUCT, stage);

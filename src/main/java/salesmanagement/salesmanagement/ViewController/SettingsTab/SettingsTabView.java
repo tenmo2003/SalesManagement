@@ -110,8 +110,12 @@ public class SettingsTabView extends TabView implements SettingsTab {
     void saveInfo() {
         runTask(() -> {
             String query = String.format("UPDATE employees SET username = '%s', password = '%s', email = '%s' WHERE employeeNumber = %d", usernameTextField.getText(), passwordTextField.getText(), emailTextField.getText(), user.getEmployeeNumber());
-            sqlConnection.updateQuery(query);
-            if (avatarImageView.getImage() != null) {
+                    try {
+                        sqlConnection.updateQuery(query);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                    if (avatarImageView.getImage() != null) {
                 ImageController.uploadImage(avatarURI, "avatar_employee_" + user.getEmployeeNumber() + ".png");
             }
         }, () -> NotificationSystem.throwNotification(NotificationCode.SUCCEED_SAVE_INFO, stage),

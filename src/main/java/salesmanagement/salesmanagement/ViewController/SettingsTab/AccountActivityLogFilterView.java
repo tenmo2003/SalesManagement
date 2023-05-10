@@ -45,7 +45,7 @@ public class AccountActivityLogFilterView extends ViewController implements Sett
     void applyFilter() {
         actionFilteredList.setPredicate(action -> {
             boolean actionIDMatch = Integer.toString(action.getActionID()).contains(actionIDTextField.getText());
-            boolean timeMatch = action.getTime().contains(timeTextField.getText());
+            boolean timeMatch = action.getTime().toString().contains(timeTextField.getText());
             boolean resultMatch = action.getResult().getText().equals(resultComboBox.getValue());
             boolean description = action.getDescription().contains(descriptionTextField.getText());
             if (resultComboBox.getValue() == null) resultMatch = true;

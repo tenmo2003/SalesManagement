@@ -3,12 +3,18 @@ package salesmanagement.salesmanagement.ViewController.ProductLinesTab;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.ColumnConstraints;
+import salesmanagement.salesmanagement.SalesComponent.Action;
+import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesComponent.ProductLine;
+import salesmanagement.salesmanagement.Utils.ImageController;
 import salesmanagement.salesmanagement.Utils.NotificationCode;
 import salesmanagement.salesmanagement.Utils.NotificationSystem;
 import salesmanagement.salesmanagement.ViewController.InfoView;
 
 import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import static salesmanagement.salesmanagement.SceneController.SceneController.runTask;
@@ -37,7 +43,8 @@ public class ProductLineInfoView extends InfoView<ProductLine> implements Produc
         runTask(() -> {
             close();
             String query = String.format("update productlines set textDescription = '%s' where productLine = '%s'", descriptionTextField.getText(), productLineTextField.getText());
-            sqlConnection.updateQuery(query);
+            sqlConnection.updateQuery(query, productLineTextField.getText(),
+                    Action.ComponentModified.PRODUCTLINES, Action.ActionCode.EDIT);
         }, () -> {
             parentController.show();
             NotificationSystem.throwNotification(NotificationCode.SUCCEED_SAVE_INFO, stage);
@@ -49,7 +56,22 @@ public class ProductLineInfoView extends InfoView<ProductLine> implements Produc
         runTask(() -> {
             close();
             String query = String.format("insert into productlines (productLine, textDescription) VALUES ('%s', '%s');", descriptionTextField.getText(), productLineTextField.getText());
-            sqlConnection.updateQuery(query);
+            Action action;
+            try {
+                sqlConnection.updateQuery(query);
+                action = new Action(productLineTextField.getText(),
+                        Action.ComponentModified.PRODUCTLINES,
+                        Action.ActionCode.CREATE_NEW,
+                        Action.ResultCode.SUCCESSFUL);
+
+
+            } catch (SQLException e) {
+                action = new Action(null,
+                        Action.ComponentModified.PRODUCTLINES,
+                        Action.ActionCode.CREATE_NEW,
+                        Action.ResultCode.FAILED);
+            }
+            action.pushAction(sqlConnection);
         }, () -> {
             parentController.show();
             NotificationSystem.throwNotification(NotificationCode.SUCCEED_SAVE_INFO, stage);
@@ -71,6 +93,7 @@ public class ProductLineInfoView extends InfoView<ProductLine> implements Produc
     @Override
     public void show() {
         super.show();
+
         boxLabel.setText("Add New Product Line");
         productLineTextField.setEditable(true);
         addButton.setVisible(true);

@@ -111,14 +111,12 @@ public class EmployeesTabView extends TabView implements EmployeesTab {
         employeeInfoView.setLoggedInUser(loggedInUser);
     }
 
-    boolean employeesTableConfigured = false;
-
     @Override
     protected void figureShow() {
         super.figureShow();
         employeeInfoView.close();
-        if (!employeesTableConfigured) {
-            employeesTableConfigured = true;
+        if (!tableFigured) {
+            tableFigured = true;
             double tableWidth = employeesTable.getWidth() - 2;
             employeeNumberColumn.setMinWidth(0.15 * tableWidth);
             nameColumn.setMinWidth(0.25 * tableWidth);

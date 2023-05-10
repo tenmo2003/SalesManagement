@@ -22,6 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 
+import salesmanagement.salesmanagement.SalesComponent.Action;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.ViewController.UserRight;
 import salesmanagement.salesmanagement.SalesManagement;
@@ -32,6 +33,7 @@ import salesmanagement.salesmanagement.Utils.NotificationSystem;
 import salesmanagement.salesmanagement.ViewController.SettingsTab.AccountActivityLogView;
 import salesmanagement.salesmanagement.ViewController.ViewController;
 
+import javax.swing.plaf.SeparatorUI;
 import java.io.File;
 import java.net.URL;
 import java.sql.ResultSet;
@@ -46,83 +48,61 @@ import static salesmanagement.salesmanagement.Utils.InputErrorCode.getInputError
 import static salesmanagement.salesmanagement.Utils.Utils.shake;
 
 public class EmployeeInfoView extends ViewController implements EmployeesTab {
-
     @FXML
     private ComboBox<String> accessibilityBox;
-
     @FXML
     private ImageView avatar;
-
     @FXML
     private DatePicker birthDatePicker;
-
     @FXML
     private JFXButton editButton;
-
     @FXML
     private TextField emailTextField;
-
     @FXML
     private TextField employeeCodeTextField;
-
     @FXML
     private JFXRadioButton femaleRadioButton;
-
     @FXML
     private TextField firstNameTextField;
-
     @FXML
     private DatePicker joiningDatePicker;
-
     @FXML
     private TextField lastNameTextField;
-
     @FXML
     private DatePicker lastWorkingDatePicker;
-
     @FXML
     private ProgressIndicator loadingIndicator;
-
     @FXML
     private JFXRadioButton maleRadioButton;
-
     @FXML
     private TextField officeCodeTextField;
-
     @FXML
     private PasswordField passwordField;
     @FXML
     private JFXButton uploadAvatarButton;
-
     @FXML
     private ComboBox<String> phoneCodeBox;
-
     @FXML
     private TextField phoneNumberTextField;
-
     @FXML
     private JFXButton saveButton;
-
     @FXML
     private JFXButton addButton;
-
     @FXML
     private ComboBox<String> statusBox;
-
     @FXML
     private TextField supervisorTextField;
-
     @FXML
     private TextField usernameTextField;
-
-    private Employee user;
-
-    private Employee loggedInUser;
     @FXML
     private StackPane loadingAvatar;
+    @FXML
+    private JFXButton showAccountLogActivityButton;
+
+    private Employee user;
+    private Employee loggedInUser;
 
     private AccountActivityLogView accountActivityLogView;
-
 
     public EmployeeInfoView setUser(Employee user) {
         this.user = user;
@@ -179,7 +159,7 @@ public class EmployeeInfoView extends ViewController implements EmployeesTab {
         }
         phoneCodeBox.setItems(FXCollections.observableArrayList(phoneCodes));
 
-        List<String> accessibilitiesList = new ArrayList<>(Arrays.asList("HR", "Manager", "Employee", "Admin"));
+        List<String> accessibilitiesList = new ArrayList<>(Arrays.asList("HR", "Manager", "Employee"));
         accessibilityBox.setItems(FXCollections.observableArrayList(accessibilitiesList));
 
         List<String> statusList = new ArrayList<>(Arrays.asList("ACTIVE", "INACTIVE"));
@@ -480,8 +460,10 @@ public class EmployeeInfoView extends ViewController implements EmployeesTab {
                     + "', username='" + usernameTextField.getText() + "', password='" + passwordField.getText() + "', phoneCode='"
                     + phoneCodeBox.getValue() + "', phone='" + phoneNumberTextField.getText() + "', status='" + statusBox.getValue() + "', joiningDate='"
                     + joiningDatePicker.getValue() + "' WHERE employeeNumber=" + user.getEmployeeNumber();
-            System.out.println(query);
-            sqlConnection.updateQuery(query);
+
+            sqlConnection.updateQuery(query, employeeCodeTextField.getText(),
+                    Action.ComponentModified.EMPLOYEE, Action.ActionCode.EDIT);
+
             if (avatar.getImage() != null)
                 if (!avatar.getImage().getUrl().toLowerCase().equals(ImageController.getURL("avatar_employee_default.png")))
                     ImageController.uploadImage(avatarURI, "avatar_employee_" + user.getEmployeeNumber() + ".png");
@@ -509,19 +491,35 @@ public class EmployeeInfoView extends ViewController implements EmployeesTab {
                         "'" + officeCodeTextField.getText() + "'," + supervisorTextField.getText() + ", '" + accessibilityBox.getValue() + "', '"
                         + usernameTextField.getText() + "', '" + passwordField.getText() + "', '" + phoneCodeBox.getValue()
                         + "', '" + phoneNumberTextField.getText() + "', 'ACTIVE', '" + joiningDatePicker.getValue() + "', "
-                        + lastWorking  + ")";
-                sqlConnection.updateQuery(query);
-                query = "SELECT * FROM employees WHERE username = '" + usernameTextField.getText() + "'";
-                ResultSet resultSet = sqlConnection.getDataQuery(query);
+                        + lastWorking + ")";
+
+                Action action;
                 try {
-                    if (resultSet.next()) {
-                        user = new Employee(resultSet);
-                        if (!avatar.getImage().getUrl().toLowerCase().equals(ImageController.getURL("avatar_employee_default.png")))
-                            ImageController.uploadImage(avatarURI, "avatar_employee_" + resultSet.getInt("employeeNumber") + ".png");
+                    sqlConnection.updateQuery(query);
+                    action = new Action(null,
+                            Action.ComponentModified.EMPLOYEE,
+                            Action.ActionCode.CREATE_NEW,
+                            Action.ResultCode.SUCCESSFUL);
+
+                    query = "SELECT * FROM employees WHERE username = '" + usernameTextField.getText() + "'";
+                    ResultSet resultSet = sqlConnection.getDataQuery(query);
+                    try {
+                        if (resultSet.next()) {
+                            user = new Employee(resultSet);
+                            action.setComponentModifiedID(String.valueOf(user.getEmployeeNumber()));
+                            if (!avatar.getImage().getUrl().toLowerCase().equals(ImageController.getURL("avatar_employee_default.png")))
+                                ImageController.uploadImage(avatarURI, "avatar_employee_" + resultSet.getInt("employeeNumber") + ".png");
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
                     }
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    action = new Action(null,
+                            Action.ComponentModified.EMPLOYEE,
+                            Action.ActionCode.CREATE_NEW,
+                            Action.ResultCode.FAILED);
                 }
+                action.pushAction(sqlConnection);
             }
         }, () -> {
             if (allValid.get()) {
@@ -621,14 +619,14 @@ public class EmployeeInfoView extends ViewController implements EmployeesTab {
 
     protected void show(Employee employee) {
         employeeInfoBox.setVvalue(0.0);
+
         if (disabledNodes == null) {
             disabledNodes = new Node[]{lastNameTextField, firstNameTextField, birthDatePicker, maleRadioButton, femaleRadioButton, emailTextField,
                     officeCodeTextField, supervisorTextField, accessibilityBox, usernameTextField, passwordField, phoneCodeBox,
                     phoneNumberTextField, joiningDatePicker, statusBox, uploadAvatarButton};
         }
 
-        refreshEmployeeInfoTab();
-
+        resetData();
 
         super.show();
 
@@ -637,6 +635,7 @@ public class EmployeeInfoView extends ViewController implements EmployeesTab {
             user = employee;
 
             addButton.setVisible(true);
+            showAccountLogActivityButton.setVisible(false);
             disableNodes(false);
 
             employeeCodeTextField.setText("");
@@ -647,6 +646,8 @@ public class EmployeeInfoView extends ViewController implements EmployeesTab {
             addButton.setVisible(false);
             saveButton.setVisible(false);
             editButton.setVisible(true);
+            showAccountLogActivityButton.setVisible(true);
+
             disableNodes(true);
 
             runTask(() -> {
@@ -719,7 +720,9 @@ public class EmployeeInfoView extends ViewController implements EmployeesTab {
         }, () -> avatarLoading.set(false), loadingIndicator, null);
     }
 
-    private void refreshEmployeeInfoTab() {
+    protected void resetData() {
+        super.resetData();
+
         VBox container = (VBox) firstNameTextField.getParent();
         if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
             container.getChildren().remove(container.getChildren().size() - 1);

@@ -62,12 +62,9 @@
                     <Insets bottom="10.0" />
                 </VBox.margin>
             </HBox>
-            <HBox VBox.vgrow="ALWAYS">
+            <HBox alignment="TOP_CENTER" VBox.vgrow="ALWAYS">
                 <children>
                     <FilteredTableView fx:id="productLinesTable" stylesheets="@../../table.css" HBox.hgrow="ALWAYS">
-                        <columnResizePolicy>
-                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                        </columnResizePolicy>
                         <columns>
                             <TableColumn fx:id="productLineColumn" prefWidth="163.199951171875" text="ProductLine" />
                             <TableColumn fx:id="descriptionColumn" prefWidth="330.76373291015625" text="Description" />
@@ -75,6 +72,9 @@
                      <TableColumn fx:id="mainProductVendorColumn" prefWidth="205.0909423828125" text="Main Product Vendor" />
                      <TableColumn fx:id="totalRevenueColumn" prefWidth="205.0909423828125" text="Total Revenue" />
                         </columns>
+                  <columnResizePolicy>
+                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                  </columnResizePolicy>
                     </FilteredTableView>
                 </children>
             </HBox>

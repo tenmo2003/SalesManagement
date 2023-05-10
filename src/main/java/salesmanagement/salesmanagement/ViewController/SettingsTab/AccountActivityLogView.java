@@ -6,8 +6,10 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.controlsfx.control.tableview2.FilteredTableView;
@@ -20,6 +22,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -32,17 +35,18 @@ public class AccountActivityLogView extends TabView implements SettingsTab {
     @FXML
     private TableColumn<?, ?> descriptionColumn;
     @FXML
-    private TableColumn<?, ?> timeColumn;
+    private TableColumn<Action, LocalDateTime> timeColumn;
     @FXML
-    private TableColumn<?, ?> actionIDColumn;
+    private TableColumn<Action, Integer> actionIDColumn;
     @FXML
-    private TableColumn<?, ?> resultColumn;
+    private TableColumn<Action, Label> resultColumn;
+    @FXML
+    private TableColumn<Action, String> componentModifiedIDColumn;
     @FXML
     private ProgressIndicator loadingIndicator;
     @FXML
     private Label userIDLabel;
 
-    boolean actionsTableConfigured = false;
     Employee user;
     AccountActivityLogFilterView accountActivityLogFilterView;
     SortedList<Action> sortedAndFilteredActions;
@@ -69,18 +73,52 @@ public class AccountActivityLogView extends TabView implements SettingsTab {
         timeColumn.setCellValueFactory(new PropertyValueFactory<>("time"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         resultColumn.setCellValueFactory(new PropertyValueFactory<>("result"));
+        componentModifiedIDColumn.setCellValueFactory(new PropertyValueFactory<>("componentModifiedID"));
+
+        resultColumn.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(Label item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+
+                } else {
+                    setGraphic(item);
+                    setAlignment(Pos.CENTER);
+
+                }
+            }
+        });
+
+        componentModifiedIDColumn.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setText(null);
+                } else {
+                    setText(item);
+                    setAlignment(Pos.CENTER);
+                }
+            }
+        });
+        actionsTable.getSortOrder().add(actionIDColumn);
+        actionsTable.sort();
     }
 
     @Override
     protected void figureShow() {
         super.figureShow();
-        if (!actionsTableConfigured) {
-            actionsTableConfigured = true;
+        if (!tableFigured) {
+            tableFigured = true;
             double actionsTableWidth = actionsTable.getWidth();
-            descriptionColumn.setMinWidth(0.5 * actionsTableWidth);
-            timeColumn.setMinWidth(0.2 * actionsTableWidth);
+            descriptionColumn.setMinWidth(0.2 * actionsTableWidth);
+            timeColumn.setMinWidth(0.14 * actionsTableWidth);
             actionIDColumn.setMinWidth(0.1 * actionsTableWidth);
-            resultColumn.setMinWidth(0.2 * actionsTableWidth);
+            resultColumn.setMinWidth(0.25 * actionsTableWidth);
+            componentModifiedIDColumn.setMinWidth(0.2 * actionsTableWidth);
         }
         userIDLabel.setText(String.format("Account %d", user.getEmployeeNumber()));
         List<Action> actions = new ArrayList<>();
@@ -98,6 +136,7 @@ public class AccountActivityLogView extends TabView implements SettingsTab {
             ObservableList<Action> actionObservableList = FXCollections.observableArrayList(actions);
             accountActivityLogFilterView.setActionFilteredList(new FilteredList<>(actionObservableList));
             sortedAndFilteredActions = new SortedList<>(accountActivityLogFilterView.getActionFilteredList());
+            sortedAndFilteredActions.comparatorProperty().bind(actionsTable.comparatorProperty());
         }, () -> {
             actionsTable.setItems(sortedAndFilteredActions);
             isShowing = false;

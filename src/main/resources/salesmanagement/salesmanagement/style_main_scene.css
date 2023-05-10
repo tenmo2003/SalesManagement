@@ -61,8 +61,8 @@
 }
 
 #small_top_label {
-    -fx-text-fill: #329efcab;
-    -fx-font-size: 18px;
+    -fx-text-fill: rgba(23, 80, 131, 0.67);
+    -fx-font-size: 16px;
     -fx-font-weight: bold;
 }
 
