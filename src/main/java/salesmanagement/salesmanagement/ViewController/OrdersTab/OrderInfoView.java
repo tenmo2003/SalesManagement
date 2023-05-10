@@ -19,14 +19,17 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
 import org.controlsfx.control.tableview2.FilteredTableView;
 import org.controlsfx.control.textfield.TextFields;
-import salesmanagement.salesmanagement.SalesComponent.*;
+import salesmanagement.salesmanagement.SalesComponent.Action;
+import salesmanagement.salesmanagement.SalesComponent.Customer;
+import salesmanagement.salesmanagement.SalesComponent.Order;
+import salesmanagement.salesmanagement.SalesComponent.OrderItem;
 import salesmanagement.salesmanagement.SalesManagement;
-import salesmanagement.salesmanagement.Utils.ImageController;
 import salesmanagement.salesmanagement.Utils.InputErrorCode;
 import salesmanagement.salesmanagement.Utils.NotificationCode;
 import salesmanagement.salesmanagement.Utils.NotificationSystem;
 import salesmanagement.salesmanagement.ViewController.CustomersTab.CustomerInfoView;
 import salesmanagement.salesmanagement.ViewController.CustomersTab.CustomerSearchView;
+import salesmanagement.salesmanagement.ViewController.InputValidator;
 import salesmanagement.salesmanagement.ViewController.UserRight;
 import salesmanagement.salesmanagement.ViewController.ViewController;
 
@@ -42,7 +45,7 @@ import static salesmanagement.salesmanagement.SceneController.SceneController.ru
 import static salesmanagement.salesmanagement.Utils.InputErrorCode.getInputErrorLabel;
 import static salesmanagement.salesmanagement.Utils.Utils.shake;
 
-public class OrderInfoView extends ViewController implements OrdersTab {
+public class OrderInfoView extends ViewController implements OrdersTab, InputValidator {
     @FXML
     private TextField commentsTextField;
 
@@ -158,7 +161,8 @@ public class OrderInfoView extends ViewController implements OrdersTab {
         quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantityOrdered"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("priceEach"));
         totalColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
-        addCheckUserInput();
+
+        addRegexChecker();
 
         priceEachTextField.setEditable(false);
         totalTextField.setEditable(false);
@@ -190,9 +194,7 @@ public class OrderInfoView extends ViewController implements OrdersTab {
             }
         });
 
-        addOrderButton.setOnAction(event -> {
-            addNewOrder(false);
-        });
+        addOrderButton.setOnAction(event -> addNewOrder(false));
 
         orderType.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.equals("online")) {
@@ -445,8 +447,8 @@ public class OrderInfoView extends ViewController implements OrdersTab {
             if (print)
                 printOrder(orderNumber);
 
-            int countOrd = -1;
-            double totalValue = -1;
+            int countOrd;
+            double totalValue;
             if (Integer.parseInt(customerNumberTextField.getText()) != 6) {
                 String customerRankCheck = "SELECT COUNT(*) AS num, SUM(value) AS totalValue" +
                         "  FROM orders" +
@@ -493,6 +495,10 @@ public class OrderInfoView extends ViewController implements OrdersTab {
     }
 
     void saveOrder(int orderNumber) {
+        if (!validInput()) {
+            NotificationSystem.throwNotification(NotificationCode.INVALID_INPUTS, stage);
+            return;
+        }
         runTask(() -> {
             if (orderType.getValue().equals("onsite") || status.getValue().equals("Shipped")) {
                 String query = String.format("SELECT * FROM orderdetails WHERE orderNumber = %d", orderNumber);
@@ -662,9 +668,7 @@ public class OrderInfoView extends ViewController implements OrdersTab {
         }
         super.show();
         addOrderButton.setVisible(true);
-        print.setOnAction(event -> {
-            addNewOrder(true);
-        });
+        print.setOnAction(event -> addNewOrder(true));
         print.setText("Create and Print");
 
         paymentMethod.setValue("Cash");
@@ -719,9 +723,7 @@ public class OrderInfoView extends ViewController implements OrdersTab {
         }
         addOrderButton.setVisible(false);
         saveOrderButton.setVisible(true);
-        saveOrderButton.setOnAction(event -> {
-            saveOrder(order.getOrderNumber());
-        });
+        saveOrderButton.setOnAction(event -> saveOrder(order.getOrderNumber()));
         runTask(() -> {
             String query = "select * from orderdetails where orderNumber = " + order.getOrderNumber();
             ResultSet resultSet = sqlConnection.getDataQuery(query);
@@ -751,6 +753,7 @@ public class OrderInfoView extends ViewController implements OrdersTab {
     @Override
     public void close() {
         super.close();
+        removeInvalidAlert();
         selectedOrder = null;
         for (Node node : disabledNodesList) {
             if (node instanceof TextField) {
@@ -779,11 +782,12 @@ public class OrderInfoView extends ViewController implements OrdersTab {
         customerInfoView.show();
     }
 
-    private void addCheckUserInput() {
+    @Override
+    public void addRegexChecker() {
         customerNumberTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue) {
                 VBox container = (VBox) customerNumberTextField.getParent().getParent();
-                int customerNumber = 0;
+                int customerNumber;
                 try {
                     customerNumber = Integer.parseInt(customerNumberTextField.getText());
                 } catch (Exception e) {
@@ -885,11 +889,26 @@ public class OrderInfoView extends ViewController implements OrdersTab {
         });
     }
 
-    boolean validInput() {
+    public boolean validInput() {
+        productCodeTextField.setStyle("-fx-border-color: transparent");
         VBox container = (VBox) productCodeTextField.getParent();
         if (container.getChildren().get(container.getChildren().size() - 1) instanceof Label) return false;
+
+        quantityTextField.setStyle("-fx-border-color: transparent");
         container = (VBox) quantityTextField.getParent();
         if (container.getChildren().get(container.getChildren().size() - 1) instanceof Label) return false;
         return !Objects.equals(totalTextField.getText(), "");
+    }
+
+    @Override
+    public void removeInvalidAlert() {
+        VBox container = (VBox) productCodeTextField.getParent();
+        if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+            container.getChildren().remove(container.getChildren().size() - 1);
+        }
+        container = (VBox) quantityTextField.getParent();
+        if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+            container.getChildren().remove(container.getChildren().size() - 1);
+        }
     }
 }

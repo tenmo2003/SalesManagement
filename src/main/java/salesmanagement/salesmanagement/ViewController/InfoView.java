@@ -7,6 +7,8 @@ import salesmanagement.salesmanagement.SalesComponent.SalesComponent;
 import salesmanagement.salesmanagement.Utils.NotificationCode;
 import salesmanagement.salesmanagement.Utils.NotificationSystem;
 
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public abstract class InfoView<T extends SalesComponent> extends ViewController implements InputValidator {
     @FXML
@@ -18,10 +20,18 @@ public abstract class InfoView<T extends SalesComponent> extends ViewController 
 
     protected T selectedSalesComponent;
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        super.initialize(url, resourceBundle);
+        addRegexChecker();
+    }
+
     protected abstract void figureSave();
 
+    protected abstract void figureAdd();
+
     @FXML
-    protected void save() {
+    protected final void save() {
         if (!validInput()) {
             NotificationSystem.throwNotification(NotificationCode.INVALID_INPUTS, stage);
             return;
@@ -29,10 +39,14 @@ public abstract class InfoView<T extends SalesComponent> extends ViewController 
         figureSave();
     }
 
-    ;
-
     @FXML
-    protected abstract void add();
+    protected final void add() {
+        if (!validInput()) {
+            NotificationSystem.throwNotification(NotificationCode.INVALID_INPUTS, stage);
+            return;
+        }
+        figureAdd();
+    }
 
     protected abstract void show(T selectedSalesComponent);
 
@@ -57,5 +71,6 @@ public abstract class InfoView<T extends SalesComponent> extends ViewController 
         super.close();
         addButton.setVisible(false);
         saveButton.setVisible(false);
+        removeInvalidAlert();
     }
 }

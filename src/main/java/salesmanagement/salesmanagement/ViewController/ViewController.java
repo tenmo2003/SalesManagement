@@ -20,6 +20,7 @@ public abstract class ViewController implements Initializable {
     protected StackPane root;
     @FXML
     protected ProgressIndicator loadingIndicator;
+
     protected static SQLConnection sqlConnection;
     protected Stage stage;
     protected ViewController parentController;

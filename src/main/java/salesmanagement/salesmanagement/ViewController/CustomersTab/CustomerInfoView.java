@@ -77,7 +77,7 @@ public class CustomerInfoView extends InfoView<Customer> implements CustomersTab
     }
 
     @FXML
-    public void add() {
+    protected void figureAdd() {
         runTask(() -> {
                     close();
                     String query = String.format("insert into customers(customerName, phone, addressLine, customerSSN) values ('%s', '%s', '%s', '%s')",
