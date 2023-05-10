@@ -147,7 +147,7 @@
                         </HBox>
                         <HBox>
                            <children>
-                              <JFXButton fx:id="productLinesTabButton" focusTraversable="false" graphicTextGap="15.0" prefHeight="43.0" prefWidth="325.0" styleClass="tab-button" text="ProductLines" HBox.hgrow="ALWAYS">
+                              <JFXButton fx:id="productLinesTabButton" focusTraversable="false" graphicTextGap="15.0" prefHeight="43.0" prefWidth="325.0" styleClass="tab-button" text="Product Lines" HBox.hgrow="ALWAYS">
                                  <graphic>
                                     <StackPane prefWidth="32.0">
                                        <children>
@@ -273,7 +273,7 @@
                         <Tab fx:id="ordersTab" text="Orders" />
                         <Tab fx:id="customersTab" closable="false" text="Customers" />
                         <Tab fx:id="settingsTab" text="Setting" />
-                        <Tab fx:id="productLinesTab" closable="false" text="ProductLines" />
+                        <Tab fx:id="productLinesTab" closable="false" text="Product Lines" />
                      </tabs>
                   </TabPane>
                </children>

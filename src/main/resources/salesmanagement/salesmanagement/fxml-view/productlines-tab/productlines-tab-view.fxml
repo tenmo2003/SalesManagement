@@ -20,7 +20,7 @@
                 <children>
                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="1477.0" spacing="20.0" HBox.hgrow="ALWAYS">
                         <children>
-                            <Label id="top_label" text="ProductLines List" textFill="#329efcab">
+                            <Label id="top_label" text="Product Lines List" textFill="#329efcab">
                                 <font>
                                     <Font name="System Bold" size="22.0" />
                                 </font>
@@ -43,7 +43,7 @@
                 <children>
                     <HBox prefHeight="30.0" prefWidth="314.0" HBox.hgrow="ALWAYS">
                         <children>
-                            <JFXButton onMouseClicked="#addFilter" prefHeight="30.0" prefWidth="146.0" text="ProductLines Filter...">
+                            <JFXButton onMouseClicked="#addFilter" prefHeight="30.0" prefWidth="170.0" text="Product Lines Filter...">
                                 <graphic>
                                     <FontAwesomeIconView glyphName="SEARCH" wrappingWidth="20.349998474121094" />
                                 </graphic>
@@ -66,7 +66,7 @@
                 <children>
                     <FilteredTableView fx:id="productLinesTable" stylesheets="@../../table.css" HBox.hgrow="ALWAYS">
                         <columns>
-                            <TableColumn fx:id="productLineColumn" prefWidth="163.199951171875" text="ProductLine" />
+                            <TableColumn fx:id="productLineColumn" prefWidth="163.199951171875" text="Product Line" />
                             <TableColumn fx:id="descriptionColumn" prefWidth="330.76373291015625" text="Description" />
                             <TableColumn fx:id="numberOfProductsColumn" prefWidth="205.0909423828125" text="Number of Products" />
                      <TableColumn fx:id="mainProductVendorColumn" prefWidth="205.0909423828125" text="Main Product Vendor" />
