@@ -8,17 +8,21 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import salesmanagement.salesmanagement.SalesComponent.Order;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -247,6 +251,30 @@ public class Utils {
         workbook.write(outputStream);
         workbook.close();
         outputStream.close();
+    }
+
+    /**
+     * This method adjusts the size of the columns in a TableView based on the specified ratios.
+     * The method listens to the widthProperty of the TableView, and adjusts the column widths
+     * every time the width of the table changes. The column ratios specify the relative size of
+     * each column compared to the total width of the table.
+     *
+     * @param <T>          the type of the items in the TableView
+     * @param table        the TableView whose column sizes will be adjusted
+     * @param columnWidthRatios a list of ratios that specify the relative size of each column. This list
+     *                     must have the same size as the number of columns in the table.
+     *                     If the list is not the same size as the number of columns in the table,
+     *                     the behavior of this method is undefined.
+     **/
+    public static <T> void adjustTableColumnWidths(TableView<T> table, List<Double> columnWidthRatios) {
+        table.widthProperty().addListener((obs, oldWidth, newWidth) -> {
+            double tableWidth = newWidth.doubleValue();
+            for (int i = 0; i < columnWidthRatios.size(); i++) {
+                TableColumn<T, ?> col = table.getColumns().get(i);
+                col.setMaxWidth(tableWidth * columnWidthRatios.get(i));
+                col.setPrefWidth(tableWidth * columnWidthRatios.get(i));
+            }
+        });
     }
 }
 

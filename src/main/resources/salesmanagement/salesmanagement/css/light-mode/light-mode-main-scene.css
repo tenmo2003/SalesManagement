@@ -30,10 +30,11 @@
 
 .text-field-box {
     -fx-font-size: 15;
+    -fx-focus-traversable: false;
 }
 
 .text-field-box:focused {
-    -fx-border-color: #007acc;
+    -fx-border-color: rgba(0, 152, 253, 0.9);
 }
 
 .text-style:hover {

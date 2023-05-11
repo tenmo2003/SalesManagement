@@ -51,7 +51,7 @@
                     </HBox>
                     <HBox alignment="CENTER_RIGHT" prefHeight="6.0" prefWidth="1050.0" spacing="10.0" HBox.hgrow="ALWAYS">
                         <children>
-                            <JFXButton fx:id="addButton" focusTraversable="false" onMouseClicked="#addNewProduct" styleClass="operation-button" text="ADD NEW" />
+                            <JFXButton fx:id="addButton" focusTraversable="false" onMouseClicked="#addNewProduct" styleClass="operation-button" text="ADD NEW PRODUCT" />
                             <JFXButton focusTraversable="false" onMouseClicked="#openExportProductsBox" styleClass="operation-button" text="EXPORT" />
                         </children>
                     </HBox>
@@ -63,9 +63,6 @@
             <HBox VBox.vgrow="ALWAYS">
                 <children>
                     <TableView fx:id="productsTable" focusTraversable="false" HBox.hgrow="ALWAYS">
-                        <columnResizePolicy>
-                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                        </columnResizePolicy>
                   <columns>
                      <TableColumn fx:id="productCodeColumn" prefWidth="163.199951171875" text="Product Code" />
                      <TableColumn fx:id="nameColumn" prefWidth="330.76373291015625" text="Name" />

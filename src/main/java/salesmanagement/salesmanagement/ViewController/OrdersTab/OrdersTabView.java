@@ -12,12 +12,14 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.control.TableView;
 import salesmanagement.salesmanagement.SalesComponent.Order;
 import salesmanagement.salesmanagement.SalesManagement;
+import salesmanagement.salesmanagement.Utils.Utils;
 import salesmanagement.salesmanagement.ViewController.TabView;
 
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -124,6 +126,8 @@ public class OrdersTabView extends TabView implements OrdersTab {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        Utils.adjustTableColumnWidths(ordersTable, Arrays.asList(0.1, 0.2, 0.1, 0.1, 0.2, 0.1, 0.2));
 
         orderNumberColumn.setCellValueFactory(new PropertyValueFactory<>("orderNumber"));
         employeeColumn.setCellValueFactory(new PropertyValueFactory<>("employeeName"));

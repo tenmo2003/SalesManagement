@@ -62,18 +62,15 @@
             </HBox>
             <HBox VBox.vgrow="ALWAYS">
                 <children>
-                    <TableView fx:id="ordersTable" focusTraversable="false" HBox.hgrow="ALWAYS">
-                        <columnResizePolicy>
-                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                        </columnResizePolicy>
+                    <TableView fx:id="ordersTable" HBox.hgrow="ALWAYS">
                   <columns>
-                     <TableColumn fx:id="orderNumberColumn" prefWidth="82.90908813476562" text="Order No." />
-                     <TableColumn fx:id="employeeColumn" prefWidth="150.10906982421875" text="Created" />
+                     <TableColumn fx:id="orderNumberColumn" prefWidth="78.40001904964447" text="Order No." />
+                     <TableColumn fx:id="employeeColumn" prefWidth="224.0000228881836" text="Created" />
                      <TableColumn fx:id="orderDateColumn" minWidth="6.103515625E-5" prefWidth="92.50909423828125" text="Order Date" />
                      <TableColumn fx:id="typeColumn" prefWidth="68.07275390625" text="Type" />
                      <TableColumn fx:id="commentsColumn" prefWidth="165.8182373046875" text="Comments" />
-                     <TableColumn fx:id="valueColumn" prefWidth="104.7274169921875" text="Value" />
-                     <TableColumn fx:id="customerColumn" prefWidth="170.181640625" text="Customer" />
+                     <TableColumn fx:id="valueColumn" minWidth="0.0" prefWidth="25.60003662109375" text="Value" />
+                     <TableColumn fx:id="customerColumn" prefWidth="269.59991455078125" text="Customer" />
                   </columns>
                     </TableView>
                 </children>

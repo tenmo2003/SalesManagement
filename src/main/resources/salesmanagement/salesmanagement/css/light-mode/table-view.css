@@ -32,8 +32,8 @@
 
 .table-view .virtual-flow .scroll-bar .increment-button,
 .table-view .virtual-flow .scroll-bar .decrement-button {
-    -fx-opacity: 5;
-    -fx-padding: 2;
+    -fx-opacity: 1;
+    -fx-padding: 1;
 }
 
 .table-view .virtual-flow .scroll-bar:vertical .thumb {

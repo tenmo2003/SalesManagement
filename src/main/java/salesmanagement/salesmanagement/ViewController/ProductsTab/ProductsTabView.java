@@ -13,6 +13,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.control.TableView;
 import salesmanagement.salesmanagement.SalesComponent.Product;
 import salesmanagement.salesmanagement.SalesManagement;
+import salesmanagement.salesmanagement.Utils.Utils;
 import salesmanagement.salesmanagement.ViewController.TabView;
 import salesmanagement.salesmanagement.ViewController.UserRight;
 import salesmanagement.salesmanagement.ViewController.ViewController;
@@ -21,6 +22,7 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -100,6 +102,8 @@ public class ProductsTabView extends TabView implements ProductsTab {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        Utils.adjustTableColumnWidths(productsTable, Arrays.asList(0.25,0.25,0.25,0.25));
 
         productsTable.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {

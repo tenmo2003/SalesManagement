@@ -70,9 +70,6 @@
                         <TableColumn fx:id="addressColumn" prefWidth="152.80001831054688" text="Address" />
                         <TableColumn fx:id="rankColumn" prefWidth="250.0" sortable="false" text="Rank" />
                      </columns>
-                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                     </columnResizePolicy>
                   </TableView>
                </children>
             </HBox>

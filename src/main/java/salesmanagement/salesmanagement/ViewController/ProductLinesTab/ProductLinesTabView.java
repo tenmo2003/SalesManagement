@@ -16,12 +16,14 @@ import salesmanagement.salesmanagement.SalesComponent.ProductLine;
 import salesmanagement.salesmanagement.SalesManagement;
 import salesmanagement.salesmanagement.Utils.NotificationCode;
 import salesmanagement.salesmanagement.Utils.NotificationSystem;
+import salesmanagement.salesmanagement.Utils.Utils;
 import salesmanagement.salesmanagement.ViewController.TabView;
 
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -75,6 +77,8 @@ public class ProductLinesTabView extends TabView implements Initializable, Produ
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        Utils.adjustTableColumnWidths(productLinesTable, Arrays.asList(0.15, 0.5, 0.1, 0.15, 0.1));
 
         productLinesTable.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {

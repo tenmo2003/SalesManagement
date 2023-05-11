@@ -14,6 +14,7 @@ import javafx.scene.control.TableView;
 import salesmanagement.salesmanagement.SalesComponent.Customer;
 import salesmanagement.salesmanagement.SalesComponent.SalesComponent;
 import salesmanagement.salesmanagement.SalesManagement;
+import salesmanagement.salesmanagement.Utils.Utils;
 import salesmanagement.salesmanagement.ViewController.TabView;
 import salesmanagement.salesmanagement.ViewController.UserRight;
 
@@ -21,6 +22,7 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -72,6 +74,8 @@ public class CustomersTabView extends TabView implements CustomersTab {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        Utils.adjustTableColumnWidths(customersTable, Arrays.asList(0.2, 0.2, 0.4, 0.2));
 
         customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         contactColumn.setCellValueFactory(new PropertyValueFactory<>("contact"));

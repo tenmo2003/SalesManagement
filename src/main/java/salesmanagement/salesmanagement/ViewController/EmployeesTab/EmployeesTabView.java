@@ -15,6 +15,7 @@ import javafx.scene.input.MouseEvent;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesComponent.SalesComponent;
 import salesmanagement.salesmanagement.SalesManagement;
+import salesmanagement.salesmanagement.Utils.Utils;
 import salesmanagement.salesmanagement.ViewController.TabView;
 import salesmanagement.salesmanagement.ViewController.ViewController;
 
@@ -22,6 +23,7 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -84,6 +86,8 @@ public class EmployeesTabView extends TabView implements EmployeesTab {
             e.printStackTrace();
         }
 
+        Utils.adjustTableColumnWidths(employeesTable, Arrays.asList(0.1, 0.25, 0.15, 0.3, 0.1, 0.1));
+
         employeeNumberColumn.setCellValueFactory(new PropertyValueFactory<>("employeeNumber"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
@@ -115,16 +119,6 @@ public class EmployeesTabView extends TabView implements EmployeesTab {
     protected void figureShow() {
         super.figureShow();
         employeeInfoView.close();
-        if (!tableFigured) {
-            tableFigured = true;
-            double tableWidth = employeesTable.getWidth() - 2;
-            employeeNumberColumn.setMinWidth(0.15 * tableWidth);
-            nameColumn.setMinWidth(0.25 * tableWidth);
-            phoneColumn.setMinWidth(0.2 * tableWidth);
-            emailColumn.setMinWidth(0.2 * tableWidth);
-            accessibilityColumn.setMinWidth(0.1 * tableWidth);
-            employeeStatusColumn.setMinWidth(0.1 * tableWidth);
-        }
 
         runTask(() -> {
             String activity = "UPDATE employees\n" +

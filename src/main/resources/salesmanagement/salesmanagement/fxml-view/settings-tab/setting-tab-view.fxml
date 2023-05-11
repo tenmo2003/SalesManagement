@@ -24,7 +24,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT" minWidth="200.0" prefHeight="32.0" prefWidth="614.0">
                      <children>
-                        <Label prefHeight="32.0" prefWidth="155.0" styleClass="top-label" text="Account Settings" />
+                        <Label prefHeight="32.0" prefWidth="162.0" styleClass="top-label" text="Account Settings" HBox.hgrow="ALWAYS" />
                         <ProgressIndicator fx:id="loadingIndicator" prefHeight="32.0" prefWidth="39.0" />
                      </children>
                   </HBox>
@@ -83,7 +83,7 @@
                                     </Label>
                                     <HBox VBox.vgrow="ALWAYS">
                                        <children>
-                                          <DatePicker fx:id="birthDatePicker" disable="true" prefHeight="31.0" prefWidth="784.0" stylesheets="@../../css/light-mode/date-picker.css" HBox.hgrow="ALWAYS" />
+                                          <DatePicker fx:id="birthDatePicker" disable="true" prefHeight="31.0" prefWidth="784.0" styleClass="text-field-box" stylesheets="@../../css/light-mode/date-picker.css" HBox.hgrow="ALWAYS" />
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefWidth="450.0" spacing="10.0" />
@@ -173,7 +173,7 @@
                                     </Label>
                                     <HBox>
                                        <children>
-                                          <DatePicker fx:id="joinngDatePicker" disable="true" prefHeight="31.0" prefWidth="641.0" stylesheets="@../../css/light-mode/date-picker.css" />
+                                          <DatePicker fx:id="joinngDatePicker" disable="true" prefHeight="31.0" prefWidth="641.0" styleClass="text-field-box" stylesheets="@../../css/light-mode/date-picker.css" />
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefWidth="450.0" spacing="10.0" />
@@ -188,7 +188,7 @@
                                     </Label>
                                     <HBox>
                                        <children>
-                                          <DatePicker fx:id="lastWorkingDatePicker" disable="true" prefHeight="31.0" prefWidth="714.0" stylesheets="@../../css/light-mode/date-picker.css" />
+                                          <DatePicker fx:id="lastWorkingDatePicker" disable="true" prefHeight="31.0" prefWidth="714.0" styleClass="text-field-box" stylesheets="@../../css/light-mode/date-picker.css" />
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" prefWidth="450.0" spacing="10.0" />
@@ -227,7 +227,7 @@
                                     </Label>
                                     <HBox alignment="CENTER_LEFT" prefWidth="450.0" spacing="10.0">
                                        <children>
-                                          <TextField fx:id="usernameTextField" prefHeight="26.0" prefWidth="350.0" styleClass="text-field-box" HBox.hgrow="ALWAYS">
+                                          <TextField fx:id="usernameTextField" focusTraversable="false" prefHeight="26.0" prefWidth="350.0" styleClass="text-field-box" HBox.hgrow="ALWAYS">
                                              <font>
                                                 <Font size="15.0" />
                                              </font>
@@ -246,7 +246,7 @@
                                     </Label>
                                     <HBox alignment="CENTER_LEFT" prefWidth="450.0" spacing="10.0">
                                        <children>
-                                          <PasswordField fx:id="passwordField" prefHeight="26.0" prefWidth="350.0" styleClass="text-field-box" HBox.hgrow="ALWAYS">
+                                          <PasswordField fx:id="passwordField" focusTraversable="false" prefHeight="26.0" prefWidth="350.0" styleClass="text-field-box" HBox.hgrow="ALWAYS">
                                              <font>
                                                 <Font size="15.0" />
                                              </font>
@@ -265,7 +265,7 @@
                                     </Label>
                                     <HBox alignment="CENTER_LEFT" prefWidth="400.0" spacing="10.0">
                                        <children>
-                                          <TextField fx:id="emailTextField" prefHeight="26.0" prefWidth="350.0" styleClass="text-field-box" HBox.hgrow="ALWAYS">
+                                          <TextField fx:id="emailTextField" focusTraversable="false" prefHeight="26.0" prefWidth="350.0" styleClass="text-field-box" HBox.hgrow="ALWAYS">
                                              <font>
                                                 <Font size="15.0" />
                                              </font>
@@ -305,7 +305,7 @@
                   </HBox>
                   <StackPane prefHeight="50.0" prefWidth="912.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <JFXButton fx:id="saveInfo" onMouseClicked="#saveInfo" styleClass="operation-button" text="SAVE ACCOUNT INFO" StackPane.alignment="CENTER" />
+                        <JFXButton fx:id="saveInfo" focusTraversable="false" onMouseClicked="#saveInfo" styleClass="operation-button" text="SAVE ACCOUNT INFO" StackPane.alignment="CENTER" />
                      </children>
                   </StackPane>
                </children>
