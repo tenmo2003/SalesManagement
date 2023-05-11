@@ -26,6 +26,9 @@ public class AppController {
     private Scene mainScene;
     private SQLConnection sqlConnection;
 
+    private LoginSceneController loginSceneController;
+    private MainSceneController mainSceneController;
+
     private AppController(Stage stage) {
         this.stage = stage;
     }
@@ -39,8 +42,6 @@ public class AppController {
         return appController;
     }
 
-    MainSceneController mainSceneController;
-
     public synchronized void run() {
         StaticComponentContainer.JVMInfo.getVersion();
 
@@ -51,9 +52,7 @@ public class AppController {
             e.printStackTrace();
             System.exit(0);
         }
-        LoginSceneController loginSceneController = loginFXMLLoader.getController();
-
-        loginScene.getStylesheets().add(0, Objects.requireNonNull(SalesManagement.class.getResource("/salesmanagement/salesmanagement/css/notification-style.css")).toExternalForm());
+        loginSceneController = loginFXMLLoader.getController();
 
         FXMLLoader mainFXMLLoader = new FXMLLoader(SalesManagement.class.getResource("fxml-scene/main-scene.fxml"));
         try {
@@ -82,7 +81,6 @@ public class AppController {
             stage.setX(event.getScreenX() + xOffset);
             stage.setY(event.getScreenY() + yOffset);
         });
-
 
 
 //        var password = "lbfj2nEwsHTelFcZAqLU";
@@ -124,6 +122,7 @@ public class AppController {
                     MainSceneController.loggerID = -1;
                     reLogin.set(true);
                     stage.setScene(AppController.this.loginScene);
+                    loginSceneController.resetData();
                 }
             }
         };

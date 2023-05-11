@@ -23,10 +23,7 @@ import javafx.util.Duration;
 import salesmanagement.salesmanagement.SalesComponent.Action;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesManagement;
-import salesmanagement.salesmanagement.Utils.ImageController;
-import salesmanagement.salesmanagement.Utils.InputErrorCode;
-import salesmanagement.salesmanagement.Utils.NotificationCode;
-import salesmanagement.salesmanagement.Utils.NotificationSystem;
+import salesmanagement.salesmanagement.Utils.*;
 import salesmanagement.salesmanagement.ViewController.SettingsTab.AccountActivityLogView;
 import salesmanagement.salesmanagement.ViewController.ViewController;
 
@@ -91,14 +88,18 @@ public class EmployeeInfoView extends ViewController implements EmployeesTab {
     @FXML
     private TextField usernameTextField;
     @FXML
-    private StackPane loadingAvatar;
-    @FXML
     private JFXButton showAccountLogActivityButton;
+    @FXML
+    private ScrollPane employeeInfoBox;
 
     private Employee user;
     private Employee loggedInUser;
+    private BooleanProperty avatarLoading;
+    private String avatarURI = "";
 
     private AccountActivityLogView accountActivityLogView;
+    private EmployeeSearchView employeeSearchView;
+    private OfficeSearchView officeSearchView;
 
     public EmployeeInfoView setUser(Employee user) {
         this.user = user;
@@ -110,27 +111,36 @@ public class EmployeeInfoView extends ViewController implements EmployeesTab {
     }
 
     @FXML
-    void downloadResume() {
+    private void openEmployeeSearchBox() {
+        employeeSearchView.show();
+    }
+
+    @FXML
+    private void openOfficeSearchBox() {
+        officeSearchView.show();
+    }
+
+    @FXML
+    private void downloadResume() {
 
     }
 
     @FXML
-    void downloadSalaryReport() {
+    private void downloadSalaryReport() {
 
     }
 
     @FXML
-    void downloadSalesReport() {
+    private void downloadSalesReport() {
 
     }
 
 
     @FXML
-    void uploadResume() {
+    private void uploadResume() {
 
     }
 
-    BooleanProperty avatarLoading;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -140,6 +150,16 @@ public class EmployeeInfoView extends ViewController implements EmployeesTab {
             loader.load();
             accountActivityLogView = loader.getController();
             root.getChildren().add(accountActivityLogView.getRoot());
+
+            loader = new FXMLLoader(SalesManagement.class.getResource("fxml-view/employees-tab/employee-search-view.fxml"));
+            loader.load();
+            employeeSearchView = loader.getController();
+            root.getChildren().add(employeeSearchView.getRoot());
+
+            loader = new FXMLLoader(SalesManagement.class.getResource("fxml-view/employees-tab/office-search-view.fxml"));
+            loader.load();
+            officeSearchView = loader.getController();
+            root.getChildren().add(officeSearchView.getRoot());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -171,25 +191,7 @@ public class EmployeeInfoView extends ViewController implements EmployeesTab {
             }
         });
 
-        avatarLoading = new javafx.beans.property.SimpleBooleanProperty(true);
-        loadingAvatar.setStyle("-fx-background-color: grey;-fx-background-radius: 10;");
-        FadeTransition imageFadeTransition = new FadeTransition(Duration.seconds(2), loadingAvatar);
-        imageFadeTransition.setFromValue(0.2);
-        imageFadeTransition.setToValue(0.4);
-        imageFadeTransition.setCycleCount(Timeline.INDEFINITE);
-        imageFadeTransition.setAutoReverse(true);
-        imageFadeTransition.play();
-
-        ChangeListener<Boolean> imageLoadingListener = (observable, oldValue, newValue) -> {
-            if (newValue) {
-                loadingAvatar.setStyle("-fx-background-color: grey;-fx-background-radius: 10;");
-                imageFadeTransition.play();
-            } else {
-                imageFadeTransition.pause();
-                loadingAvatar.setStyle("-fx-background-color: transparent");
-            }
-        };
-        avatarLoading.addListener(imageLoadingListener);
+        avatarLoading = Utils.skeletonEffect(avatar);
         addRegexChecker();
     }
 
@@ -235,8 +237,6 @@ public class EmployeeInfoView extends ViewController implements EmployeesTab {
         }, () -> show(user), loadingIndicator, employeeInfoBox);
     }
 
-    @FXML
-    ScrollPane employeeInfoBox;
 
     @FXML
     public void addNewEmployee() {
@@ -291,9 +291,6 @@ public class EmployeeInfoView extends ViewController implements EmployeesTab {
             }
         }, loadingIndicator, employeeInfoBox);
     }
-
-
-    String avatarURI = "";
 
     @FXML
     void uploadAvatar() {

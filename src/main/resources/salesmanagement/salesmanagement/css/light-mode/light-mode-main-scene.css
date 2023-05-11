@@ -13,15 +13,18 @@
 .button {
     -fx-border-radius: 10px;
     -fx-background-radious: 10px;
+    -fx-cursor: HAND;
+    -fx-focus-traversable: false;
 }
 
-.main-button {
-    -fx-border-radius: 0;
-    -fx-border-width: 0 0 0 4;
-    -fx-border-color: rgba(0, 0, 0, 0);
-    -fx-background-color: #ffffff;
+.stage-button {
+    -fx-pref-width: 45;
+    -fx-pref-height: 38;
 }
 
+.window-button:hover {
+    -fx-cursor: DEFAULT;
+}
 @font-face {
     font-family: 'SVN-Poppins';
     src: url('/salesmanagement/salesmanagement/SVN-Poppins.ttf');
@@ -200,4 +203,18 @@
 
 .tab-button-bar.close{
     -fx-pref-width: 40;
+}
+
+.text-field-name {
+    -fx-text-fill: black;
+    -fx-font-weight: 700;
+    -fx-font-size: 15;
+}
+
+.center-box {
+    -fx-background-color: white;
+}
+
+.window-button:hover {
+    -fx-background-color: #dfe2e7;
 }

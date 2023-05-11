@@ -39,9 +39,6 @@ public class CustomersExportView extends ExportView implements CustomersTab {
     private JFXCheckBox name;
 
     @FXML
-    VBox centerBox;
-
-    @FXML
     public File export() {
         setExportedFileName("Customers_List");
         File file = super.export();

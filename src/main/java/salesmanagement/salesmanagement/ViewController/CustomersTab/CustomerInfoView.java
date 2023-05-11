@@ -54,12 +54,7 @@ public class CustomerInfoView extends InfoView<Customer> implements CustomersTab
     }
 
     protected void resetData() {
-        customerNumberTextField.setText("");
-        SSNTextField.setText("");
-        addressTextField.setText("");
-        contactTextField.setText("");
-        rankComboBox.setValue(null);
-        nameTextField.setText("");
+
     }
 
     @FXML

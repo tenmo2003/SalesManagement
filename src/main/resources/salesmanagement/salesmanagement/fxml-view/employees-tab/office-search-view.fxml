@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<StackPane fx:id="root" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.EmployeesTab.OfficeSearchView">
+    <children>
+        <StackPane opacity="0.5" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: grey;" />
+        <FlowPane alignment="CENTER" StackPane.alignment="CENTER">
+            <children>
+                <VBox alignment="TOP_CENTER" prefHeight="444.0" prefWidth="412.0" style="-fx-background-color: white;">
+                    <children>
+                        <StackPane>
+                            <children>
+                                <Label text="Office Search Box">
+                                    <font>
+                                        <Font size="21.0" />
+                                    </font>
+                                </Label>
+                                <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" minWidth="46.0" onMouseClicked="#close" prefHeight="30.0" prefWidth="46.0" styleClass="window-button" textAlignment="CENTER" StackPane.alignment="CENTER_RIGHT">
+                                    <graphic>
+                                        <FontAwesomeIconView glyphName="CLOSE" size="25" />
+                                    </graphic>
+                                    <cursor>
+                                        <Cursor fx:constant="HAND" />
+                                    </cursor>
+                                </JFXButton>
+                            </children>
+                            <VBox.margin>
+                                <Insets top="10.0" />
+                            </VBox.margin>
+                        </StackPane>
+                        <HBox spacing="25.0">
+                            <children>
+                                <VBox fillWidth="false" prefHeight="58.0" prefWidth="523.0">
+                                    <children>
+                                        <Label text="Office Code">
+                                            <font>
+                                                <Font size="14.0" />
+                                            </font>
+                                        </Label>
+                                        <TextField fx:id="officeCodeTextField" prefHeight="30.0" prefWidth="303.0" styleClass="text-field-box" VBox.vgrow="ALWAYS">
+                                            <font>
+                                                <Font size="14.0" />
+                                            </font>
+                                        </TextField>
+                                    </children>
+                                </VBox>
+                                <VBox fillWidth="false" prefHeight="58.0" prefWidth="523.0">
+                                    <children>
+                                        <Label text="Phone Code">
+                                            <font>
+                                                <Font size="14.0" />
+                                            </font>
+                                        </Label>
+                                        <TextField fx:id="phoneCodeTextField" prefHeight="30.0" prefWidth="294.0" styleClass="text-field-box" VBox.vgrow="ALWAYS">
+                                            <font>
+                                                <Font size="14.0" />
+                                            </font>
+                                        </TextField>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+                        <HBox spacing="25.0">
+                            <children>
+                                <VBox fillWidth="false" prefHeight="58.0" prefWidth="523.0" HBox.hgrow="ALWAYS">
+                                    <children>
+                                        <Label prefHeight="18.0" prefWidth="369.0" text="Address Line" VBox.vgrow="ALWAYS">
+                                            <font>
+                                                <Font size="14.0" />
+                                            </font>
+                                        </Label>
+                              <HBox>
+                                 <children>
+                                    <TextField fx:id="addressLineTextField" prefHeight="30.0" prefWidth="546.0" styleClass="text-field-box" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </TextField>
+                                 </children>
+                              </HBox>
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+                        <StackPane>
+                            <VBox.margin>
+                                <Insets bottom="10.0" top="10.0" />
+                            </VBox.margin>
+                            <children>
+                                <ProgressIndicator fx:id="loadingIndicator" focusTraversable="false" prefHeight="38.0" prefWidth="66.0" visible="false" StackPane.alignment="CENTER_RIGHT" />
+                                <HBox alignment="CENTER" prefHeight="21.0" prefWidth="392.0" spacing="20.0">
+                                    <children>
+                                        <JFXButton focusTraversable="false" onMouseClicked="#search" styleClass="operation-button" text="Search">
+                                            <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                            </cursor>
+                                        </JFXButton>
+                                        <JFXButton focusTraversable="false" onMouseClicked="#clearAll" styleClass="operation-button" text="Clear All">
+                                            <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                            </cursor>
+                                        </JFXButton>
+                                    </children>
+                                </HBox>
+                            </children>
+                        </StackPane>
+                        <TableView fx:id="searchTable" minHeight="100.0" prefHeight="199.0" prefWidth="392.0" VBox.vgrow="ALWAYS">
+                            <columns>
+                                <TableColumn fx:id="officeCodeColumn" prefWidth="75.0" text="Office Code" />
+                                <TableColumn fx:id="phoneColumn" prefWidth="75.0" text="Phone" />
+                                <TableColumn fx:id="addressLineColumn" prefWidth="75.0" text="Address Line" />
+                            </columns>
+                        </TableView>
+                    </children>
+                    <padding>
+                        <Insets bottom="20.0" left="10.0" right="10.0" />
+                    </padding>
+                </VBox>
+            </children>
+        </FlowPane>
+    </children>
+</StackPane>

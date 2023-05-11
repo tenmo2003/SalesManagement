@@ -18,112 +18,119 @@
         <StackPane opacity="0.5" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: grey;" />
         <FlowPane alignment="CENTER">
             <children>
-                <VBox fx:id="employeeFilterBox" alignment="TOP_CENTER" prefHeight="296.0" prefWidth="412.0" style="-fx-background-color: white; -fx-border-radius: white; -fx-background-radius: white;">
-                    <children>
-                        <StackPane>
-                            <children>
-                                <Label id="top_label" text="Customers Filter">
-                                    <font>
-                                        <Font size="21.0" />
-                                    </font>
-                                </Label>
-                                <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minWidth="46.0" onMouseClicked="#close" prefHeight="30.0" prefWidth="46.0" textAlignment="CENTER" StackPane.alignment="CENTER_RIGHT">
-                                    <graphic>
-                                        <FontAwesomeIconView id="close_color" fill="#0000008f" glyphName="CLOSE" size="25" text="" />
-                                    </graphic>
-                                    <cursor>
-                                        <Cursor fx:constant="HAND" />
-                                    </cursor>
-                                </JFXButton>
-                            </children>
-                            <VBox.margin>
-                                <Insets top="10.0" />
-                            </VBox.margin>
-                        </StackPane>
-                        <VBox fillWidth="false" prefHeight="174.0" prefWidth="392.0" spacing="10.0">
-                            <children>
-                                <VBox prefHeight="170.0" prefWidth="448.0">
-                                    <children>
-                                        <Label text="Customer ID">
-                                            <font>
-                                                <Font name="System Bold" size="15.0" />
-                                            </font>
-                                        </Label>
-                                        <TextField fx:id="customerNumberTextField">
-                                            <font>
-                                                <Font size="15.0" />
-                                            </font>
-                                        </TextField>
-                                    </children>
-                                </VBox>
-                                <VBox prefHeight="170.0" prefWidth="448.0">
-                                    <children>
-                                        <Label text="Name">
-                                            <font>
-                                                <Font name="System Bold" size="15.0" />
-                                            </font>
-                                        </Label>
-                                        <TextField fx:id="nameTextField">
-                                            <font>
-                                                <Font size="15.0" />
-                                            </font>
-                                        </TextField>
-                                    </children>
-                                </VBox>
-                                <VBox prefHeight="170.0" prefWidth="448.0">
-                                    <children>
-                                        <Label text="Contact">
-                                            <font>
-                                                <Font name="System Bold" size="15.0" />
-                                            </font>
-                                        </Label>
-                                        <TextField fx:id="contactTextField">
-                                            <font>
-                                                <Font size="15.0" />
-                                            </font>
-                                        </TextField>
-                                    </children>
-                                </VBox>
-                                <VBox prefHeight="170.0" prefWidth="448.0">
-                                    <children>
-                                        <Label text="Address">
-                                            <font>
-                                                <Font name="System Bold" size="15.0" />
-                                            </font>
-                                        </Label>
-                                        <TextField fx:id="addressTextField">
-                                            <font>
-                                                <Font size="15.0" />
-                                            </font>
-                                        </TextField>
-                                    </children>
-                                </VBox>
-                                <VBox prefHeight="170.0" prefWidth="448.0">
-                                    <children>
-                                        <Label text="Rank">
-                                            <font>
-                                                <Font name="System Bold" size="15.0" />
-                                            </font>
-                                        </Label>
-                                        <ComboBox fx:id="rankComboBox" prefHeight="26.0" prefWidth="169.0" style="-fx-font-size: 15;" />
-                                    </children>
-                                </VBox>
-                            </children>
-                            <VBox.margin>
-                                <Insets top="10.0" />
-                            </VBox.margin>
-                        </VBox>
-                  <HBox alignment="CENTER">
-                     <children>
-                                <JFXButton onMouseClicked="#applyFilter" text="Apply Filter" />
-                        <JFXButton onMouseClicked="#resetData" text="Clear All" />
-                     </children>
-                  </HBox>
-                    </children>
-                    <padding>
-                        <Insets left="10.0" right="10.0" />
-                    </padding>
-                </VBox>
+            <StackPane fx:id="centerBox" styleClass="center-box">
+               <children>
+                      <VBox fx:id="employeeFilterBox" alignment="TOP_CENTER" prefHeight="296.0" prefWidth="412.0">
+                          <children>
+                              <StackPane>
+                                  <children>
+                                      <Label styleClass="top-label" text="Customers Filter">
+                                          <font>
+                                              <Font size="21.0" />
+                                          </font>
+                                      </Label>
+                                      <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minWidth="46.0" onMouseClicked="#close" prefHeight="30.0" prefWidth="46.0" styleClass="window-button" textAlignment="CENTER" StackPane.alignment="CENTER_RIGHT">
+                                          <graphic>
+                                              <FontAwesomeIconView fill="#0000008f" glyphName="CLOSE" size="25" styleClass="window-button" text="" />
+                                          </graphic>
+                                          <cursor>
+                                              <Cursor fx:constant="HAND" />
+                                          </cursor>
+                                      </JFXButton>
+                                  </children>
+                                  <VBox.margin>
+                                      <Insets top="10.0" />
+                                  </VBox.margin>
+                              </StackPane>
+                              <VBox fillWidth="false" prefHeight="174.0" prefWidth="392.0" spacing="10.0">
+                                  <children>
+                                      <VBox prefHeight="170.0" prefWidth="448.0">
+                                          <children>
+                                              <Label focusTraversable="false" styleClass="text-field-name" text="Customer ID">
+                                                  <font>
+                                                      <Font name="System Bold" size="15.0" />
+                                                  </font>
+                                              </Label>
+                                              <TextField fx:id="customerNumberTextField" styleClass="text-field-box">
+                                                  <font>
+                                                      <Font size="15.0" />
+                                                  </font>
+                                              </TextField>
+                                          </children>
+                                      </VBox>
+                                      <VBox prefHeight="170.0" prefWidth="448.0">
+                                          <children>
+                                              <Label focusTraversable="false" styleClass="text-field-name" text="Name">
+                                                  <font>
+                                                      <Font name="System Bold" size="15.0" />
+                                                  </font>
+                                              </Label>
+                                              <TextField fx:id="nameTextField" styleClass="text-field-box">
+                                                  <font>
+                                                      <Font size="15.0" />
+                                                  </font>
+                                              </TextField>
+                                          </children>
+                                      </VBox>
+                                      <VBox prefHeight="170.0" prefWidth="448.0">
+                                          <children>
+                                              <Label focusTraversable="false" styleClass="text-field-name" text="Contact">
+                                                  <font>
+                                                      <Font name="System Bold" size="15.0" />
+                                                  </font>
+                                              </Label>
+                                              <TextField fx:id="contactTextField" styleClass="text-field-box">
+                                                  <font>
+                                                      <Font size="15.0" />
+                                                  </font>
+                                              </TextField>
+                                          </children>
+                                      </VBox>
+                                      <VBox prefHeight="170.0" prefWidth="448.0">
+                                          <children>
+                                              <Label focusTraversable="false" styleClass="text-field-name" text="Address">
+                                                  <font>
+                                                      <Font name="System Bold" size="15.0" />
+                                                  </font>
+                                              </Label>
+                                              <TextField fx:id="addressTextField" styleClass="text-field-box">
+                                                  <font>
+                                                      <Font size="15.0" />
+                                                  </font>
+                                              </TextField>
+                                          </children>
+                                      </VBox>
+                                      <VBox prefHeight="170.0" prefWidth="448.0">
+                                          <children>
+                                              <Label focusTraversable="false" styleClass="text-field-name" text="Rank">
+                                                  <font>
+                                                      <Font name="System Bold" size="15.0" />
+                                                  </font>
+                                              </Label>
+                                              <ComboBox fx:id="rankComboBox" prefHeight="26.0" prefWidth="169.0" style="-fx-font-size: 15;" />
+                                          </children>
+                                      </VBox>
+                                  </children>
+                                  <VBox.margin>
+                                      <Insets top="10.0" />
+                                  </VBox.margin>
+                              </VBox>
+                        <HBox alignment="CENTER" spacing="20.0">
+                           <children>
+                                      <JFXButton onMouseClicked="#applyFilter" prefWidth="100.0" styleClass="operation-button" text="Apply Filter" />
+                              <JFXButton onMouseClicked="#resetData" prefWidth="100.0" styleClass="operation-button" text="Clear All" />
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="5.0" top="5.0" />
+                           </VBox.margin>
+                        </HBox>
+                          </children>
+                          <padding>
+                              <Insets left="10.0" right="10.0" />
+                          </padding>
+                      </VBox>
+               </children>
+            </StackPane>
             </children>
         </FlowPane>
     </children>

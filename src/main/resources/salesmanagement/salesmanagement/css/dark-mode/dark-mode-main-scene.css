@@ -4,11 +4,6 @@
 @import "dark-date-picker.css";
 @import "shared-dark-mode.css";
 
-
-#close_color {
-    -fx-fill: #329efcab;
-}
-
 .switch-button-box {
     -fx-pref-height: 60;
     -fx-pref-width: 300;
@@ -87,8 +82,7 @@
 }
 
 .top-label {
-    -fx-font-size: 20
-;
+    -fx-font-size: 20;
     -fx-text-fill: -label-color;
     -fx-font-weight: 700;
 }
@@ -140,7 +134,6 @@
 
 .text-field-name {
     -fx-text-fill: -label-color;
-    -fx-font-weight: 700;
     -fx-font-size: 15;
 }
 
@@ -169,6 +162,18 @@
     -fx-fill: -label-color;
 }
 
+.window-button:hover {
+    -fx-background-color: #383a3d;
+}
+
+.close-button:hover {
+    -fx-background-color: #e81123;
+}
+
 .combo-box {
     -fx-font-size: 15;
+}
+
+.center-box {
+    -fx-background-color: -mode-color-1;
 }

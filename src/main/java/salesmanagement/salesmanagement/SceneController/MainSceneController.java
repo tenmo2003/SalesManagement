@@ -142,6 +142,8 @@ public class MainSceneController extends SceneController implements Initializabl
     private Employee user;
     public static boolean haveJustOpened = false;
     public static int loggerID = -1;
+
+
     public AnimationTimer loginDataListener = new AnimationTimer() {
         @Override
         public void handle(long l) {
