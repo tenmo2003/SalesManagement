@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="root" prefHeight="400.0" prefWidth="600.0" stylesheets="@../../css/light-mode-main-scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.CustomersTab.CustomersFilterView">
+<StackPane fx:id="root" prefHeight="400.0" prefWidth="600.0" stylesheets="@../../css/light-mode/light-mode-main-scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.CustomersTab.CustomersFilterView">
     <children>
         <StackPane opacity="0.5" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: grey;" />
         <FlowPane alignment="CENTER">

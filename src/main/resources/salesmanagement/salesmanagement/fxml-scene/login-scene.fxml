@@ -16,7 +16,7 @@
 <?import org.controlsfx.control.textfield.CustomPasswordField?>
 <?import org.controlsfx.control.textfield.CustomTextField?>
 
-<StackPane fx:id="loginRoot" prefHeight="475.0" prefWidth="743.0" stylesheets="@../css/login_scene_style.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.SceneController.LoginSceneController">
+<StackPane fx:id="loginRoot" prefHeight="475.0" prefWidth="743.0" stylesheets="@../css/login-scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.SceneController.LoginSceneController">
    <children>
       <VBox prefHeight="434.0" prefWidth="777.0" StackPane.alignment="TOP_CENTER">
          <children>

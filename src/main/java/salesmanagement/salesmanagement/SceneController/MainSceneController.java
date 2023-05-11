@@ -331,7 +331,7 @@ public class MainSceneController extends SceneController implements Initializabl
                 ft.setFromValue(1.0);
                 ft.setToValue(0.0);
                 ft.setOnFinished(event -> {
-                    root.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/salesmanagement/salesmanagement/css/dark-mode-main-scene.css")).toExternalForm());
+                    root.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/salesmanagement/salesmanagement/css/dark-mode/dark-mode-main-scene.css")).toExternalForm());
 
                     FadeTransition ft2 = new FadeTransition(Duration.millis(200), root);
                     ft2.setFromValue(0.0);

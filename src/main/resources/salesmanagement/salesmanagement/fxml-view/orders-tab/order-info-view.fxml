@@ -37,12 +37,12 @@
                         </HBox>
                         <HBox>
                             <children>
-                                <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" onMouseClicked="#close">
+                                <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" onMouseClicked="#close" styleClass="window-button">
                                     <graphic>
                                         <FontAwesomeIconView fill="#329efc" glyphName="ARROW_LEFT" size="22" />
                                     </graphic>
                                 </JFXButton>
-                                <JFXButton contentDisplay="GRAPHIC_ONLY" onMouseClicked="#show" prefHeight="26.0" prefWidth="26.0">
+                                <JFXButton contentDisplay="GRAPHIC_ONLY" focusTraversable="false" onMouseClicked="#show" prefHeight="26.0" prefWidth="26.0" styleClass="window-button">
                                     <graphic>
                                         <FontAwesomeIconView fill="#329efc" glyphName="UNDO" size="22" />
                                     </graphic>
@@ -54,7 +54,7 @@
                         <Insets left="30.0" right="30.0" />
                     </VBox.margin>
                 </HBox>
-                <ScrollPane fx:id="employeeInfoBox" fitToHeight="true" fitToWidth="true" focusTraversable="false" prefHeight="1513.0" prefWidth="1598.0" styleClass="tab-background" stylesheets="@../../css/scroll-pane.css" VBox.vgrow="ALWAYS">
+                <ScrollPane fx:id="employeeInfoBox" fitToHeight="true" fitToWidth="true" focusTraversable="false" prefHeight="1513.0" prefWidth="1598.0" styleClass="tab-background" VBox.vgrow="ALWAYS">
                     <content>
                         <VBox fx:id="detailsInfoBox" alignment="TOP_CENTER" prefHeight="1000.0" prefWidth="1500.0" spacing="15.0" styleClass="tab-background">
                             <padding>
@@ -80,7 +80,7 @@
                                           <HBox prefHeight="26.0" prefWidth="174.0">
                                              <children>
                                                 <TextField fx:id="customerNumberTextField" prefHeight="26.0" prefWidth="374.0" styleClass="text-field-box" HBox.hgrow="ALWAYS" />
-                                                <JFXButton contentDisplay="GRAPHIC_ONLY" onMouseClicked="#searchCustomer">
+                                                <JFXButton contentDisplay="GRAPHIC_ONLY" onMouseClicked="#searchCustomer" styleClass="operation-button">
                                                    <graphic>
                                                       <FontAwesomeIconView glyphName="SEARCH" size="18" />
                                                    </graphic>
@@ -97,7 +97,7 @@
                                           <Insets top="5.0" />
                                        </VBox.margin>
                                        <children>
-                                          <JFXButton fx:id="addNewCustomerButton" onMouseClicked="#addNewCustomer" text="Add new Customer" />
+                                          <JFXButton fx:id="addNewCustomerButton" onMouseClicked="#addNewCustomer" styleClass="operation-button" text="Add new Customer" />
                                        </children>
                                     </HBox>
                                     <VBox prefHeight="30.0" prefWidth="59.0">
@@ -142,17 +142,17 @@
                                     </VBox>
                                     <HBox alignment="CENTER" spacing="10.0">
                                        <children>
-                                          <JFXButton fx:id="addButton" onMouseClicked="#addOrderItem" text="Add" />
-                                          <JFXButton fx:id="updateButton" disable="true" onMouseClicked="#updateOrderItem" text="Update" />
-                                          <JFXButton fx:id="removeButton" disable="true" onMouseClicked="#remove" text="Remove" />
-                                          <JFXButton fx:id="clearButton" onMouseClicked="#clearAll" text="Clear" />
+                                          <JFXButton fx:id="addButton" focusTraversable="false" onMouseClicked="#addOrderItem" styleClass="operation-button" text="Add" />
+                                          <JFXButton fx:id="updateButton" disable="true" focusTraversable="false" onMouseClicked="#updateOrderItem" styleClass="operation-button" text="Update" />
+                                          <JFXButton fx:id="removeButton" disable="true" focusTraversable="false" onMouseClicked="#remove" styleClass="operation-button" text="Remove" />
+                                          <JFXButton fx:id="clearButton" focusTraversable="false" onMouseClicked="#clearAll" styleClass="operation-button" text="Clear" />
                                        </children>
                                     </HBox>
                                  </children>
                               </VBox>
                               <VBox prefHeight="670.0" prefWidth="942.0" spacing="30.0">
                                  <children>
-                                    <TableView fx:id="orderTable" minHeight="400.0" prefHeight="553.0" prefWidth="942.0" stylesheets="@../../css/table.css">
+                                    <TableView fx:id="orderTable" minHeight="400.0" prefHeight="553.0" prefWidth="942.0">
                                        <columns>
                                           <TableColumn fx:id="productCodeColumn" prefWidth="246.98178100585938" text="Item" />
                                           <TableColumn fx:id="quantityColumn" prefWidth="143.12725830078125" text="Quantity" />
@@ -182,7 +182,7 @@
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <DatePicker fx:id="orderedDatePicker" prefHeight="26.0" prefWidth="200.0" stylesheets="@../../css/date_picker.css" />
+                                    <DatePicker fx:id="orderedDatePicker" prefHeight="26.0" prefWidth="200.0" stylesheets="@../../css/light-mode/date-picker.css" />
                                  </children>
                               </VBox>
                               <VBox prefHeight="100.0" prefWidth="200.0">
@@ -192,7 +192,7 @@
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <DatePicker fx:id="requiredDatePicker" prefHeight="26.0" prefWidth="200.0" stylesheets="@../../css/date_picker.css" />
+                                    <DatePicker fx:id="requiredDatePicker" prefHeight="26.0" prefWidth="200.0" stylesheets="@../../css/light-mode/date-picker.css" />
                                  </children>
                               </VBox>
                               <VBox prefHeight="100.0" prefWidth="200.0">
@@ -202,7 +202,7 @@
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <DatePicker fx:id="shippedDatePicker" prefHeight="26.0" prefWidth="200.0" stylesheets="@../../css/date_picker.css" />
+                                    <DatePicker fx:id="shippedDatePicker" prefHeight="26.0" prefWidth="200.0" stylesheets="@../../css/light-mode/date-picker.css" />
                                  </children>
                               </VBox>
                            </children>
@@ -262,7 +262,7 @@
                               <JFXButton fx:id="saveOrderButton" text="Save Order" visible="false" />
                            </children>
                         </StackPane>
-                        <JFXButton fx:id="print" text="Print" />
+                        <JFXButton fx:id="print" styleClass="operation-button" text="Print" />
                      </children>
                         </VBox>
                     </content>

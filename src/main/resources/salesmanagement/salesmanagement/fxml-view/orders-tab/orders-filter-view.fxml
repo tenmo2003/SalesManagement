@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="root" prefHeight="446.0" prefWidth="600.0" stylesheets="@../../css/light-mode-main-scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.OrdersTab.OrdersFilterView">
+<StackPane fx:id="root" prefHeight="446.0" prefWidth="600.0" stylesheets="@../../css/light-mode/light-mode-main-scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.OrdersTab.OrdersFilterView">
     <children>
         <StackPane opacity="0.5" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: grey;" />
         <FlowPane alignment="CENTER" prefHeight="482.0" prefWidth="600.0">
@@ -93,7 +93,7 @@
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <DatePicker fx:id="shippedDatePicker" prefHeight="26.0" prefWidth="331.0" stylesheets="@../../css/date_picker.css" />
+                                    <DatePicker fx:id="shippedDatePicker" prefHeight="26.0" prefWidth="331.0" stylesheets="@../../css/light-mode/date-picker.css" />
                                  </children>
                               </VBox>
                               <VBox prefHeight="53.0" prefWidth="410.0">
@@ -131,7 +131,7 @@
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <DatePicker fx:id="orderedDatePicker" prefHeight="26.0" prefWidth="331.0" stylesheets="@../../css/date_picker.css" />
+                                    <DatePicker fx:id="orderedDatePicker" prefHeight="26.0" prefWidth="331.0" stylesheets="@../../css/light-mode/date-picker.css" />
                                  </children>
                               </VBox>
                               <VBox prefHeight="170.0" prefWidth="448.0">
@@ -141,7 +141,7 @@
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <DatePicker fx:id="requiredDatePicker" prefHeight="26.0" prefWidth="331.0" stylesheets="@../../css/date_picker.css" />
+                                    <DatePicker fx:id="requiredDatePicker" prefHeight="26.0" prefWidth="331.0" stylesheets="@../../css/light-mode/date-picker.css" />
                                  </children>
                               </VBox>
                               <VBox prefHeight="170.0" prefWidth="448.0">

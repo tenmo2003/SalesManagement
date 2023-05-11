@@ -9,8 +9,15 @@
       <option name="myIgnoreVendorSpecificProperties" value="false" />
       <option name="myCustomPropertiesList">
         <value>
-          <list size="1">
+          <list size="8">
             <item index="0" class="java.lang.String" itemvalue="-jfx-unfocus-color" />
+            <item index="1" class="java.lang.String" itemvalue="-theme-color" />
+            <item index="2" class="java.lang.String" itemvalue="-theme-color-2" />
+            <item index="3" class="java.lang.String" itemvalue="-mode-color-1" />
+            <item index="4" class="java.lang.String" itemvalue="-mode-color-2" />
+            <item index="5" class="java.lang.String" itemvalue="-label-color" />
+            <item index="6" class="java.lang.String" itemvalue="-text-fill-color" />
+            <item index="7" class="java.lang.String" itemvalue="-text-field-color" />
           </list>
         </value>
       </option>

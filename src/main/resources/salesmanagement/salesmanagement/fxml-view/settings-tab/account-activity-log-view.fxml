@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane fx:id="root" prefHeight="618.0" prefWidth="855.0" styleClass="tab-background" stylesheets="@../../css/dark-mode-main-scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.SettingsTab.AccountActivityLogView">
+<StackPane fx:id="root" prefHeight="618.0" prefWidth="855.0" styleClass="tab-background" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.SettingsTab.AccountActivityLogView">
    <children>
       <VBox>
          <children>
@@ -41,7 +41,7 @@
             </HBox>
             <StackPane alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="855.0">
                <children>
-                  <JFXButton onMouseClicked="#addFilter" styleClass="operation-button" text="Actions Filter..." StackPane.alignment="CENTER_LEFT" />
+                  <JFXButton onMouseClicked="#addFilter" prefHeight="27.0" prefWidth="121.0" styleClass="operation-button" text="Actions Filter..." StackPane.alignment="CENTER_LEFT" />
                   <Label id="small_top_label" fx:id="userIDLabel" alignment="CENTER_RIGHT" prefHeight="32.0" prefWidth="266.0" text="Account 21000000" StackPane.alignment="CENTER_RIGHT" />
                </children>
                <VBox.margin>

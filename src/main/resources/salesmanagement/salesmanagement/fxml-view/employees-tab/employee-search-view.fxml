@@ -133,7 +133,7 @@
                         </HBox>
                   <StackPane prefHeight="148.0" prefWidth="392.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <TableView fx:id="employeesTable" minHeight="100.0" prefHeight="100.0" stylesheets="@../../css/table.css">
+                        <TableView fx:id="employeesTable" minHeight="100.0" prefHeight="100.0" stylesheets="@../../css/light-mode/table-view.css">
                            <columns>
                               <TableColumn prefWidth="75.0" text="Employee Code" />
                               <TableColumn prefWidth="75.0" text="EmployeeName" />

@@ -30,7 +30,7 @@
                   </HBox>
                   <HBox>
                      <children>
-                        <JFXButton contentDisplay="GRAPHIC_ONLY" onMouseClicked="#show" prefHeight="26.0" prefWidth="26.0" styleClass="window-button">
+                        <JFXButton contentDisplay="GRAPHIC_ONLY" focusTraversable="false" onMouseClicked="#show" prefHeight="26.0" prefWidth="26.0" styleClass="window-button">
                            <graphic>
                               <FontAwesomeIconView fill="#329efc" glyphName="UNDO" size="22" />
                            </graphic>
@@ -41,7 +41,7 @@
             </HBox>
             <HBox>
                <children>
-                  <HBox prefHeight="30.0" prefWidth="314.0" HBox.hgrow="ALWAYS">
+                  <HBox minWidth="200.0" prefHeight="30.0" prefWidth="314.0" HBox.hgrow="ALWAYS">
                      <children>
                         <JFXButton focusTraversable="false" onMouseClicked="#applyFilter" prefHeight="30.0" prefWidth="146.0" styleClass="operation-button" text="Customers Filter...">
                            <graphic>
@@ -52,7 +52,7 @@
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="6.0" prefWidth="1050.0" spacing="10.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <JFXButton fx:id="addButton" focusTraversable="false" onMouseClicked="#add" styleClass="operation-button" text="ADD" />
+                        <JFXButton fx:id="addButton" focusTraversable="false" onMouseClicked="#add" styleClass="operation-button" text="ADD NEW CUSTOMER" />
                         <JFXButton focusTraversable="false" onMouseClicked="#export" styleClass="operation-button" text="EXPORT" />
                      </children>
                   </HBox>
@@ -63,7 +63,7 @@
             </HBox>
             <HBox VBox.vgrow="ALWAYS">
                <children>
-                  <TableView fx:id="customersTable" HBox.hgrow="ALWAYS">
+                  <TableView fx:id="customersTable" focusTraversable="false" HBox.hgrow="ALWAYS">
                      <columns>
                         <TableColumn fx:id="customerNameColumn" prefWidth="98.4000244140625" text="Name" />
                         <TableColumn fx:id="contactColumn" prefWidth="150.0" text="Contact" />

@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="root" minWidth="1000.0" prefHeight="800.0" prefWidth="1000.0" stylesheets="@../css/light-mode-main-scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.SceneController.MainSceneController">
+<VBox fx:id="root" minWidth="1000.0" prefHeight="800.0" prefWidth="1000.0" stylesheets="@../css/light-mode/light-mode-main-scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.SceneController.MainSceneController">
    <children>
       <StackPane fx:id="menuPane" prefHeight="47.0" prefWidth="1000.0" styleClass="top-menu-pane">
          <children>
@@ -284,7 +284,7 @@
             </VBox>
             <VBox prefHeight="652.0" prefWidth="754.0" HBox.hgrow="ALWAYS">
                <children>
-                  <TabPane id="background_color" fx:id="tabPane" focusTraversable="false" maxWidth="2000.0" prefHeight="750.0" prefWidth="794.0" styleClass="main-tab-pane" stylesheets="@../css/tabpane_style.css" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+                  <TabPane id="background_color" fx:id="tabPane" focusTraversable="false" maxWidth="2000.0" prefHeight="750.0" prefWidth="794.0" styleClass="main-tab-pane" stylesheets="@../css/light-mode/tab-pane.css" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
                      <tabs>
                         <Tab fx:id="productsTab" closable="false" text="Products" />
                         <Tab fx:id="employeesTab" closable="false" text="Employees" />

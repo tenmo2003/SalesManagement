@@ -1,17 +1,9 @@
 @import "dark-table-view.css";
+@import "dark-titled-pane.css";
+@import "dark-scroll-pane.css";
+@import "dark-date-picker.css";
+@import "shared-dark-mode.css";
 
-{
-    -theme-color: #329cfe
-;
-    -theme-color-2: #329efcab
-;
-    -mode-color-1: #2b2d30
-;
-    -mode-color-2: #1e1f22
-;
-    -label-color: #ececf1
-;
-}
 
 #close_color {
     -fx-fill: #329efcab;
@@ -30,7 +22,7 @@
 }
 
 .switch-sub-box > .glyph-icon {
-    -fx-fill: white;
+    -fx-fill: -label-color;
 }
 
 .switch-sub-box {
@@ -56,12 +48,12 @@
 }
 
 .tab-button:hover {
-    -fx-text-fill: white;
+    -fx-text-fill: -label-color;
     -fx-background-color: transparent, transparent, transparent, #329efcab;
 }
 
 .tab-button:hover .glyph-icon {
-    -fx-fill: white;
+    -fx-fill: -label-color;
 }
 
 .active-tab-button {
@@ -95,7 +87,8 @@
 }
 
 .top-label {
-    -fx-font-size: 20;
+    -fx-font-size: 20
+;
     -fx-text-fill: -label-color;
     -fx-font-weight: 700;
 }
@@ -118,7 +111,7 @@
 
 
 .axis {
-    -fx-tick-label-fill: white;
+    -fx-tick-label-fill: -label-color;
 }
 
 .chart {
@@ -126,7 +119,7 @@
 }
 
 .chart > .chart-title {
-    -fx-text-fill: white;
+    -fx-text-fill: -label-color;
 }
 
 .chart-plot-background {
@@ -134,11 +127,11 @@
 }
 
 .chart-vertical-grid-lines {
-    -fx-stroke: white;
+    -fx-stroke: -label-color;
 }
 
 .chart-horizontal-grid-lines {
-    -fx-stroke: white;
+    -fx-stroke: -label-color;
 }
 
 .tab-background {
@@ -146,9 +139,19 @@
 }
 
 .text-field-name {
-    -fx-text-fill: white;
+    -fx-text-fill: -label-color;
     -fx-font-weight: 700;
     -fx-font-size: 15;
+}
+
+.text-field-box {
+    -fx-background-color: rgba(255, 255, 255, 0.81);
+    -fx-border-color: #d1d1d1;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 3px;
+    -jfx-unfocus-color: transparent;
+    -jfx-focus-color: transparent;
+
 }
 
 .progress-indicator {
@@ -167,3 +170,6 @@
     -fx-fill: -label-color;
 }
 
+.combo-box {
+    -fx-font-size: 15;
+}

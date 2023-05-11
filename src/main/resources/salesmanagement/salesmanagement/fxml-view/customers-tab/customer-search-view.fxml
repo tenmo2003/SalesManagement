@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.control.TableView?>
 
-<StackPane fx:id="root" prefHeight="400.0" prefWidth="600.0" stylesheets="@../../css/light-mode-main-scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.CustomersTab.CustomerSearchView">
+<StackPane fx:id="root" prefHeight="400.0" prefWidth="600.0" stylesheets="@../../css/light-mode/light-mode-main-scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.CustomersTab.CustomerSearchView">
     <children>
         <StackPane opacity="0.5" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: grey;" />
         <FlowPane alignment="CENTER">
@@ -130,7 +130,7 @@
                   </StackPane>
                   <StackPane prefHeight="203.0" prefWidth="526.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <TableView fx:id="searchTable" minHeight="100.0" prefHeight="100.0" stylesheets="@../../css/table.css" StackPane.alignment="TOP_CENTER">
+                        <TableView fx:id="searchTable" minHeight="100.0" prefHeight="100.0" stylesheets="@../../css/light-mode/table-view.css" StackPane.alignment="TOP_CENTER">
                            <columns>
                               <TableColumn fx:id="customerNumberColumn" prefWidth="75.0" text="No." />
                               <TableColumn fx:id="customerNameColumn" prefWidth="75.0" text="Customer Name" />

@@ -40,7 +40,7 @@
             </HBox>
             <HBox>
                 <children>
-                    <HBox prefHeight="30.0" prefWidth="314.0" HBox.hgrow="ALWAYS">
+                    <HBox minWidth="200.0" prefHeight="30.0" prefWidth="314.0" HBox.hgrow="ALWAYS">
                         <children>
                             <JFXButton focusTraversable="false" onMouseClicked="#addFilter" prefHeight="30.0" prefWidth="170.0" styleClass="operation-button" text="Product Lines Filter...">
                                 <graphic>

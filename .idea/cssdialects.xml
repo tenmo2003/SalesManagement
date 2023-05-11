@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CssDialectMappings">
-    <file url="file://$PROJECT_DIR$/src/main/resources/salesmanagement/salesmanagement/css/login_scene_style.css" dialect="JavaFX" />
-    <file url="file://$PROJECT_DIR$/src/main/resources/salesmanagement/salesmanagement/css/tabpane_style.css" dialect="JavaFX" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/salesmanagement/salesmanagement/css/light-mode/tab-pane.css" dialect="JavaFX" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/salesmanagement/salesmanagement/css/login-scene.css" dialect="JavaFX" />
   </component>
 </project>

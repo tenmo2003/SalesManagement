@@ -9,7 +9,7 @@ public class Customer implements SalesComponent {
     private String contact = "";
     private String address;
     private String rank;
-    private long SSN;
+    private String SSN;
 
     boolean isNewUser = true;
 
@@ -30,14 +30,14 @@ public class Customer implements SalesComponent {
         this.address = customerInfo.getString("addressLine");
         if (address == null) address = "";
         this.rank = customerInfo.getString("rank");
-        this.SSN = customerInfo.getLong("customerSSN");
+        this.SSN = customerInfo.getString("customerSSN");
     }
 
-    public long getSSN() {
+    public String getSSN() {
         return SSN;
     }
 
-    public void setSSN(long SSN) {
+    public void setSSN(String SSN) {
         this.SSN = SSN;
     }
 

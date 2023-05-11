@@ -1,4 +1,8 @@
-@import "table.css";
+@import "table-view.css";
+@import "scroll-pane.css";
+@import "titled-pane.css";
+@import "date-picker.css";
+
 .avatar-image {
     -fx-background-radius: 50%;
     -fx-background-color: #d8e9ef;
@@ -20,19 +24,12 @@
 
 @font-face {
     font-family: 'SVN-Poppins';
-    src: url('/salesmanagement/salesmanagement/css/SVN-Poppins.ttf.ttf');
+    src: url('/salesmanagement/salesmanagement/SVN-Poppins.ttf');
     font-weight: 10;
 }
 
 .text-field-box {
-    -fx-padding: 4 0 4 10;
-    -fx-background-color: white;
-    -fx-border-color: #d1d1d1;
-    -fx-border-width: 1.5px;
-    -fx-border-radius: 3px;
-    -jfx-unfocus-color: transparent;
-    -jfx-focus-color: transparent;
-
+    -fx-font-size: 15;
 }
 
 .text-field-box:focused {
@@ -43,14 +40,8 @@
     -fx-fill: #329cfe;
 }
 
-#background_color {
+.tab-background {
     -fx-background-color: #f4f4f4;
-}
-
-#top_label {
-    -fx-text-fill: #329efcab;
-    -fx-font-size: 22px;
-    -fx-font-weight: bold;
 }
 
 #small_top_label {
