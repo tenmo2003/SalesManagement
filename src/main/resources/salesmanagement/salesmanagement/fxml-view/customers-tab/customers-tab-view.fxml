@@ -11,9 +11,8 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.control.TableView?>
 
-<StackPane fx:id="root" prefHeight="707.0" prefWidth="1111.0" stylesheets="@../../style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.CustomersTab.CustomersTabView">
+<StackPane fx:id="root" prefHeight="707.0" prefWidth="1111.0" styleClass="tab-background" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.CustomersTab.CustomersTabView">
    <children>
       <VBox alignment="TOP_CENTER" prefHeight="720.0" prefWidth="997.6">
          <children>
@@ -21,7 +20,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="1477.0" spacing="20.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <Label id="top_label" text="Customer List">
+                        <Label styleClass="top-label" text="Customer List">
                            <font>
                               <Font name="System Bold" size="22.0" />
                            </font>
@@ -31,7 +30,7 @@
                   </HBox>
                   <HBox>
                      <children>
-                        <JFXButton contentDisplay="GRAPHIC_ONLY" onMouseClicked="#show" prefHeight="26.0" prefWidth="26.0">
+                        <JFXButton contentDisplay="GRAPHIC_ONLY" onMouseClicked="#show" prefHeight="26.0" prefWidth="26.0" styleClass="window-button">
                            <graphic>
                               <FontAwesomeIconView fill="#329efc" glyphName="UNDO" size="22" />
                            </graphic>
@@ -44,7 +43,7 @@
                <children>
                   <HBox prefHeight="30.0" prefWidth="314.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <JFXButton onMouseClicked="#applyFilter" prefHeight="30.0" prefWidth="146.0" text="Customers Filter...">
+                        <JFXButton focusTraversable="false" onMouseClicked="#applyFilter" prefHeight="30.0" prefWidth="146.0" styleClass="operation-button" text="Customers Filter...">
                            <graphic>
                               <FontAwesomeIconView glyphName="SEARCH" wrappingWidth="20.349998474121094" />
                            </graphic>
@@ -53,8 +52,8 @@
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="6.0" prefWidth="1050.0" spacing="10.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <JFXButton fx:id="addButton" onMouseClicked="#add" text="ADD" />
-                        <JFXButton onMouseClicked="#export" text="EXPORT" />
+                        <JFXButton fx:id="addButton" focusTraversable="false" onMouseClicked="#add" styleClass="operation-button" text="ADD" />
+                        <JFXButton focusTraversable="false" onMouseClicked="#export" styleClass="operation-button" text="EXPORT" />
                      </children>
                   </HBox>
                </children>
@@ -64,7 +63,7 @@
             </HBox>
             <HBox VBox.vgrow="ALWAYS">
                <children>
-                  <TableView fx:id="customersTable" stylesheets="@../../table.css" HBox.hgrow="ALWAYS">
+                  <TableView fx:id="customersTable" HBox.hgrow="ALWAYS">
                      <columns>
                         <TableColumn fx:id="customerNameColumn" prefWidth="98.4000244140625" text="Name" />
                         <TableColumn fx:id="contactColumn" prefWidth="150.0" text="Contact" />

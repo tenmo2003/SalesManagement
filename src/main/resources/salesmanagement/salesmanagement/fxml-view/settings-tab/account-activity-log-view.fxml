@@ -10,9 +10,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.TableView?>
 
-<StackPane id="background_color" fx:id="root" prefHeight="618.0" prefWidth="855.0" stylesheets="@../../style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.SettingsTab.AccountActivityLogView">
+<StackPane fx:id="root" prefHeight="618.0" prefWidth="855.0" styleClass="tab-background" stylesheets="@../../css/dark-mode-main-scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.SettingsTab.AccountActivityLogView">
    <children>
       <VBox>
          <children>
@@ -20,18 +19,18 @@
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="32.0" prefWidth="821.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <Label id="top_label" prefHeight="32.0" prefWidth="131.0" text="Activity Log" HBox.hgrow="ALWAYS" />
+                        <Label prefHeight="32.0" prefWidth="131.0" styleClass="top-label" text="Activity Log" HBox.hgrow="ALWAYS" />
                         <ProgressIndicator fx:id="loadingIndicator" prefHeight="26.0" prefWidth="41.0" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="26.0" prefWidth="750.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" onMouseClicked="#close">
+                        <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" onMouseClicked="#close" styleClass="window-button">
                            <graphic>
                               <FontAwesomeIconView fill="#329efc" glyphName="ARROW_LEFT" size="22" />
                            </graphic>
                         </JFXButton>
-                        <JFXButton contentDisplay="GRAPHIC_ONLY" onMouseClicked="#show" prefHeight="26.0" prefWidth="26.0">
+                        <JFXButton contentDisplay="GRAPHIC_ONLY" onMouseClicked="#show" prefHeight="26.0" prefWidth="26.0" styleClass="window-button">
                            <graphic>
                               <FontAwesomeIconView fill="#329efc" glyphName="UNDO" size="22" />
                            </graphic>
@@ -42,14 +41,14 @@
             </HBox>
             <StackPane alignment="CENTER_LEFT" prefHeight="40.0" prefWidth="855.0">
                <children>
-                  <JFXButton onMouseClicked="#addFilter" text="Actions Filter..." StackPane.alignment="CENTER_LEFT" />
+                  <JFXButton onMouseClicked="#addFilter" styleClass="operation-button" text="Actions Filter..." StackPane.alignment="CENTER_LEFT" />
                   <Label id="small_top_label" fx:id="userIDLabel" alignment="CENTER_RIGHT" prefHeight="32.0" prefWidth="266.0" text="Account 21000000" StackPane.alignment="CENTER_RIGHT" />
                </children>
                <VBox.margin>
-                  <Insets top="5.0" />
+                  <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </StackPane>
-            <HBox alignment="CENTER" prefHeight="563.0" prefWidth="855.0" stylesheets="@../../table.css" VBox.vgrow="ALWAYS">
+            <HBox alignment="CENTER" prefHeight="563.0" prefWidth="855.0" VBox.vgrow="ALWAYS">
                <children>
                   <TableView fx:id="actionsTable" HBox.hgrow="ALWAYS">
                      <columns>

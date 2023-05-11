@@ -15,10 +15,8 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.control.TableView?>
 
-<StackPane id="background_color" fx:id="root" stylesheets="@../../style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.OrdersTab.OrderInfoView">
+<StackPane fx:id="root" styleClass="tab-background" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.OrdersTab.OrderInfoView">
     <children>
         <VBox alignment="TOP_CENTER" prefHeight="1500.0" prefWidth="1598.0">
             <children>
@@ -26,7 +24,7 @@
                     <children>
                         <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="1477.0" spacing="20.0" HBox.hgrow="ALWAYS">
                             <children>
-                                <Label id="top_label" text="Orders Info" textFill="#329efcab">
+                                <Label styleClass="top-label" text="Orders Info" textFill="#329efcab">
                                     <font>
                                         <Font name="System Bold" size="22.0" />
                                     </font>
@@ -56,9 +54,9 @@
                         <Insets left="30.0" right="30.0" />
                     </VBox.margin>
                 </HBox>
-                <ScrollPane fx:id="employeeInfoBox" fitToHeight="true" fitToWidth="true" focusTraversable="false" prefHeight="1513.0" prefWidth="1598.0" stylesheets="@../../scroll-pane.css" VBox.vgrow="ALWAYS">
+                <ScrollPane fx:id="employeeInfoBox" fitToHeight="true" fitToWidth="true" focusTraversable="false" prefHeight="1513.0" prefWidth="1598.0" styleClass="tab-background" stylesheets="@../../css/scroll-pane.css" VBox.vgrow="ALWAYS">
                     <content>
-                        <VBox fx:id="detailsInfoBox" alignment="TOP_CENTER" prefHeight="1000.0" prefWidth="1500.0" spacing="15.0">
+                        <VBox fx:id="detailsInfoBox" alignment="TOP_CENTER" prefHeight="1000.0" prefWidth="1500.0" spacing="15.0" styleClass="tab-background">
                             <padding>
                                 <Insets bottom="20.0" left="90.0" right="90.0" top="10.0" />
                             </padding>
@@ -74,14 +72,14 @@
                                  <children>
                                     <VBox prefHeight="46.0" prefWidth="398.0">
                                        <children>
-                                          <Label text="Customer Number">
+                                          <Label styleClass="text-field-name" text="Customer Number">
                                              <font>
                                                 <Font name="System Bold" size="15.0" />
                                              </font>
                                           </Label>
                                           <HBox prefHeight="26.0" prefWidth="174.0">
                                              <children>
-                                                <TextField fx:id="customerNumberTextField" prefHeight="26.0" prefWidth="374.0" HBox.hgrow="ALWAYS" />
+                                                <TextField fx:id="customerNumberTextField" prefHeight="26.0" prefWidth="374.0" styleClass="text-field-box" HBox.hgrow="ALWAYS" />
                                                 <JFXButton contentDisplay="GRAPHIC_ONLY" onMouseClicked="#searchCustomer">
                                                    <graphic>
                                                       <FontAwesomeIconView glyphName="SEARCH" size="18" />
@@ -104,42 +102,42 @@
                                     </HBox>
                                     <VBox prefHeight="30.0" prefWidth="59.0">
                                        <children>
-                                          <Label text="Product Code">
+                                          <Label styleClass="text-field-name" text="Product Code">
                                              <font>
                                                 <Font name="System Bold" size="15.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="productCodeTextField" />
+                                          <TextField fx:id="productCodeTextField" styleClass="text-field-box" />
                                        </children>
                                     </VBox>
                                     <VBox prefHeight="20.0" prefWidth="69.0">
                                        <children>
-                                          <Label text="Quantity">
+                                          <Label styleClass="text-field-name" text="Quantity">
                                              <font>
                                                 <Font name="System Bold" size="15.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="quantityTextField" />
+                                          <TextField fx:id="quantityTextField" styleClass="text-field-box" />
                                        </children>
                                     </VBox>
                                     <VBox prefHeight="20.0" prefWidth="69.0">
                                        <children>
-                                          <Label text="Price Each">
+                                          <Label styleClass="text-field-name" text="Price Each">
                                              <font>
                                                 <Font name="System Bold" size="15.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="priceEachTextField" disable="true" />
+                                          <TextField fx:id="priceEachTextField" disable="true" styleClass="text-field-box" />
                                        </children>
                                     </VBox>
                                     <VBox prefHeight="18.0" prefWidth="59.0">
                                        <children>
-                                          <Label text="Total">
+                                          <Label styleClass="text-field-name" text="Total">
                                              <font>
                                                 <Font name="System Bold" size="15.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="totalTextField" disable="true" />
+                                          <TextField fx:id="totalTextField" disable="true" styleClass="text-field-box" />
                                        </children>
                                     </VBox>
                                     <HBox alignment="CENTER" spacing="10.0">
@@ -154,7 +152,7 @@
                               </VBox>
                               <VBox prefHeight="670.0" prefWidth="942.0" spacing="30.0">
                                  <children>
-                                    <TableView fx:id="orderTable" minHeight="400.0" prefHeight="553.0" prefWidth="942.0" stylesheets="@../../table.css">
+                                    <TableView fx:id="orderTable" minHeight="400.0" prefHeight="553.0" prefWidth="942.0" stylesheets="@../../css/table.css">
                                        <columns>
                                           <TableColumn fx:id="productCodeColumn" prefWidth="246.98178100585938" text="Item" />
                                           <TableColumn fx:id="quantityColumn" prefWidth="143.12725830078125" text="Quantity" />
@@ -167,11 +165,7 @@
                                     </TableView>
                                     <HBox alignment="CENTER_RIGHT">
                                        <children>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Amount: ">
-                                             <font>
-                                                <Font name="System Bold" size="15.0" />
-                                             </font>
-                                          </Text>
+                                          <Label styleClass="text-field-name" text="Total Amount: " />
                                           <TextField fx:id="totalAmountTextField" editable="false" focusTraversable="false" prefHeight="26.0" prefWidth="198.0" />
                                        </children>
                                     </HBox>
@@ -183,32 +177,32 @@
                            <children>
                               <VBox prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <Label text="Ordered Date">
+                                    <Label styleClass="text-field-name" text="Ordered Date">
                                        <font>
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <DatePicker fx:id="orderedDatePicker" prefHeight="26.0" prefWidth="200.0" stylesheets="@../../date_picker.css" />
+                                    <DatePicker fx:id="orderedDatePicker" prefHeight="26.0" prefWidth="200.0" stylesheets="@../../css/date_picker.css" />
                                  </children>
                               </VBox>
                               <VBox prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <Label text="Required Date">
+                                    <Label styleClass="text-field-name" text="Required Date">
                                        <font>
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <DatePicker fx:id="requiredDatePicker" prefHeight="26.0" prefWidth="200.0" stylesheets="@../../date_picker.css" />
+                                    <DatePicker fx:id="requiredDatePicker" prefHeight="26.0" prefWidth="200.0" stylesheets="@../../css/date_picker.css" />
                                  </children>
                               </VBox>
                               <VBox prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <Label text="Shipped Date">
+                                    <Label styleClass="text-field-name" text="Shipped Date">
                                        <font>
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <DatePicker fx:id="shippedDatePicker" prefHeight="26.0" prefWidth="200.0" stylesheets="@../../date_picker.css" />
+                                    <DatePicker fx:id="shippedDatePicker" prefHeight="26.0" prefWidth="200.0" stylesheets="@../../css/date_picker.css" />
                                  </children>
                               </VBox>
                            </children>
@@ -217,7 +211,7 @@
                            <children>
                               <VBox prefHeight="47.0" prefWidth="200.0">
                                  <children>
-                                    <Label text="Deliver To">
+                                    <Label styleClass="text-field-name" text="Deliver To">
                                        <font>
                                           <Font name="System Bold" size="15.0" />
                                        </font>
@@ -227,7 +221,7 @@
                               </VBox>
                               <VBox prefHeight="47.0" prefWidth="200.0">
                                  <children>
-                                    <Label text="Payment Method">
+                                    <Label styleClass="text-field-name" text="Payment Method">
                                        <font>
                                           <Font name="System Bold" size="15.0" />
                                        </font>
@@ -237,7 +231,7 @@
                               </VBox>
                               <VBox prefHeight="47.0" prefWidth="200.0">
                                  <children>
-                                    <Label text="Status">
+                                    <Label styleClass="text-field-name" text="Status">
                                        <font>
                                           <Font name="System Bold" size="15.0" />
                                        </font>
@@ -251,7 +245,7 @@
                            <children>
                               <VBox prefHeight="47.0" prefWidth="667.0">
                                  <children>
-                                    <Label text="Comments">
+                                    <Label styleClass="text-field-name" text="Comments">
                                        <font>
                                           <Font name="System Bold" size="15.0" />
                                        </font>

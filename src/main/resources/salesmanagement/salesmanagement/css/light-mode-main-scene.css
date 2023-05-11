@@ -1,3 +1,4 @@
+@import "table.css";
 .avatar-image {
     -fx-background-radius: 50%;
     -fx-background-color: #d8e9ef;
@@ -19,7 +20,7 @@
 
 @font-face {
     font-family: 'SVN-Poppins';
-    src: url('/salesmanagement/salesmanagement/SVN-Poppins.ttf');
+    src: url('/salesmanagement/salesmanagement/css/SVN-Poppins.ttf.ttf');
     font-weight: 10;
 }
 
@@ -139,6 +140,7 @@
 .top-menu-pane {
     -fx-border-width: 0 0 2 0;
     -fx-border-color: #e0e0e0;
+    -fx-background-color: #f4f4f4;;
 }
 
 .valid-icon-view {
@@ -149,4 +151,57 @@
 .invalid-icon-view {
     -glyph-name: "CLOSE";
     -fx-fill: #e71c1c
+}
+
+
+.switch-button-box {
+    -fx-pref-height: 60;
+    -fx-pref-width: 300;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.switch-sub-box > .label {
+    -fx-text-fill: #7c8db5;
+    -fx-font-size: 16;
+    -fx-font-weight: 700;
+}
+
+.switch-sub-box > .glyph-icon {
+    -fx-fill: #7c8db5;
+}
+
+.switch-sub-box {
+    -fx-spacing: 15;
+    -fx-padding: 0 0 0 15;
+}
+
+
+.axis {
+    -fx-tick-label-fill: black;
+}
+
+.chart {
+    -fx-background-color: #f4f4f4;
+}
+
+.chart > .chart-title {
+    -fx-text-fill: #000000;
+}
+
+.chart-plot-background {
+    -fx-background-color: #f4f4f4;
+}
+
+.chart-vertical-grid-lines {
+    -fx-stroke: #0f9de8;
+}
+
+.chart-horizontal-grid-lines {
+    -fx-stroke: #0f9de8;
+}
+
+
+.text-field-name {
+    -fx-text-fill: black;
+    -fx-font-weight: 700;
 }

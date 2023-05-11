@@ -11,16 +11,15 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.control.TableView?>
 
-<StackPane fx:id="root" prefHeight="707.0" prefWidth="1111.0" stylesheets="@../../style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.ProductsTab.ProductsTabView">
+<StackPane fx:id="root" prefHeight="707.0" prefWidth="1111.0" styleClass="tab-background" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.ProductsTab.ProductsTabView">
     <VBox alignment="TOP_CENTER" prefHeight="720.0" prefWidth="997.6">
         <children>
             <HBox>
                 <children>
                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="1477.0" spacing="20.0" HBox.hgrow="ALWAYS">
                         <children>
-                            <Label id="top_label" text="Products List" textFill="#329efcab">
+                            <Label styleClass="top-label" text="Products List" textFill="#329efcab">
                                 <font>
                                     <Font name="System Bold" size="22.0" />
                                 </font>
@@ -30,7 +29,7 @@
                     </HBox>
                     <HBox>
                         <children>
-                            <JFXButton contentDisplay="GRAPHIC_ONLY" onMouseClicked="#show" prefHeight="26.0" prefWidth="26.0">
+                            <JFXButton contentDisplay="GRAPHIC_ONLY" focusTraversable="false" onMouseClicked="#show" prefHeight="26.0" prefWidth="26.0" styleClass="window-button">
                                 <graphic>
                                     <FontAwesomeIconView fill="#329efc" glyphName="UNDO" size="22" />
                                 </graphic>
@@ -43,7 +42,7 @@
                 <children>
                     <HBox prefHeight="30.0" prefWidth="314.0" HBox.hgrow="ALWAYS">
                         <children>
-                            <JFXButton onMouseClicked="#addFilter" prefHeight="30.0" prefWidth="146.0" text="Products Filter...">
+                            <JFXButton focusTraversable="false" onMouseClicked="#addFilter" prefHeight="30.0" prefWidth="146.0" styleClass="operation-button" text="Products Filter...">
                                 <graphic>
                                     <FontAwesomeIconView glyphName="SEARCH" wrappingWidth="20.349998474121094" />
                                 </graphic>
@@ -52,18 +51,18 @@
                     </HBox>
                     <HBox alignment="CENTER_RIGHT" prefHeight="6.0" prefWidth="1050.0" spacing="10.0" HBox.hgrow="ALWAYS">
                         <children>
-                            <JFXButton fx:id="addButton" onMouseClicked="#addNewProduct" text="ADD NEW" />
-                            <JFXButton onMouseClicked="#openExportProductsBox" text="EXPORT" />
+                            <JFXButton fx:id="addButton" focusTraversable="false" onMouseClicked="#addNewProduct" styleClass="operation-button" text="ADD NEW" />
+                            <JFXButton focusTraversable="false" onMouseClicked="#openExportProductsBox" styleClass="operation-button" text="EXPORT" />
                         </children>
                     </HBox>
                 </children>
                 <VBox.margin>
-                    <Insets bottom="10.0" />
+                    <Insets bottom="10.0" top="5.0" />
                 </VBox.margin>
             </HBox>
             <HBox VBox.vgrow="ALWAYS">
                 <children>
-                    <TableView fx:id="productsTable" stylesheets="@../../table.css" HBox.hgrow="ALWAYS">
+                    <TableView fx:id="productsTable" focusTraversable="false" HBox.hgrow="ALWAYS">
                         <columnResizePolicy>
                             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                         </columnResizePolicy>

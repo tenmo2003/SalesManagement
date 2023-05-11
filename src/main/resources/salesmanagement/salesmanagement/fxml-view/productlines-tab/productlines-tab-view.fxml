@@ -12,14 +12,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="root" prefHeight="707.0" prefWidth="1111.0" stylesheets="@../../style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.ProductLinesTab.ProductLinesTabView">
+<StackPane fx:id="root" prefHeight="707.0" prefWidth="1111.0" styleClass="tab-background" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.ProductLinesTab.ProductLinesTabView">
     <VBox alignment="TOP_CENTER" prefHeight="720.0" prefWidth="997.6">
         <children>
             <HBox>
                 <children>
                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="1477.0" spacing="20.0" HBox.hgrow="ALWAYS">
                         <children>
-                            <Label id="top_label" text="Product Lines List" textFill="#329efcab">
+                            <Label styleClass="top-label" text="Product Lines List" textFill="#329efcab">
                                 <font>
                                     <Font name="System Bold" size="22.0" />
                                 </font>
@@ -29,7 +29,7 @@
                     </HBox>
                     <HBox>
                         <children>
-                            <JFXButton contentDisplay="GRAPHIC_ONLY" focusTraversable="false" onMouseClicked="#show" prefHeight="26.0" prefWidth="26.0">
+                            <JFXButton contentDisplay="GRAPHIC_ONLY" focusTraversable="false" onMouseClicked="#show" prefHeight="26.0" prefWidth="26.0" styleClass="window-button">
                                 <graphic>
                                     <FontAwesomeIconView fill="#329efc" glyphName="UNDO" size="22" />
                                 </graphic>
@@ -42,7 +42,7 @@
                 <children>
                     <HBox prefHeight="30.0" prefWidth="314.0" HBox.hgrow="ALWAYS">
                         <children>
-                            <JFXButton onMouseClicked="#addFilter" prefHeight="30.0" prefWidth="170.0" text="Product Lines Filter...">
+                            <JFXButton focusTraversable="false" onMouseClicked="#addFilter" prefHeight="30.0" prefWidth="170.0" styleClass="operation-button" text="Product Lines Filter...">
                                 <graphic>
                                     <FontAwesomeIconView glyphName="SEARCH" wrappingWidth="20.349998474121094" />
                                 </graphic>
@@ -51,19 +51,19 @@
                     </HBox>
                     <HBox alignment="CENTER_RIGHT" prefHeight="6.0" prefWidth="1050.0" spacing="10.0" HBox.hgrow="ALWAYS">
                         <children>
-                            <JFXButton fx:id="addButton" focusTraversable="false" onMouseClicked="#addNewProductLine" text="ADD NEW" />
-                            <JFXButton fx:id="removeButton" focusTraversable="false" onMouseClicked="#remove" text="REMOVE" />
-                            <JFXButton focusTraversable="false" onMouseClicked="#openExportProductLinesBox" text="EXPORT" />
+                            <JFXButton fx:id="addButton" focusTraversable="false" onMouseClicked="#addNewProductLine" styleClass="operation-button" text="ADD NEW" />
+                            <JFXButton fx:id="removeButton" focusTraversable="false" onMouseClicked="#remove" styleClass="operation-button" text="REMOVE" />
+                            <JFXButton focusTraversable="false" onMouseClicked="#openExportProductLinesBox" styleClass="operation-button" text="EXPORT" />
                         </children>
                     </HBox>
                 </children>
                 <VBox.margin>
-                    <Insets bottom="10.0" />
+                    <Insets bottom="10.0" top="5.0" />
                 </VBox.margin>
             </HBox>
             <HBox alignment="TOP_CENTER" VBox.vgrow="ALWAYS">
                 <children>
-                    <TableView fx:id="productLinesTable" focusTraversable="false" stylesheets="@../../table.css" HBox.hgrow="ALWAYS">
+                    <TableView fx:id="productLinesTable" focusTraversable="false" HBox.hgrow="ALWAYS">
                         <columns>
                             <TableColumn fx:id="productLineColumn" prefWidth="163.199951171875" text="Product Line" />
                             <TableColumn fx:id="descriptionColumn" prefWidth="330.76373291015625" text="Description" />

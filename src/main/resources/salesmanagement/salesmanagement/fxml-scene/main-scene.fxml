@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXToggleButton?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
@@ -14,9 +15,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="root" minWidth="1000.0" prefHeight="700.0" prefWidth="1000.0" stylesheets="@../style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.SceneController.MainSceneController">
+<VBox fx:id="root" minWidth="1000.0" prefHeight="800.0" prefWidth="1000.0" stylesheets="@../css/light-mode-main-scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.SceneController.MainSceneController">
    <children>
-      <StackPane id="background_color" fx:id="menuPane" prefHeight="47.0" prefWidth="1000.0" styleClass="top-menu-pane">
+      <StackPane fx:id="menuPane" prefHeight="47.0" prefWidth="1000.0" styleClass="top-menu-pane">
          <children>
             <Label fx:id="timeLabel" styleClass="top-label" text="11:11 11/11/2023" />
             <HBox>
@@ -28,7 +29,7 @@
                               <Image url="@../img/app_icon.png" />
                            </image>
                         </ImageView>
-                        <Label prefHeight="36.0" prefWidth="230.0" styleClass="top-label" text="SAMA" textFill="#329efcb8" />
+                        <Label prefHeight="36.0" prefWidth="230.0" styleClass="top-label" text="SAMA" textFill="#000000b8" />
                      </children>
                      <padding>
                         <Insets left="20.0" />
@@ -36,17 +37,17 @@
                   </HBox>
                   <HBox alignment="CENTER_RIGHT" prefHeight="39.0" prefWidth="500.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <JFXButton fx:id="minimizeIcon" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" minWidth="36.0" onMouseClicked="#minimizeStage" prefHeight="28.0" prefWidth="34.0" style="-fx-background-radius: 10; -fx-border-radius: 10;" textAlignment="CENTER" textFill="TRANSPARENT">
+                        <JFXButton fx:id="minimizeIcon" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" minWidth="36.0" onMouseClicked="#minimizeStage" prefHeight="28.0" prefWidth="34.0" style="-fx-background-radius: 10; -fx-border-radius: 10;" styleClass="window-button" textAlignment="CENTER" textFill="TRANSPARENT">
                            <graphic>
                               <FontAwesomeIconView boundsType="VISUAL" fill="#29a3e8" glyphName="WINDOW_MINIMIZE" size="25" textAlignment="CENTER" wrappingWidth="30.0" />
                            </graphic>
                         </JFXButton>
-                        <JFXButton fx:id="maximumIcon" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" minWidth="36.0" onMouseClicked="#maximumStage" prefHeight="28.0" prefWidth="34.0" style="-fx-background-radius: 10; -fx-border-radius: 10;" textAlignment="CENTER" textFill="TRANSPARENT">
+                        <JFXButton fx:id="maximumIcon" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" minWidth="36.0" onMouseClicked="#maximumStage" prefHeight="28.0" prefWidth="34.0" style="-fx-background-radius: 10; -fx-border-radius: 10;" styleClass="window-button" textAlignment="CENTER" textFill="TRANSPARENT">
                            <graphic>
                               <FontAwesomeIconView boundsType="VISUAL" fill="#29a3e8" glyphName="WINDOW_MAXIMIZE" size="25" textAlignment="CENTER" wrappingWidth="30.0" />
                            </graphic>
                         </JFXButton>
-                        <JFXButton fx:id="closeIcon" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" minWidth="36.0" onMouseClicked="#closeStage" prefHeight="28.0" prefWidth="34.0" style="-fx-background-radius: 10; -fx-border-radius: 10;" textAlignment="CENTER" textFill="TRANSPARENT">
+                        <JFXButton fx:id="closeIcon" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" minWidth="36.0" onMouseClicked="#closeStage" prefHeight="28.0" prefWidth="34.0" style="-fx-background-radius: 10; -fx-border-radius: 10;" styleClass="window-button" textAlignment="CENTER" textFill="TRANSPARENT">
                            <graphic>
                               <FontAwesomeIconView boundsType="VISUAL" fill="#29a3e8" glyphName="CLOSE" size="30" textAlignment="CENTER" wrappingWidth="30.0" />
                            </graphic>
@@ -230,18 +231,36 @@
                      <children>
                         <HBox>
                            <children>
-                              <JFXButton fx:id="logOutButton" focusTraversable="false" graphicTextGap="12.0" prefHeight="43.0" prefWidth="325.0" styleClass="tab-button" text="Logout" HBox.hgrow="ALWAYS">
+                              <JFXButton fx:id="logOutButton" focusTraversable="false" graphicTextGap="15.0" prefHeight="43.0" prefWidth="325.0" styleClass="tab-button" text="Log out" HBox.hgrow="ALWAYS">
                                  <graphic>
                                     <StackPane prefWidth="32.0">
                                        <children>
-                                          <FontAwesomeIconView glyphName="SIGN_OUT" rotate="180.0" size="25" />
+                                          <FontAwesomeIconView glyphName="SIGN_OUT" size="25" />
                                        </children>
                                     </StackPane>
                                  </graphic>
                                  <font>
                                     <Font size="18.0" />
                                  </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </JFXButton>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" styleClass="switch-button-box">
+                           <children>
+                              <HBox fx:id="switchSubBox" alignment="CENTER_LEFT" styleClass="switch-sub-box">
+                                 <children>
+                                    <FontAwesomeIconView fx:id="modeIconView" glyphName="MOON_ALT" size="25" />
+                                    <Label fx:id="modeLabel" prefHeight="26.0" prefWidth="332.0" text="Dark mode" />
+                                 </children>
+                              </HBox>
+                              <JFXToggleButton fx:id="switchModeButton" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" prefHeight="58.0" prefWidth="136.0" textAlignment="CENTER" toggleColor="#0180c9" toggleLineColor="#00b2ff">
+                                 <padding>
+                                    <Insets right="6.0" />
+                                 </padding>
+                              </JFXToggleButton>
                            </children>
                         </HBox>
                      </children>
@@ -265,14 +284,14 @@
             </VBox>
             <VBox prefHeight="652.0" prefWidth="754.0" HBox.hgrow="ALWAYS">
                <children>
-                  <TabPane id="background_color" fx:id="tabPane" maxWidth="2000.0" prefHeight="750.0" prefWidth="794.0" styleClass="main-tab-pane" stylesheets="@../tabpane_style.css" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+                  <TabPane id="background_color" fx:id="tabPane" focusTraversable="false" maxWidth="2000.0" prefHeight="750.0" prefWidth="794.0" styleClass="main-tab-pane" stylesheets="@../css/tabpane_style.css" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
                      <tabs>
                         <Tab fx:id="productsTab" closable="false" text="Products" />
                         <Tab fx:id="employeesTab" closable="false" text="Employees" />
-                        <Tab fx:id="dashBoardTab" text="Dashboard" />
-                        <Tab fx:id="ordersTab" text="Orders" />
+                        <Tab fx:id="dashBoardTab" closable="false" text="Dashboard" />
+                        <Tab fx:id="ordersTab" closable="false" text="Orders" />
                         <Tab fx:id="customersTab" closable="false" text="Customers" />
-                        <Tab fx:id="settingsTab" text="Setting" />
+                        <Tab fx:id="settingsTab" closable="false" text="Setting" />
                         <Tab fx:id="productLinesTab" closable="false" text="Product Lines" />
                      </tabs>
                   </TabPane>

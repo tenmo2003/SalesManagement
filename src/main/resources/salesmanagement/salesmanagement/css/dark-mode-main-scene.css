@@ -1,0 +1,169 @@
+@import "dark-table-view.css";
+
+{
+    -theme-color: #329cfe
+;
+    -theme-color-2: #329efcab
+;
+    -mode-color-1: #2b2d30
+;
+    -mode-color-2: #1e1f22
+;
+    -label-color: #ececf1
+;
+}
+
+#close_color {
+    -fx-fill: #329efcab;
+}
+
+.switch-button-box {
+    -fx-pref-height: 60;
+    -fx-pref-width: 300;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.switch-sub-box > .label {
+    -fx-text-fill: #ececf1;
+    -fx-font-size: 16;
+    -fx-font-weight: 700;
+}
+
+.switch-sub-box > .glyph-icon {
+    -fx-fill: white;
+}
+
+.switch-sub-box {
+    -fx-spacing: 15;
+    -fx-padding: 0 0 0 15;
+}
+
+
+.tab-button {
+    -fx-text-fill: #ececf1;
+    -fx-font-size: 16;
+    -fx-font-weight: 700;
+    -fx-pref-height: 60;
+    -fx-pref-width: 300;
+    -fx-alignment: CENTER_LEFT;
+    -fx-border-radius: 6;
+    -fx-graphic-text-gap: 15;
+}
+
+.tab-button .glyph-icon {
+    -fx-fill: #ececf1;
+    -fx-font-size: 20;
+}
+
+.tab-button:hover {
+    -fx-text-fill: white;
+    -fx-background-color: transparent, transparent, transparent, #329efcab;
+}
+
+.tab-button:hover .glyph-icon {
+    -fx-fill: white;
+}
+
+.active-tab-button {
+    -fx-background-color: transparent, transparent, transparent, #43454a;
+}
+
+
+.tab-button-bar {
+    -fx-padding: 20 0 0 20;
+    -fx-background-color: #2b2d30;
+}
+
+.username-label {
+    -fx-text-fill: -label-color;
+    -fx-font-size: 18;
+    -fx-font-weight: 700;
+    -fx-graphic-text-gap: 15;
+}
+
+.job-title-label {
+    -fx-text-fill: -label-color;
+    -fx-font-size: 15;
+}
+
+.shrink-button .glyph-icon {
+    -fx-fill: -label-color;
+}
+
+.shrink-button-box {
+    -fx-background-color: linear-gradient(to right, -mode-color-1 50%, -mode-color-2 50%);
+}
+
+.top-label {
+    -fx-font-size: 20;
+    -fx-text-fill: -label-color;
+    -fx-font-weight: 700;
+}
+
+.top-menu-pane {
+    -fx-border-width: 0 0 2 0;
+    -fx-border-color: #1e1f22;
+    -fx-background-color: #2b2d30;
+}
+
+.valid-icon-view {
+    -glyph-name: "CHECK";
+    -fx-fill: #71ea71
+}
+
+.invalid-icon-view {
+    -glyph-name: "CLOSE";
+    -fx-fill: #e71c1c
+}
+
+
+.axis {
+    -fx-tick-label-fill: white;
+}
+
+.chart {
+    -fx-background-color: #1e1f22;
+}
+
+.chart > .chart-title {
+    -fx-text-fill: white;
+}
+
+.chart-plot-background {
+    -fx-background-color: #1e1f22;
+}
+
+.chart-vertical-grid-lines {
+    -fx-stroke: white;
+}
+
+.chart-horizontal-grid-lines {
+    -fx-stroke: white;
+}
+
+.tab-background {
+    -fx-background-color: #1e1f22;
+}
+
+.text-field-name {
+    -fx-text-fill: white;
+    -fx-font-weight: 700;
+    -fx-font-size: 15;
+}
+
+.progress-indicator {
+    -fx-progress-color: -label-color;
+}
+
+.operation-button {
+    -fx-text-fill: -label-color;
+    -fx-background-color: #393b40;
+    -fx-font-size: 13;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+.operation-button .glyph-icon, .window-button .glyph-icon {
+    -fx-fill: -label-color;
+}
+

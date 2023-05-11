@@ -1,5 +1,5 @@
 #loginRoot {
-    -fx-background-image: url("img/login_background.png");
+    -fx-background-image: url("../img/login_background.png");
 }
 #inputTextField {
     -fx-border-width: 100%;

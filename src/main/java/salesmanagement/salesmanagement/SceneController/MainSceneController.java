@@ -1,14 +1,13 @@
 package salesmanagement.salesmanagement.SceneController;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXToggleButton;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
-import javafx.animation.Timeline;
 import javafx.animation.Transition;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -17,10 +16,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Screen;
 import javafx.util.Duration;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesManagement;
@@ -86,7 +84,15 @@ public class MainSceneController extends SceneController implements Initializabl
     @FXML
     private JFXButton productLinesTabButton;
     @FXML
+    private JFXToggleButton switchModeButton;
+    @FXML
     ImageView smallAvatar;
+    @FXML
+    HBox switchSubBox;
+    @FXML
+    Label modeLabel;
+    @FXML
+    FontAwesomeIconView modeIconView;
 
     JFXButton previousTabButton = dashBoardTabButton;
 
@@ -303,6 +309,40 @@ public class MainSceneController extends SceneController implements Initializabl
                 // Perform other logout actions here
             }
         });
+
+        switchModeButton.selectedProperty().addListener(((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                FadeTransition ft = new FadeTransition(Duration.millis(200), root);
+                ft.setFromValue(1.0);
+                ft.setToValue(0.0);
+                ft.setOnFinished(event -> {
+                    root.getStylesheets().remove(1);
+
+                    FadeTransition ft2 = new FadeTransition(Duration.millis(200), root);
+                    ft2.setFromValue(0.0);
+                    ft2.setToValue(1.0);
+                    ft2.play();
+                });
+                ft.play();
+                modeLabel.setText("Dark mode");
+                modeIconView.setGlyphName("MOON_ALT");
+            } else {
+                FadeTransition ft = new FadeTransition(Duration.millis(200), root);
+                ft.setFromValue(1.0);
+                ft.setToValue(0.0);
+                ft.setOnFinished(event -> {
+                    root.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/salesmanagement/salesmanagement/css/dark-mode-main-scene.css")).toExternalForm());
+
+                    FadeTransition ft2 = new FadeTransition(Duration.millis(200), root);
+                    ft2.setFromValue(0.0);
+                    ft2.setToValue(1.0);
+                    ft2.play();
+                });
+                ft.play();
+                modeLabel.setText("Light mode");
+                modeIconView.setGlyphName("SUN_ALT");
+            }
+        }));
     }
 
     @FXML
@@ -324,6 +364,8 @@ public class MainSceneController extends SceneController implements Initializabl
                 button.getStyleClass().add("shrink-tab-button");
             usernameLabel.getStyleClass().add("shrink-tab-button");
             shrinkSideBarButton.getStyleClass().add("active-shrink-button");
+
+            ((HBox) switchModeButton.getParent()).getChildren().remove(switchSubBox);
 
 //            double endX = Screen.getPrimary().getVisualBounds().getWidth();
 //            double startX = endX - notificationStage.getWidth();
@@ -372,6 +414,8 @@ public class MainSceneController extends SceneController implements Initializabl
                 button.getStyleClass().remove("shrink-tab-button");
             usernameLabel.getStyleClass().remove("shrink-tab-button");
             shrinkSideBarButton.getStyleClass().remove("active-shrink-button");
+
+            ((HBox) switchModeButton.getParent()).getChildren().add(0, switchSubBox);
 
             Transition transition = new Transition() {
                 {

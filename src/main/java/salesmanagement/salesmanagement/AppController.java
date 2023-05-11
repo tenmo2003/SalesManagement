@@ -53,7 +53,7 @@ public class AppController {
         }
         LoginSceneController loginSceneController = loginFXMLLoader.getController();
 
-        loginScene.getStylesheets().add(0, Objects.requireNonNull(SalesManagement.class.getResource("notification-style.css")).toExternalForm());
+        loginScene.getStylesheets().add(0, Objects.requireNonNull(SalesManagement.class.getResource("/salesmanagement/salesmanagement/css/notification-style.css")).toExternalForm());
 
         FXMLLoader mainFXMLLoader = new FXMLLoader(SalesManagement.class.getResource("fxml-scene/main-scene.fxml"));
         try {

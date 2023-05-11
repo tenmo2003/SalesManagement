@@ -16,14 +16,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="root" prefHeight="1248.0" prefWidth="1111.0" stylesheets="@../../style_main_scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.DashBoardTab.DashboardTabView">
+<StackPane fx:id="root" prefHeight="1248.0" prefWidth="1111.0" styleClass="tab-background" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.DashBoardTab.DashboardTabView">
     <VBox alignment="TOP_CENTER" prefHeight="1450.0" prefWidth="1111.0">
         <children>
             <HBox>
                 <children>
                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="1477.0" spacing="20.0" HBox.hgrow="ALWAYS">
                         <children>
-                            <Label id="top_label" text="DashBoard" textFill="#329efcab">
+                            <Label styleClass="top-label" text="DashBoard" textFill="#329efcab">
                                 <font>
                                     <Font name="System Bold" size="22.0" />
                                 </font>
@@ -33,7 +33,7 @@
                     </HBox>
                     <HBox>
                         <children>
-                            <JFXButton contentDisplay="GRAPHIC_ONLY" onMouseClicked="#show" prefHeight="26.0" prefWidth="26.0">
+                            <JFXButton contentDisplay="GRAPHIC_ONLY" focusTraversable="false" onMouseClicked="#show" prefHeight="26.0" prefWidth="26.0" styleClass="window-button">
                                 <graphic>
                                     <FontAwesomeIconView fill="#329efc" glyphName="UNDO" size="22" />
                                 </graphic>
@@ -45,9 +45,9 @@
                <Insets left="30.0" right="30.0" />
             </VBox.margin>
             </HBox>
-         <ScrollPane fitToWidth="true" stylesheets="@../../scroll-pane.css" VBox.vgrow="ALWAYS">
+         <ScrollPane fitToWidth="true" stylesheets="@../../css/scroll-pane.css" VBox.vgrow="ALWAYS">
             <content>
-               <VBox prefHeight="1200.0" prefWidth="1034.0" spacing="20.0">
+               <VBox prefHeight="1200.0" prefWidth="1034.0" spacing="20.0" styleClass="tab-background">
                   <children>
                      <HBox prefHeight="380.0" prefWidth="1064.0">
                         <children>
@@ -64,7 +64,7 @@
                      </HBox>
                      <HBox prefHeight="380.0">
                         <children>
-                           <LineChart fx:id="revenueByChannelChart" prefHeight="380.0" prefWidth="554.0" title="Revenue By Channel" HBox.hgrow="ALWAYS">
+                           <LineChart fx:id="revenueByChannelChart" prefHeight="380.0" prefWidth="554.0" styleClass="axis" title="Revenue By Channel" HBox.hgrow="ALWAYS">
                              <xAxis>
                                <CategoryAxis side="BOTTOM" />
                              </xAxis>
@@ -72,7 +72,7 @@
                                <NumberAxis side="LEFT" upperBound="1.0E7" />
                              </yAxis>
                            </LineChart>
-                           <BarChart fx:id="topProductLinesChart" title="Top ProductLines" HBox.hgrow="ALWAYS">
+                           <BarChart fx:id="topProductLinesChart" legendVisible="false" title="Top ProductLines" HBox.hgrow="ALWAYS">
                              <xAxis>
                                <NumberAxis minorTickCount="0" side="BOTTOM" upperBound="9000000.0" />
                              </xAxis>

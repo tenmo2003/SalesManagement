@@ -15,7 +15,7 @@
 
 <StackPane fx:id="root" prefHeight="100.0" prefWidth="354.0" style="-fx-background-color: #e2eef9;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.SceneController.NotificationSceneController">
    <children>
-      <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="126.0" prefWidth="354.0" style="-fx-background-color: transparent;" stylesheets="@../notification-style.css" StackPane.alignment="TOP_CENTER">
+      <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="126.0" prefWidth="354.0" style="-fx-background-color: transparent;" stylesheets="@../css/notification-style.css" StackPane.alignment="TOP_CENTER">
          <children>
             <HBox prefHeight="3.0" prefWidth="319.0">
                <children>
