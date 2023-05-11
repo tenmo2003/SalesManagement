@@ -197,3 +197,7 @@
     -fx-text-fill: black;
     -fx-font-weight: 700;
 }
+
+.tab-button-bar.close{
+    -fx-pref-width: 40;
+}
