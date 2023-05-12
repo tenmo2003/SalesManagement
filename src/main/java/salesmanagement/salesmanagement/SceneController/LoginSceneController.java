@@ -1,7 +1,10 @@
 package salesmanagement.salesmanagement.SceneController;
 
+import com.jfoenix.controls.JFXButton;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.Event;
@@ -18,6 +21,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 import org.controlsfx.control.textfield.CustomPasswordField;
 import org.controlsfx.control.textfield.CustomTextField;
 import salesmanagement.salesmanagement.Utils.*;
@@ -28,6 +32,8 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static salesmanagement.salesmanagement.Utils.InputErrorCode.getInputErrorLabel;
 import static salesmanagement.salesmanagement.Utils.Utils.shake;
@@ -56,6 +62,9 @@ public class LoginSceneController extends SceneController implements Initializab
     @FXML
     private HBox securityCodeBox;
 
+    @FXML
+    JFXButton resendButton;
+
     private int securityCode;
     private int employeeNumber;
 
@@ -78,8 +87,50 @@ public class LoginSceneController extends SceneController implements Initializab
                 } else if (newValue.length() == 1 && finalI < securityCodeBox.getChildren().size() - 1) {
                     securityCodeBox.getChildren().get(finalI + 1).requestFocus();
                 }
+                if (newValue.length() == 0 && finalI > 0) {
+                    securityCodeBox.getChildren().get(finalI - 1).requestFocus();
+                }
             });
         }
+
+        resendButton.setOnAction(event -> {
+            runTask(() -> {
+                securityCode = MailSender.sendResetPasswordMail(emailForgot.getText());
+            }, () -> {
+                // Disable the button
+                resendButton.setDisable(true);
+
+                // Set the initial text
+                resendButton.setText("Resend");
+
+                // Create a timer that will run for 20 seconds
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    int secondsLeft = 20;
+
+                    @Override
+                    public void run() {
+                        Platform.runLater(() -> {
+                            // Update the text of the button with the remaining time
+                            resendButton.setText("Resend(" + secondsLeft + "s)");
+                            secondsLeft--;
+
+                            if (secondsLeft < 0) {
+                                // Re-enable the button and set the text back to "Resend"
+                                resendButton.setDisable(false);
+                                resendButton.setText("Resend");
+
+                                // Cancel the timer
+                                timer.cancel();
+                            }
+                        });
+                    }
+                }, 0, 1000); // Start the timer immediately and run it every 1000 milliseconds (1 second)
+            }, progressIndicator, emailVerifyPane);
+
+
+        });
+
         FontAwesomeIconView userIcon = new FontAwesomeIconView(FontAwesomeIcon.USER);
         userIcon.setFill(Color.WHITE);
         FontAwesomeIconView keyIcon = new FontAwesomeIconView(FontAwesomeIcon.KEY);

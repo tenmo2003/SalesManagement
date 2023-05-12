@@ -21,6 +21,24 @@
     -fx-font-weight: bold;
 }
 
+#resendButton {
+    -fx-font-size: 14px;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-color: transparent;
+    -fx-font-weight: bold;
+    -fx-padding: 5px 10px;
+    -fx-border-width: 0px;
+    -fx-border-color: transparent;
+    -fx-background-insets: 0px;
+}
+
+#resendButton:hover {
+    -fx-background-color: transparent;
+    -fx-border-width: 0px;
+    -fx-border-color: transparent;
+    -fx-underline: true;
+}
+
 .check-box:selected .box {
     /* background color for selected checkbox */
     -fx-background-color: white;

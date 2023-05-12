@@ -31,12 +31,13 @@ public class CustomersFilterView extends FilterView<Customer> implements Custome
     @FXML
     public void applyFilter() {
         filteredList.setPredicate(customer -> {
+            boolean customerNumberMatch = (String.valueOf(customer.getCustomerNumber()).contains(customerNumberTextField.getText()));
             boolean nameMatch = customer.getName().toLowerCase().contains(nameTextField.getText().toLowerCase());
             boolean addressMatch = customer.getAddress().toLowerCase().contains(addressTextField.getText().toLowerCase());
             boolean phoneMatch = customer.getContact().toLowerCase().contains(contactTextField.getText().toLowerCase());
             boolean rankMatch = customer.getRank().equals(rankComboBox.getValue());
             if (rankComboBox.getValue() == null) rankMatch = true;
-            return nameMatch && addressMatch && phoneMatch && rankMatch;
+            return nameMatch && addressMatch && phoneMatch && rankMatch && customerNumberMatch;
         });
         close();
     }
