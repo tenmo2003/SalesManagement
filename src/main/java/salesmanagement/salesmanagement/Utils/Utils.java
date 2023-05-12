@@ -6,8 +6,11 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.ImageView;
@@ -259,12 +262,12 @@ public class Utils {
      * every time the width of the table changes. The column ratios specify the relative size of
      * each column compared to the total width of the table.
      *
-     * @param <T>          the type of the items in the TableView
-     * @param table        the TableView whose column sizes will be adjusted
+     * @param <T>               the type of the items in the TableView
+     * @param table             the TableView whose column sizes will be adjusted
      * @param columnWidthRatios a list of ratios that specify the relative size of each column. This list
-     *                     must have the same size as the number of columns in the table.
-     *                     If the list is not the same size as the number of columns in the table,
-     *                     the behavior of this method is undefined.
+     *                          must have the same size as the number of columns in the table.
+     *                          If the list is not the same size as the number of columns in the table,
+     *                          the behavior of this method is undefined.
      **/
     public static <T> void adjustTableColumnWidths(TableView<T> table, List<Double> columnWidthRatios) {
         table.widthProperty().addListener((obs, oldWidth, newWidth) -> {
@@ -275,6 +278,34 @@ public class Utils {
                 col.setPrefWidth(tableWidth * columnWidthRatios.get(i));
             }
         });
+    }
+
+    /**
+     * Sets the graphic alignment of multiple TableColumns to center.
+     *
+     * @param tableColumns A List of TableColumns to set the graphic alignment of.
+     * @param <S>          The type of the TableView.
+     * @param <T>          The type of the TableColumn.
+     */
+    public static <S, T> void setColumnAlignmentCenter(List<TableColumn<S, T>> tableColumns) {
+        for (TableColumn<S, T> tableColumn : tableColumns) {
+            tableColumn.setCellFactory(column -> new TableCell<>() {
+                        @Override
+                        protected void updateItem(T item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (item == null || empty) {
+                                setText(null);
+                            } else {
+                                if (item instanceof Node)
+                                    setGraphic((Node) item);
+                                else if (item instanceof String)
+                                    setText((String) item);
+                                setAlignment(Pos.CENTER);
+                            }
+                        }
+                    }
+            );
+        }
     }
 }
 
