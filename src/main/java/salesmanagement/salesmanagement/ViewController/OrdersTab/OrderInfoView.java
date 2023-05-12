@@ -133,7 +133,6 @@ public class OrderInfoView extends ViewController implements OrdersTab, InputVal
         customerNumberTextField.setText(String.valueOf(searchedCustomer.getCustomerNumber()));
     }
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         super.initialize(url, resourceBundle);
@@ -200,13 +199,15 @@ public class OrderInfoView extends ViewController implements OrdersTab, InputVal
             if (newValue.equals("online")) {
                 requiredDatePicker.setDisable(false);
                 shippedDatePicker.setDisable(false);
-                status.setDisable(false);
                 deliverTo.setDisable(false);
+                status.setItems(FXCollections.observableList(Arrays.asList("In Process", "Shipped", "Cancelled")));
+                status.setValue("In Process");
             } else {
                 requiredDatePicker.setDisable(true);
                 shippedDatePicker.setDisable(true);
-                status.setDisable(true);
                 deliverTo.setDisable(true);
+                status.setItems(FXCollections.observableList(Arrays.asList("Resolved", "Cancelled")));
+                status.setValue("Resolved");
             }
         });
     }
@@ -427,7 +428,7 @@ public class OrderInfoView extends ViewController implements OrdersTab, InputVal
                         .append(",")
                         .append(item.getPriceEach())
                         .append("),");
-                if (orderType.getValue().equals("onsite") || status.getValue().equals("Shipped")) {
+                if (!status.getValue().equals("Cancelled")) {
                     query = String.format("UPDATE products SET quantityInStock = quantityInStock - %d WHERE productCode = '%s';\n", item.getQuantityOrdered(), item.getProductCode());
                     try {
                         sqlConnection.updateQuery(query);
@@ -495,12 +496,24 @@ public class OrderInfoView extends ViewController implements OrdersTab, InputVal
     }
 
     void saveOrder(int orderNumber) {
-        if (!validInput()) {
-            NotificationSystem.throwNotification(NotificationCode.INVALID_INPUTS, stage);
-            return;
-        }
+//        if (!validInput()) {
+//            NotificationSystem.throwNotification(NotificationCode.INVALID_INPUTS, stage);
+//            return;
+//        }
         runTask(() -> {
-            if (orderType.getValue().equals("onsite") || status.getValue().equals("Shipped")) {
+            boolean cancelledBefore = false;
+            String cancelCheck = String.format("SELECT status FROM orders WHERE orderNumber = %d", orderNumber);
+            ResultSet result = sqlConnection.getDataQuery(cancelCheck);
+            try {
+                if (result.next()) {
+                    if (result.getString(1).equals("Cancelled")) {
+                        cancelledBefore = true;
+                    }
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            if ((!cancelledBefore && status.getValue().equals("Cancelled"))) {
                 String query = String.format("SELECT * FROM orderdetails WHERE orderNumber = %d", orderNumber);
                 ResultSet rs = sqlConnection.getDataQuery(query);
                 try {
@@ -528,8 +541,8 @@ public class OrderInfoView extends ViewController implements OrdersTab, InputVal
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
-                if (orderType.getValue().equals("onsite") || status.getValue().equals("Shipped")) {
-                    String tmp = String.format("UPDATE products SET quantityInStock = quantityInStock + %d WHERE productCode = '%s'", quantity, productCode);
+                if (cancelledBefore && !status.getValue().equals("Cancelled")) {
+                    String tmp = String.format("UPDATE products SET quantityInStock = quantityInStock - %d WHERE productCode = '%s'", quantity, productCode);
                     try {
                         sqlConnection.updateQuery(tmp);
                     } catch (SQLException e) {
@@ -582,49 +595,28 @@ public class OrderInfoView extends ViewController implements OrdersTab, InputVal
             para.put("orderMonth", orderDate.getMonthValue() - 1);
             para.put("orderDay", orderDate.getDayOfMonth());
             para.put("paymentMethod", paymentMethod.getValue());
-            String query = String.format("SELECT value, type, CONCAT(lastName, ' ', firstName) AS name, `rank`, customerName, customers.phone FROM orders INNER JOIN employees ON orders.created_by = employees.employeeNumber INNER JOIN customers ON orders.customerNumber = customers.customerNumber WHERE orderNumber = %d", orderNumber);
-            ResultSet rs = sqlConnection.getDataQuery(query);
-            if (rs.next()) {
-                String rank = rs.getString(4);
-                double left = 1;
-                switch (rank) {
-                    case "Emerald" -> {
-                        para.put("discount", "25%");
-                        left = 0.75;
-                    }
-                    case "Diamond" -> {
-                        para.put("discount", "20%");
-                        left = 0.8;
-                    }
-                    case "Platinum" -> {
-                        para.put("discount", "15%");
-                        left = 0.85;
-                    }
-                    case "Gold" -> {
-                        para.put("discount", "10%");
-                        left = 0.9;
-                    }
-                    case "Silver" -> {
-                        para.put("discount", "5%");
-                        left = 0.95;
-                    }
-                    case "Membership" -> {
-                        para.put("discount", "0%");
-                        left = 1;
-                    }
-                }
-                para.put("totalAmount", Double.parseDouble(String.format("%.2f", rs.getDouble(1) / left)));
-                para.put("leftAmount", rs.getDouble(1));
-                para.put("type", rs.getString(2).substring(0, 1).toUpperCase() + rs.getString(2).substring(1));
-                para.put("employee", rs.getString(3));
-                para.put("customerName", rs.getString(5));
-                para.put("contact", rs.getString(6));
-            }
+
+            double subValue = 0;
 
             ArrayList<OrderItem> plist = new ArrayList<>();
 
             for (OrderItem item : orderTable.getItems()) {
                 plist.add(new OrderItem(item.getProductCode(), item.getQuantityOrdered(), item.getPriceEach()));
+                subValue += Double.parseDouble(String.format("%.2f", item.getPriceEach() * item.getQuantityOrdered()));
+            }
+
+            String query = String.format("SELECT value, type, CONCAT(lastName, ' ', firstName) AS name, `rank`, customerName, customers.phone FROM orders INNER JOIN employees ON orders.created_by = employees.employeeNumber INNER JOIN customers ON orders.customerNumber = customers.customerNumber WHERE orderNumber = %d", orderNumber);
+            ResultSet rs = sqlConnection.getDataQuery(query);
+            if (rs.next()) {
+                double value = rs.getDouble(1);
+                String discounted = (int)((1 - value / subValue) * 100) + "%";
+                para.put("discount", discounted);
+                para.put("totalAmount", subValue);
+                para.put("leftAmount", value);
+                para.put("type", rs.getString(2).substring(0, 1).toUpperCase() + rs.getString(2).substring(1));
+                para.put("employee", rs.getString(3));
+                para.put("customerName", rs.getString(5));
+                para.put("contact", rs.getString(6));
             }
 
             JRBeanCollectionDataSource jcs = new JRBeanCollectionDataSource(plist);
@@ -674,6 +666,8 @@ public class OrderInfoView extends ViewController implements OrdersTab, InputVal
         paymentMethod.setValue("Cash");
 
         orderType.setValue("onsite");
+
+        status.setValue("Resolved");
 
         orderItems.clear();
 

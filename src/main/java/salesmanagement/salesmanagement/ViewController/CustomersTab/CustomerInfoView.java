@@ -156,11 +156,31 @@ public class CustomerInfoView extends InfoView<Customer> implements CustomersTab
                 }
             }
         });
+
+        contactTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                VBox container = (VBox) contactTextField.getParent();
+
+                if (!contactTextField.getText().matches("^\\d+$")) {
+                    contactTextField.setStyle("-fx-border-color: #f35050");
+                    if (!(container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                        container.getChildren().add(getInputErrorLabel(InputErrorCode.INVALID_INPUT));
+                    }
+                    shake(contactTextField);
+                } else {
+                    contactTextField.setStyle("-fx-border-color: transparent");
+                    if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                        container.getChildren().remove(container.getChildren().size() - 1);
+                    }
+                }
+            }
+        });
     }
 
     @Override
     public boolean validInput() {
         if (!SSNTextField.getText().matches("^\\d+$")) return false;
+        if (!contactTextField.getText().matches("^\\d+$")) return false;
         return nameTextField.getText().matches("^.+$");
     }
 
