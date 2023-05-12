@@ -1,9 +1,14 @@
 package salesmanagement.salesmanagement.ViewController.ProductLinesTab;
 
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import salesmanagement.salesmanagement.SalesComponent.ProductLine;
 import salesmanagement.salesmanagement.ViewController.FilterView;
+
+import java.net.URL;
+import java.util.Arrays;
+import java.util.ResourceBundle;
 
 public class ProductLinesFilterView extends FilterView<ProductLine> implements ProductLinesTab {
     @FXML
@@ -19,5 +24,10 @@ public class ProductLinesFilterView extends FilterView<ProductLine> implements P
             return nameMatch && descriptionMatch;
         });
         close();
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        super.initialize(url, resourceBundle);
     }
 }

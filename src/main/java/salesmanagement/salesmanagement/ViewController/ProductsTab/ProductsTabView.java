@@ -107,7 +107,9 @@ public class ProductsTabView extends TabView implements ProductsTab {
 
         productsTable.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                productInfoView.show(productsTable.getSelectionModel().getSelectedItem());
+                if (productsTable.getSelectionModel().getSelectedItem() != null) {
+                    productInfoView.show(productsTable.getSelectionModel().getSelectedItem());
+                }
             }
         });
     }

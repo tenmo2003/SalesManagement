@@ -1,6 +1,7 @@
 package salesmanagement.salesmanagement.ViewController.ProductLinesTab;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -57,7 +58,7 @@ public class ProductLineInfoView extends InfoView<ProductLine> implements Produc
     protected void figureAdd() {
         runTask(() -> {
             close();
-            String query = String.format("insert into productlines (productLine, textDescription) VALUES ('%s', '%s');", descriptionTextField.getText(), productLineTextField.getText());
+            String query = String.format("insert into productlines (productLine, textDescription) VALUES ('%s', '%s');", productLineTextField.getText(), descriptionTextField.getText());
             Action action;
             try {
                 sqlConnection.updateQuery(query);
@@ -130,10 +131,12 @@ public class ProductLineInfoView extends InfoView<ProductLine> implements Produc
 
     @Override
     public void removeInvalidAlert() {
-        VBox container = (VBox) productLineTextField.getParent();
-        productLineTextField.setStyle("-fx-border-color: transparent");
-        if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
-            container.getChildren().remove(container.getChildren().size() - 1);
-        }
+        Platform.runLater(() -> {
+            VBox container = (VBox) productLineTextField.getParent();
+            productLineTextField.setStyle("-fx-border-color: transparent");
+            if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                container.getChildren().remove(container.getChildren().size() - 1);
+            }
+        });
     }
 }

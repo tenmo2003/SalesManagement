@@ -80,7 +80,9 @@ public class ProductLinesTabView extends TabView implements Initializable, Produ
 
         productLinesTable.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                productLineInfoView.show(productLinesTable.getSelectionModel().getSelectedItem());
+                if (productLinesTable.getSelectionModel().getSelectedItem() != null) {
+                    productLineInfoView.show(productLinesTable.getSelectionModel().getSelectedItem());
+                }
             }
         });
     }
@@ -100,13 +102,11 @@ public class ProductLinesTabView extends TabView implements Initializable, Produ
         ProductLine selected = productLinesTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
             runTask(() -> {
-                String query = "delete from productlines where productline = '" + selected.getProductLine() + "'";
+                String query = "delete from productlines where productLine = '" + selected.getProductLine() + "'";
                 sqlConnection.updateQuery(query, selected.getProductLine(), Action.ComponentModified.PRODUCTLINES, Action.ActionCode.REMOVE);
                 show();
 
-            }, () -> {
-                NotificationSystem.throwNotification(NotificationCode.INVALID_INPUTS, stage);
-            }, loadingIndicator, null);
+            }, null, loadingIndicator, null);
         }
     }
 

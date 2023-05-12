@@ -81,7 +81,7 @@ public class AccountActivityLogView extends TabView implements SettingsTab {
                 super.updateItem(item, empty);
 
                 if (empty || item == null) {
-                    setText(null);
+                    setText("");
                     setGraphic(null);
 
                 } else {
@@ -97,7 +97,7 @@ public class AccountActivityLogView extends TabView implements SettingsTab {
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
                 if (item == null || empty) {
-                    setText(null);
+                    setText("");
                 } else {
                     setText(item);
                     setAlignment(Pos.CENTER);

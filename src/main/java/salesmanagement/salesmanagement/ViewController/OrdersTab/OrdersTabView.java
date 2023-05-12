@@ -139,7 +139,9 @@ public class OrdersTabView extends TabView implements OrdersTab {
 
         ordersTable.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                orderInfoView.show(ordersTable.getSelectionModel().getSelectedItem());
+                if (ordersTable.getSelectionModel().getSelectedItem() != null) {
+                    orderInfoView.show(ordersTable.getSelectionModel().getSelectedItem());
+                }
             }
         });
     }
