@@ -130,7 +130,7 @@ public class OrdersTabView extends TabView implements OrdersTab {
             e.printStackTrace();
         }
 
-        Utils.adjustTableColumnWidths(ordersTable, Arrays.asList(0.1, 0.2, 0.1, 0.1, 0.2, 0.1, 0.2));
+        Utils.adjustTableColumnWidths(ordersTable, Arrays.asList(0.1, 0.1, 0.1, 0.1, 0.1, 0.3, 0.1, 0.1));
 
         orderNumberColumn.setCellValueFactory(new PropertyValueFactory<>("orderNumber"));
         employeeColumn.setCellValueFactory(new PropertyValueFactory<>("employeeName"));

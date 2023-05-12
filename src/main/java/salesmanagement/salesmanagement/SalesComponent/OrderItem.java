@@ -10,7 +10,8 @@ public class OrderItem implements SalesComponent {
         this.productCode = productCode;
         this.quantityOrdered = quantityOrdered;
         this.priceEach = priceEach;
-        this.amount = Double.parseDouble(String.format("%.2f", quantityOrdered * priceEach));
+        //System.out.println(String.format("%.2f", quantityOrdered * priceEach));
+        this.amount = Double.parseDouble(String.format("%.2f", quantityOrdered * priceEach).replaceAll(",","."));
     }
 
     public String getProductCode() {

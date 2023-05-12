@@ -166,7 +166,7 @@
                                     <HBox alignment="CENTER_RIGHT">
                                        <children>
                                           <Label styleClass="text-field-name" text="Total Amount: " />
-                                          <TextField fx:id="totalAmountTextField" editable="false" focusTraversable="false" prefHeight="26.0" prefWidth="198.0" />
+                                          <TextField fx:id="totalAmountTextField" editable="false" focusTraversable="false" prefHeight="26.0" prefWidth="198.0" styleClass="text-field-box" />
                                        </children>
                                     </HBox>
                                  </children>
@@ -182,7 +182,7 @@
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <DatePicker fx:id="orderedDatePicker" prefHeight="26.0" prefWidth="200.0" stylesheets="@../../css/light-mode/date-picker.css" />
+                                    <DatePicker fx:id="orderedDatePicker" prefHeight="26.0" prefWidth="200.0" styleClass="text-field-box" />
                                  </children>
                               </VBox>
                               <VBox prefHeight="100.0" prefWidth="200.0">
@@ -192,7 +192,7 @@
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <DatePicker fx:id="requiredDatePicker" prefHeight="26.0" prefWidth="200.0" stylesheets="@../../css/light-mode/date-picker.css" />
+                                    <DatePicker fx:id="requiredDatePicker" prefHeight="26.0" prefWidth="200.0" styleClass="text-field-box" stylesheets="@../../css/light-mode/date-picker.css" />
                                  </children>
                               </VBox>
                               <VBox prefHeight="100.0" prefWidth="200.0">
@@ -202,7 +202,7 @@
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <DatePicker fx:id="shippedDatePicker" prefHeight="26.0" prefWidth="200.0" stylesheets="@../../css/light-mode/date-picker.css" />
+                                    <DatePicker fx:id="shippedDatePicker" prefHeight="26.0" prefWidth="200.0" styleClass="text-field-box" stylesheets="@../../css/light-mode/date-picker.css" />
                                  </children>
                               </VBox>
                            </children>
@@ -216,7 +216,7 @@
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="deliverTo" prefHeight="26.0" prefWidth="200.0" />
+                                    <TextField fx:id="deliverTo" prefHeight="26.0" prefWidth="200.0" styleClass="text-field-box" />
                                  </children>
                               </VBox>
                               <VBox prefHeight="47.0" prefWidth="200.0">
@@ -226,7 +226,7 @@
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <ComboBox fx:id="paymentMethod" prefWidth="200.0" style="-fx-font-size: 15;" />
+                                    <ComboBox fx:id="paymentMethod" prefWidth="200.0" style="-fx-font-size: 15;" styleClass="text-field-box" />
                                  </children>
                               </VBox>
                               <VBox prefHeight="47.0" prefWidth="200.0">
@@ -236,7 +236,7 @@
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <ComboBox fx:id="status" prefWidth="200.0" />
+                                    <ComboBox fx:id="status" prefWidth="200.0" styleClass="text-field-box" />
                                  </children>
                               </VBox>
                            </children>
@@ -250,7 +250,7 @@
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="commentsTextField" prefHeight="26.0" prefWidth="329.0" />
+                                    <TextField fx:id="commentsTextField" prefHeight="26.0" prefWidth="329.0" styleClass="text-field-box" />
                                  </children>
                               </VBox>
                            </children>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="@localhost" uuid="a6dd4904-65ea-4d99-9e09-33b66325798c">
+    <data-source source="LOCAL" name="@127.0.0.1" uuid="a6dd4904-65ea-4d99-9e09-33b66325798c">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306</jdbc-url>
+      <jdbc-url>jdbc:mysql://127.0.0.1:3306</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
     <data-source source="LOCAL" name="b7kidpocyxjnjhwdw73i@b7kidpocyxjnjhwdw73i-mysql.services.clever-cloud.com" uuid="8b84f1ec-765a-4637-ae60-d499e938010f">
@@ -20,6 +20,13 @@
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://antooo5113.mysql.pythonanywhere-services.com :3306</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="bro797wh6lkgffqmjr7x@bro797wh6lkgffqmjr7x-mysql.services.clever-cloud.com" uuid="0ec781a0-99e5-4c67-b0e7-6c01555bf81b">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://bro797wh6lkgffqmjr7x-mysql.services.clever-cloud.com:3306/bro797wh6lkgffqmjr7x</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

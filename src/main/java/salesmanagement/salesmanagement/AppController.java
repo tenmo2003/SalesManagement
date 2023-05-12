@@ -82,14 +82,13 @@ public class AppController {
             stage.setY(event.getScreenY() + yOffset);
         });
 
+//        var password = "";
+//        var user = "root";
+//        var url = "jdbc:mysql://localhost:3306/b7kidpocyxjnjhwdw73i";
 
-//        var password = "lbfj2nEwsHTelFcZAqLU";
-//        var user = "udomuzbs3hfulslz";
-//        var url = "jdbc:mysql://b7kidpocyxjnjhwdw73i-mysql.services.clever-cloud.com:3306/b7kidpocyxjnjhwdw73i";
-
-        var password = "";
-        var user = "root";
-        var url = "jdbc:mysql://localhost:3306/b7kidpocyxjnjhwdw73i";
+        var password = "M3hB6j3RXWrqpQssMdSq";
+        var user = "ur3nnlrz6fwe487r";
+        var url = "jdbc:mysql://bro797wh6lkgffqmjr7x-mysql.services.clever-cloud.com:3306/bro797wh6lkgffqmjr7x";
 
         sqlConnection = new SQLConnection(url, user, password);
         loginSceneController.setSqlConnection(sqlConnection, stage);
