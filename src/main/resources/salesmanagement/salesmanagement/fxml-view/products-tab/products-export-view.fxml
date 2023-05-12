@@ -17,70 +17,77 @@
         <StackPane opacity="0.5" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: grey;" />
         <FlowPane alignment="CENTER" StackPane.alignment="CENTER">
             <children>
-                <VBox alignment="TOP_CENTER" prefHeight="195.0" prefWidth="414.0" style="-fx-background-color: white;">
-                    <children>
-                        <StackPane>
-                            <children>
-                                <Label text="Export Products List">
-                                    <font>
-                                        <Font size="21.0" />
-                                    </font>
-                                </Label>
-                                <JFXButton alignment="CENTER" contentDisplay="CENTER" minWidth="46.0" onMouseClicked="#close" prefHeight="30.0" prefWidth="46.0" textAlignment="CENTER" StackPane.alignment="CENTER_RIGHT">
-                                    <graphic>
-                                        <FontAwesomeIconView glyphName="CLOSE" size="25" />
-                                    </graphic>
-                                    <cursor>
-                                        <Cursor fx:constant="HAND" />
-                                    </cursor>
-                                </JFXButton>
-                            </children>
-                            <VBox.margin>
-                                <Insets bottom="10.0" top="10.0" />
-                            </VBox.margin>
-                        </StackPane>
-                        <HBox prefHeight="123.0" prefWidth="394.0" spacing="30.0">
-                            <children>
-                                <VBox prefHeight="192.0" prefWidth="82.0" spacing="10.0">
-                                    <children>
-                                        <JFXCheckBox fx:id="productCode" selected="true" text="Product Code" />
-                                        <JFXCheckBox fx:id="productVendor" selected="true" text="Product Vendor" />
-                                        <JFXCheckBox fx:id="buyPrice" selected="true" text="Buy Price" />
-                                        <JFXCheckBox fx:id="productLine" selected="true" text="Product Line" />
-                                    </children>
-                                </VBox>
-                                <VBox prefHeight="192.0" prefWidth="78.0" spacing="10.0">
-                                    <children>
-                                        <JFXCheckBox fx:id="productName" selected="true" text="Product Name" />
-                                        <JFXCheckBox fx:id="inStock" selected="true" text="In Stock" />
-                                        <JFXCheckBox fx:id="sellPrice" selected="true" text="Sell Price" />
-                                        <JFXCheckBox fx:id="description" selected="true" text="Description" />
-                                    </children>
-                                </VBox>
-                            </children>
-                            <padding>
-                                <Insets left="50.0" />
-                            </padding>
-                        </HBox>
-                        <HBox alignment="CENTER" prefHeight="51.0" prefWidth="394.0" spacing="20.0">
-                            <children>
-                                <JFXButton onMouseClicked="#export" text="EXPORT">
-                                    <cursor>
-                                        <Cursor fx:constant="HAND" />
-                                    </cursor>
-                                </JFXButton>
-                        <JFXButton onMouseClicked="#resetData" text="RESET">
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </JFXButton>
-                            </children>
-                        </HBox>
-                    </children>
-                    <padding>
-                        <Insets left="10.0" right="10.0" />
-                    </padding>
-                </VBox>
+            <StackPane fx:id="centerBox" styleClass="center-box">
+               <children>
+                      <VBox alignment="TOP_CENTER" prefHeight="195.0" prefWidth="414.0">
+                          <children>
+                              <StackPane>
+                                  <children>
+                                      <Label styleClass="top-label" text="Export Products List">
+                                          <font>
+                                              <Font size="21.0" />
+                                          </font>
+                                      </Label>
+                                      <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minWidth="46.0" onMouseClicked="#close" prefHeight="30.0" prefWidth="46.0" styleClass="window-button" textAlignment="CENTER" StackPane.alignment="CENTER_RIGHT">
+                                          <graphic>
+                                              <FontAwesomeIconView glyphName="CLOSE" size="25" />
+                                          </graphic>
+                                          <cursor>
+                                              <Cursor fx:constant="HAND" />
+                                          </cursor>
+                                      </JFXButton>
+                                  </children>
+                                  <VBox.margin>
+                                      <Insets bottom="10.0" top="10.0" />
+                                  </VBox.margin>
+                              </StackPane>
+                              <HBox prefHeight="123.0" prefWidth="394.0" spacing="30.0">
+                                  <children>
+                                      <VBox prefHeight="192.0" prefWidth="82.0" spacing="10.0">
+                                          <children>
+                                              <JFXCheckBox fx:id="productCode" selected="true" text="Product Code" />
+                                              <JFXCheckBox fx:id="productVendor" selected="true" text="Product Vendor" />
+                                              <JFXCheckBox fx:id="buyPrice" selected="true" text="Buy Price" />
+                                              <JFXCheckBox fx:id="productLine" selected="true" text="Product Line" />
+                                          </children>
+                                      </VBox>
+                                      <VBox prefHeight="192.0" prefWidth="78.0" spacing="10.0">
+                                          <children>
+                                              <JFXCheckBox fx:id="productName" selected="true" text="Product Name" />
+                                              <JFXCheckBox fx:id="inStock" selected="true" text="In Stock" />
+                                              <JFXCheckBox fx:id="sellPrice" selected="true" text="Sell Price" />
+                                              <JFXCheckBox fx:id="description" selected="true" text="Description" />
+                                          </children>
+                                      </VBox>
+                                  </children>
+                                  <padding>
+                                      <Insets left="50.0" />
+                                  </padding>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="51.0" prefWidth="394.0" spacing="20.0">
+                                  <children>
+                                      <JFXButton onMouseClicked="#export" prefWidth="100.0" styleClass="operation-button" text="EXPORT">
+                                          <cursor>
+                                              <Cursor fx:constant="HAND" />
+                                          </cursor>
+                                      </JFXButton>
+                              <JFXButton onMouseClicked="#resetData" prefWidth="100.0" styleClass="operation-button" text="RESET">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </JFXButton>
+                                  </children>
+                           <VBox.margin>
+                              <Insets bottom="15.0" top="15.0" />
+                           </VBox.margin>
+                              </HBox>
+                          </children>
+                          <padding>
+                              <Insets left="10.0" right="10.0" />
+                          </padding>
+                      </VBox>
+               </children>
+            </StackPane>
             </children>
         </FlowPane>
     </children>

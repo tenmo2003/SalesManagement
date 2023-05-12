@@ -7,6 +7,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import salesmanagement.salesmanagement.SalesComponent.Customer;
+import salesmanagement.salesmanagement.Utils.Utils;
 import salesmanagement.salesmanagement.ViewController.OrdersTab.OrderInfoView;
 import salesmanagement.salesmanagement.ViewController.SearchView;
 
@@ -14,6 +15,7 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -45,9 +47,11 @@ public class CustomerSearchView extends SearchView<Customer> {
         SSNColumn.setCellValueFactory(new PropertyValueFactory<>("SSN"));
         contactColumn.setCellValueFactory(new PropertyValueFactory<>("contact"));
 
+        Utils.adjustTableColumnWidths(searchTable, Arrays.asList(0.1, 0.3, 0.3, 0.3));
+
         searchTable.setOnMouseClicked(event -> {
-            if(event.getClickCount() == 2) {
-                ((OrderInfoView)parentController).setSearchedCustomer(searchTable.getSelectionModel().getSelectedItem());
+            if (event.getClickCount() == 2) {
+                ((OrderInfoView) parentController).setSearchedCustomer(searchTable.getSelectionModel().getSelectedItem());
                 close();
             }
         });
@@ -56,14 +60,6 @@ public class CustomerSearchView extends SearchView<Customer> {
     @Override
     public void show() {
         super.show();
-        if (!tableFigured) {
-            tableFigured = true;
-            double tableWidth = searchTable.getWidth();
-            customerNumberColumn.setMinWidth(0.1 * tableWidth);
-            customerNameColumn.setMinWidth(0.3 * tableWidth);
-            contactColumn.setMinWidth(0.3 * tableWidth);
-            SSNColumn.setMinWidth(0.3 * tableWidth);
-        }
         search();
     }
 

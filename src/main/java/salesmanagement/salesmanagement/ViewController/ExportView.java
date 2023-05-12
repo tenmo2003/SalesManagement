@@ -8,7 +8,7 @@ import salesmanagement.salesmanagement.Utils.Utils;
 
 import java.io.File;
 
-public abstract class ExportView extends ViewController {
+public abstract class ExportView extends PopUpView {
     private String exportedFileName;
 
     @Override

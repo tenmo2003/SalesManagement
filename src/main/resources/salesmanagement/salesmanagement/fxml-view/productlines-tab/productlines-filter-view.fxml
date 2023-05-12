@@ -12,25 +12,25 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="root" prefHeight="400.0" prefWidth="600.0" stylesheets="@../../css/light-mode/light-mode-main-scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.ProductLinesTab.ProductLinesFilterView">
+<StackPane fx:id="root" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.ProductLinesTab.ProductLinesFilterView">
     <children>
         <StackPane opacity="0.5" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: grey;" />
         <FlowPane alignment="CENTER">
             <children>
-            <StackPane>
+            <StackPane fx:id="centerBox" styleClass="center-box">
                <children>
-                      <VBox alignment="TOP_CENTER" prefHeight="198.0" prefWidth="412.0" style="-fx-background-color: white; -fx-border-radius: white; -fx-background-radius: white;">
+                      <VBox alignment="TOP_CENTER" prefHeight="198.0" prefWidth="412.0">
                           <children>
                               <StackPane>
                                   <children>
-                                      <Label id="top_label" text="Products Filter">
+                                      <Label styleClass="top-label" text="Products Filter">
                                           <font>
                                               <Font size="21.0" />
                                           </font>
                                       </Label>
-                                      <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minWidth="46.0" onMouseClicked="#close" prefHeight="30.0" prefWidth="46.0" textAlignment="CENTER" StackPane.alignment="CENTER_RIGHT">
+                                      <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minWidth="46.0" onMouseClicked="#close" prefHeight="30.0" prefWidth="46.0" styleClass="window-button" textAlignment="CENTER" StackPane.alignment="CENTER_RIGHT">
                                           <graphic>
-                                              <FontAwesomeIconView id="close_color" fill="#0000008f" glyphName="CLOSE" size="25" text="" />
+                                              <FontAwesomeIconView fill="#0000008f" glyphName="CLOSE" size="25" text="" />
                                           </graphic>
                                           <cursor>
                                               <Cursor fx:constant="HAND" />
@@ -45,12 +45,12 @@
                                   <children>
                                       <VBox prefHeight="170.0" prefWidth="448.0">
                                           <children>
-                                              <Label text="Product Line">
+                                              <Label styleClass="text-field-name" text="Product Line">
                                                   <font>
                                                       <Font name="System Bold" size="15.0" />
                                                   </font>
                                               </Label>
-                                              <TextField fx:id="productLineTextField">
+                                              <TextField fx:id="productLineTextField" styleClass="text-field-box">
                                                   <font>
                                                       <Font size="15.0" />
                                                   </font>
@@ -59,12 +59,12 @@
                                       </VBox>
                                       <VBox prefHeight="170.0" prefWidth="448.0">
                                           <children>
-                                              <Label text="Description">
+                                              <Label styleClass="text-field-name" text="Description">
                                                   <font>
                                                       <Font name="System Bold" size="15.0" />
                                                   </font>
                                               </Label>
-                                              <TextField fx:id="descriptionTextField">
+                                              <TextField fx:id="descriptionTextField" styleClass="text-field-box">
                                                   <font>
                                                       <Font size="15.0" />
                                                   </font>
@@ -76,13 +76,13 @@
                                       <Insets top="10.0" />
                                   </VBox.margin>
                               </VBox>
-                              <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
+                              <HBox alignment="CENTER" spacing="20.0" VBox.vgrow="ALWAYS">
                                   <children>
-                                      <JFXButton onMouseClicked="#applyFilter" text="Apply Filter" />
-                                      <JFXButton onMouseClicked="#clearFilter" text="Clear All" />
+                                      <JFXButton maxWidth="100.0" onMouseClicked="#applyFilter" prefWidth="100.0" styleClass="operation-button" text="Apply Filter" />
+                                      <JFXButton maxWidth="100.0" onMouseClicked="#clearFilter" prefWidth="100.0" styleClass="operation-button" text="Clear All" />
                                   </children>
                            <padding>
-                              <Insets bottom="10.0" top="10.0" />
+                              <Insets bottom="20.0" top="15.0" />
                            </padding>
                               </HBox>
                           </children>

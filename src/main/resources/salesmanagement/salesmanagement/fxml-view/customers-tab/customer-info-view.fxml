@@ -142,7 +142,7 @@
                               </JFXButton>
                            </children>
                            <VBox.margin>
-                              <Insets top="10.0" />
+                              <Insets bottom="20.0" top="15.0" />
                            </VBox.margin>
                         </StackPane>
                      </children>

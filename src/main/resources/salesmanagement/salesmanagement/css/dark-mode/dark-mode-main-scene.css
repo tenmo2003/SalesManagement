@@ -177,3 +177,9 @@
 .center-box {
     -fx-background-color: -mode-color-1;
 }
+
+.check-box {
+    -fx-font-size: 14;
+    -fx-text-fill: -label-color;
+    -fx-focus-traversable: false;
+}
