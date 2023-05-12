@@ -12,136 +12,140 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="root" prefHeight="400.0" prefWidth="600.0" stylesheets="@../../css/light-mode/light-mode-main-scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.ProductLinesTab.ProductLineInfoView">
+<StackPane fx:id="root" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.ProductLinesTab.ProductLineInfoView">
     <children>
         <StackPane opacity="0.5" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: grey;" />
         <FlowPane alignment="CENTER">
             <children>
-                <VBox alignment="TOP_CENTER" prefHeight="282.0" prefWidth="454.0" spacing="10.0" style="-fx-background-color: white; -fx-border-radius: white; -fx-background-radius: white;">
-                    <children>
-                        <StackPane>
-                            <children>
-                                <Label id="top_label" fx:id="boxLabel" text="ProductLine Infomation">
-                                    <font>
-                                        <Font size="21.0" />
-                                    </font>
-                                </Label>
-                                <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minWidth="46.0" onMouseClicked="#close" prefHeight="30.0" prefWidth="46.0" textAlignment="CENTER" StackPane.alignment="CENTER_RIGHT">
-                                    <graphic>
-                                        <FontAwesomeIconView id="close_color" fill="#0000008f" glyphName="CLOSE" size="25" text="" />
-                                    </graphic>
-                                    <cursor>
-                                        <Cursor fx:constant="HAND" />
-                                    </cursor>
-                                </JFXButton>
-                            </children>
-                            <VBox.margin>
-                                <Insets top="10.0" />
-                            </VBox.margin>
-                        </StackPane>
-                        <HBox prefHeight="179.0" prefWidth="540.0" spacing="30.0">
-                            <VBox.margin>
-                                <Insets top="10.0" />
-                            </VBox.margin>
-                            <children>
-                                <VBox fillWidth="false" prefHeight="179.0" prefWidth="526.0" spacing="10.0">
-                                    <children>
-                                        <VBox prefHeight="53.0" prefWidth="581.0">
-                                            <children>
-                                                <Label text="Product Line">
-                                                    <font>
-                                                        <Font name="System Bold" size="15.0" />
-                                                    </font>
-                                                </Label>
-                                                <TextField fx:id="productLineTextField" editable="false">
-                                                    <font>
-                                                        <Font size="15.0" />
-                                                    </font>
-                                                </TextField>
-                                            </children>
-                                        </VBox>
-                                        <VBox prefHeight="53.0" prefWidth="572.0">
-                                            <children>
-                                                <Label text="Description">
-                                                    <font>
-                                                        <Font name="System Bold" size="15.0" />
-                                                    </font>
-                                                </Label>
-                                                <TextField fx:id="descriptionTextField">
-                                                    <font>
-                                                        <Font size="15.0" />
-                                                    </font>
-                                                </TextField>
-                                            </children>
-                                        </VBox>
-                              <VBox prefHeight="54.0" prefWidth="573.0">
-                                 <children>
-                                    <Label text="Main Product Vendor">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                    </Label>
-                                    <TextField fx:id="mainProductVendorTextField" disable="true">
-                                       <font>
-                                          <Font size="15.0" />
-                                       </font>
-                                    </TextField>
-                                 </children>
-                              </VBox>
-                              <VBox prefHeight="54.0" prefWidth="573.0">
-                                 <children>
-                                    <Label text="Total Revenue">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                    </Label>
-                                    <TextField fx:id="totalRevenueTextField" disable="true">
-                                       <font>
-                                          <Font size="15.0" />
-                                       </font>
-                                    </TextField>
-                                 </children>
-                              </VBox>
-                              <VBox prefHeight="54.0" prefWidth="573.0">
-                                 <children>
-                                    <Label text="Quantity In Stock">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                    </Label>
-                                    <TextField fx:id="quantityInStockTextField" disable="true">
-                                       <font>
-                                          <Font size="15.0" />
-                                       </font>
-                                    </TextField>
-                                 </children>
-                              </VBox>
-                                    </children>
-                                </VBox>
-                            </children>
-                        </HBox>
-                        <StackPane VBox.vgrow="ALWAYS">
-                            <children>
-                                <JFXButton fx:id="saveButton" onMouseClicked="#save" text="SAVE" visible="false">
-                                    <cursor>
-                                        <Cursor fx:constant="HAND" />
-                                    </cursor>
-                                </JFXButton>
-                                <JFXButton fx:id="addButton" onMouseClicked="#add" text="ADD" visible="false">
-                                    <cursor>
-                                        <Cursor fx:constant="HAND" />
-                                    </cursor>
-                                </JFXButton>
-                            </children>
-                            <VBox.margin>
-                                <Insets top="10.0" />
-                            </VBox.margin>
-                        </StackPane>
-                    </children>
-                    <padding>
-                        <Insets left="10.0" right="10.0" />
-                    </padding>
-                </VBox>
+            <StackPane fx:id="centerBox" prefHeight="353.0" prefWidth="454.0" styleClass="center-box">
+               <children>
+                      <VBox alignment="TOP_CENTER" prefHeight="438.0" prefWidth="454.0" spacing="10.0">
+                          <children>
+                              <StackPane>
+                                  <children>
+                                      <Label id="top_label" fx:id="boxLabel" styleClass="top-label" text="ProductLine Infomation">
+                                          <font>
+                                              <Font size="21.0" />
+                                          </font>
+                                      </Label>
+                                      <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minWidth="46.0" onMouseClicked="#close" prefHeight="30.0" prefWidth="46.0" styleClass="window-button" textAlignment="CENTER" StackPane.alignment="CENTER_RIGHT">
+                                          <graphic>
+                                              <FontAwesomeIconView fill="#0000008f" glyphName="CLOSE" size="25" text="" />
+                                          </graphic>
+                                          <cursor>
+                                              <Cursor fx:constant="HAND" />
+                                          </cursor>
+                                      </JFXButton>
+                                  </children>
+                                  <VBox.margin>
+                                      <Insets top="10.0" />
+                                  </VBox.margin>
+                              </StackPane>
+                              <HBox prefHeight="179.0" prefWidth="540.0" spacing="30.0">
+                                  <VBox.margin>
+                                      <Insets top="10.0" />
+                                  </VBox.margin>
+                                  <children>
+                                      <VBox fillWidth="false" prefHeight="179.0" prefWidth="526.0" spacing="10.0">
+                                          <children>
+                                              <VBox prefHeight="53.0" prefWidth="581.0">
+                                                  <children>
+                                                      <Label styleClass="text-field-name" text="Product Line">
+                                                          <font>
+                                                              <Font name="System Bold" size="15.0" />
+                                                          </font>
+                                                      </Label>
+                                                      <TextField fx:id="productLineTextField" editable="false" styleClass="text-field-box">
+                                                          <font>
+                                                              <Font size="15.0" />
+                                                          </font>
+                                                      </TextField>
+                                                  </children>
+                                              </VBox>
+                                              <VBox prefHeight="53.0" prefWidth="572.0">
+                                                  <children>
+                                                      <Label styleClass="text-field-name" text="Description">
+                                                          <font>
+                                                              <Font name="System Bold" size="15.0" />
+                                                          </font>
+                                                      </Label>
+                                                      <TextField fx:id="descriptionTextField" styleClass="text-field-box">
+                                                          <font>
+                                                              <Font size="15.0" />
+                                                          </font>
+                                                      </TextField>
+                                                  </children>
+                                              </VBox>
+                                    <VBox prefHeight="54.0" prefWidth="573.0">
+                                       <children>
+                                          <Label styleClass="text-field-name" text="Main Product Vendor">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="mainProductVendorTextField" disable="true" styleClass="text-field-box">
+                                             <font>
+                                                <Font size="15.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </VBox>
+                                    <VBox prefHeight="54.0" prefWidth="573.0">
+                                       <children>
+                                          <Label styleClass="text-field-name" text="Total Revenue">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="totalRevenueTextField" disable="true" styleClass="text-field-box">
+                                             <font>
+                                                <Font size="15.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </VBox>
+                                    <VBox prefHeight="54.0" prefWidth="573.0">
+                                       <children>
+                                          <Label styleClass="text-field-name" text="Quantity In Stock">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="quantityInStockTextField" disable="true" styleClass="text-field-box">
+                                             <font>
+                                                <Font size="15.0" />
+                                             </font>
+                                          </TextField>
+                                       </children>
+                                    </VBox>
+                                          </children>
+                                      </VBox>
+                                  </children>
+                              </HBox>
+                              <StackPane prefWidth="100.0" VBox.vgrow="ALWAYS">
+                                  <children>
+                                      <JFXButton fx:id="saveButton" onMouseClicked="#save" prefWidth="100.0" styleClass="operation-button" text="SAVE" visible="false">
+                                          <cursor>
+                                              <Cursor fx:constant="HAND" />
+                                          </cursor>
+                                      </JFXButton>
+                                      <JFXButton fx:id="addButton" onMouseClicked="#add" prefWidth="100.0" styleClass="operation-button" text="ADD" visible="false">
+                                          <cursor>
+                                              <Cursor fx:constant="HAND" />
+                                          </cursor>
+                                      </JFXButton>
+                                  </children>
+                                  <VBox.margin>
+                                      <Insets bottom="20.0" top="15.0" />
+                                  </VBox.margin>
+                              </StackPane>
+                          </children>
+                          <padding>
+                              <Insets left="10.0" right="10.0" />
+                          </padding>
+                      </VBox>
+               </children>
+            </StackPane>
             </children>
         </FlowPane>
     </children>

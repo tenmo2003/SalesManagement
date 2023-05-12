@@ -24,7 +24,6 @@ public abstract class ViewController implements Initializable {
     protected static SQLConnection sqlConnection;
     protected Stage stage;
     protected ViewController parentController;
-    protected boolean tableFigured = false;
     protected static UserRight userRight;
     protected boolean rightSet = false;
 

@@ -21,132 +21,136 @@
         <StackPane opacity="0.5" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: grey;" />
         <FlowPane alignment="CENTER" StackPane.alignment="CENTER">
             <children>
-                <VBox fx:id="employeeFilterBox" alignment="TOP_CENTER" prefHeight="444.0" prefWidth="412.0" style="-fx-background-color: white;">
-                    <children>
-                        <StackPane>
-                            <children>
-                                <Label text="Employee Search Box">
-                                    <font>
-                                        <Font size="21.0" />
-                                    </font>
-                                </Label>
-                                <JFXButton alignment="CENTER" contentDisplay="CENTER" minWidth="46.0" onMouseClicked="#close" prefHeight="30.0" prefWidth="46.0" textAlignment="CENTER" StackPane.alignment="CENTER_RIGHT">
-                                    <graphic>
-                                        <FontAwesomeIconView glyphName="CLOSE" size="25" />
-                                    </graphic>
-                                    <cursor>
-                                        <Cursor fx:constant="HAND" />
-                                    </cursor>
-                                </JFXButton>
-                            </children>
-                            <VBox.margin>
-                                <Insets top="10.0" />
-                            </VBox.margin>
-                        </StackPane>
-                        <VBox fillWidth="false" prefHeight="58.0" prefWidth="699.0">
-                            <children>
-                                <Label text="Employee Name">
-                                    <font>
-                                        <Font size="14.0" />
-                                    </font>
-                                </Label>
-                                <TextField fx:id="nameTextField" prefHeight="30.0" prefWidth="538.0" VBox.vgrow="ALWAYS">
-                                    <font>
-                                        <Font size="14.0" />
-                                    </font>
-                                </TextField>
-                            </children>
-                        </VBox>
-                        <HBox spacing="25.0">
-                            <children>
-                                <VBox fillWidth="false" prefHeight="58.0" prefWidth="523.0">
-                                    <children>
-                                        <Label text="Phone">
-                                            <font>
-                                                <Font size="14.0" />
-                                            </font>
-                                        </Label>
-                                        <TextField fx:id="phoneTextField" prefHeight="30.0" prefWidth="303.0" VBox.vgrow="ALWAYS">
-                                            <font>
-                                                <Font size="14.0" />
-                                            </font>
-                                        </TextField>
-                                    </children>
-                                </VBox>
-                                <VBox fillWidth="false" prefHeight="58.0" prefWidth="523.0">
-                                    <children>
-                                        <Label text="Email">
-                                            <font>
-                                                <Font size="14.0" />
-                                            </font>
-                                        </Label>
-                                        <TextField fx:id="emailTextField" prefHeight="30.0" prefWidth="294.0" VBox.vgrow="ALWAYS">
-                                            <font>
-                                                <Font size="14.0" />
-                                            </font>
-                                        </TextField>
-                                    </children>
-                                </VBox>
-                            </children>
-                        </HBox>
-                        <HBox spacing="25.0">
-                            <children>
-                                <VBox fillWidth="false" prefHeight="58.0" prefWidth="523.0" HBox.hgrow="ALWAYS">
-                                    <children>
-                                        <Label prefHeight="18.0" prefWidth="369.0" text="Status" VBox.vgrow="ALWAYS">
-                                            <font>
-                                                <Font size="14.0" />
-                                            </font>
-                                        </Label>
-                                        <ComboBox fx:id="statusComboBox" prefHeight="28.0" prefWidth="251.0" VBox.vgrow="ALWAYS" />
-                                    </children>
-                                </VBox>
-                                <VBox fillWidth="false" prefHeight="58.0" prefWidth="523.0" HBox.hgrow="ALWAYS">
-                                    <children>
-                                        <Label prefHeight="18.0" prefWidth="315.0" text="Accessibility">
-                                            <font>
-                                                <Font size="14.0" />
-                                            </font>
-                                        </Label>
-                                        <ComboBox fx:id="accessibilityComboBox" prefHeight="28.0" prefWidth="246.0" />
-                                    </children>
-                                </VBox>
-                            </children>
-                        </HBox>
-                  <StackPane>
-                     <VBox.margin>
-                        <Insets bottom="10.0" top="10.0" />
-                     </VBox.margin>
-                     <children>
-                        <ProgressIndicator fx:id="loadingIndicator" prefHeight="38.0" prefWidth="66.0" StackPane.alignment="CENTER_RIGHT" />
-                              <HBox alignment="CENTER" prefHeight="21.0" prefWidth="392.0" spacing="20.0">
+            <StackPane fx:id="centerBox" styleClass="center-box">
+               <children>
+                      <VBox fx:id="employeeFilterBox" alignment="TOP_CENTER" prefHeight="444.0" prefWidth="412.0">
+                          <children>
+                              <StackPane>
                                   <children>
-                                      <JFXButton onMouseClicked="#search" text="Search">
-                                          <cursor>
-                                              <Cursor fx:constant="HAND" />
-                                          </cursor>
-                                      </JFXButton>
-                                      <JFXButton onMouseClicked="#clearAll" text="Clear All">
+                                      <Label styleClass="top-label" text="Employee Search Box">
+                                          <font>
+                                              <Font size="21.0" />
+                                          </font>
+                                      </Label>
+                                      <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minWidth="46.0" onMouseClicked="#close" prefHeight="30.0" prefWidth="46.0" styleClass="window-button" textAlignment="CENTER" StackPane.alignment="CENTER_RIGHT">
+                                          <graphic>
+                                              <FontAwesomeIconView glyphName="CLOSE" size="25" />
+                                          </graphic>
                                           <cursor>
                                               <Cursor fx:constant="HAND" />
                                           </cursor>
                                       </JFXButton>
                                   </children>
+                                  <VBox.margin>
+                                      <Insets top="10.0" />
+                                  </VBox.margin>
+                              </StackPane>
+                              <VBox fillWidth="false" prefHeight="58.0" prefWidth="699.0">
+                                  <children>
+                                      <Label styleClass="text-field-name" text="Employee Name">
+                                          <font>
+                                              <Font size="14.0" />
+                                          </font>
+                                      </Label>
+                                      <TextField fx:id="nameTextField" prefHeight="30.0" prefWidth="538.0" styleClass="text-field-box" VBox.vgrow="ALWAYS">
+                                          <font>
+                                              <Font size="14.0" />
+                                          </font>
+                                      </TextField>
+                                  </children>
+                              </VBox>
+                              <HBox spacing="25.0">
+                                  <children>
+                                      <VBox fillWidth="false" prefHeight="58.0" prefWidth="523.0">
+                                          <children>
+                                              <Label styleClass="text-field-name" text="Phone">
+                                                  <font>
+                                                      <Font size="14.0" />
+                                                  </font>
+                                              </Label>
+                                              <TextField fx:id="phoneTextField" prefHeight="30.0" prefWidth="303.0" styleClass="text-field-box" VBox.vgrow="ALWAYS">
+                                                  <font>
+                                                      <Font size="14.0" />
+                                                  </font>
+                                              </TextField>
+                                          </children>
+                                      </VBox>
+                                      <VBox fillWidth="false" prefHeight="58.0" prefWidth="523.0">
+                                          <children>
+                                              <Label styleClass="text-field-name" text="Email">
+                                                  <font>
+                                                      <Font size="14.0" />
+                                                  </font>
+                                              </Label>
+                                              <TextField fx:id="emailTextField" prefHeight="30.0" prefWidth="294.0" styleClass="text-field-box" VBox.vgrow="ALWAYS">
+                                                  <font>
+                                                      <Font size="14.0" />
+                                                  </font>
+                                              </TextField>
+                                          </children>
+                                      </VBox>
+                                  </children>
                               </HBox>
-                     </children>
-                  </StackPane>
-                  <TableView fx:id="searchTable" minHeight="100.0" prefHeight="199.0" prefWidth="392.0" VBox.vgrow="ALWAYS">
-                     <columns>
-                        <TableColumn fx:id="employeeNumberColumn" prefWidth="75.0" text="Employee Code" />
-                        <TableColumn fx:id="employeeNameColumn" prefWidth="75.0" text="EmployeeName" />
-                        <TableColumn fx:id="officeColumn" prefWidth="75.0" text="Office" />
-                     </columns>
-                  </TableView>
-                    </children>
-                    <padding>
-                        <Insets bottom="20.0" left="10.0" right="10.0" />
-                    </padding>
-                </VBox>
+                              <HBox spacing="25.0">
+                                  <children>
+                                      <VBox fillWidth="false" prefHeight="58.0" prefWidth="523.0" HBox.hgrow="ALWAYS">
+                                          <children>
+                                              <Label prefHeight="18.0" prefWidth="369.0" styleClass="text-field-name" text="Status" VBox.vgrow="ALWAYS">
+                                                  <font>
+                                                      <Font size="14.0" />
+                                                  </font>
+                                              </Label>
+                                              <ComboBox fx:id="statusComboBox" prefHeight="28.0" prefWidth="251.0" styleClass="text-field-box" VBox.vgrow="ALWAYS" />
+                                          </children>
+                                      </VBox>
+                                      <VBox fillWidth="false" prefHeight="58.0" prefWidth="523.0" HBox.hgrow="ALWAYS">
+                                          <children>
+                                              <Label prefHeight="18.0" prefWidth="315.0" styleClass="text-field-name" text="Accessibility">
+                                                  <font>
+                                                      <Font size="14.0" />
+                                                  </font>
+                                              </Label>
+                                              <ComboBox fx:id="accessibilityComboBox" prefHeight="28.0" prefWidth="246.0" styleClass="text-field-box" />
+                                          </children>
+                                      </VBox>
+                                  </children>
+                              </HBox>
+                        <StackPane>
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </VBox.margin>
+                           <children>
+                              <ProgressIndicator fx:id="loadingIndicator" prefHeight="38.0" prefWidth="66.0" StackPane.alignment="CENTER_RIGHT" />
+                                    <HBox alignment="CENTER" prefHeight="21.0" prefWidth="392.0" spacing="20.0">
+                                        <children>
+                                            <JFXButton onMouseClicked="#search" prefWidth="100.0" text="Search">
+                                                <cursor>
+                                                    <Cursor fx:constant="HAND" />
+                                                </cursor>
+                                            </JFXButton>
+                                            <JFXButton onMouseClicked="#clearAll" prefWidth="100.0" text="Clear All">
+                                                <cursor>
+                                                    <Cursor fx:constant="HAND" />
+                                                </cursor>
+                                            </JFXButton>
+                                        </children>
+                                    </HBox>
+                           </children>
+                        </StackPane>
+                        <TableView fx:id="searchTable" minHeight="100.0" prefHeight="199.0" prefWidth="392.0" VBox.vgrow="ALWAYS">
+                           <columns>
+                              <TableColumn fx:id="employeeNumberColumn" prefWidth="75.0" text="Employee Code" />
+                              <TableColumn fx:id="employeeNameColumn" prefWidth="75.0" text="EmployeeName" />
+                              <TableColumn fx:id="officeColumn" prefWidth="75.0" text="Office" />
+                           </columns>
+                        </TableView>
+                          </children>
+                          <padding>
+                              <Insets bottom="20.0" left="10.0" right="10.0" />
+                          </padding>
+                      </VBox>
+               </children>
+            </StackPane>
             </children>
         </FlowPane>
     </children>

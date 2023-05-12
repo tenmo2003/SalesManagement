@@ -187,7 +187,7 @@
                                       <JFXButton focusTraversable="false" onMouseClicked="#clearFilter" style="-fx-pref-width: 100;" styleClass="operation-button" text="Clear All" />
                                   </children>
                            <VBox.margin>
-                              <Insets bottom="10.0" top="10.0" />
+                              <Insets bottom="20.0" top="15.0" />
                            </VBox.margin>
                               </HBox>
                           </children>

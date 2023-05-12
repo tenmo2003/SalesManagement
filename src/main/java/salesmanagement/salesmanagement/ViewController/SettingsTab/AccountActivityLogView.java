@@ -16,6 +16,7 @@ import javafx.scene.control.TableView;
 import salesmanagement.salesmanagement.SalesComponent.Action;
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesManagement;
+import salesmanagement.salesmanagement.Utils.Utils;
 import salesmanagement.salesmanagement.ViewController.TabView;
 
 import java.io.IOException;
@@ -24,6 +25,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -75,6 +77,8 @@ public class AccountActivityLogView extends TabView implements SettingsTab {
         resultColumn.setCellValueFactory(new PropertyValueFactory<>("result"));
         componentModifiedIDColumn.setCellValueFactory(new PropertyValueFactory<>("componentModifiedID"));
 
+        Utils.adjustTableColumnWidths(actionsTable, Arrays.asList(0.1, 0.2, 0.3, 0.2, 0.2));
+
         resultColumn.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(Label item, boolean empty) {
@@ -92,18 +96,10 @@ public class AccountActivityLogView extends TabView implements SettingsTab {
             }
         });
 
-        componentModifiedIDColumn.setCellFactory(column -> new TableCell<>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if (item == null || empty) {
-                    setText(null);
-                } else {
-                    setText(item);
-                    setAlignment(Pos.CENTER);
-                }
-            }
-        });
+        Utils.setColumnAlignmentCenter(Arrays.asList(componentModifiedIDColumn));
+        Utils.setColumnAlignmentCenter(Arrays.asList(resultColumn));
+
+
         actionsTable.getSortOrder().add(actionIDColumn);
         actionsTable.sort();
     }
@@ -111,15 +107,7 @@ public class AccountActivityLogView extends TabView implements SettingsTab {
     @Override
     protected void figureShow() {
         super.figureShow();
-        if (!tableFigured) {
-            tableFigured = true;
-            double actionsTableWidth = actionsTable.getWidth();
-            descriptionColumn.setMinWidth(0.2 * actionsTableWidth);
-            timeColumn.setMinWidth(0.14 * actionsTableWidth);
-            actionIDColumn.setMinWidth(0.1 * actionsTableWidth);
-            resultColumn.setMinWidth(0.25 * actionsTableWidth);
-            componentModifiedIDColumn.setMinWidth(0.2 * actionsTableWidth);
-        }
+
         userIDLabel.setText(String.format("Account %d", user.getEmployeeNumber()));
         List<Action> actions = new ArrayList<>();
         runTask(() -> {
@@ -134,8 +122,8 @@ public class AccountActivityLogView extends TabView implements SettingsTab {
             }
 
             ObservableList<Action> actionObservableList = FXCollections.observableArrayList(actions);
-            accountActivityLogFilterView.setActionFilteredList(new FilteredList<>(actionObservableList));
-            sortedAndFilteredActions = new SortedList<>(accountActivityLogFilterView.getActionFilteredList());
+            accountActivityLogFilterView.setFilteredList(new FilteredList<>(actionObservableList));
+            sortedAndFilteredActions = new SortedList<>(accountActivityLogFilterView.getFilteredList());
             sortedAndFilteredActions.comparatorProperty().bind(actionsTable.comparatorProperty());
         }, () -> {
             actionsTable.setItems(sortedAndFilteredActions);
