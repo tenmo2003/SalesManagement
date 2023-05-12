@@ -74,6 +74,8 @@ public class ProductsTabView extends TabView implements ProductsTab {
     ViewController productsExportViewController;
     ProductsFilterView productsFilterView;
 
+    private boolean loaded = false;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         super.initialize(url, resourceBundle);
@@ -118,7 +120,10 @@ public class ProductsTabView extends TabView implements ProductsTab {
     protected void figureShow() {
         super.figureShow();
         runTask(() -> {
-            productInfoView.loadProductLine();
+            if (!loaded) {
+                productInfoView.loadProductLine();
+                loaded = true;
+            }
             List<Product> products = new ArrayList<>();
             try {
                 String query = "SELECT productCode, productName, productLine, productVendor, productDescription, quantityInStock, buyPrice, sellPrice FROM products";

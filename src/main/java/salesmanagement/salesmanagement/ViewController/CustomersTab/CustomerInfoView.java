@@ -33,6 +33,12 @@ public class CustomerInfoView extends InfoView<Customer> implements CustomersTab
         super.show();
         addButton.setVisible(true);
         customerNumberTextField.setEditable(false);
+        customerNumberTextField.clear();
+        SSNTextField.clear();
+        addressTextField.clear();
+        contactTextField.clear();
+        nameTextField.clear();
+        rankComboBox.setValue(null);
     }
 
     public void show(Customer customer) {
@@ -86,7 +92,7 @@ public class CustomerInfoView extends InfoView<Customer> implements CustomersTab
                                 Action.ActionCode.CREATE_NEW,
                                 Action.ResultCode.SUCCESSFUL);
 
-                        query = "select customerNumber from customers where customerSSN = " + SSNTextField.getText();
+                        query = String.format("SELECT customerNumber FROM customers WHERE customerName = '%s' AND phone = '%s'", nameTextField.getText(), contactTextField.getText());
                         ResultSet resultSet = sqlConnection.getDataQuery(query);
                         try {
                             while (resultSet.next()) {
