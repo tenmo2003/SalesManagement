@@ -51,6 +51,13 @@ public class EmployeeSearchView extends SearchView<Employee> {
 
         statusComboBox.setItems(FXCollections.observableArrayList(Arrays.asList("Active", "Inactive", "All")));
         accessibilityComboBox.setItems(FXCollections.observableArrayList(Arrays.asList("Employee", "HR", "Manager", "All")));
+
+        searchTable.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                ((EmployeeInfoView)parentController).setSupervisor(searchTable.getSelectionModel().getSelectedItem().getEmployeeNumber());
+                close();
+            }
+        });
     }
 
     @Override

@@ -193,6 +193,9 @@ public class EmployeeInfoView extends ViewController implements EmployeesTab {
 
         avatarLoading = Utils.skeletonEffect(avatar);
         addRegexChecker();
+
+        officeSearchView.setParentController(this);
+        employeeSearchView.setParentController(this);
     }
 
     @FXML
@@ -780,5 +783,13 @@ public class EmployeeInfoView extends ViewController implements EmployeesTab {
                 }
             }
         });
+    }
+
+    public void setSearchedOffice(int officeCode) {
+        officeCodeTextField.setText(String.valueOf(officeCode));
+    }
+
+    public void setSupervisor(int employeeNumber) {
+        supervisorTextField.setText(String.valueOf((employeeNumber)));
     }
 }

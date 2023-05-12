@@ -44,10 +44,17 @@ public class OfficeSearchView extends SearchView<Office> {
         super.initialize(url, resourceBundle);
 
         officeCodeColumn.setCellValueFactory(new PropertyValueFactory<>("officeCode"));
-        phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phoneCode"));
+        phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
         addressLineColumn.setCellValueFactory(new PropertyValueFactory<>("addressLine"));
 
         Utils.adjustTableColumnWidths(searchTable, Arrays.asList(0.3, 0.2, 0.5));
+
+        searchTable.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                ((EmployeeInfoView)parentController).setSearchedOffice(searchTable.getSelectionModel().getSelectedItem().getOfficeCode());
+                close();
+            }
+        });
     }
 
     @Override

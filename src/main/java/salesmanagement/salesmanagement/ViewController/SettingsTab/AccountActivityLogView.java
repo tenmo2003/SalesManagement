@@ -79,26 +79,8 @@ public class AccountActivityLogView extends TabView implements SettingsTab {
 
         Utils.adjustTableColumnWidths(actionsTable, Arrays.asList(0.1, 0.2, 0.3, 0.2, 0.2));
 
-        resultColumn.setCellFactory(column -> new TableCell<>() {
-            @Override
-            protected void updateItem(Label item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (empty || item == null) {
-                    setText(null);
-                    setGraphic(null);
-
-                } else {
-                    setGraphic(item);
-                    setAlignment(Pos.CENTER);
-
-                }
-            }
-        });
-
         Utils.setColumnAlignmentCenter(Arrays.asList(componentModifiedIDColumn));
         Utils.setColumnAlignmentCenter(Arrays.asList(resultColumn));
-
 
         actionsTable.getSortOrder().add(actionIDColumn);
         actionsTable.sort();

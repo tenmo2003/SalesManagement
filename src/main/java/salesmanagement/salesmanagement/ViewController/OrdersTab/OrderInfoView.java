@@ -392,7 +392,7 @@ public class OrderInfoView extends ViewController implements OrdersTab, InputVal
                 try {
                     if (result.next()) {
 
-                        action.setComponentModifiedID(String.valueOf(result.getInt("orderNumber")));
+                        action.setComponentModifiedID(String.valueOf(result.getInt(1)));
 
                     }
                 } catch (SQLException e) {
