@@ -100,15 +100,6 @@ public class ProductLineInfoView extends InfoView<ProductLine> implements Produc
         addButton.setVisible(true);
     }
 
-    @Override
-    protected void resetData() {
-        super.resetData();
-        totalRevenueTextField.setText("");
-        productLineTextField.setText("");
-        descriptionTextField.setText("");
-        mainProductVendorTextField.setText("");
-        quantityInStockTextField.setText("");
-    }
 
     @Override
     public void addRegexChecker() {

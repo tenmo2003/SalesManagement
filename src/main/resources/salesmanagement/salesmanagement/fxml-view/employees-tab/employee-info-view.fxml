@@ -40,12 +40,12 @@
                   </HBox>
                   <HBox>
                      <children>
-                        <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" onMouseClicked="#close" styleClass="window-button">
+                        <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" onMouseClicked="#close" styleClass="window-button">
                            <graphic>
                               <FontAwesomeIconView fill="#329efc" glyphName="ARROW_LEFT" size="22" />
                            </graphic>
                         </JFXButton>
-                        <JFXButton contentDisplay="GRAPHIC_ONLY" onMouseClicked="#show" prefHeight="26.0" prefWidth="26.0" styleClass="window-button">
+                        <JFXButton contentDisplay="GRAPHIC_ONLY" focusTraversable="false" onMouseClicked="#show" prefHeight="26.0" prefWidth="26.0" styleClass="window-button">
                            <graphic>
                               <FontAwesomeIconView fill="#329efc" glyphName="UNDO" size="22" />
                            </graphic>
@@ -314,14 +314,14 @@
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
                                                 </Label>
-                                                <HBox>
+                                                <HBox alignment="CENTER_LEFT">
                                                    <children>
                                                       <TextField fx:id="officeCodeTextField" style="-fx-border-color: transparent;" styleClass="text-field-box" HBox.hgrow="ALWAYS">
                                                          <font>
                                                             <Font size="15.0" />
                                                          </font>
                                                       </TextField>
-                                                      <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" styleClass="operation-button">
+                                                      <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" onMouseClicked="#openOfficeSearchBox" styleClass="operation-button">
                                                          <graphic>
                                                             <FontAwesomeIconView glyphName="SEARCH" size="20" />
                                                          </graphic>
@@ -337,7 +337,7 @@
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
                                                 </Label>
-                                                <ComboBox fx:id="accessibilityBox" prefWidth="150.0" promptText="Employee" style="-fx-font-size: 15; -fx-padding: 1 1 1 1;" />
+                                                <ComboBox fx:id="accessibilityBox" focusTraversable="false" prefWidth="150.0" promptText="Employee" style="-fx-font-size: 15; -fx-padding: 1 1 1 1;" />
                                              </children>
                                           </VBox>
                                           <VBox>
@@ -347,14 +347,14 @@
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
                                                 </Label>
-                                                <HBox>
+                                                <HBox alignment="CENTER_LEFT">
                                                    <children>
                                                       <TextField fx:id="supervisorTextField" style="-fx-border-color: transparent;" styleClass="text-field-box" HBox.hgrow="ALWAYS">
                                                          <font>
                                                             <Font size="15.0" />
                                                          </font>
                                                       </TextField>
-                                                      <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" HBox.hgrow="ALWAYS">
+                                                      <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" onMouseClicked="#openEmployeeSearchBox" styleClass="operation-button" HBox.hgrow="ALWAYS">
                                                          <graphic>
                                                             <FontAwesomeIconView glyphName="SEARCH" size="20" />
                                                          </graphic>
@@ -370,7 +370,7 @@
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
                                                 </Label>
-                                                <DatePicker fx:id="joiningDatePicker" prefHeight="26.0" prefWidth="745.0" style="-fx-border-color: transparent;" styleClass="text-field-box" />
+                                                <DatePicker fx:id="joiningDatePicker" prefHeight="26.0" prefWidth="745.0" styleClass="text-field-box" />
                                              </children>
                                           </VBox>
                                           <VBox>
@@ -399,7 +399,7 @@
                                        <children>
                                           <HBox alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="711.0">
                                              <children>
-                                                <Label prefHeight="26.0" prefWidth="100.0" text="Resume">
+                                                <Label prefHeight="26.0" prefWidth="100.0" styleClass="name-text-field" text="Resume">
                                                    <font>
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
@@ -410,7 +410,7 @@
                                           </HBox>
                                           <HBox>
                                              <children>
-                                                <Label prefHeight="28.0" prefWidth="100.0" text="Salary Report">
+                                                <Label prefHeight="28.0" prefWidth="100.0" styleClass="name-text-field" text="Salary Report">
                                                    <font>
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>
@@ -420,7 +420,7 @@
                                           </HBox>
                                           <HBox>
                                              <children>
-                                                <Label prefHeight="28.0" prefWidth="100.0" text="Sales Report">
+                                                <Label prefHeight="28.0" prefWidth="100.0" styleClass="name-text-field" text="Sales Report">
                                                    <font>
                                                       <Font name="System Bold" size="15.0" />
                                                    </font>

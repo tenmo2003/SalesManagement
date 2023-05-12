@@ -11,7 +11,9 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
@@ -22,10 +24,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import org.controlsfx.control.textfield.CustomPasswordField;
 import org.controlsfx.control.textfield.CustomTextField;
-import salesmanagement.salesmanagement.Utils.InputErrorCode;
-import salesmanagement.salesmanagement.Utils.MailSender;
-import salesmanagement.salesmanagement.Utils.NotificationCode;
-import salesmanagement.salesmanagement.Utils.NotificationSystem;
+import salesmanagement.salesmanagement.Utils.*;
 import salesmanagement.salesmanagement.ViewController.InputValidator;
 import salesmanagement.salesmanagement.ViewController.ViewController;
 
@@ -297,5 +296,12 @@ public class LoginSceneController extends SceneController implements Initializab
 
     public VBox getLoginPane() {
         return loginPane;
+    }
+
+    public void resetData() {
+        MainSceneController.loggerID = -1;
+        for (Node node : Utils.getAllNodes(loginRoot)) {
+            if (node instanceof TextField) ((TextField) node).setText("");
+        }
     }
 }

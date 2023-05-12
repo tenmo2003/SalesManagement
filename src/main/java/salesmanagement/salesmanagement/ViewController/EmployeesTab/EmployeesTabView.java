@@ -6,12 +6,10 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-
 import salesmanagement.salesmanagement.SalesComponent.Employee;
 import salesmanagement.salesmanagement.SalesComponent.SalesComponent;
 import salesmanagement.salesmanagement.SalesManagement;
@@ -32,36 +30,27 @@ import static salesmanagement.salesmanagement.SceneController.SceneController.ru
 public class EmployeesTabView extends TabView implements EmployeesTab {
     @FXML
     private TableColumn<?, ?> accessibilityColumn;
-
     @FXML
     private TableColumn<?, ?> emailColumn;
-
     @FXML
     private TableColumn<?, ?> employeeNumberColumn;
-
     @FXML
     private TableColumn<?, ?> employeeStatusColumn;
-
     @FXML
     private TableView<SalesComponent> employeesTable;
-
-    @FXML
-    private ProgressIndicator loadingIndicator;
-
     @FXML
     private TableColumn<?, ?> nameColumn;
-
     @FXML
     private TableColumn<?, ?> phoneColumn;
-
-    ViewController employeesExportView;
-    EmployeesFilterView employeesFilterView;
-    EmployeeInfoView employeeInfoView;
-    SortedList<SalesComponent> sortedAndFilteredEmployees;
-
-    Employee loggedInUser;
     @FXML
-    JFXButton addEmployee;
+    private JFXButton addEmployee;
+
+    private ViewController employeesExportView;
+    private EmployeesFilterView employeesFilterView;
+    private EmployeeInfoView employeeInfoView;
+    private SortedList<SalesComponent> sortedAndFilteredEmployees;
+    private Employee loggedInUser;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -107,11 +96,7 @@ public class EmployeesTabView extends TabView implements EmployeesTab {
 
     public void setLoggedInUser(Employee loggedInUser) {
         this.loggedInUser = loggedInUser;
-        if (loggedInUser.getJobTitle().equals("Employee")) {
-            addEmployee.setVisible(false);
-        } else {
-            addEmployee.setVisible(true);
-        }
+        addEmployee.setVisible(!loggedInUser.getJobTitle().equals("Employee"));
         employeeInfoView.setLoggedInUser(loggedInUser);
     }
 

@@ -4,7 +4,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import salesmanagement.salesmanagement.SalesComponent.SalesComponent;
 
-public abstract class FilterView<T extends SalesComponent> extends ViewController {
+public abstract class FilterView<T extends SalesComponent> extends PopUpView {
     protected FilteredList<T> filteredList;
 
     @FXML

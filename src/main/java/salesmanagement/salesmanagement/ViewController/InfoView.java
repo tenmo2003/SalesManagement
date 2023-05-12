@@ -10,7 +10,7 @@ import salesmanagement.salesmanagement.Utils.NotificationSystem;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public abstract class InfoView<T extends SalesComponent> extends ViewController implements InputValidator {
+public abstract class InfoView<T extends SalesComponent> extends PopUpView implements InputValidator {
     @FXML
     protected Label boxLabel;
     @FXML

@@ -7,144 +7,148 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.control.TableView?>
 
-<StackPane fx:id="root" prefHeight="400.0" prefWidth="600.0" stylesheets="@../../css/light-mode/light-mode-main-scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.CustomersTab.CustomerSearchView">
+<StackPane fx:id="root" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.CustomersTab.CustomerSearchView">
     <children>
         <StackPane opacity="0.5" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: grey;" />
         <FlowPane alignment="CENTER">
             <children>
-                <VBox fx:id="employeeFilterBox" alignment="TOP_CENTER" prefHeight="458.0" prefWidth="546.0" style="-fx-background-color: white; -fx-border-radius: white; -fx-background-radius: white;">
-                    <children>
-                        <StackPane>
-                            <children>
-                                <Label id="top_label" text="Customer Search Box">
-                                    <font>
-                                        <Font size="21.0" />
-                                    </font>
-                                </Label>
-                                <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minWidth="46.0" onMouseClicked="#close" prefHeight="30.0" prefWidth="46.0" textAlignment="CENTER" StackPane.alignment="CENTER_RIGHT">
-                                    <graphic>
-                                        <FontAwesomeIconView id="close_color" fill="#0000008f" glyphName="CLOSE" size="25" text="" />
-                                    </graphic>
-                                    <cursor>
-                                        <Cursor fx:constant="HAND" />
-                                    </cursor>
-                                </JFXButton>
-                            </children>
-                            <VBox.margin>
-                                <Insets top="10.0" />
-                            </VBox.margin>
-                        </StackPane>
-                        <VBox fillWidth="false" prefHeight="58.0" prefWidth="526.0" spacing="10.0">
-                            <children>
-                        <HBox prefHeight="106.0" prefWidth="670.0" spacing="30.0">
-                           <children>
-                              <VBox spacing="10.0" HBox.hgrow="ALWAYS">
-                                 <children>
-                                            <VBox prefHeight="53.0" prefWidth="206.0">
-                                                <children>
-                                                    <Label text="Customer Name">
-                                                        <font>
-                                                            <Font name="System Bold" size="15.0" />
-                                                        </font>
-                                                    </Label>
-                                                    <TextField fx:id="customerNameTextField">
-                                                        <font>
-                                                            <Font size="15.0" />
-                                                        </font>
-                                                    </TextField>
-                                                </children>
-                                            </VBox>
-                                            <VBox prefHeight="53.0" prefWidth="206.0">
-                                                <children>
-                                                    <Label text="SSN">
-                                                        <font>
-                                                            <Font name="System Bold" size="15.0" />
-                                                        </font>
-                                                    </Label>
-                                                    <TextField fx:id="SSNTextField">
-                                                        <font>
-                                                            <Font size="15.0" />
-                                                        </font>
-                                                    </TextField>
-                                                </children>
-                                            </VBox>
-                                 </children>
-                              </VBox>
-                              <VBox prefHeight="106.0" prefWidth="206.0" spacing="10.0" HBox.hgrow="ALWAYS">
-                                 <children>
-                                            <VBox prefHeight="53.0" prefWidth="212.0">
-                                                <children>
-                                                    <Label text="Contact">
-                                                        <font>
-                                                            <Font name="System Bold" size="15.0" />
-                                                        </font>
-                                                    </Label>
-                                                    <TextField fx:id="contactTextField">
-                                                        <font>
-                                                            <Font size="15.0" />
-                                                        </font>
-                                                    </TextField>
-                                                </children>
-                                            </VBox>
-                                            <VBox prefHeight="170.0" prefWidth="448.0">
-                                                <children>
-                                                    <Label text="Address">
-                                                        <font>
-                                                            <Font name="System Bold" size="15.0" />
-                                                        </font>
-                                                    </Label>
-                                                    <TextField fx:id="addressTextField">
-                                                        <font>
-                                                            <Font size="15.0" />
-                                                        </font>
-                                                    </TextField>
-                                                </children>
-                                            </VBox>
-                                 </children>
-                              </VBox>
-                           </children>
-                        </HBox>
-                            </children>
-                            <VBox.margin>
-                                <Insets top="10.0" />
-                            </VBox.margin>
-                        </VBox>
-                  <StackPane>
-                     <children>
-                              <HBox alignment="CENTER" prefHeight="59.0" prefWidth="526.0">
+            <StackPane fx:id="centerBox" styleClass="center-box">
+               <children>
+                      <VBox fx:id="employeeFilterBox" alignment="TOP_CENTER" prefHeight="458.0" prefWidth="546.0">
+                          <children>
+                              <StackPane>
                                   <children>
-                                      <JFXButton onMouseClicked="#search" text="Search" />
-                                      <JFXButton onMouseClicked="#clearAll" text="Clear All" />
+                                      <Label styleClass="top-label" text="Customer Search Box">
+                                          <font>
+                                              <Font size="21.0" />
+                                          </font>
+                                      </Label>
+                                      <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minWidth="46.0" onMouseClicked="#close" prefHeight="30.0" prefWidth="46.0" styleClass="window-button" textAlignment="CENTER" StackPane.alignment="CENTER_RIGHT">
+                                          <graphic>
+                                              <FontAwesomeIconView fill="#0000008f" glyphName="CLOSE" size="25" text="" />
+                                          </graphic>
+                                          <cursor>
+                                              <Cursor fx:constant="HAND" />
+                                          </cursor>
+                                      </JFXButton>
                                   </children>
+                                  <VBox.margin>
+                                      <Insets top="10.0" />
+                                  </VBox.margin>
+                              </StackPane>
+                              <VBox fillWidth="false" prefHeight="58.0" prefWidth="526.0" spacing="10.0">
+                                  <children>
+                              <HBox prefHeight="106.0" prefWidth="670.0" spacing="30.0">
+                                 <children>
+                                    <VBox spacing="10.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                                  <VBox prefHeight="53.0" prefWidth="206.0">
+                                                      <children>
+                                                          <Label styleClass="text-field-name" text="Customer Name">
+                                                              <font>
+                                                                  <Font name="System Bold" size="15.0" />
+                                                              </font>
+                                                          </Label>
+                                                          <TextField fx:id="customerNameTextField" focusTraversable="false" styleClass="text-field-box">
+                                                              <font>
+                                                                  <Font size="15.0" />
+                                                              </font>
+                                                          </TextField>
+                                                      </children>
+                                                  </VBox>
+                                                  <VBox prefHeight="53.0" prefWidth="206.0">
+                                                      <children>
+                                                          <Label styleClass="text-field-name" text="SSN">
+                                                              <font>
+                                                                  <Font name="System Bold" size="15.0" />
+                                                              </font>
+                                                          </Label>
+                                                          <TextField fx:id="SSNTextField" focusTraversable="false" styleClass="text-field-box">
+                                                              <font>
+                                                                  <Font size="15.0" />
+                                                              </font>
+                                                          </TextField>
+                                                      </children>
+                                                  </VBox>
+                                       </children>
+                                    </VBox>
+                                    <VBox prefHeight="106.0" prefWidth="206.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                                       <children>
+                                                  <VBox prefHeight="53.0" prefWidth="212.0">
+                                                      <children>
+                                                          <Label styleClass="text-field-name" text="Contact">
+                                                              <font>
+                                                                  <Font name="System Bold" size="15.0" />
+                                                              </font>
+                                                          </Label>
+                                                          <TextField fx:id="contactTextField" focusTraversable="false" styleClass="text-field-box">
+                                                              <font>
+                                                                  <Font size="15.0" />
+                                                              </font>
+                                                          </TextField>
+                                                      </children>
+                                                  </VBox>
+                                                  <VBox prefHeight="170.0" prefWidth="448.0">
+                                                      <children>
+                                                          <Label styleClass="text-field-name" text="Address">
+                                                              <font>
+                                                                  <Font name="System Bold" size="15.0" />
+                                                              </font>
+                                                          </Label>
+                                                          <TextField fx:id="addressTextField" focusTraversable="false" styleClass="text-field-box">
+                                                              <font>
+                                                                  <Font size="15.0" />
+                                                              </font>
+                                                          </TextField>
+                                                      </children>
+                                                  </VBox>
+                                       </children>
+                                    </VBox>
+                                 </children>
                               </HBox>
-                        <ProgressIndicator fx:id="loadingIndicator" prefHeight="42.0" prefWidth="34.0" visible="false" StackPane.alignment="CENTER_RIGHT" />
-                     </children>
-                  </StackPane>
-                  <StackPane prefHeight="203.0" prefWidth="526.0" VBox.vgrow="ALWAYS">
-                     <children>
-                        <TableView fx:id="searchTable" minHeight="100.0" prefHeight="100.0" stylesheets="@../../css/light-mode/table-view.css" StackPane.alignment="TOP_CENTER">
-                           <columns>
-                              <TableColumn fx:id="customerNumberColumn" prefWidth="75.0" text="No." />
-                              <TableColumn fx:id="customerNameColumn" prefWidth="75.0" text="Customer Name" />
-                              <TableColumn fx:id="SSNColumn" prefWidth="75.0" text="SSN" />
-                              <TableColumn fx:id="contactColumn" prefWidth="75.0" text="Contact" />
-                           </columns>
-                        </TableView>
-                     </children>
-                  </StackPane>
-                    </children>
-                    <padding>
-                        <Insets bottom="20.0" left="10.0" right="10.0" />
-                    </padding>
-                </VBox>
+                                  </children>
+                                  <VBox.margin>
+                                      <Insets top="10.0" />
+                                  </VBox.margin>
+                              </VBox>
+                        <StackPane>
+                           <children>
+                                    <HBox alignment="CENTER" prefHeight="59.0" prefWidth="526.0" spacing="20.0">
+                                        <children>
+                                            <JFXButton onMouseClicked="#search" prefWidth="100.0" styleClass="operation-button" text="Search" />
+                                            <JFXButton onMouseClicked="#clearAll" prefWidth="100.0" styleClass="operation-button" text="Clear All" />
+                                        </children>
+                                    </HBox>
+                              <ProgressIndicator fx:id="loadingIndicator" prefHeight="42.0" prefWidth="34.0" visible="false" StackPane.alignment="CENTER_RIGHT" />
+                           </children>
+                        </StackPane>
+                        <StackPane prefHeight="203.0" prefWidth="526.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <TableView fx:id="searchTable" minHeight="100.0" prefHeight="100.0" StackPane.alignment="TOP_CENTER">
+                                 <columns>
+                                    <TableColumn fx:id="customerNumberColumn" prefWidth="75.0" text="No." />
+                                    <TableColumn fx:id="customerNameColumn" prefWidth="75.0" text="Customer Name" />
+                                    <TableColumn fx:id="SSNColumn" prefWidth="75.0" text="SSN" />
+                                    <TableColumn fx:id="contactColumn" prefWidth="75.0" text="Contact" />
+                                 </columns>
+                              </TableView>
+                           </children>
+                        </StackPane>
+                          </children>
+                          <padding>
+                              <Insets bottom="20.0" left="10.0" right="10.0" />
+                          </padding>
+                      </VBox>
+               </children>
+            </StackPane>
             </children>
         </FlowPane>
     </children>

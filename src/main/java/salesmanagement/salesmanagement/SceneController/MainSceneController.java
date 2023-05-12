@@ -3,9 +3,7 @@ package salesmanagement.salesmanagement.SceneController;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXToggleButton;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import javafx.animation.AnimationTimer;
-import javafx.animation.FadeTransition;
-import javafx.animation.Transition;
+import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.fxml.FXML;
@@ -144,6 +142,8 @@ public class MainSceneController extends SceneController implements Initializabl
     private Employee user;
     public static boolean haveJustOpened = false;
     public static int loggerID = -1;
+
+
     public AnimationTimer loginDataListener = new AnimationTimer() {
         @Override
         public void handle(long l) {
@@ -367,46 +367,12 @@ public class MainSceneController extends SceneController implements Initializabl
 
             ((HBox) switchModeButton.getParent()).getChildren().remove(switchSubBox);
 
-//            double endX = Screen.getPrimary().getVisualBounds().getWidth();
-//            double startX = endX - notificationStage.getWidth();
-//            long duration = 500000000L;
-//
-//            AnimationTimer animationTimer = new AnimationTimer() {
-//                long startTime = 0;
-//                final double distance = endX - startX;
-//                final double speed = distance / (double) duration;
-//
-//                @Override
-//                public void start() {
-//                    super.start();
-//                    startTime = System.nanoTime();
-//                }
-//
-//                @Override
-//                public void handle(long now) {
-//                    long elapsed = now - startTime;
-//                    double newX = startX + speed * elapsed;
-//                    notificationStage.setX(newX);
-//                    if (newX >= endX) {
-//                        notificationStage.close();
-//                        stop();
-//                    }
-//                }
-//            };
-//            animationTimer.start();
-
-            Transition transition = new Transition() {
-                {
-                    setCycleDuration(Duration.seconds(0.6));
-                }
-
-                @Override
-                protected void interpolate(double frac) {
-                    double width = sideBarBox.getWidth() * (1 - frac);
-                    sideBarBox.setPrefWidth(width);
-                }
-            };
-            transition.play();
+            Duration cycleDuration = Duration.millis(300);
+            Timeline timeline = new Timeline(
+                    new KeyFrame(cycleDuration,
+                            new KeyValue(sideBarBox.prefWidthProperty(), 95, Interpolator.EASE_BOTH))
+            );
+            timeline.play();
         } else {
             shrinkSideBar = false;
 
@@ -417,18 +383,13 @@ public class MainSceneController extends SceneController implements Initializabl
 
             ((HBox) switchModeButton.getParent()).getChildren().add(0, switchSubBox);
 
-            Transition transition = new Transition() {
-                {
-                    setCycleDuration(Duration.seconds(0.6));
-                }
+            Duration cycleDuration = Duration.millis(300);
+            Timeline timeline = new Timeline(
+                    new KeyFrame(cycleDuration,
+                            new KeyValue(sideBarBox.prefWidthProperty(), 250, Interpolator.EASE_BOTH))
+            );
 
-                @Override
-                protected void interpolate(double frac) {
-                    double width = sideBarBox.getWidth() * (1 + frac);
-                    sideBarBox.setPrefWidth(width);
-                }
-            };
-            transition.play();
+            timeline.play();
         }
     }
 

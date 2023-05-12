@@ -62,7 +62,7 @@
             </HBox>
             <HBox VBox.vgrow="ALWAYS">
                 <children>
-                    <TableView fx:id="ordersTable" HBox.hgrow="ALWAYS">
+                    <TableView fx:id="ordersTable" focusTraversable="false" HBox.hgrow="ALWAYS">
                   <columns>
                      <TableColumn fx:id="orderNumberColumn" prefWidth="78.40001904964447" text="Order No." />
                      <TableColumn fx:id="employeeColumn" prefWidth="224.0000228881836" text="Created" />

@@ -20,28 +20,20 @@ import java.util.ResourceBundle;
 import static salesmanagement.salesmanagement.SceneController.SceneController.runTask;
 
 public class CustomerSearchView extends SearchView<Customer> {
-
     @FXML
     private TableColumn<?, ?> SSNColumn;
-
     @FXML
     private TextField SSNTextField;
-
     @FXML
     private TextField addressTextField;
-
     @FXML
     private TextField contactTextField;
-
     @FXML
     private TableColumn<?, ?> customerNameColumn;
-
     @FXML
     private TableColumn<?, ?> customerNumberColumn;
-
     @FXML
     private TableColumn<?, ?> contactColumn;
-
     @FXML
     private TextField customerNameTextField;
 
@@ -98,13 +90,5 @@ public class CustomerSearchView extends SearchView<Customer> {
             });
         }, () -> searchTable.setItems(searchList), loadingIndicator, null);
 
-    }
-
-    @FXML
-    public void clearAll() {
-        customerNameTextField.setText("");
-        addressTextField.setText("");
-        SSNTextField.setText("");
-        contactTextField.setText("");
     }
 }

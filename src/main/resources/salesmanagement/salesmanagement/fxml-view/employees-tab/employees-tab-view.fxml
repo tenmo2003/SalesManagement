@@ -17,7 +17,7 @@
       <children>
          <HBox>
             <children>
-               <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="1477.0" spacing="20.0" HBox.hgrow="ALWAYS">
+               <HBox alignment="CENTER_LEFT" minWidth="250.0" prefHeight="38.0" prefWidth="1477.0" spacing="20.0" HBox.hgrow="ALWAYS">
                   <children>
                      <Label styleClass="top-label" text="Employees List" textFill="#329efcab">
                         <font>
@@ -62,7 +62,7 @@
          </HBox>
          <HBox VBox.vgrow="ALWAYS">
             <children>
-               <TableView fx:id="employeesTable" HBox.hgrow="ALWAYS">
+               <TableView fx:id="employeesTable" focusTraversable="false" HBox.hgrow="ALWAYS">
                   <columns>
                      <TableColumn fx:id="employeeNumberColumn" prefWidth="98.4000244140625" text="S.No" />
                      <TableColumn fx:id="nameColumn" prefWidth="150.0" text="Employee Name" />

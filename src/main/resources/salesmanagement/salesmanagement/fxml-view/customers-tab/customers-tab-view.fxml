@@ -20,7 +20,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="1477.0" spacing="20.0" HBox.hgrow="ALWAYS">
                      <children>
-                        <Label styleClass="top-label" text="Customer List">
+                        <Label styleClass="top-label" text="Customers List">
                            <font>
                               <Font name="System Bold" size="22.0" />
                            </font>
@@ -58,7 +58,7 @@
                   </HBox>
                </children>
                <VBox.margin>
-                  <Insets bottom="10.0" />
+                  <Insets bottom="10.0" top="5.0" />
                </VBox.margin>
             </HBox>
             <HBox VBox.vgrow="ALWAYS">

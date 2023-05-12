@@ -14,182 +14,189 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="root" prefHeight="446.0" prefWidth="600.0" stylesheets="@../../css/light-mode/light-mode-main-scene.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.OrdersTab.OrdersFilterView">
+<StackPane fx:id="root" prefHeight="446.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="salesmanagement.salesmanagement.ViewController.OrdersTab.OrdersFilterView">
     <children>
         <StackPane opacity="0.5" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: grey;" />
         <FlowPane alignment="CENTER" prefHeight="482.0" prefWidth="600.0">
             <children>
-                <VBox alignment="TOP_CENTER" prefHeight="422.0" prefWidth="578.0" style="-fx-background-color: white; -fx-border-radius: white; -fx-background-radius: white;">
-                    <children>
-                        <StackPane>
-                            <children>
-                                <Label id="top_label" text="Orders Filter">
-                                    <font>
-                                        <Font size="21.0" />
-                                    </font>
-                                </Label>
-                                <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minWidth="46.0" onMouseClicked="#close" prefHeight="30.0" prefWidth="46.0" textAlignment="CENTER" StackPane.alignment="CENTER_RIGHT">
-                                    <graphic>
-                                        <FontAwesomeIconView id="close_color" fill="#0000008f" glyphName="CLOSE" size="25" text="" />
-                                    </graphic>
-                                    <cursor>
-                                        <Cursor fx:constant="HAND" />
-                                    </cursor>
-                                </JFXButton>
-                            </children>
-                            <VBox.margin>
-                                <Insets top="10.0" />
-                            </VBox.margin>
-                        </StackPane>
-                  <HBox prefHeight="284.0" prefWidth="392.0" spacing="50.0">
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                     <children>
-                              <VBox fillWidth="false" prefHeight="174.0" prefWidth="392.0" spacing="10.0">
+            <StackPane fx:id="centerBox" styleClass="center-box">
+               <children>
+                      <VBox alignment="TOP_CENTER" prefHeight="358.0" prefWidth="578.0">
+                          <children>
+                              <StackPane>
                                   <children>
-                                      <VBox prefHeight="170.0" prefWidth="448.0">
-                                          <children>
-                                              <Label text="Customer Name">
-                                                  <font>
-                                                      <Font name="System Bold" size="15.0" />
-                                                  </font>
-                                              </Label>
-                                              <TextField fx:id="customerNameTextField">
-                                                  <font>
-                                                      <Font size="15.0" />
-                                                  </font>
-                                              </TextField>
-                                          </children>
-                                      </VBox>
-                                      <VBox prefHeight="170.0" prefWidth="448.0">
-                                          <children>
-                                              <Label text="Contact">
-                                                  <font>
-                                                      <Font name="System Bold" size="15.0" />
-                                                  </font>
-                                              </Label>
-                                              <TextField fx:id="contactTextField">
-                                                  <font>
-                                                      <Font size="15.0" />
-                                                  </font>
-                                              </TextField>
-                                          </children>
-                                      </VBox>
-                                      <VBox prefHeight="170.0" prefWidth="448.0">
-                                          <children>
-                                              <Label text="Order Type">
-                                                  <font>
-                                                      <Font name="System Bold" size="15.0" />
-                                                  </font>
-                                              </Label>
-                                    <ComboBox fx:id="orderType" prefHeight="26.0" prefWidth="387.0" style="-fx-font-size: 15;" />
-                                          </children>
-                                      </VBox>
-                              <VBox prefHeight="53.0" prefWidth="382.0">
-                                 <children>
-                                    <Label text="Shipped Date">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                    </Label>
-                                    <DatePicker fx:id="shippedDatePicker" prefHeight="26.0" prefWidth="331.0" stylesheets="@../../css/light-mode/date-picker.css" />
-                                 </children>
-                              </VBox>
-                              <VBox prefHeight="53.0" prefWidth="410.0">
-                                 <children>
-                                    <Label text="Status">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                    </Label>
-                                    <ComboBox fx:id="orderStatus" prefHeight="26.0" prefWidth="387.0" style="-fx-font-size: 15;" />
-                                 </children>
-                              </VBox>
+                                      <Label styleClass="top-label" text="Orders Filter">
+                                          <font>
+                                              <Font size="21.0" />
+                                          </font>
+                                      </Label>
+                                      <JFXButton alignment="CENTER" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" minWidth="46.0" onMouseClicked="#close" prefHeight="30.0" prefWidth="46.0" styleClass="window-button" textAlignment="CENTER" StackPane.alignment="CENTER_RIGHT">
+                                          <graphic>
+                                              <FontAwesomeIconView fill="#0000008f" glyphName="CLOSE" size="25" text="" />
+                                          </graphic>
+                                          <cursor>
+                                              <Cursor fx:constant="HAND" />
+                                          </cursor>
+                                      </JFXButton>
                                   </children>
-                              </VBox>
-                        <VBox fillWidth="false" prefHeight="174.0" prefWidth="392.0" spacing="10.0">
+                                  <VBox.margin>
+                                      <Insets top="10.0" />
+                                  </VBox.margin>
+                              </StackPane>
+                        <HBox prefHeight="284.0" prefWidth="392.0" spacing="50.0">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
                            <children>
-                              <VBox prefHeight="170.0" prefWidth="448.0">
-                                 <children>
-                                    <Label text="Employee Name">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                    </Label>
-                                    <TextField fx:id="employeeNameTextField">
-                                       <font>
-                                          <Font size="15.0" />
-                                       </font>
-                                    </TextField>
-                                 </children>
-                              </VBox>
-                              <VBox prefHeight="170.0" prefWidth="448.0">
-                                 <children>
-                                    <Label text="Ordered Date">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                    </Label>
-                                    <DatePicker fx:id="orderedDatePicker" prefHeight="26.0" prefWidth="331.0" stylesheets="@../../css/light-mode/date-picker.css" />
-                                 </children>
-                              </VBox>
-                              <VBox prefHeight="170.0" prefWidth="448.0">
-                                 <children>
-                                    <Label text="Required Date">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                    </Label>
-                                    <DatePicker fx:id="requiredDatePicker" prefHeight="26.0" prefWidth="331.0" stylesheets="@../../css/light-mode/date-picker.css" />
-                                 </children>
-                              </VBox>
-                              <VBox prefHeight="170.0" prefWidth="448.0">
-                                 <children>
-                                    <Label text="Destination">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                    </Label>
-                                    <TextField fx:id="destinationTextField">
-                                       <font>
-                                          <Font size="15.0" />
-                                       </font>
-                                    </TextField>
-                                    <VBox prefHeight="24.0" prefWidth="196.0">
+                                    <VBox fillWidth="false" prefHeight="174.0" prefWidth="392.0" spacing="10.0">
+                                        <children>
+                                            <VBox prefHeight="170.0" prefWidth="448.0">
+                                                <children>
+                                                    <Label focusTraversable="false" styleClass="text-field-name" text="Customer Name">
+                                                        <font>
+                                                            <Font name="System Bold" size="15.0" />
+                                                        </font>
+                                                    </Label>
+                                                    <TextField fx:id="customerNameTextField" focusTraversable="false" styleClass="text-field-box">
+                                                        <font>
+                                                            <Font size="15.0" />
+                                                        </font>
+                                                    </TextField>
+                                                </children>
+                                            </VBox>
+                                            <VBox prefHeight="170.0" prefWidth="448.0">
+                                                <children>
+                                                    <Label focusTraversable="false" styleClass="text-field-name" text="Contact">
+                                                        <font>
+                                                            <Font name="System Bold" size="15.0" />
+                                                        </font>
+                                                    </Label>
+                                                    <TextField fx:id="contactTextField" focusTraversable="false" styleClass="text-field-box">
+                                                        <font>
+                                                            <Font size="15.0" />
+                                                        </font>
+                                                    </TextField>
+                                                </children>
+                                            </VBox>
+                                            <VBox prefHeight="170.0" prefWidth="448.0">
+                                                <children>
+                                                    <Label focusTraversable="false" styleClass="text-field-name" text="Order Type">
+                                                        <font>
+                                                            <Font name="System Bold" size="15.0" />
+                                                        </font>
+                                                    </Label>
+                                          <ComboBox fx:id="orderType" focusTraversable="false" prefHeight="26.0" prefWidth="387.0" style="-fx-font-size: 15;" />
+                                                </children>
+                                            </VBox>
+                                    <VBox prefHeight="53.0" prefWidth="382.0">
                                        <children>
-                                          <Label text="Comment">
+                                          <Label focusTraversable="false" styleClass="text-field-name" text="Shipped Date">
                                              <font>
                                                 <Font name="System Bold" size="15.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="commentTextField">
+                                          <DatePicker fx:id="shippedDatePicker" focusTraversable="false" prefHeight="26.0" prefWidth="331.0" stylesheets="@../../css/light-mode/date-picker.css" />
+                                       </children>
+                                    </VBox>
+                                    <VBox prefHeight="53.0" prefWidth="410.0">
+                                       <children>
+                                          <Label focusTraversable="false" styleClass="text-field-name" text="Status">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </Label>
+                                          <ComboBox fx:id="orderStatus" focusTraversable="false" prefHeight="26.0" prefWidth="387.0" style="-fx-font-size: 15;" />
+                                       </children>
+                                    </VBox>
+                                        </children>
+                                    </VBox>
+                              <VBox fillWidth="false" prefHeight="174.0" prefWidth="392.0" spacing="10.0">
+                                 <children>
+                                    <VBox prefHeight="170.0" prefWidth="448.0">
+                                       <children>
+                                          <Label focusTraversable="false" styleClass="text-field-name" text="Employee Name">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="employeeNameTextField" focusTraversable="false" styleClass="text-field-box">
                                              <font>
                                                 <Font size="15.0" />
                                              </font>
                                           </TextField>
                                        </children>
-                                       <VBox.margin>
-                                          <Insets top="10.0" />
-                                       </VBox.margin>
+                                    </VBox>
+                                    <VBox prefHeight="170.0" prefWidth="448.0">
+                                       <children>
+                                          <Label focusTraversable="false" styleClass="text-field-name" text="Ordered Date">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </Label>
+                                          <DatePicker fx:id="orderedDatePicker" focusTraversable="false" prefHeight="26.0" prefWidth="331.0" stylesheets="@../../css/light-mode/date-picker.css" />
+                                       </children>
+                                    </VBox>
+                                    <VBox prefHeight="170.0" prefWidth="448.0">
+                                       <children>
+                                          <Label focusTraversable="false" styleClass="text-field-name" text="Required Date">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </Label>
+                                          <DatePicker fx:id="requiredDatePicker" focusTraversable="false" prefHeight="26.0" prefWidth="331.0" stylesheets="@../../css/light-mode/date-picker.css" />
+                                       </children>
+                                    </VBox>
+                                    <VBox prefHeight="170.0" prefWidth="448.0">
+                                       <children>
+                                          <Label focusTraversable="false" styleClass="text-field-name" text="Destination">
+                                             <font>
+                                                <Font name="System Bold" size="15.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="destinationTextField" focusTraversable="false" styleClass="text-field-box">
+                                             <font>
+                                                <Font size="15.0" />
+                                             </font>
+                                          </TextField>
+                                          <VBox prefHeight="24.0" prefWidth="196.0">
+                                             <children>
+                                                <Label focusTraversable="false" styleClass="text-field-name" text="Comment">
+                                                   <font>
+                                                      <Font name="System Bold" size="15.0" />
+                                                   </font>
+                                                </Label>
+                                                <TextField fx:id="commentTextField" focusTraversable="false" styleClass="text-field-box">
+                                                   <font>
+                                                      <Font size="15.0" />
+                                                   </font>
+                                                </TextField>
+                                             </children>
+                                             <VBox.margin>
+                                                <Insets top="10.0" />
+                                             </VBox.margin>
+                                          </VBox>
+                                       </children>
                                     </VBox>
                                  </children>
                               </VBox>
                            </children>
-                        </VBox>
-                     </children>
-                  </HBox>
-                        <HBox alignment="CENTER" prefHeight="95.0" prefWidth="558.0" VBox.vgrow="ALWAYS">
-                            <children>
-                                <JFXButton onMouseClicked="#applyFilter" text="Apply Filter" />
-                                <JFXButton onMouseClicked="#clearFilter" text="Clear All" />
-                            </children>
                         </HBox>
-                    </children>
-                    <padding>
-                        <Insets left="10.0" right="10.0" />
-                    </padding>
-                </VBox>
+                              <HBox alignment="CENTER" prefHeight="37.0" prefWidth="558.0" spacing="20.0" VBox.vgrow="ALWAYS">
+                                  <children>
+                                      <JFXButton focusTraversable="false" onMouseClicked="#applyFilter" style="-fx-pref-width: 100;" styleClass="operation-button" text="Apply Filter" />
+                                      <JFXButton focusTraversable="false" onMouseClicked="#clearFilter" style="-fx-pref-width: 100;" styleClass="operation-button" text="Clear All" />
+                                  </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </VBox.margin>
+                              </HBox>
+                          </children>
+                          <padding>
+                              <Insets left="10.0" right="10.0" />
+                          </padding>
+                      </VBox>
+               </children>
+            </StackPane>
             </children>
         </FlowPane>
     </children>
