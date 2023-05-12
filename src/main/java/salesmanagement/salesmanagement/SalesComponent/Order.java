@@ -27,7 +27,7 @@ public class Order implements SalesComponent {
     private double value;
     private String payment_method;
     private String deliver_to;
-    private static final List<String> orderStatusList = new ArrayList<>(Arrays.asList("Cancelled", "Disputed", "In Process", "On Hold", "Resolved", "Shipped"));
+    private static final List<String> orderStatusList = new ArrayList<>(Arrays.asList("Cancelled", "In Process", "Resolved", "Shipped"));
 
     public static List<String> getorderStatusList() {
         return orderStatusList;

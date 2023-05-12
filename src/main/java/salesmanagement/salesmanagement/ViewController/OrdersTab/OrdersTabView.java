@@ -55,6 +55,9 @@ public class OrdersTabView extends TabView implements OrdersTab {
     private TableColumn<?, ?> typeColumn;
 
     @FXML
+    private TableColumn<?, ?> statusColumn;
+
+    @FXML
     private TableColumn<?, ?> valueColumn;
 
     private OrdersFilterView ordersFilterView;
@@ -133,6 +136,7 @@ public class OrdersTabView extends TabView implements OrdersTab {
         employeeColumn.setCellValueFactory(new PropertyValueFactory<>("employeeName"));
         orderDateColumn.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         commentsColumn.setCellValueFactory(new PropertyValueFactory<>("comments"));
         valueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
         customerColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
