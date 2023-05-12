@@ -495,10 +495,10 @@ public class OrderInfoView extends ViewController implements OrdersTab, InputVal
     }
 
     void saveOrder(int orderNumber) {
-        if (!validInput()) {
-            NotificationSystem.throwNotification(NotificationCode.INVALID_INPUTS, stage);
-            return;
-        }
+//        if (!validInput()) {
+//            NotificationSystem.throwNotification(NotificationCode.INVALID_INPUTS, stage);
+//            return;
+//        }
         runTask(() -> {
             if (orderType.getValue().equals("onsite") || status.getValue().equals("Shipped")) {
                 String query = String.format("SELECT * FROM orderdetails WHERE orderNumber = %d", orderNumber);
