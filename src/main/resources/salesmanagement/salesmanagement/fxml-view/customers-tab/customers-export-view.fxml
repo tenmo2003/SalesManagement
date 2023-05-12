@@ -45,17 +45,17 @@
                                   <children>
                                       <VBox prefHeight="192.0" prefWidth="82.0" spacing="10.0">
                                           <children>
-                                              <JFXCheckBox fx:id="customerNumber" selected="true" styleClass="text-field-name" text="Customer Number" />
-                                              <JFXCheckBox fx:id="address" selected="true" styleClass="text-field-name" text="Address" />
-                                              <JFXCheckBox fx:id="phoneNumber" selected="true" styleClass="text-field-name" text="Phone Number" />
-                                    <JFXCheckBox fx:id="name" selected="true" styleClass="text-field-name" text="Name" />
+                                              <JFXCheckBox fx:id="customerNumber" selected="true" text="Customer Number" />
+                                              <JFXCheckBox fx:id="address" selected="true" text="Address" />
+                                              <JFXCheckBox fx:id="phoneNumber" selected="true" text="Phone Number" />
+                                    <JFXCheckBox fx:id="name" selected="true" text="Name" />
                                           </children>
                                       </VBox>
                                       <VBox prefHeight="124.0" prefWidth="107.0" spacing="10.0">
                                           <children>
-                                              <JFXCheckBox fx:id="rank" selected="true" styleClass="text-field-name" text="Customer Rank" />
-                                              <JFXCheckBox fx:id="registerDate" selected="true" styleClass="text-field-name" text="Register Date" />
-                                              <JFXCheckBox fx:id="SSN" selected="true" styleClass="text-field-name" text="SSN" />
+                                              <JFXCheckBox fx:id="rank" selected="true" text="Customer Rank" />
+                                              <JFXCheckBox fx:id="registerDate" selected="true" text="Register Date" />
+                                              <JFXCheckBox fx:id="SSN" selected="true" text="SSN" />
                                           </children>
                                       </VBox>
                                   </children>

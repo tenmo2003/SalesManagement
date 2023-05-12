@@ -298,7 +298,7 @@ public class Utils {
                             } else {
                                 if (item instanceof Node)
                                     setGraphic((Node) item);
-                                else if (item instanceof String)
+                                else
                                     setText((String) item);
                                 setAlignment(Pos.CENTER);
                             }

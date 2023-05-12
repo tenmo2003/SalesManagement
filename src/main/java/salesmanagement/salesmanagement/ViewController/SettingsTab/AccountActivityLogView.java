@@ -81,6 +81,7 @@ public class AccountActivityLogView extends TabView implements SettingsTab {
 
         Utils.setColumnAlignmentCenter(Arrays.asList(componentModifiedIDColumn));
         Utils.setColumnAlignmentCenter(Arrays.asList(resultColumn));
+        Utils.setColumnAlignmentCenter(Arrays.asList(timeColumn));
 
         actionsTable.getSortOrder().add(actionIDColumn);
         actionsTable.sort();

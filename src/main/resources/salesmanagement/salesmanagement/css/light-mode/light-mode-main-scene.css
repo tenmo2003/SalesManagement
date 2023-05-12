@@ -48,16 +48,6 @@
     -fx-background-color: #f4f4f4;
 }
 
-#small_top_label {
-    -fx-text-fill: rgba(23, 80, 131, 0.67);
-    -fx-font-size: 16px;
-    -fx-font-weight: bold;
-}
-
-#close_color {
-    -fx-fill: #329efcab;
-}
-
 .tab-button {
     -fx-text-fill: #7c8db5;
     -fx-font-size: 16;
@@ -188,11 +178,11 @@
 }
 
 .chart-vertical-grid-lines {
-    -fx-stroke: #0f9de8;
+    -fx-stroke: #030303;
 }
 
 .chart-horizontal-grid-lines {
-    -fx-stroke: #0f9de8;
+    -fx-stroke: #111111;
 }
 
 
@@ -214,7 +204,15 @@
 .center-box {
     -fx-background-color: white;
 }
-
+.window-button .glyph-icon{
+    -fx-fill: #0f9de8;
+}
 .window-button:hover {
     -fx-background-color: #dfe2e7;
+}
+.close-button:hover {
+    -fx-background-color: #f64856;
+}
+.close-button:hover .glyph-icon {
+    -fx-fill: white;
 }

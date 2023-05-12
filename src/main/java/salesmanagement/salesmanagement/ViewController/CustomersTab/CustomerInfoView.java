@@ -2,9 +2,12 @@ package salesmanagement.salesmanagement.ViewController.CustomersTab;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import salesmanagement.salesmanagement.SalesComponent.Action;
 import salesmanagement.salesmanagement.SalesComponent.Customer;
+import salesmanagement.salesmanagement.Utils.InputErrorCode;
 import salesmanagement.salesmanagement.Utils.NotificationCode;
 import salesmanagement.salesmanagement.Utils.NotificationSystem;
 import salesmanagement.salesmanagement.ViewController.InfoView;
@@ -13,6 +16,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static salesmanagement.salesmanagement.SceneController.SceneController.runTask;
+import static salesmanagement.salesmanagement.Utils.InputErrorCode.getInputErrorLabel;
+import static salesmanagement.salesmanagement.Utils.Utils.shake;
 
 public class CustomerInfoView extends InfoView<Customer> implements CustomersTab {
     @FXML
@@ -51,10 +56,6 @@ public class CustomerInfoView extends InfoView<Customer> implements CustomersTab
     @Override
     public void close() {
         super.close();
-    }
-
-    protected void resetData() {
-
     }
 
     @FXML
@@ -97,7 +98,7 @@ public class CustomerInfoView extends InfoView<Customer> implements CustomersTab
                             throw new RuntimeException(e);
                         }
                     } catch (SQLException e) {
-                        action = new Action( null,
+                        action = new Action(null,
                                 Action.ComponentModified.CUSTOMER,
                                 Action.ActionCode.CREATE_NEW,
                                 Action.ResultCode.FAILED);
@@ -112,16 +113,64 @@ public class CustomerInfoView extends InfoView<Customer> implements CustomersTab
 
     @Override
     public void addRegexChecker() {
+        nameTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                VBox container = (VBox) nameTextField.getParent();
 
+                if (!nameTextField.getText().matches("^.+$")) {
+                    nameTextField.setStyle("-fx-border-color: #f35050");
+                    if (!(container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                        container.getChildren().add(getInputErrorLabel(InputErrorCode.INVALID_INPUT));
+                    }
+                    shake(nameTextField);
+                } else {
+                    nameTextField.setStyle("-fx-border-color: transparent");
+                    if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                        container.getChildren().remove(container.getChildren().size() - 1);
+                    }
+                }
+            }
+        });
+
+        SSNTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                VBox container = (VBox) SSNTextField.getParent();
+
+                if (!SSNTextField.getText().matches("^\\d+$")) {
+                    SSNTextField.setStyle("-fx-border-color: #f35050");
+                    if (!(container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                        container.getChildren().add(getInputErrorLabel(InputErrorCode.INVALID_INPUT));
+                    }
+                    shake(SSNTextField);
+                } else {
+                    SSNTextField.setStyle("-fx-border-color: transparent");
+                    if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+                        container.getChildren().remove(container.getChildren().size() - 1);
+                    }
+                }
+            }
+        });
     }
 
     @Override
     public boolean validInput() {
-        return true;
+        if (!SSNTextField.getText().matches("^\\d+$")) return false;
+        return nameTextField.getText().matches("^.+$");
     }
 
     @Override
     public void removeInvalidAlert() {
+        VBox container = (VBox) SSNTextField.getParent();
+        if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+            container.getChildren().remove(container.getChildren().size() - 1);
+        }
+        SSNTextField.setStyle("-fx-border-color: transparent");
+
+        container = (VBox) nameTextField.getParent();
+        if ((container.getChildren().get(container.getChildren().size() - 1) instanceof Label)) {
+            container.getChildren().remove(container.getChildren().size() - 1);
+        }
+        nameTextField.setStyle("-fx-border-color: transparent");
 
     }
 }
