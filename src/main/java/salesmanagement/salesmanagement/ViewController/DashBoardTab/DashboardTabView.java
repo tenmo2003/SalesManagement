@@ -246,7 +246,10 @@ public class DashboardTabView extends TabView {
                 series.getData().add(data);
             }
             ((CategoryAxis) topProductLinesChart.getYAxis()).setCategories(FXCollections.observableList(xAxisLabels));
-            Platform.runLater(() -> topProductLinesChart.getData().add(series));
+            Platform.runLater(() -> {
+               // topProductLinesChart.getYAxis().setStyle("-fx-text-fill: green");
+                topProductLinesChart.getData().add(series);
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }

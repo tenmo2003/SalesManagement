@@ -182,11 +182,11 @@ public class SettingsTabView extends TabView implements SettingsTab, InputValida
         }, () -> isShowing = false, loadingIndicator, null);
 
         runTask(() -> {
-            Image image = ImageController.getImage("avatar_employee_" + user.getEmployeeNumber() + ".png", true);
-            if (isImageLoaded(image.getUrl())) {
-                avatarImageView.setImage(image);
-            } else {
-                avatarImageView.setImage(ImageController.getImage("avatar_employee_default.png", true));
+            while (avatarImageView.getImage() == null) {
+                Image image = ImageController.getImage("avatar_employee_" + user.getEmployeeNumber() + ".png", true);
+                if (isImageLoaded(image.getUrl())) {
+                    avatarImageView.setImage(image);
+                }
             }
         }, () -> avatarLoading.set(false), null, null);
     }

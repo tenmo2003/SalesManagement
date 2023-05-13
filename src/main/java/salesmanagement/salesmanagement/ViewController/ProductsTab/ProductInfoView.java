@@ -1,5 +1,6 @@
 package salesmanagement.salesmanagement.ViewController.ProductsTab;
 
+import impl.org.controlsfx.skin.AutoCompletePopup;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -124,6 +125,7 @@ public class ProductInfoView extends InfoView<Product> implements ProductsTab {
     @Override
     public void show() {
         super.show();
+        loadProductLine();
         addButton.setVisible(true);
     }
 

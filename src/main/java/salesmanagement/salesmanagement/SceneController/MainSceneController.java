@@ -127,11 +127,11 @@ public class MainSceneController extends SceneController implements Initializabl
         previousTabButton = dashBoardTabButton;
 
         runTask(() -> {
-            Image image = ImageController.getImage("avatar_employee_" + user.getEmployeeNumber() + ".png", true);
-            if (isImageLoaded(image.getUrl())) {
-                smallAvatar.setImage(image);
-            } else {
-                smallAvatar.setImage(ImageController.getImage("avatar_employee_default.png", true));
+            while (smallAvatar.getImage() == null) {
+                Image image = ImageController.getImage("avatar_employee_" + user.getEmployeeNumber() + ".png", true);
+                if (isImageLoaded(image.getUrl())) {
+                    smallAvatar.setImage(image);
+                }
             }
         }, () -> avatarLoading.set(false), null, null);
     }

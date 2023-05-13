@@ -109,6 +109,7 @@ public class SQLConnection {
             statement.executeUpdate(query);
             action = new Action(componentModifiedCode, componentModified, actionCode, Action.ResultCode.SUCCESSFUL);
         } catch (SQLException ex) {
+            ex.printStackTrace();
             action = new Action(componentModifiedCode, componentModified, actionCode, Action.ResultCode.FAILED);
         }
         action.pushAction(this);
