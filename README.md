@@ -2,10 +2,10 @@
 
 <p align="center">This project is developed as a part of the Software Engineering course, written in JavaFX.</p>
 <h2> Authors</h2>
-<p> Ngũ Thành An - 21020271 - UET - VNU</p>
-<p> Vũ Ngọc Anh - 21020271 - UET - VNU</p>
-<p> Phạm Khôi Nguyên - 21020271 - UET - VNU</p>
-<p> Bùi Thị Ngọc - 21020271 - UET - VNU</p>
+<p> Ngũ Thành An - UET - VNU</p>
+<p> Vũ Ngọc Anh - UET - VNU</p>
+<p> Phạm Khôi Nguyên - UET - VNU</p>
+<p> Bùi Thị Ngọc - UET - VNU</p>
 
 <h2>Installation Guide</h2>
 
