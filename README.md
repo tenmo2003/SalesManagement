@@ -50,6 +50,6 @@
 
 <h2>Contact</h2>
 
-<p>If you have any questions or issues, please feel free to contact us [here](https://www.facebook.com/profile.php?id=100009251475746).</p>
+<p>If you have any questions or issues, please feel free to contact us at profile of this project owner.</p>
 
 <p align="center">Thank you for using our project!</p>
