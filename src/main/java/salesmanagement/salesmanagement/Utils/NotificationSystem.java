@@ -111,6 +111,14 @@ public class NotificationSystem {
                 title = "Action Result Notification";
                 content = "You do not have permission to perform this action!";
             }
+            case SUCCEED_REMOVE_PRODUCT_LINE -> {
+                title = "Action Result Notification";
+                content = "Product Line Removed Successfully!";
+            }
+            case FAILED_REMOVE_PRODUCT_LINE -> {
+                title = "Action Result Notification";
+                content = "There are still products that links to this product line!";
+            }
         }
 
         Scene notificationScene = null;

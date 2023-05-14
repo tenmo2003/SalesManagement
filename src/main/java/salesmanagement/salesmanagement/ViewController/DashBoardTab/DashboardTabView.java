@@ -70,13 +70,13 @@ public class DashboardTabView extends TabView {
                 e.printStackTrace();
             }
         }, null, loadingIndicator, null);
-        runTask(() -> {
-            try {
-                initTopProductLines();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }, null, loadingIndicator, null);
+//        runTask(() -> {
+//            try {
+//                initTopProductLines();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }, null, loadingIndicator, null);
         runTask(() -> {
             try {
                 initCustomersChart();

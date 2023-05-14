@@ -1,5 +1,7 @@
 package salesmanagement.salesmanagement.SalesComponent;
 
+import javafx.scene.control.Label;
+
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,6 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class Order implements SalesComponent {
     private int orderNumber;
@@ -19,6 +22,7 @@ public class Order implements SalesComponent {
     private LocalDate shippedDate = LocalDate.of(1970, 1, 1);
     ;
     private String status;
+    private Label statusLabel;
     private String comments;
     private int customerNumber;
     private String customerName;
@@ -51,6 +55,7 @@ public class Order implements SalesComponent {
         this.requiredDate = requiredDate;
         this.shippedDate = shippedDate;
         this.status = status;
+        statusLabel = new Label(status);
         this.comments = comments;
         this.customerName = customerName;
         this.contact = contact;
@@ -59,6 +64,12 @@ public class Order implements SalesComponent {
         this.value = value;
         this.payment_method = payment_method;
         this.deliver_to = deliver_to;
+
+        String statusBoxColor = "";
+        if (Objects.equals(getStatus().toLowerCase(), "resolved") || Objects.equals(getStatus().toLowerCase(), "shipped")) statusBoxColor = "#19C37D";
+        else if (Objects.equals(getStatus().toLowerCase(), "cancelled")) statusBoxColor = "#EF9589FF";
+        else if (Objects.equals(getStatus().toLowerCase(), "in process")) statusBoxColor = "#FFD700";
+        statusLabel.setStyle("-fx-background-color:" + statusBoxColor + ";-fx-pref-width: 100; -fx-pref-height: 20;-fx-text-fill: white;-fx-alignment: center;-fx-font-weight: bold;");
     }
 
     public Order(ResultSet resultSet) throws SQLException {
@@ -78,12 +89,26 @@ public class Order implements SalesComponent {
         if (shippedDate != null) this.shippedDate = shippedDate.toLocalDate();
 
         this.status = resultSet.getString("status");
+        statusLabel = new Label(this.status);
         this.comments = resultSet.getString("comments");
 
         this.type = resultSet.getString("type");
         this.value = resultSet.getDouble("value");
         this.payment_method = resultSet.getString("payment_method");
         this.deliver_to = resultSet.getString("deliver_to");
+
+        String statusBoxColor = "";
+        if (Objects.equals(getStatus().toLowerCase(), "resolved") || Objects.equals(getStatus().toLowerCase(), "shipped")) statusBoxColor = "#19C37D";
+        else if (Objects.equals(getStatus().toLowerCase(), "cancelled")) statusBoxColor = "#EF9589FF";
+        else if (Objects.equals(getStatus().toLowerCase(), "in process")) statusBoxColor = "#FFD700";
+        statusLabel.setStyle("-fx-background-color:" + statusBoxColor + ";-fx-pref-width: 100; -fx-pref-height: 20;-fx-text-fill: white;-fx-alignment: center;-fx-font-weight: bold;");
+    }
+
+    public Label getStatusLabel() {
+        return statusLabel;
+    }
+    public void setStatusLabel(Label statusLabel) {
+        this.statusLabel = statusLabel;
     }
 
     public int getCustomerNumber() {

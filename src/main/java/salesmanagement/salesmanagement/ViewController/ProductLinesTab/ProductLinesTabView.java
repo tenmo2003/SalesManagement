@@ -1,5 +1,6 @@
 package salesmanagement.salesmanagement.ViewController.ProductLinesTab;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -33,8 +34,6 @@ public class ProductLinesTabView extends TabView implements Initializable, Produ
     @FXML
     private TableColumn<?, ?> mainProductVendorColumn;
     @FXML
-    private TableColumn<?, ?> numberOfProductsColumn;
-    @FXML
     private TableColumn<String, String> productLineColumn;
     @FXML
     private TableView<ProductLine> productLinesTable;
@@ -53,7 +52,6 @@ public class ProductLinesTabView extends TabView implements Initializable, Produ
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         totalRevenueColumn.setCellValueFactory(new PropertyValueFactory<>("totalRevenue"));
         mainProductVendorColumn.setCellValueFactory(new PropertyValueFactory<>("mainProductVendor"));
-        numberOfProductsColumn.setCellValueFactory(new PropertyValueFactory<>("numberOfProducts"));
 
         try {
             FXMLLoader loader = new FXMLLoader(SalesManagement.class.getResource("fxml-view/productlines-tab/productline-info-view.fxml"));
@@ -76,7 +74,7 @@ public class ProductLinesTabView extends TabView implements Initializable, Produ
             e.printStackTrace();
         }
 
-        Utils.adjustTableColumnWidths(productLinesTable, Arrays.asList(0.15, 0.5, 0.1, 0.15, 0.1));
+        Utils.adjustTableColumnWidths(productLinesTable, Arrays.asList(0.2, 0.5, 0.2, 0.1));
 
         productLinesTable.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
@@ -102,9 +100,31 @@ public class ProductLinesTabView extends TabView implements Initializable, Produ
         ProductLine selected = productLinesTable.getSelectionModel().getSelectedItem();
         if (selected != null) {
             runTask(() -> {
-                String query = "delete from productlines where productLine = '" + selected.getProductLine() + "'";
-                sqlConnection.updateQuery(query, selected.getProductLine(), Action.ComponentModified.PRODUCTLINES, Action.ActionCode.REMOVE);
-                show();
+                String query = "SELECT quantityInStock FROM products WHERE productLine = '" + selected.getProductLine() + "'";
+                ResultSet resultSet = sqlConnection.getDataQuery(query);
+                boolean deletable = true;
+                try {
+                    while (resultSet.next()) {
+                        int quantityInStock = resultSet.getInt("quantityInStock");
+                        if (quantityInStock > 0) {
+                            deletable = false;
+                        }
+                    }
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+                if (deletable) {
+                    query = "delete from productlines where productLine = '" + selected.getProductLine() + "'";
+                    sqlConnection.updateQuery(query, selected.getProductLine(), Action.ComponentModified.PRODUCTLINES, Action.ActionCode.REMOVE);
+                    show();
+                    Platform.runLater(() -> {
+                        NotificationSystem.throwNotification(NotificationCode.SUCCEED_REMOVE_PRODUCT_LINE, stage);
+                    });
+                } else {
+                    Platform.runLater(() -> {
+                        NotificationSystem.throwNotification(NotificationCode.FAILED_REMOVE_PRODUCT_LINE, stage);
+                    });
+                }
 
             }, null, loadingIndicator, null);
         }

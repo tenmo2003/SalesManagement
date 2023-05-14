@@ -67,7 +67,6 @@
                         <columns>
                             <TableColumn fx:id="productLineColumn" prefWidth="163.199951171875" text="Product Line" />
                             <TableColumn fx:id="descriptionColumn" prefWidth="330.76373291015625" text="Description" />
-                            <TableColumn fx:id="numberOfProductsColumn" prefWidth="205.0909423828125" text="Number of Products" />
                             <TableColumn fx:id="mainProductVendorColumn" prefWidth="205.0909423828125" text="Main Product Vendor" />
                             <TableColumn fx:id="totalRevenueColumn" prefWidth="205.0909423828125" text="Total Revenue" />
                         </columns>

@@ -72,14 +72,6 @@
                                <NumberAxis side="LEFT" upperBound="1.0E7" />
                              </yAxis>
                            </LineChart>
-                           <BarChart fx:id="topProductLinesChart" legendVisible="false" title="Top ProductLines" HBox.hgrow="ALWAYS">
-                             <xAxis>
-                               <NumberAxis minorTickCount="0" side="BOTTOM" upperBound="9000000.0" />
-                             </xAxis>
-                             <yAxis>
-                               <CategoryAxis side="LEFT" />
-                             </yAxis>
-                           </BarChart>
                         </children>
                      </HBox>
                      <HBox prefHeight="380.0">

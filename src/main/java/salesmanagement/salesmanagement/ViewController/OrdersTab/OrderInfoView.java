@@ -502,39 +502,47 @@ public class OrderInfoView extends ViewController implements OrdersTab, InputVal
 //        }
         runTask(() -> {
             boolean cancelledBefore = false;
-            String cancelCheck = String.format("SELECT status FROM orders WHERE orderNumber = %d", orderNumber);
+            double initValue = 0;
+            String cancelCheck = String.format("SELECT status, value FROM orders WHERE orderNumber = %d", orderNumber);
             ResultSet result = sqlConnection.getDataQuery(cancelCheck);
             try {
                 if (result.next()) {
                     if (result.getString(1).equals("Cancelled")) {
                         cancelledBefore = true;
                     }
+                    initValue = result.getDouble(2);
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-            if ((!cancelledBefore && status.getValue().equals("Cancelled"))) {
-                String query = String.format("SELECT * FROM orderdetails WHERE orderNumber = %d", orderNumber);
-                ResultSet rs = sqlConnection.getDataQuery(query);
-                try {
-                    while (rs.next()) {
+            double initSubValue = 0;
+            String query = String.format("SELECT * FROM orderdetails WHERE orderNumber = %d", orderNumber);
+            ResultSet rs = sqlConnection.getDataQuery(query);
+            try {
+                while (rs.next()) {
+                    if ((!cancelledBefore && status.getValue().equals("Cancelled"))) {
                         String tmp = String.format("UPDATE products SET quantityInStock = quantityInStock + %d WHERE productCode = '%s'", rs.getInt(3), rs.getString(2));
                         sqlConnection.updateQuery(tmp);
                     }
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
+                    initSubValue += rs.getDouble(4) * rs.getInt(3);
                 }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
-            String query = String.format("DELETE FROM orderdetails WHERE orderNumber = %d", orderNumber);
+
+            double percentage = Double.parseDouble(String.format("%.2f", initValue / initSubValue));
+            query = String.format("DELETE FROM orderdetails WHERE orderNumber = %d", orderNumber);
             try {
                 sqlConnection.updateQuery(query);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+            double subValue = 0;
             for (OrderItem orderItem : orderTable.getItems()) {
                 String productCode = orderItem.getProductCode();
                 int quantity = orderItem.getQuantityOrdered();
                 double priceEach = orderItem.getPriceEach();
+                subValue += quantity * priceEach;
                 query = String.format("INSERT INTO orderdetails (orderNumber, productCode, quantityOrdered, priceEach) VALUES (%d, '%s', %d, %f)", orderNumber, productCode, quantity, priceEach);
                 try {
                     sqlConnection.updateQuery(query);
@@ -556,7 +564,7 @@ public class OrderInfoView extends ViewController implements OrdersTab, InputVal
             String shippedDate = shippedDatePicker.getValue() != null ? "'" + shippedDatePicker.getValue().toString() + "'" : "null";
             String st = status.getValue();
             String comments = commentsTextField.getText();
-            query = String.format("UPDATE orders SET orderDate = '%s', requiredDate = %s, shippedDate = %s, status = '%s', comments = '%s', payment_method = '%s', deliver_to = '%s' WHERE orderNumber = %d", orderDate.toString(), requiredDate, shippedDate, st, comments, paymentMethod.getValue(), deliverTo.getText(), orderNumber);
+            query = String.format("UPDATE orders SET orderDate = '%s', requiredDate = %s, shippedDate = %s, status = '%s', comments = '%s', payment_method = '%s', deliver_to = '%s', value = %f WHERE orderNumber = %d", orderDate.toString(), requiredDate, shippedDate, st, comments, paymentMethod.getValue(), deliverTo.getText(), Double.parseDouble(String.format("%.2f", subValue * percentage)), orderNumber);
             try {
                 sqlConnection.updateQuery(query);
             } catch (SQLException e) {

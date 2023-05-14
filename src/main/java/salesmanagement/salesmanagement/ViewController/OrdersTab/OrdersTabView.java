@@ -130,13 +130,13 @@ public class OrdersTabView extends TabView implements OrdersTab {
             e.printStackTrace();
         }
 
-        Utils.adjustTableColumnWidths(ordersTable, Arrays.asList(0.1, 0.1, 0.1, 0.1, 0.1, 0.3, 0.1, 0.1));
+        Utils.adjustTableColumnWidths(ordersTable, Arrays.asList(0.08, 0.12, 0.1, 0.05, 0.1, 0.3, 0.1, 0.15));
 
         orderNumberColumn.setCellValueFactory(new PropertyValueFactory<>("orderNumber"));
         employeeColumn.setCellValueFactory(new PropertyValueFactory<>("employeeName"));
         orderDateColumn.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        statusColumn.setCellValueFactory(new PropertyValueFactory<>("statusLabel"));
         commentsColumn.setCellValueFactory(new PropertyValueFactory<>("comments"));
         valueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
         customerColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));

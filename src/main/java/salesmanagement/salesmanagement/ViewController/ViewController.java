@@ -77,7 +77,7 @@ public abstract class ViewController implements Initializable {
         for (Node node : Utils.getAllNodes(root)) {
             if (node instanceof TextField) ((TextField) node).setText("");
             if (node instanceof ComboBox<?>) {
-                ((ComboBox<String>) node).setValue("All");
+                ((ComboBox<String>) node).setValue(null);
             }
             if (node instanceof DatePicker) ((DatePicker) node).setValue(null);
         }
