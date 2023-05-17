@@ -83,11 +83,9 @@ public class EmployeeSearchView extends SearchView<Employee> {
             searchList.setPredicate(employee -> {
                 boolean nameMatch = employee.getName().toLowerCase().contains(nameTextField.getText());
                 boolean phoneMatch = employee.getPhone().toLowerCase().contains(phoneTextField.getText());
-                boolean statusMatch = statusComboBox.getValue().equalsIgnoreCase(employee.getStatus());
+                boolean statusMatch = statusComboBox.getValue() == null || statusComboBox.getValue().equalsIgnoreCase(employee.getStatus());
                 boolean emailMatch = employee.getEmail().toLowerCase().contains(emailTextField.getText().toLowerCase());
-                boolean accessibilityMatch = employee.getJobTitle().equalsIgnoreCase(accessibilityComboBox.getValue());
-                if (accessibilityComboBox.getValue().equals("All")) accessibilityMatch = true;
-                if (statusComboBox.getValue().equals("All")) statusMatch = true;
+                boolean accessibilityMatch = accessibilityComboBox.getValue() == null || employee.getJobTitle().equalsIgnoreCase(accessibilityComboBox.getValue());
                 return phoneMatch && nameMatch && accessibilityMatch && emailMatch && statusMatch;
             });
         }, () -> searchTable.setItems(searchList), loadingIndicator, null);
